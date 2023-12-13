@@ -1,0 +1,19 @@
+#Tue Dec 12 21:53:39 IST 2023
+path.4=6/classes.dex
+path.3=14/classes.dex
+path.2=0/classes.dex
+path.1=0/classes.dex
+path.5=classes2.dex
+path.0=classes.dex
+base.4=/Users/mahammadsuelc/Desktop/PickkR/android/app/build/intermediates/dex/debug/mergeProjectDexDebug/6/classes.dex
+base.3=/Users/mahammadsuelc/Desktop/PickkR/android/app/build/intermediates/dex/debug/mergeProjectDexDebug/14/classes.dex
+base.2=/Users/mahammadsuelc/Desktop/PickkR/android/app/build/intermediates/dex/debug/mergeProjectDexDebug/0/classes.dex
+base.1=/Users/mahammadsuelc/Desktop/PickkR/android/app/build/intermediates/dex/debug/mergeLibDexDebug/0/classes.dex
+base.0=/Users/mahammadsuelc/Desktop/PickkR/android/app/build/intermediates/dex/debug/mergeExtDexDebug/classes.dex
+renamed.3=classes4.dex
+renamed.2=classes3.dex
+renamed.1=classes2.dex
+renamed.0=classes.dex
+renamed.5=classes6.dex
+renamed.4=classes5.dex
+base.5=/Users/mahammadsuelc/Desktop/PickkR/android/app/build/intermediates/dex/debug/mergeExtDexDebug/classes2.dex
