@@ -16,6 +16,17 @@ import UserProfileScreen from "../screens/UserScreens/UserProfileScreen/UserProf
 import BottomTabRoutes from "./BottomTabRoutes";
 import VehicleVerification from "../screens/UserScreens/VehicleVerification/VehicleVerification";
 import PickerAccount from "../screens/UserScreens/PickerAccount/PickerAccount";
+import TrainingScreen from "../screens/UserScreens/TrainingScreen/TrainingScreen";
+import PickerDetails from "../screens/UserScreens/PickerDetails/PickerDetails";
+import ActivitySummary from "../screens/UserScreens/ActivitySummary/ActivitySummary";
+import DisputeScreen from "../screens/UserScreens/DisputeScreen/DisputeScreen";
+import PickerReviewWhenCancelled from "../screens/UserScreens/PickerReviewWhenCancelled/PickerReviewWhenCancelled";
+import SetDestination from "../screens/UserScreens/SetDestination/SetDestination";
+import PickerHomeScreen from "../screens/PickerScreens/PickerHomeScreen/PickerHomeScreen";
+import AddressScreen from "../screens/UserScreens/AddressScreen/AddressScreen";
+import PaymentMethod from "../screens/UserScreens/PaymentMethod/PaymentMethod";
+import RatingAndReviews from "../screens/UserScreens/RatingAndReviews/RatingAndReviews";
+import UserKycScreen from "../screens/UserScreens/UserKycScreen/UserKycScreen";
 
 export const screens = {
     USER_HOME_SCREEN: UserHomeScreen,
@@ -34,6 +45,21 @@ export const screens = {
     ACTIVITY_SCREEN:ActivityScreen,
     BECOME_PICKER:BecomePicker,
     VEHICLE_VERIFICATION:VehicleVerification,
-    PICKER_ACCOUNT:PickerAccount
+    PICKER_ACCOUNT:PickerAccount,
+    TRAINING_SCREEN:TrainingScreen,
+    PICKER_DETAILS:PickerDetails,
+    ACTIVITY_SUMMERY:ActivitySummary,
+    DISPUTE_SCREEN:DisputeScreen,
+    PICKER_REVIEW_WHEN_CANCELLED:PickerReviewWhenCancelled,
+    SET_DESTINATION:SetDestination,
+    ADDRESS_SCREEN:AddressScreen,
+    PAYMENT_METHOD:PaymentMethod,
+    RATING_AND_REVIEW:RatingAndReviews,
+    USER_KYC_SCREEN:UserKycScreen,
+
+    
+
+
+    PICKER_HOME_SCREEN:PickerHomeScreen
 
 }

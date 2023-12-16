@@ -17,7 +17,9 @@ const MobileNumberInput = ({
     handleBlur,
     ErrorMsg,
     onPressIn,
-    ShowError
+    ShowError,
+    setFormData,
+    formData
 }) => {
 
     const { appStyles } = useContext(AppContext)
@@ -77,7 +79,7 @@ const MobileNumberInput = ({
 
     const handleMobileNumberChange = (phoneNumber) => {
         const cleanedNumber = phoneNumber.replace(/\D/g, '');
-        console.log('Cleaned Number:', cleanedNumber);
+        // console.log('Cleaned Number:', cleanedNumber);
 
         const formattedNumber = `${cleanedNumber.slice(0, 3)} ${cleanedNumber.slice(3, 6)} ${cleanedNumber.slice(6)}`
         setMobileNumber(formattedNumber);
@@ -138,6 +140,10 @@ const MobileNumberInput = ({
                                     activeOpacity={0.6}
                                     onPress={() => {
                                         LayoutAnimation.configureNext(toggleAnimation)
+                                        setFormData({
+                                            ...formData,
+                                            selectedCountry:item
+                                        });
                                         setSelctedCountry(item)
                                         setShowSheet(false)
                                     }}

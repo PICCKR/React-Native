@@ -44,7 +44,7 @@ export async function apiReq(
                 return res(result);
             })
             .catch(error => {
-                console.log(error, 'the error respne')
+                // console.log(error, 'the error respne')
                 const { data } = error?.response ? error?.response : error;
                 if (data) {
                     return res(data)

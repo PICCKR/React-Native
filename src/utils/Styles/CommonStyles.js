@@ -10,74 +10,20 @@ export const screenSize = {
 }
 
 export const commonStyles = {
-    smallTextBlack: {
-        color: uiColours.BLACK_TEXT,
-        fontSize:scale(12),
-    },
 
-    smallTextWhite: {
-        color: uiColours.WHITE_TEXT,
-        fontSize:scale(12),
+    flexRowAlnCtrJutySpaceBetween:{
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: "space-between"
     },
-
-    smallTextGray: {
-        color: uiColours.GRAY_TEXT,
-        fontSize:scale(12),
+    flexRowAlnCtr:{
+        flexDirection: 'row',
+        alignItems: 'center',
+        gap:scale(10)
     },
-
-    mediumTextBlack:{
-        color: uiColours.BLACK_TEXT,
-        fontSize:scale(14),
-    },
-
-    mediumTextWhite:{
-        color: uiColours.WHITE_TEXT,
-        fontSize:scale(14),
-    },
-
-    mediumTextPrimary:{
-        color: uiColours.PRIMARY,
-        fontSize:scale(14),
-    },
-
-    mediumTextBlackBold:{
-        color: uiColours.BLACK_TEXT,
-        fontSize:scale(14),
-        fontWeight:"700"
-    },
-
-    mediumTextWhiteBold:{
-        color: uiColours.WHITE_TEXT,
-        fontSize:scale(14),
-        fontWeight:"700"
-    },
-
-    mediumTextPrimaryBold:{
-        color: uiColours.PRIMARY,
-        fontSize:scale(14),
-        fontWeight:"700"
-    },
-
-    largeTextBalck:{
-        color: uiColours.BLACK_TEXT,
-        fontSize:scale(16),
-    },
-
-    largeTextWhite:{
-        color: uiColours.WHITE_TEXT,
-        fontSize:scale(16),
-    },
-
-    largeTextBalckBold:{
-        color: uiColours.BLACK_TEXT,
-        fontSize:scale(16),
-        fontWeight:"700"
-    },
-
-    largeTextWhiteBold:{
-        color: uiColours.WHITE_TEXT,
-        fontSize:scale(16),
-        fontWeight:"700"
+    bottomBorder:{
+        borderBottomWidth:moderateScale(1),
+        borderColor:uiColours.LIGHT_GRAY,
     },
 
     dropShadow: {

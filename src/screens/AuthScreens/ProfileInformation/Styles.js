@@ -64,7 +64,6 @@ const styles = StyleSheet.create({
     paymentExpairy: {
         flexDirection: "row",
         alignItems: "center",
-        top: verticalScale(-13),
         gap: scale(6)
     }
 })

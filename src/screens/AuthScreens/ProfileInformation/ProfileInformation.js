@@ -71,7 +71,7 @@ const ProfileInformation = ({ route }) => {
             location: addressData?.location,
         }
 
-        console.log("[...profileInformation.address, ...newAddress]", [...profileInformation.address, newAddress]);
+        // console.log("[...profileInformation.address, ...newAddress]", [...profileInformation.address, newAddress]);
         setProfileInformation({
             ...profileInformation,
             address: [...profileInformation.address, newAddress]
@@ -98,7 +98,7 @@ const ProfileInformation = ({ route }) => {
         var addresss = profileInformation.address
 
         const newAddress = await addresss.map((item) => {
-            console.log(item.id, addressData.id);
+            // console.log(item.id, addressData.id);
             if (item.id === addressData.id) {
                 return addressData
             } else {
@@ -126,7 +126,7 @@ const ProfileInformation = ({ route }) => {
 
     const handleAddPayment = () => {
 
-        console.log("sdjsgd");
+        // console.log("sdjsgd");
 
         setShowSheet({
             addPayment: false,
@@ -160,7 +160,7 @@ const ProfileInformation = ({ route }) => {
     }
 
     const handleSave = () => {
-        console.log("...data, profileInformation", {...data, ...profileInformation});
+        // console.log("...data, profileInformation", {...data, ...profileInformation});
         // return
          navigation.navigate(AuthRouteStrings.KYC_SCREEN,{
             data : {...data, ...profileInformation}

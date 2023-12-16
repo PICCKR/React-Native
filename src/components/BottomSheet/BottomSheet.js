@@ -1,5 +1,5 @@
 import { View, Text, TouchableOpacity } from 'react-native'
-import React from 'react'
+import React, { useContext } from 'react'
 import Modal from 'react-native-modal'
 import styles from './Styles'
 import CustomButton from '../Button/CustomButton'
@@ -7,6 +7,7 @@ import { buttonTypes } from '../../utils/Constents/constentStrings'
 import { commonStyles } from '../../utils/Styles/CommonStyles'
 import { Images } from '../../assets/images'
 import { moderateScale } from 'react-native-size-matters'
+import { AppContext } from '../../context/AppContext'
 
 const BottomSheet = ({
     isVisible,
@@ -17,6 +18,7 @@ const BottomSheet = ({
     handleRightClick,
     modelStyles
 }) => {
+    const { appStyles } = useContext(AppContext)
     return (
         <Modal
             isVisible={isVisible}
@@ -27,7 +29,7 @@ const BottomSheet = ({
         >
             <View style={[styles.modal, modelStyles]}>
                 <View style={styles.header}>
-                    <Text style={[commonStyles.mediumTextPrimaryBold, styles.titleText]}>
+                    <Text style={[appStyles.mediumTextPrimaryBold, styles.titleText]}>
                         {title}
                     </Text>
                     <TouchableOpacity

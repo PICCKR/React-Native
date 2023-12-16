@@ -1,5 +1,5 @@
 import { View, Text, SafeAreaView, ScrollView, TouchableOpacity, Image } from 'react-native'
-import React, { useContext } from 'react'
+import React, { useContext, useState } from 'react'
 import { AppContext } from '../../../context/AppContext'
 import styles from './Styles'
 import Header from './Header'
@@ -10,10 +10,24 @@ import { uiColours } from '../../../utils/Styles/uiColors'
 import { screenSize } from '../../../utils/Styles/CommonStyles'
 import { useNavigation } from '@react-navigation/native'
 import { MainRouteStrings } from '../../../utils/Constents/RouteStrings'
+import TopUpSheet from './TopUpSheet'
+import AddTopUp from './AddTopUp'
+import OtpPopUp from './OtpPopUp'
+import { showToast } from '../../../components/tostConfig/tostConfig'
+import { tostMessagetypes } from '../../../utils/Constents/constentStrings'
 
 const UserHomeScreen = () => {
-  const { appStyles, userData } = useContext(AppContext)
+  const { appStyles, userData, isDark } = useContext(AppContext)
   const navigation = useNavigation()
+
+  const [showSheet, setShowSheet] = useState({
+    showPayment: false,
+    addPayment: false,
+    Otp: false
+  })
+  const [topUpAmount, setTopUpAmount] = useState({
+    price: "0"
+  })
 
   const recentDestinationData = [
     {
@@ -87,6 +101,9 @@ const UserHomeScreen = () => {
         <Header
           userData={userData}
           appStyles={appStyles}
+          setShowSheet={setShowSheet}
+          showSheet={showSheet}
+          topUpAmount={topUpAmount}
         />
         <View style={styles.homeScreenContainer}>
           <InputText
@@ -173,8 +190,51 @@ const UserHomeScreen = () => {
           </View>
 
         </View>
-
       </ScrollView>
+
+      {/* sheets */}
+      <TopUpSheet
+        isVisible={showSheet.showPayment}
+        handleCardClick={() => {
+          setShowSheet({
+            ...showSheet,
+            showPayment: false,
+            addPayment: true
+          })
+        }}
+      />
+
+      <AddTopUp
+        isVisible={showSheet.addPayment}
+        appStyles={appStyles}
+        setShowSheet={setShowSheet}
+        topUpAmount={topUpAmount}
+        setTopUpAmount={setTopUpAmount}
+        handleAddTopUp={() => {
+          setShowSheet({
+            ...showSheet,
+            addPayment: false,
+            Otp: true
+          })
+        }}
+
+      />
+      <OtpPopUp
+        isVisible={showSheet.Otp}
+        appStyles={appStyles}
+        setShowSheet={setShowSheet}
+        handleVerifyOtp={() => {
+          setShowSheet({
+            ...showSheet,
+            Otp: false
+          })
+          const toastMsgConfg = {
+            isDark: isDark,
+            msg: "You successfully top up your wallet"
+          }
+          showToast(toastMsgConfg, tostMessagetypes.SUCCESS, isDark)
+        }}
+      />
     </SafeAreaView>
   )
 }

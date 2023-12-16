@@ -44,7 +44,7 @@ const DocumentUpload = ({
                     } else if (response.customButton) {
                     } else {
                         const source = response.assets[0].uri;
-                        console.log("source", source, response?.assets[0]?.fileName);
+                        // console.log("source", source, response?.assets[0]?.fileName);
                         setDocument({
                             ...document,
                             [documentType]: response?.assets[0]?.uri,

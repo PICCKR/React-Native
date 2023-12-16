@@ -146,7 +146,7 @@ const AddPaymentMethodSheet = ({
 
             handleButtonPress={handleAddCard}
         >
-            <ScrollView style={{ marginBottom: verticalScale(65) }}>
+            <ScrollView style={{ marginBottom: verticalScale(80), paddingTop:verticalScale(16) }}>
                 <View style={{ paddingBottom: verticalScale(16) }}>
                     <Text style={appStyles.smallTextBlack}>
                         Card Type
@@ -213,7 +213,7 @@ const AddPaymentMethodSheet = ({
                             )
                         }}
                     />
-                    <Text style={{ fontSize: scale(20), top: verticalScale(6), color: uiColours.GRAY_TEXT }}>/</Text>
+                    <Text style={{ fontSize: scale(20), color: uiColours.GRAY_TEXT }}>/</Text>
                     <InputText
                         inputContainer={{ width: scale(70) }}
                         placeholder="yy"
@@ -237,7 +237,7 @@ const AddPaymentMethodSheet = ({
                 <InputText
                     hasTitle
                     inputTitle="CVV"
-                    inputContainer={{ width: scale(70) }}
+                    inputContainer={{ width: scale(70), marginTop:verticalScale(10)}}
                     placeholder="123"
                     maxLength={3}
                     textBox={{ paddingLeft: scale(10) }}

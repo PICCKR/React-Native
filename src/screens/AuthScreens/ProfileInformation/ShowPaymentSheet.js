@@ -86,7 +86,7 @@ const ShowPaymentSheet = ({
               </TouchableOpacity>
             </View>
             {payments?.map((item, index) => {
-              console.log("item", item);
+              // console.log("item", item);
               return (
                 <View key={index.toString()} style={styles.addresCard}>
                   <View style={{ flexDirection: "row", alignItems: 'center', maxWidth: "90%" }}>

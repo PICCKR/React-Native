@@ -6,9 +6,12 @@ import { moderateScale, scale, verticalScale } from 'react-native-size-matters'
 
 const Header = ({
     userData,
-    appStyles
+    appStyles,
+    setShowSheet,
+    showSheet,
+    topUpAmount
 }) => {
-    console.log("userData", userData);
+    // console.log("userData", userData);
     return (
         <View style={styles.headerContainer}>
             <View style={styles.profileSection}>
@@ -30,13 +33,19 @@ const Header = ({
                             PicckRPay
                         </Text>
                         <Text style={appStyles.smallTextBlackBold} >
-                            $530
+                            ${topUpAmount?.price}
                         </Text>
                     </View>
                 </View>
 
                 <TouchableOpacity
-                    style={{ paddingVertical: verticalScale(6)}}
+                    onPress={() =>
+                        setShowSheet({
+                            ...showSheet,
+                            showPayment: true
+                        })
+                    }
+                    style={{ paddingVertical: verticalScale(6) }}
                 >
                     <Text style={appStyles.smallTextPrimaryBold} >
                         Top up

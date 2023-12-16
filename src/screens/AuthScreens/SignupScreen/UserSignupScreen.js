@@ -34,7 +34,7 @@ const UserSignupScreen = () => {
   const [ShowError, setShowError] = useState({})
 
   const handledContinue = () => {
-    console.log("RegEx.name__regEx.test(formData.firstName)", RegEx.name__regEx.test(formData.firstName));
+    // console.log("RegEx.name__regEx.test(formData.firstName)", formData);
     if (!RegEx.name__regEx.test(formData.firstName)) {
       setShowError({
         ...ShowError,
@@ -48,14 +48,14 @@ const UserSignupScreen = () => {
       })
     }
     else if (formData.password.length < 6) {
-      console.log("!formData.password.length >= 6");
+      // console.log("!formData.password.length >= 6");
       setShowError({
         ...ShowError,
         password: true
       })
     } else {
       setShowError({})
-      console.log("sdgfshdahdasghdag", formData);
+      // console.log("sdgfshdahdasghdag", formData);
       navigation.navigate(AuthRouteStrings.OTP_SCREEN, {
         data: formData
       })
@@ -86,6 +86,7 @@ const UserSignupScreen = () => {
       handleButtonPress={handledContinue}
     >
       <ScrollView style={Styles.formView}>
+        
         <Form
           data={signUpFormData}
           formData={formData}

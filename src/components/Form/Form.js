@@ -37,13 +37,13 @@ const Form = ({
 
             });
         }
-        textChange(e, item)
+        textChange(e, item, selectedCountry)
     }
 
     const handleOnBlur = (item) => {
 
         const { type, validationString, isRequired, errorMsg } = item
-        console.log("validationString", validationString, type, errorMsg);
+        // console.log("validationString", validationString, type, errorMsg);
         // return
         if (!validationString?.test(formData[type])) {
             setShowError((prevState) => ({
@@ -75,6 +75,8 @@ const Form = ({
                                     handleBlur={() => handleOnBlur(item)}
                                     ErrorMsg={item?.errorMsg}
                                     ShowError={ShowError[item?.type]}
+                                    setFormData={setFormData}
+                                    formData={formData}
                                 />
                                 :
 
