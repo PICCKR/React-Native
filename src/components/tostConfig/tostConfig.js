@@ -40,7 +40,7 @@ export const toastConfig = {
   ),
 
   tomatoToast: ({ props }) => {
-    console.log("props==>", props);
+    // console.log("props==>", props);
     return (
       <View style={{
         padding: moderateScale(10),
@@ -75,7 +75,7 @@ export const showToast = (
   message,
   messageType
 ) => {
-  console.log("message==> ijiji", message, messageType);
+  // console.log("message==> ijiji", message, messageType);
   Toast.show({
     type: 'tomatoToast',
     props: {

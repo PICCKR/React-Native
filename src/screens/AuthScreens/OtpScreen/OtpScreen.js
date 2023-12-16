@@ -64,7 +64,7 @@ const OtpScreen = ({ route }) => {
         onCodeFilled={(code) => {
           setOTP(code)
         }}
-        autoFocusOnLoad
+        autoFocusOnLoad = {false}
         pinCount={5}
         codeInputFieldStyle={styles.underlineStyleBase}
         codeInputHighlightStyle={styles.borderStyleHighLighted}

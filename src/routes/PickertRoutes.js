@@ -12,7 +12,7 @@ const PickertRoutes = () => {
             <Stack.Navigator
                 screenOptions={{ headerShown: false }}
             >
-                <Stack.Screen name={MainRouteStrings.HOME_SCREEN} component={screens.HOME_SCREEN} />
+                <Stack.Screen name={MainRouteStrings.PICKER_HOME_SCREEN} component={screens.PICKER_HOME_SCREEN} />
             </Stack.Navigator>
         </NavigationContainer>
     )

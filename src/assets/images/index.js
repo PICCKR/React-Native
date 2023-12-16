@@ -42,9 +42,29 @@ import canadaFlag from '../images/canadaFlag.svg'
 import ukFlag from '../images/ukFlag.svg'
 import pakFlag from '../images/pakFlag.svg'
 import gallary from '../images/gallary.png'
+import playArrow from "../images/play-arrow.svg"
+import star from "../images/star.svg"
+import heartRed from "../images/heartRed.svg"
+import source from "../images/source.svg"
+import cardIcon from "../images/cardIcon.svg"
+import emailBig from "../images/emailBig.svg"
+import warning from "../images/warning.svg"
+import profilePicker from "../images/profilePicker.svg"
+import Delete from "../images/delete.svg"
+import logOut from "../images/logOut.png"
 
 
 export const Images = {
+    logOut:logOut,
+    delete:Delete,
+    profilePicker:profilePicker,
+    warning:warning,
+    emailBig:emailBig,
+    cardIcon:cardIcon,
+    source:source,
+    heartRed:heartRed,
+    star:star,
+    playArrow:playArrow,
     gallary:gallary,
     pakFlag:pakFlag,
     ukFlag:ukFlag,

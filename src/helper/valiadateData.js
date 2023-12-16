@@ -1,7 +1,7 @@
 import { RegEx } from "../utils/Constents/regulerexpressions";
 
 export const validateData = (value, type) => {
-    console.log("RegEx.password.test(value)", RegEx.password.test(value), value, value?.length);
+    // console.log("RegEx.password.test(value)", RegEx.password.test(value), value, value?.length);
     switch (type) {
         case "email":
             if (RegEx.email__regEx.test(value)) {

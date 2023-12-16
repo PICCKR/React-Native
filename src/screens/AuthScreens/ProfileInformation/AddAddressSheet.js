@@ -156,7 +156,7 @@ const AddAddressSheet = ({
                         keepResultsAfterBlur
                         onPress={(data, details = null) => {
                             // 'details' contains information about the selected place.
-                            console.log("ddd", data.description);
+                            // console.log("ddd", data.description);
                             setAddresData({
                                 ...addressData,
                                 location: data.description

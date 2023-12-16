@@ -40,12 +40,13 @@ const AppProvider = ({ children }) => {
     }, [])
 
     // storing the color mode of the mobile 
-    const isDark = useColorScheme() === "dark"
+    // const isDark = useColorScheme() === "dark"
 
     // state variables
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [userData, setuserData] = useState(null)
     const [isNew, setisNew] = useState(null)
+    const [isDark, setIsDark] = useState(useColorScheme() === "dark")
 
     // commanly used appliaction styles
     const appStyles = {
@@ -143,6 +144,11 @@ const AppProvider = ({ children }) => {
             fontSize: scale(16),
             fontFamily: "Poppins-Bold"
         },
+        largeTextGray: {
+            color: uiColours?.GRAY_TEXT,
+            fontSize: scale(16),
+            fontFamily: "Poppins-Regular"
+        },
 
         largeTextWhiteBold: {
             color: uiColours?.WHITE_TEXT,
@@ -174,7 +180,6 @@ const AppProvider = ({ children }) => {
         containerPadding: {
             backgroundColor: isDark ? uiColours?.DARK_BG : uiColours.WHITE_TEXT,
             paddingHorizontal: scale(16),
-            paddingVertical: verticalScale(16),
             flex: 1,
         },
     }
@@ -189,7 +194,8 @@ const AppProvider = ({ children }) => {
                 isNew,
                 userData,
                 setuserData,
-                isDark
+                isDark,
+                setIsDark
             }}
         >
             {children}

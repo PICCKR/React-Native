@@ -1,15 +1,22 @@
-import { View, Text, ScrollView } from 'react-native'
-import React, { useContext, useState } from 'react'
+import { View, Text, ScrollView, TouchableOpacity } from 'react-native'
+import React, { useContext, useEffect, useState } from 'react'
 import WrapperContainer from '../../../components/WrapperContainer/WrapperContainer'
 import { useNavigation } from '@react-navigation/native'
 import { AppContext } from '../../../context/AppContext'
-import { verticalScale } from 'react-native-size-matters'
+import { moderateScale, scale, verticalScale } from 'react-native-size-matters'
+import { uiColours } from '../../../utils/Styles/uiColors'
+import Form from '../../../components/Form/Form'
+import { RegEx } from '../../../utils/Constents/regulerexpressions'
+import styles from './Styles'
+import InputText from '../../../components/InputText/InputText'
+import { MainRouteStrings } from '../../../utils/Constents/RouteStrings'
 
 const PickerAccount = ({ route }) => {
     const data = route?.params?.data
     const { appStyles } = useContext(AppContext)
     const navigation = useNavigation()
 
+    const [showError, setShowError] = useState()
     const [buttonActive, setButtonActive] = useState(false)
 
     const paymentTypeData = [
@@ -23,12 +30,86 @@ const PickerAccount = ({ route }) => {
         },
     ]
 
-    const handleNext = () => {
+    const paymentFormData = [
+        {
+            id: 1,
+            title: 'Card holder name',
+            placeHolder: "Input your card holder name",
+            type: "cardHolderName",
+            isRequired: true,
+            errorMsg: "Enter holder name number",
+            validationString: RegEx.notEmpty
 
+        },
+        {
+            id: 2,
+            title: 'Card number',
+            placeHolder: "Ex: 1234 5678 9012 3456",
+            type: "cardNumber",
+            maxLenght: 19,
+            isRequired: true,
+            errorMsg: "Enter valid Card number",
+            validationString: RegEx.length19
+        },
+
+    ]
+
+    const [paymentData, setPaymentData] = useState({
+        id: "",
+        cardType: "",
+        cardHolderName: "",
+        cardNumber: "",
+        expiredDate: {
+            mm: "",
+            yy: ""
+        },
+        cvv: ""
+    })
+
+    const handleTextChange = (cardNumber, item) => {
+        const { type } = item
+        if (type === "cardNumber") {
+            // Remove any non-digit characters
+            const cleanedNumber = cardNumber.replace(/\D/g, '');
+
+            // Check if the cleaned number is empty or not a valid number
+            if (!cleanedNumber || isNaN(cleanedNumber)) {
+                return 'Invalid card number';
+            }
+
+            // Define the format (adjust based on your needs)
+            const formattedNumber = cleanedNumber.replace(/(\d{4})/g, '$1-');
+
+            // Remove trailing hyphen if present
+            formattedNumber.replace(/-$/, '');
+            setPaymentData({
+                ...paymentData,
+                cardNumber: formattedNumber
+            })
+        }
     }
+
+    const handleNext = () => {
+        navigation.navigate(MainRouteStrings.TRAINING_SCREEN)
+    }
+
+    useEffect(() => {
+        if (
+            paymentData.cardType !== '' &&
+            paymentData?.cardHolderName !== "" &&
+            paymentData?.cardNumber.length > 18 &&
+            paymentData.expiredDate.mm !== "" &&
+            paymentData.expiredDate.yy !== "" &&
+            paymentData?.cvv.length == 3
+        ) {
+            setButtonActive(true);
+        } else {
+            setButtonActive(false);
+        }
+    }, [paymentData]);
     return (
         <WrapperContainer
-            centerTitle="Vehicle Verification"
+            centerTitle="PicckR Account"
             showBackButton
             buttonTitle={"Next"}
             handleButtonPress={handleNext}
@@ -37,6 +118,12 @@ const PickerAccount = ({ route }) => {
         >
 
             <ScrollView style={{ marginBottom: verticalScale(65) }}>
+                <Text style={[appStyles.mediumTextPrimaryBold]}>
+                    You have to complete your PicckR account
+                </Text>
+                <Text style={[appStyles.mediumTextBlack,{marginVertical:verticalScale(6)}]}>
+                    Banking informations
+                </Text>
                 <View style={{ paddingBottom: verticalScale(16) }}>
                     <Text style={appStyles.smallTextBlack}>
                         Card Type
@@ -71,12 +158,12 @@ const PickerAccount = ({ route }) => {
                 </View>
 
                 <Form
-                    data={addData}
+                    data={paymentFormData}
                     formData={paymentData}
                     setFormData={setPaymentData}
                     setShowError={setShowError}
                     ShowError={showError}
-                    handleOnBlur={handleOnBlur}
+                    // handleOnBlur={handleOnBlur}
                     textChange={handleTextChange}
 
                 />
@@ -127,7 +214,7 @@ const PickerAccount = ({ route }) => {
                 <InputText
                     hasTitle
                     inputTitle="CVV"
-                    inputContainer={{ width: scale(70) }}
+                    inputContainer={{ width: scale(70), marginTop: verticalScale(10) }}
                     placeholder="123"
                     maxLength={3}
                     textBox={{ paddingLeft: scale(10) }}

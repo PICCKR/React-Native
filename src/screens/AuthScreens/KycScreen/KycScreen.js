@@ -29,7 +29,8 @@ const KycScreen = ({route}) => {
             flag: Images.NigeriaFlags,
             name: "Nigeria",
             code: "(+234)"
-        },
+        }
+        ,
         {
             id: 2,
             flag: Images.usFlags,
@@ -53,6 +54,7 @@ const KycScreen = ({route}) => {
             buttonTitle={"Upload"}
             handleButtonPress={handleSave}
             buttonActive={buttonActive}
+            containerPadding={{paddingTop:verticalScale(16)}}
         >
             <View style={{ gap: verticalScale(20) }}>
                 {

@@ -22,7 +22,7 @@ export const getLocalData = async storageKey => {
 export const clearLocalData = async () => {
   try {
     const res = await AsyncStorage.clear();
-    console.log('clear res', res);
+    // console.log('clear res', res);
     return res
   } catch (e) {
 
