@@ -19,16 +19,17 @@ const styles = StyleSheet.create({
         alignItems: "center",
         justifyContent: 'center',
     },
+
     termsView: {
         flexDirection: "row",
         alignItems: "center",
         gap: scale(10),
         marginVertical: verticalScale(16),
-        paddingHorizontal: scale(16)
     },
     linkTextView: {
         paddingVertical: verticalScale(6),
         paddingRight: scale(10)
     },
+
 })
 export default styles

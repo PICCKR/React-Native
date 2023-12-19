@@ -16,6 +16,9 @@ import { tostMessagetypes } from '../../../utils/Constents/constentStrings'
 import ShowPaymentSheet from './ShowPaymentSheet'
 import AddPaymentMethodSheet from './AddPaymentMethodSheet'
 import { AuthRouteStrings } from '../../../utils/Constents/RouteStrings'
+import ChooseMediaTypeSheet from '../../../components/ChooseMediaTypeSheet/ChooseMediaTypeSheet'
+import { chooseMedia, openCamara } from '../../../helper/imagePickerFunctions'
+import ProfileView from '../../../components/PrifileView/ProfileView'
 
 const ProfileInformation = ({ route }) => {
     const data = route?.params?.data
@@ -28,8 +31,7 @@ const ProfileInformation = ({ route }) => {
         email: false,
         showAddress: false,
         addAddress: false,
-        showPayment: false,
-        addPayment: false
+        mediaType: false,
     })
 
     const [profileInformation, setProfileInformation] = useState({
@@ -162,17 +164,16 @@ const ProfileInformation = ({ route }) => {
     const handleSave = () => {
         // console.log("...data, profileInformation", {...data, ...profileInformation});
         // return
-         navigation.navigate(AuthRouteStrings.KYC_SCREEN,{
-            data : {...data, ...profileInformation}
-         })
+        navigation.navigate(AuthRouteStrings.KYC_SCREEN, {
+            data: { ...data, ...profileInformation }
+        })
     }
 
 
     useEffect(() => {
         if (
             profileInformation?.email !== "" &&
-            profileInformation?.address.length > 0 &&
-            profileInformation.paymentMethod.length > 0
+            profileInformation?.address.length > 0
         ) {
             setButtonActive(true);
         } else {
@@ -191,20 +192,18 @@ const ProfileInformation = ({ route }) => {
             containerPadding={{ paddingHorizontal: 0 }}
         >
 
-            <View style={styles.profileSection}>
-                <View style={styles.profileView}>
-                    {profileInformation.profileImg ? <Image source={{ uri: profileInformation.profileImg }} /> : <Images.profile />}
-                    <TouchableOpacity style={styles.cameraIconView}>
-                        <Images.camera />
-                    </TouchableOpacity>
-                </View>
-                <Text>
-                    {data?.firstName} {data?.lastName}
-                </Text>
-                <Text>
-                    {`${data?.selectedCountry?.code} ${data?.phoneNumber}`}
-                </Text>
-            </View>
+            <ProfileView
+                showEdit
+                profileImg={profileInformation.profileImg}
+                userData={data}
+                handleEdit={() => {
+                    setShowSheet({
+                        ...showSheet,
+                        mediaType: true
+                    })
+                }}
+            />
+
             <View style={styles.contentView}>
                 <Text style={appStyles.mediumTextBlackBold}>
                     Other Information
@@ -225,14 +224,14 @@ const ProfileInformation = ({ route }) => {
                     addressVal={profileInformation.address?.length !== 0 && `${profileInformation.address?.length} Address`}
                     title="Address"
                 />
-                <EditAction
+                {/* <EditAction
                     appStyles={appStyles}
                     title="Payment Method"
                     addressVal={ profileInformation.paymentMethod?.length !== 0 && `${profileInformation.paymentMethod?.length} Card`}
                     handlePress={() => setShowSheet({
                         showPayment: true
                     })}
-                />
+                /> */}
             </View>
 
             <EmailSheet
@@ -297,7 +296,36 @@ const ProfileInformation = ({ route }) => {
                 handleEditAddress={handleEditAddress}
             />
 
-            <ShowPaymentSheet
+            <ChooseMediaTypeSheet
+                isVisible={showSheet.mediaType}
+                setShowMode={setShowSheet}
+                openCamara={async () => {
+                    const res = await openCamara()
+                    console.log("source", res?.assets[0]?.uri);
+                    setProfileInformation({
+                        ...profileInformation,
+                        profileImg: res?.assets[0]?.uri
+                    })
+                    setShowSheet({
+                        ...showSheet,
+                        mediaType: false
+                    })
+                }}
+                chooseMedia={async () => {
+                    const res = await chooseMedia()
+                    setProfileInformation({
+                        ...profileInformation,
+                        profileImg: res?.assets[0]?.uri
+                    })
+                    setShowSheet({
+                        ...showSheet,
+                        mediaType: false
+                    })
+                }}
+            />
+
+            {/* i have kept this for future refrence */}
+            {/* <ShowPaymentSheet
                 isVisible={showSheet.showPayment}
                 setShowSheet={setShowSheet}
                 profileInformation={profileInformation}
@@ -320,9 +348,9 @@ const ProfileInformation = ({ route }) => {
                         showPayment: false
                     })
                 }}
-            />
+            /> */}
 
-            <AddPaymentMethodSheet
+            {/* <AddPaymentMethodSheet
                 isVisible={showSheet.addPayment}
                 setShowSheet={setShowSheet}
                 profileInformation={profileInformation}
@@ -331,7 +359,7 @@ const ProfileInformation = ({ route }) => {
                 paymentData={paymentData}
                 setPaymentData={setPaymentData}
                 action={action}
-            />
+            /> */}
 
         </WrapperContainer>
     )

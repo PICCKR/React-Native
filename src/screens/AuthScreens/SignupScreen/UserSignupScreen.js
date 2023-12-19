@@ -23,7 +23,7 @@ const UserSignupScreen = () => {
     lastName: "",
     phoneNumber: "",
     password: "",
-    selectedCountry: {}
+    selectedCountry: null
   })
   const [checkData, setCheckData] = useState({
     termsCheck: false,
@@ -55,7 +55,6 @@ const UserSignupScreen = () => {
       })
     } else {
       setShowError({})
-      // console.log("sdgfshdahdasghdag", formData);
       navigation.navigate(AuthRouteStrings.OTP_SCREEN, {
         data: formData
       })

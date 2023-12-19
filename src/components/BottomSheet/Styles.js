@@ -25,5 +25,12 @@ const styles = StyleSheet.create({
         padding:moderateScale(16),
         borderColor:uiColours.LIGHT_GRAY
     },
+    footer: {
+        alignSelf: 'center',
+        paddingVertical:verticalScale(16),
+        borderTopWidth:moderateScale(1),
+        borderColor:uiColours.LIGHT_GRAY,
+        width:screenSize.width
+    }
 })
 export default styles

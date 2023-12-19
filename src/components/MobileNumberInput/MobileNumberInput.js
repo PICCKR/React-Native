@@ -19,18 +19,22 @@ const MobileNumberInput = ({
     onPressIn,
     ShowError,
     setFormData,
-    formData
+    formData,
+    value,
+    country
 }) => {
 
     const { appStyles } = useContext(AppContext)
     const [showSheet, setShowSheet] = useState(false)
     const [mobileNumber, setMobileNumber] = useState("")
-    const [selectedCountry, setSelctedCountry] = useState({
-        id: 1,
-        flag: Images.NigeriaFlags,
-        name: "Nigeria",
-        code: "(+234)"
-    })
+    const [selectedCountry, setSelctedCountry] = useState(
+        formData?.selectedCountry ? formData?.selectedCountry :
+            {
+                id: 1,
+                flag: Images.NigeriaFlags,
+                name: "Nigeria",
+                code: "(+234)"
+            })
 
     const countryData = [
         {
@@ -86,6 +90,36 @@ const MobileNumberInput = ({
         handleChange(formattedNumber, selectedCountry)
     }
 
+    const renderFlag = () => {
+        switch (selectedCountry?.id) {
+            case 1:
+                return <Images.NigeriaFlags height={moderateScale(20)} width={moderateScale(35)} />
+                break;
+            case 2:
+                return <Images.usFlags height={moderateScale(20)} width={moderateScale(35)} />
+                break;
+            case 3:
+                return <Images.indianFlag height={moderateScale(20)} width={moderateScale(35)} />
+                break;
+            case 4:
+                return <Images.pakFlag height={moderateScale(20)} width={moderateScale(35)} />
+                break;
+            case 5:
+                return <Images.indonatiaFlag height={moderateScale(20)} width={moderateScale(35)} />
+                break;
+            case 6:
+                return <Images.ukFlag height={moderateScale(20)} width={moderateScale(35)} />
+                break;
+            case 7:
+                return <Images.canadaFlag height={moderateScale(20)} width={moderateScale(35)} />
+                break;
+
+            default:
+                return <Images.canadaFlag height={moderateScale(20)} width={moderateScale(35)} />
+                break;
+        }
+
+    }
 
     return (
         <>
@@ -96,7 +130,7 @@ const MobileNumberInput = ({
                 inputTitle="Phone Number"
                 handleChange={handleMobileNumberChange}
                 placeholder="Input phone number"
-                value={mobileNumber}
+                value={value}
                 OnBlur={handleBlur}
                 ShowError={ShowError}
                 ErrorMsg={ErrorMsg}
@@ -110,10 +144,12 @@ const MobileNumberInput = ({
                             style={Styles.countryView}
                         >
                             <View style={Styles.flagView}>
-                                <selectedCountry.flag height={moderateScale(20)} width={moderateScale(35)} />
+                                {selectedCountry?.flag ? <selectedCountry.flag height={moderateScale(20)} width={moderateScale(35)} /> :
+                                    renderFlag()
+                                }
                             </View>
 
-                            <Text style={appStyles.smallTextBlack}>{selectedCountry.code}</Text>
+                            <Text style={appStyles.smallTextBlack}>{selectedCountry?.code}</Text>
                             <Images.downArrow />
                         </TouchableOpacity>
                     )
@@ -142,7 +178,7 @@ const MobileNumberInput = ({
                                         LayoutAnimation.configureNext(toggleAnimation)
                                         setFormData({
                                             ...formData,
-                                            selectedCountry:item
+                                            selectedCountry: item
                                         });
                                         setSelctedCountry(item)
                                         setShowSheet(false)

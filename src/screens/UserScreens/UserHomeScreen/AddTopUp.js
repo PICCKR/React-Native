@@ -7,14 +7,16 @@ import FullScreenModal from '../../../components/FullScreenModal/FullScreenModal
 import { Images } from '../../../assets/images'
 import { commonStyles } from '../../../utils/Styles/CommonStyles'
 import { uiColours } from '../../../utils/Styles/uiColors'
+import BottomSheet from '../../../components/BottomSheet/BottomSheet'
 
 const AddTopUp = ({
     isVisible,
     setShowSheet,
+
     appStyles,
-    handleAddTopUp = () =>{},
+    handleAddTopUp = () => { },
     topUpAmount,
-    setTopUpAmount 
+    setTopUpAmount
 }) => {
     const [buttonActive, setButtonActive] = useState(false)
 
@@ -45,22 +47,30 @@ const AddTopUp = ({
         }
     ]
     return (
-        <FullScreenModal
+        <BottomSheet
             isVisible={isVisible}
-            buttonTitle={"Top Up"}
-            leftTitle="Top Up"
+            title="Top Up"
             hasCloseIcon
             setShowModal={setShowSheet}
             buttonActive={buttonActive}
             handleButtonPress={handleAddTopUp}
+            handleRightClick={()=>{
+                setShowSheet(false)
+            }}
+            onBackdropPress={()=>{
+                setShowSheet(false)
+            }}
+            showFooterButton
+            buttonTitle={"Top Up"}
         >
-            <ScrollView style={{paddingTop:verticalScale(16)}}>
-                <View style={{ flexDirection: "row", flexWrap: "wrap", justifyContent:'space-between' }}>
+            <ScrollView style={{  }}>
+                <View style={{ flexDirection: "row", flexWrap: "wrap", justifyContent: 'space-between' }}>
                     {
                         priceData.map((item) => {
                             const selected = topUpAmount?.id === item.id
                             return (
                                 <TouchableOpacity
+                                    key={item.id}
                                     style={[styles.priceCard, {
                                         borderColor: selected ? uiColours.PRIMARY : uiColours.LIGHT_GRAY
                                     }]}
@@ -94,26 +104,10 @@ const AddTopUp = ({
                     }}
                     placeholder={topUpAmount?.price}
                     value={topUpAmount?.price}
-                    inputContainer={{ marginVertical: verticalScale(10) }}
+                    inputContainer={{  }}
                 />
 
-                <Text style={[appStyles?.smallTextBlack, { marginVertical: verticalScale(10) }]}>Payment details</Text>
-                <View style={{ flexDirection: 'row', alignItems: 'center', gap: scale(8) }}>
-                    <Images.cardIcon height={moderateScale(13)} width={moderateScale(20)} />
-                    <View>
-                        <Text style={appStyles?.smallTextBlack}>
-                            American Express
-                        </Text>
-                        <Text style={appStyles.smallTextGray}>
-                            Credit card (*1234)
-                        </Text>
-                    </View>
-                </View>
-
-                <View style={{ marginTop: verticalScale(20) }}>
-                    <Text style={appStyles?.smallTextBlack}>
-                        Total
-                    </Text>
+                <View style={{ marginTop: verticalScale(16) }}>
                     <View style={commonStyles.flexRowAlnCtrJutySpaceBetween}>
                         <Text style={appStyles.smallTextGray}>
                             Total Payment
@@ -126,7 +120,7 @@ const AddTopUp = ({
                 </View>
 
             </ScrollView>
-        </FullScreenModal>
+        </BottomSheet>
     )
 }
 

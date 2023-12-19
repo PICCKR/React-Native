@@ -52,9 +52,13 @@ import warning from "../images/warning.svg"
 import profilePicker from "../images/profilePicker.svg"
 import Delete from "../images/delete.svg"
 import logOut from "../images/logOut.png"
+import selectMap from "../images/selectMap.svg"
+import add from "../images/add.svg"
 
 
 export const Images = {
+    add:add,
+    selectMap:selectMap,
     logOut:logOut,
     delete:Delete,
     profilePicker:profilePicker,

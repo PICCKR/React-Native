@@ -9,10 +9,12 @@ import { moderateScale, verticalScale } from 'react-native-size-matters'
 import { Images } from '../../../assets/images'
 import { uiColours } from '../../../utils/Styles/uiColors'
 import { MainRouteStrings } from '../../../utils/Constents/RouteStrings'
+import CheckBox from '../../../components/CheckBox/CheckBox'
+import styles from './Styles'
 
 const VehicleVerification = ({ route }) => {
     const data = route?.params?.data
-    const { appStyles } = useContext(AppContext)
+    const { appStyles, userData } = useContext(AppContext)
     const navigation = useNavigation()
 
     const [buttonActive, setButtonActive] = useState(false)
@@ -22,7 +24,9 @@ const VehicleVerification = ({ route }) => {
         insuranceFileName: "",
         registration: "",
         registrationFileName: "",
-        bvn: ''
+        bvn: userData?.bvn,
+        check: false
+
     })
 
     const handleSubmit = () => {
@@ -34,15 +38,15 @@ const VehicleVerification = ({ route }) => {
         }, 2000);
     }
 
-    const handleNext = () =>{
-        navigation.navigate(MainRouteStrings.PICKER_ACCOUNT)
+    const handleNext = () => {
+        navigation.navigate(MainRouteStrings.TRAINING_SCREEN)
     }
     useEffect(() => {
         if (
             vehicleData?.insurance !== '' &&
             vehicleData.registration !== "" &&
-            vehicleData.bvn !== ""
-
+            vehicleData.bvn !== "" &&
+            vehicleData.check
         ) {
             setButtonActive(true);
         } else {
@@ -85,32 +89,48 @@ const VehicleVerification = ({ route }) => {
                 <InputText
                     hasTitle
                     inputTitle="Bank Verification Number"
-                    placeholder="e.g. 1234 5678 9012 3456"
-                    value={vehicleData.bvn}
-                    maxLength={19}
+                    editable={false}
+                    // placeholder="e.g. 1234 5678 9012 3456"
+                    value={vehicleData?.bvn}
+                    // maxLength={19}
                     inputContainer={{ marginTop: verticalScale(10) }}
                     inPutStyles={{ marginTop: verticalScale(4) }}
-                    handleChange={(e) => {
-                        // Remove any non-digit characters
-                        const cleanedNumber = e.replace(/\D/g, '');
+                // handleChange={(e) => {
+                //     // Remove any non-digit characters
+                //     const cleanedNumber = e.replace(/\D/g, '');
 
-                        // Define the format (adjust based on your needs)
-                        const formattedNumber = cleanedNumber.replace(/(\d{4})/g, '$1 ');
+                //     // Define the format (adjust based on your needs)
+                //     const formattedNumber = cleanedNumber.replace(/(\d{4})/g, '$1 ');
 
-                        // Remove trailing hyphen if present
-                        formattedNumber.replace(/-$/, '');
+                //     // Remove trailing hyphen if present
+                //     formattedNumber.replace(/-$/, '');
 
-                        setVehicleData({
-                            ...vehicleData,
-                            bvn: formattedNumber
-                        })
-                        if (e.length > 18) {
-                            setButtonActive(true)
-                        } else {
-                            setButtonActive(false)
-                        }
-                    }}
+                //     setVehicleData({
+                //         ...vehicleData,
+                //         bvn: formattedNumber
+                //     })
+                //     if (e.length > 18) {
+                //         setButtonActive(true)
+                //     } else {
+                //         setButtonActive(false)
+                //     }
+                // }}
                 />
+
+                <View style={styles.termsView}>
+                    <CheckBox
+                        handleCheck={() => {
+                            setVehicleData({
+                                ...vehicleData,
+                                check: !vehicleData.check
+                            })
+                        }}
+                        selected={vehicleData.check}
+                    />
+                    <Text style={appStyles.smallTextGray}>
+                        I agree that I am over 21 years old
+                    </Text>
+                </View>
             </ScrollView>}
 
             {status === "waiting" &&

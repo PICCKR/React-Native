@@ -24,6 +24,7 @@ const AuthRoutes = () => {
                 <Stack.Screen name={AuthRouteStrings.KYC_SCREEN} component={screens.KYC_SCREEN} />
                 <Stack.Screen name={AuthRouteStrings.APPROVAL_SCREEN} component={screens.APPROVAL_SCREEN} />
                 
+                
             </Stack.Navigator>
         </NavigationContainer>
     )

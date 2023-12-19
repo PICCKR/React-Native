@@ -1,25 +1,29 @@
-import { useColorScheme, Appearance, StyleSheet } from "react-native";
+import { useColorScheme, Appearance, StyleSheet, Alert } from "react-native";
 import React, { useEffect, useState, } from "react";
 import { getLocalData } from "../helper/AsyncStorage";
 import { storageKeys } from "../helper/AsyncStorage/storageKeys";
 import { screenSize } from "../utils/Styles/CommonStyles";
-import { scale, verticalScale } from "react-native-size-matters";
+import { moderateScale, scale, verticalScale } from "react-native-size-matters";
 import { uiColours } from "../utils/Styles/uiColors";
 import { useNavigation } from "@react-navigation/native";
+import Geolocation from "@react-native-community/geolocation";
+import Actions from "../redux/Actions";
+import Geocoder from "react-native-geocoding";
+import { GOOGLE_MAP_API_KEY } from "../configs/google_map_api_key";
 
 
 
 export const AppContext = React.createContext();
+
+
 
 const AppProvider = ({ children }) => {
 
     const getUserData = async () => {
         // to get user data
         const UserData = await getLocalData(storageKeys.userData)
-
         // to get new user status
         const newUser = await getLocalData(storageKeys.isNew)
-
         // check if user is new to the application
         // if we get undefined data the he is new user so set it to true else false
         if (newUser === undefined || newUser === null) {
@@ -27,7 +31,6 @@ const AppProvider = ({ children }) => {
         } else {
             setisNew(false)
         }
-
         // if user data exist then set login to true to that user can directly
         // navigate to home screen
         if (UserData) {
@@ -35,8 +38,53 @@ const AppProvider = ({ children }) => {
         }
     }
 
+    const getCurrentLocation = async () => {
+        Geolocation.getCurrentPosition(
+            (position) => {
+                console.log('position =======>', position);
+                // Geocoder.from(position?.coords?.latitude, position?.coords?.longitude)
+                const latitude = position?.coords?.latitude
+                const longitude = position?.coords?.longitude
+                // convert lat lng to address
+                Geocoder.init(GOOGLE_MAP_API_KEY);
+                Geocoder.from(latitude, longitude)
+                    .then(async json => {
+                        const adddress = json.results[0]?.formatted_address
+                        setCurrentLocation({
+                            ...currentLocation,
+                            location: adddress,
+                            lat: latitude,
+                            lng: longitude
+                        })
+                        // setDestination({
+                        //     ...destination,
+                        //     lat: latitude,
+                        //     lng: longitude,
+                        //     location: adddress
+                        // })
+                        setSource({
+                            ...source,
+                            lat: latitude,
+                            lng: longitude,
+                            location: adddress
+                        })
+                    })
+                    .catch(function (error) {
+                        console.log('errr', error);
+                        Alert.alert("", "Something went wrong please try again")
+                    });
+
+                // Actions.currentLoaction(position)
+            },
+            (error) => {
+                console.log('location err', error);
+            }
+        );
+    }
+
     useEffect(() => {
         getUserData()
+        getCurrentLocation()
     }, [])
 
     // storing the color mode of the mobile 
@@ -47,6 +95,23 @@ const AppProvider = ({ children }) => {
     const [userData, setuserData] = useState(null)
     const [isNew, setisNew] = useState(null)
     const [isDark, setIsDark] = useState(useColorScheme() === "dark")
+    const [destination, setDestination] = useState({
+        lat: "",
+        lng: "",
+        location: ""
+    })
+
+    const [source, setSource] = useState({
+        lat: "",
+        lng: "",
+        location: "Current location"
+    })
+
+    const [currentLocation, setCurrentLocation] = useState({
+        lat: "",
+        lng: "",
+        location: ""
+    })
 
     // commanly used appliaction styles
     const appStyles = {
@@ -179,7 +244,7 @@ const AppProvider = ({ children }) => {
         },
         containerPadding: {
             backgroundColor: isDark ? uiColours?.DARK_BG : uiColours.WHITE_TEXT,
-            paddingHorizontal: scale(16),
+            paddingHorizontal: moderateScale(16),
             flex: 1,
         },
     }
@@ -195,7 +260,13 @@ const AppProvider = ({ children }) => {
                 userData,
                 setuserData,
                 isDark,
-                setIsDark
+                setIsDark,
+                destination,
+                setDestination,
+                currentLocation,
+                setCurrentLocation,
+                source,
+                setSource
             }}
         >
             {children}

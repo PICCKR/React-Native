@@ -1,4 +1,4 @@
-import {StatusBar} from'react-native'
+import { StatusBar, Text, View } from 'react-native'
 import React from 'react'
 import { useSelector } from 'react-redux'
 import AppProvider from './src/context/AppContext'
@@ -13,16 +13,12 @@ const App = () => {
   const showLoader = useSelector((state) => state?.showLoader?.loader)
 
   return (
-    <>
-      <AppProvider>
-        <StatusBar backgroundColor={uiColours.PRIMARY}/>
-        <CheckRoutes />
-        {showLoader && <Loader />}
-        <Toast config={toastConfig} />
-      </AppProvider>
-
-    </>
-
+    <AppProvider>
+      <StatusBar backgroundColor={uiColours.PRIMARY}/>
+      <CheckRoutes />
+      {showLoader && <Loader />}
+      <Toast config={toastConfig} />
+    </AppProvider>
   )
 }
 

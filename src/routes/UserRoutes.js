@@ -13,7 +13,6 @@ const UserRoutes = () => {
             >
                 <Stack.Screen name={MainRouteStrings.BOTTOM_TAB_ROUTES} component={screens.BOTTOM_TAB_ROUTES} />
                 <Stack.Screen name={MainRouteStrings.BECOME_PICKER} component={screens.BECOME_PICKER} />
-                <Stack.Screen name={AuthRouteStrings.OTP_SCREEN} component={screens.OTP_SCREEN} />
                 <Stack.Screen name={MainRouteStrings.VEHICLE_VERIFICATION} component={screens.VEHICLE_VERIFICATION} />
                 <Stack.Screen name={MainRouteStrings.PICKER_ACCOUNT} component={screens.PICKER_ACCOUNT} />
                 <Stack.Screen name={MainRouteStrings.TRAINING_SCREEN} component={screens.TRAINING_SCREEN} />
@@ -26,6 +25,10 @@ const UserRoutes = () => {
                 <Stack.Screen name={MainRouteStrings.PAYMENT_METHOD} component={screens.PAYMENT_METHOD} />
                 <Stack.Screen name={MainRouteStrings.RATING_AND_REVIEW} component={screens.RATING_AND_REVIEW} />
                 <Stack.Screen name={MainRouteStrings.USER_KYC_SCREEN} component={screens.USER_KYC_SCREEN} />
+                <Stack.Screen name={MainRouteStrings.EDIT_PROFILE} component={screens.EDIT_PROFILE} />
+                <Stack.Screen name={MainRouteStrings.FIND_DESTINATON} component={screens.FIND_DESTINATON} />
+                <Stack.Screen name={MainRouteStrings.SELECT_ADDRRESS_FROM_MAP} component={screens.SELECT_ADDRRESS_FROM_MAP} />
+                <Stack.Screen name={MainRouteStrings.ITEMS_DETAILS} component={screens.ITEMS_DETAILS} />
             </Stack.Navigator>
         </NavigationContainer>
     )

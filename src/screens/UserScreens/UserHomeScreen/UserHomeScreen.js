@@ -31,19 +31,19 @@ const UserHomeScreen = () => {
 
   const recentDestinationData = [
     {
-      titel: "Harvard University",
+      title: "Harvard University",
       details: 'Massachusetts Hall, Cambridge, MA 02138'
     },
     {
-      titel: "Houghton Library",
+      title: "Houghton Library",
       details: 'Quincy Street &, Harvard St, Cambridge, MA 02138'
     },
     {
-      titel: "Cambridge Historical Tours",
+      title: "Cambridge Historical Tours",
       details: '1400 Massachusetts Ave, Cambridge, MA 02138'
     },
     {
-      titel: "John Harvard Statue",
+      title: "John Harvard Statue",
       details: 'Harvard Yard, 1, Cambridge, MA 02138'
     }
   ]
@@ -120,14 +120,14 @@ const UserHomeScreen = () => {
             {
               recentDestinationData.map((item) => {
                 return (
-                  <View key={item.titel} style={{ flexDirection: 'row', gap: scale(8) }}>
+                  <View key={item.title} style={{ flexDirection: 'row', gap: scale(8) }}>
                     <Images.locationPinRed height={moderateScale(20)} width={moderateScale(20)} />
                     <View style={{ flex: 1 }}>
                       <Text style={appStyles.smallTextBlackBold}>
-                        {item.titel}
+                        {item?.title}
                       </Text>
                       <Text style={appStyles.smallTextGray}>
-                        {item.details}
+                        {item?.details}
                       </Text>
                     </View>
                   </View>
@@ -156,6 +156,11 @@ const UserHomeScreen = () => {
                   <View key={item?.id} style={styles.VehicleType}>
                     <TouchableOpacity
                       style={styles.vehicleTypeIcon}
+                      onPress={() => {
+                        navigation.navigate(MainRouteStrings.FIND_DESTINATON, {
+
+                        })
+                      }}
                     >
                       <item.icon height={moderateScale(40)} width={moderateScale(40)} />
                     </TouchableOpacity>
@@ -192,18 +197,6 @@ const UserHomeScreen = () => {
         </View>
       </ScrollView>
 
-      {/* sheets */}
-      <TopUpSheet
-        isVisible={showSheet.showPayment}
-        handleCardClick={() => {
-          setShowSheet({
-            ...showSheet,
-            showPayment: false,
-            addPayment: true
-          })
-        }}
-      />
-
       <AddTopUp
         isVisible={showSheet.addPayment}
         appStyles={appStyles}
@@ -214,12 +207,11 @@ const UserHomeScreen = () => {
           setShowSheet({
             ...showSheet,
             addPayment: false,
-            Otp: true
           })
         }}
 
       />
-      <OtpPopUp
+      {/* <OtpPopUp
         isVisible={showSheet.Otp}
         appStyles={appStyles}
         setShowSheet={setShowSheet}
@@ -234,7 +226,7 @@ const UserHomeScreen = () => {
           }
           showToast(toastMsgConfg, tostMessagetypes.SUCCESS, isDark)
         }}
-      />
+      /> */}
     </SafeAreaView>
   )
 }

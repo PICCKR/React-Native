@@ -42,7 +42,7 @@ const Header = ({
                     onPress={() =>
                         setShowSheet({
                             ...showSheet,
-                            showPayment: true
+                            addPayment: true
                         })
                     }
                     style={{ paddingVertical: verticalScale(6) }}

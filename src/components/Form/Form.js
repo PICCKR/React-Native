@@ -15,7 +15,7 @@ const Form = ({
     setShowError,
     style,
     // handleOnBlur = () => {},
-    textChange = () => { }
+    textChange = () => { },
 }) => {
 
     const [showPassword, setShowPassword] = useState(false)
@@ -29,10 +29,7 @@ const Form = ({
         if (selectedCountry) {
             setFormData({
                 ...formData,
-                selectedCountry: {
-                    code: selectedCountry?.code,
-                    name: selectedCountry?.name
-                },
+                selectedCountry: selectedCountry,
                 phoneNumber: e
 
             });
@@ -77,6 +74,7 @@ const Form = ({
                                     ShowError={ShowError[item?.type]}
                                     setFormData={setFormData}
                                     formData={formData}
+                                    value={formData[item.type]}
                                 />
                                 :
 
@@ -103,6 +101,7 @@ const Form = ({
                                     showRenderRightView={
                                         item.type === "password" ? true : false
                                     }
+                                    editable={item?.editable ? item?.editable : true}
                                     renderRightView={() => {
                                         return (
                                             <TouchableOpacity

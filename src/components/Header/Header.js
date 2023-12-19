@@ -16,13 +16,13 @@ const Header = ({
     hasCloseIcon,
     leftViewStyles,
     centerViewStyles,
-    righyViewStyles
+    righyViewStyles,
+    headerContainer
 }) => {
     const { appStyles } = useContext(AppContext)
     const navigation = useNavigation()
     return (
-        <View style={styles.headerContainer}>
-
+        <View style={[styles.headerContainer,headerContainer]}>
             <View style={[styles.leftView,leftViewStyles]}>
                 {
                     showBackButton ? <TouchableOpacity

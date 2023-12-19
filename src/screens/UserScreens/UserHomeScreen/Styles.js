@@ -5,7 +5,8 @@ import { uiColours } from "../../../utils/Styles/uiColors"
 
 const styles = StyleSheet.create({
     homeScreenContainer: {
-        paddingHorizontal: scale(16)
+        paddingHorizontal: scale(16),
+        marginTop:verticalScale(16)
     },
     profileView: {
         height: moderateScale(50),

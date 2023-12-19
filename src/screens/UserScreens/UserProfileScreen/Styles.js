@@ -12,9 +12,6 @@ const styles = StyleSheet.create({
         borderColor: uiColours.LIGHT_GRAY,
         paddingVertical: verticalScale(8)
     },
-    profileSection:{
-        alignItems:"center",
-        marginTop:verticalScale(16)
-    }
+
 })
 export default styles

@@ -98,7 +98,7 @@ const AddAddressSheet = ({
 
             }}
         >
-            <ScrollView style={{ marginBottom: verticalScale(50) }}>
+            <ScrollView style={{ marginBottom: verticalScale(70) }}>
                 <View style={{ paddingBottom: verticalScale(16) }}>
                     <Text style={appStyles.smallTextBlack}>
                         Address type

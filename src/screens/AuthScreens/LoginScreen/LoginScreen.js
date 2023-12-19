@@ -94,6 +94,7 @@ const LoginScreen = () => {
               phoneNumber: false
             })
           }}
+          setFormData={setLoginData}
         />
 
         <InputText

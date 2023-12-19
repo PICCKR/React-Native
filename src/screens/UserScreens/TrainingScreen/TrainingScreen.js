@@ -11,7 +11,7 @@ import { Images } from '../../../assets/images'
 
 const TrainingScreen = () => {
 
-    const { appStyles } = useContext(AppContext)
+    const { appStyles, setuserData,userData } = useContext(AppContext)
     const navigation = useNavigation()
 
 
@@ -40,7 +40,7 @@ const TrainingScreen = () => {
     const [data, setData] = useState(videoData)
 
     const handleNext = () => {
-        navigation.navigate(MainRouteStrings.TRAINING_SCREEN)
+        setuserData({ ...userData, type: "picker" })
     }
 
     const handleClickVideo = (val) => {

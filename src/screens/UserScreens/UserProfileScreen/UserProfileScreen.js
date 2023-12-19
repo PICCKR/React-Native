@@ -6,8 +6,8 @@ import { Images } from '../../../assets/images'
 import { AppContext } from '../../../context/AppContext'
 import { useNavigation } from '@react-navigation/native'
 import EditAction from './EditAction'
-import { moderateScale, scale } from 'react-native-size-matters'
-import PrifileView from '../../../components/PrifileView/PrifileView'
+import { moderateScale, scale, verticalScale } from 'react-native-size-matters'
+import PrifileView from '../../../components/PrifileView/ProfileView'
 import Switch from '../../../components/Switch/Switch'
 import { commonStyles } from '../../../utils/Styles/CommonStyles'
 import { MainRouteStrings } from '../../../utils/Constents/RouteStrings'
@@ -15,6 +15,7 @@ import ConfirmationSheet from '../../../components/ConfirmationSheet/Confirmatio
 import { uiColours } from '../../../utils/Styles/uiColors'
 import { clearLocalData, setLocalData } from '../../../helper/AsyncStorage'
 import { storageKeys } from '../../../helper/AsyncStorage/storageKeys'
+import AddTopUp from '../UserHomeScreen/AddTopUp'
 
 const UserProfileScreen = () => {
 
@@ -23,7 +24,7 @@ const UserProfileScreen = () => {
   const navigation = useNavigation()
 
   const [profileInformation, setProfileInformation] = useState({
-    profileImg: null,
+    profileImg: userData?.profileImg,
     email: userData?.email,
     firstName: userData?.firstName,
     lastName: userData?.lastName,
@@ -31,18 +32,18 @@ const UserProfileScreen = () => {
     selectedCountry: userData?.selectedCountry,
     address: userData?.address,
     paymentMethod: userData?.paymentMethod,
+    walletBalance: 0
 
   })
 
   const [showSheet, setShowSheet] = useState({
-    email: false,
-    showAddress: false,
-    addAddress: false,
-    showPayment: false,
-    addPayment: false
+    addPayment: false,
+    signOut: false
   })
 
-  const [mode, setMode] = useState("Light Mode")
+  const [walletBalance, seWalletBalance] = useState({
+    price: "0"
+  })
 
   const editActionData = [
     {
@@ -52,8 +53,8 @@ const UserProfileScreen = () => {
     },
     {
       id: "2",
-      title: "Payment Method",
-      type: "paymentMethod"
+      title: "Wallet",
+      type: "Wallet"
     },
     {
       id: "3",
@@ -84,6 +85,11 @@ const UserProfileScreen = () => {
       id: "8",
       title: "Sign out",
       type: "Signout"
+    },
+    {
+      id: "9",
+      title: "Delete Account",
+      type: "deleteAccount"
     }
   ]
 
@@ -92,8 +98,11 @@ const UserProfileScreen = () => {
       case "address":
         navigation.navigate(MainRouteStrings.ADDRESS_SCREEN)
         break;
-      case "paymentMethod":
-        navigation.navigate(MainRouteStrings.PAYMENT_METHOD)
+      case "Wallet":
+        setShowSheet({
+          ...showSheet,
+          addPayment: true
+        })
         break;
       case "addresRatingReviewss":
         navigation.navigate(MainRouteStrings.RATING_AND_REVIEW)
@@ -105,7 +114,10 @@ const UserProfileScreen = () => {
         navigation.navigate(MainRouteStrings.BECOME_PICKER)
         break;
       case "Signout":
-
+        setShowSheet({
+          ...showSheet,
+          signOut: true
+        })
         break;
 
       default:
@@ -117,31 +129,22 @@ const UserProfileScreen = () => {
     <WrapperContainer
       centerTitle="Profile"
       rightTitle="Edit"
+      handlerRightViewPress={() => {
+        navigation.navigate(MainRouteStrings.EDIT_PROFILE)
+      }}
       showFooterButton={false}
-      // handleButtonPress={handleSave}
-      // buttonActive={buttonActive}
       containerPadding={{ paddingHorizontal: 0 }}
     >
       <ScrollView
-        style={{ paddingHorizontal: scale(16) }}
+        style={{ paddingHorizontal: scale(0) }}
       >
 
-        <View style={styles.profileSection}>
-          <PrifileView
-            profileViewStyles={{}}
-          />
-          <Text style={appStyles.mediumTextPrimaryBold}>
-            {profileInformation?.firstName} {profileInformation?.lastName}
-          </Text>
-          <Text style={appStyles.smallTextGray}>
-            {profileInformation?.email}
-          </Text>
-          <Text style={appStyles.smallTextGray}>
-            {`${profileInformation?.selectedCountry?.code} ${profileInformation?.phoneNumber}`}
-          </Text>
-        </View>
+        <PrifileView
+          profileImg={profileInformation?.profileImg}
+          userData={userData}
+        />
 
-        <View style={{}}>
+        <View style={{paddingHorizontal:scale(16), paddingTop:verticalScale(10)}}>
           <Text style={appStyles.mediumTextBlackBold}>
             Account
           </Text>
@@ -156,14 +159,16 @@ const UserProfileScreen = () => {
                   style={styles.deatilsEditbutton}
                   onPress={() => handleOptionClick(item)}
                 >
-                  <Text style={appStyles.smallTextGray}>
+                  <Text style={[appStyles.smallTextGray, {
+                    color: item?.type == "Signout" ? uiColours.RED : uiColours.GRAY_TEXT
+                  }]}>
                     {item.title}
                   </Text>
                   <View style={{ flexDirection: "row", alignItems: 'center', gap: scale(10) }}>
-                    {item?.type === "paymentMethod" && <Text>
+                    {item?.type === "Wallet" && <Text>
                       {
-                        profileInformation?.paymentMethod?.length
-                      } Cards
+                        walletBalance?.price
+                      }
                     </Text>
                     }
                     {item?.type === "address" &&
@@ -204,7 +209,8 @@ const UserProfileScreen = () => {
         </View>
       </ScrollView>
       <ConfirmationSheet
-        isVisible={true}
+        isVisible={showSheet.signOut}
+        setShowSheet={setShowSheet}
         renderIcon={() => {
           return (
             <Image source={Images.logOut} style={commonStyles.icon} tintColor={uiColours.GRAY_TEXT} />
@@ -216,6 +222,21 @@ const UserProfileScreen = () => {
           clearLocalData()
           setuserData(null)
         }}
+      />
+
+      <AddTopUp
+        isVisible={showSheet.addPayment}
+        appStyles={appStyles}
+        setShowSheet={setShowSheet}
+        topUpAmount={walletBalance}
+        setTopUpAmount={seWalletBalance}
+        handleAddTopUp={() => {
+          setShowSheet({
+            ...showSheet,
+            addPayment: false,
+          })
+        }}
+
       />
     </WrapperContainer >
   )

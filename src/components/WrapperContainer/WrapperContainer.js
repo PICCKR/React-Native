@@ -5,6 +5,7 @@ import { AppContext } from '../../context/AppContext'
 import Header from '../Header/Header'
 import CustomButton from '../Button/CustomButton'
 import { Styles } from './Styles'
+import { verticalScale } from 'react-native-size-matters'
 
 const WrapperContainer = ({
     StatusBarColor = uiColours.PRIMARY,
@@ -44,7 +45,9 @@ const WrapperContainer = ({
                 />
 
 
-                <View style={[appStyles.containerPadding, containerPadding]}>
+                <View style={[appStyles.containerPadding,{
+                   paddingBottom : showFooterButton ? verticalScale(16) : 0,
+                }, containerPadding]}>
                     {children}
                 </View>
 

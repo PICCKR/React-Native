@@ -27,6 +27,10 @@ import AddressScreen from "../screens/UserScreens/AddressScreen/AddressScreen";
 import PaymentMethod from "../screens/UserScreens/PaymentMethod/PaymentMethod";
 import RatingAndReviews from "../screens/UserScreens/RatingAndReviews/RatingAndReviews";
 import UserKycScreen from "../screens/UserScreens/UserKycScreen/UserKycScreen";
+import EditProfile from "../screens/UserScreens/EditProfile/EditProfile";
+import FindDestination from "../screens/UserScreens/FindDestination/FindDestination";
+import SelectAddresFromMap from "../screens/CommonScreens/SelectAddresFromMap/SelectAddresFromMap";
+import ItemsDetails from "../screens/UserScreens/ItemsDetails/ItemsDetails";
 
 export const screens = {
     USER_HOME_SCREEN: UserHomeScreen,
@@ -56,9 +60,10 @@ export const screens = {
     PAYMENT_METHOD:PaymentMethod,
     RATING_AND_REVIEW:RatingAndReviews,
     USER_KYC_SCREEN:UserKycScreen,
-
-    
-
+    EDIT_PROFILE:EditProfile,
+    FIND_DESTINATON:FindDestination,
+    SELECT_ADDRRESS_FROM_MAP:SelectAddresFromMap,
+    ITEMS_DETAILS:ItemsDetails,
 
     PICKER_HOME_SCREEN:PickerHomeScreen
 

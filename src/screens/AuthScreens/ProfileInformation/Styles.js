@@ -20,6 +20,11 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         marginBottom: verticalScale(10)
     },
+    profileImg:{
+        height: moderateScale(100),
+        width: moderateScale(100),
+        borderRadius: moderateScale(50),
+    },
     cameraIconView: {
         height: moderateScale(28),
         width: moderateScale(28),

@@ -41,7 +41,7 @@ const KycScreen = ({route}) => {
 
     const handleSave = () => {
         navigation.navigate(AuthRouteStrings.APPROVAL_SCREEN,{
-            data:data
+            data:{...data, bvn:bvn}
         })
     }
 
