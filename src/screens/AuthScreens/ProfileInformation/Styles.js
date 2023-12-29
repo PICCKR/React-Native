@@ -20,7 +20,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         marginBottom: verticalScale(10)
     },
-    profileImg:{
+    profileImg: {
         height: moderateScale(100),
         width: moderateScale(100),
         borderRadius: moderateScale(50),
@@ -70,6 +70,18 @@ const styles = StyleSheet.create({
         flexDirection: "row",
         alignItems: "center",
         gap: scale(6)
+    },
+    setAddress: {
+        borderWidth: moderateScale(1),
+        borderRadius: moderateScale(6),
+        borderColor: uiColours.LIGHT_GRAY,
+        minHeight:verticalScale(45),
+        flexDirection:'row',
+        alignItems:"center",
+        paddingHorizontal:scale(10),
+        gap:scale(10),
+        paddingVertical:verticalScale(8)
+
     }
 })
 export default styles

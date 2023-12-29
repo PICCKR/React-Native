@@ -13,6 +13,11 @@ import CustomButton from '../../../components/Button/CustomButton'
 import { uiColours } from '../../../utils/Styles/uiColors'
 import { RegEx } from '../../../utils/Constents/regulerexpressions'
 import { AuthRouteStrings } from '../../../utils/Constents/RouteStrings'
+import { verticalScale } from 'react-native-size-matters'
+import { signUp } from '@aws-amplify/auth'
+import Actions from '../../../redux/Actions'
+import { showToast } from '../../../components/tostConfig/tostConfig'
+import { tostMessagetypes } from '../../../utils/Constents/constentStrings'
 
 const UserSignupScreen = () => {
   const { appStyles, isDark } = useContext(AppContext)
@@ -32,8 +37,10 @@ const UserSignupScreen = () => {
 
   const [buttonActive, setButtonActive] = useState(false)
   const [ShowError, setShowError] = useState({})
+  const [errorMsg, setErrorMsg] = useState()
 
-  const handledContinue = () => {
+  const handledContinue = async () => {
+
     // console.log("RegEx.name__regEx.test(formData.firstName)", formData);
     if (!RegEx.name__regEx.test(formData.firstName)) {
       setShowError({
@@ -55,9 +62,49 @@ const UserSignupScreen = () => {
       })
     } else {
       setShowError({})
-      navigation.navigate(AuthRouteStrings.OTP_SCREEN, {
-        data: formData
-      })
+      Actions.showLoader(true)
+      try {
+        const user = await signUp({
+          username: `${formData?.selectedCountry?.code?.replace(/[()]/g, '')}${formData?.phoneNumber.replace(/\s+/g, '')}`,
+          password: formData?.password,
+          attributes: {
+            phone_number: `${formData?.selectedCountry?.code}${formData?.phoneNumber.replace(/\s+/g, '')}`,
+          },
+          options: {
+            userAttributes: {
+              "custom:first_name": "First Name",
+              "custom:last_name": "Last Name",
+              "custom:middle_name": "middle Name",
+            },
+          },
+        });
+
+        if (user) {
+          navigation.navigate(AuthRouteStrings.OTP_SCREEN, {
+            from: AuthRouteStrings.USER_SIGN_UP,
+            data: formData,
+            user: user
+          })
+        }
+      } catch (error) {
+
+        // setShowError({
+        //   ...ShowError,
+        //   phoneNumber:true
+        // })
+        // setErrorMsg({
+        //   ...errorMsg,
+        //   phoneNumber:error?.message
+        // })
+        const toastMsgConfg = {
+          isDark: isDark,
+          msg: error?.message
+        }
+        showToast(toastMsgConfg, tostMessagetypes.ERROR, isDark)
+        console.log("error", error?.message);
+      } finally {
+        Actions.showLoader(false)
+      }
     }
   }
 
@@ -81,17 +128,22 @@ const UserSignupScreen = () => {
       centerTitle={"Sign up"}
       showBackButton
       buttonTitle="Continue"
+      handleBack={() => {
+        navigation.goBack()
+      }}
       buttonActive={buttonActive}
       handleButtonPress={handledContinue}
     >
       <ScrollView style={Styles.formView}>
-        
+
         <Form
           data={signUpFormData}
           formData={formData}
           setFormData={setFormData}
           ShowError={ShowError}
           setShowError={setShowError}
+          errorMsg={errorMsg}
+          setErrorMsg={setErrorMsg}
         />
 
         <HyperlinkView
@@ -116,12 +168,10 @@ const UserSignupScreen = () => {
           leftText="I have read the"
           rightText="Privacy Policy"
           selected={checkData.privecyCheck}
+          termsView={{ marginBottom: verticalScale(70) }}
         />
 
       </ScrollView>
-
-
-
     </WrapperContainer>
   )
 }

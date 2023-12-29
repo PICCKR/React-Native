@@ -2,7 +2,6 @@ import React from "react"
 import { useState } from 'react'
 import { ColorValue, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import Modal, { ModalProps } from 'react-native-modal'
-import MDicon from 'react-native-vector-icons/MaterialIcons'
 import type { Dispatch, SetStateAction, FC } from 'react'
 
 
@@ -74,7 +73,7 @@ const ChangeYearModal: FC<ChangeYearModalProps> = ({ colorOptions, dismiss, disp
                     onPress={() => { setYear(prev => prev - 1) }}
                     style={styles.btn}
                 >
-                    <MDicon name={'keyboard-arrow-up'} size={48} color={primary} />
+                    {/* <MDicon name={'keyboard-arrow-up'} size={48} color={primary} /> */}
                     <Text style={styles.prevYearText}>{year - 1}</Text>
                 </TouchableOpacity>
                 <Text style={[styles.yearText, { color: primary }]}>{year}</Text>
@@ -83,7 +82,7 @@ const ChangeYearModal: FC<ChangeYearModalProps> = ({ colorOptions, dismiss, disp
                     style={styles.btn}
                 >
                     <Text style={styles.nextYearText}>{year + 1}</Text>
-                    <MDicon name={'keyboard-arrow-down'} size={48} color={primary} />
+                    {/* <MDicon name={'keyboard-arrow-down'} size={48} color={primary} /> */}
                 </TouchableOpacity>
             </View>
         </Modal>

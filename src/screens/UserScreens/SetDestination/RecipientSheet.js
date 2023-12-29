@@ -8,6 +8,8 @@ import { uiColours } from '../../../utils/Styles/uiColors'
 import { RegEx } from '../../../utils/Constents/regulerexpressions'
 import Form from '../../../components/Form/Form'
 import BottomSheet from '../../../components/BottomSheet/BottomSheet'
+import { useNavigation } from '@react-navigation/native'
+import useBackButton from '../../../customHooks/useBackButton'
 
 const RecipientSheet = ({
   location,
@@ -20,7 +22,7 @@ const RecipientSheet = ({
   handleBackClick,
   handleEdit
 }) => {
-
+const navigation =useNavigation()
   const recepentFormData = [
     {
       id: 1,
@@ -55,11 +57,22 @@ const RecipientSheet = ({
     }
   }, [formData])
 
+  useBackButton(() => {
+    // setShowBottomSheet(false)
+    navigation.goBack()
+    return true
+  })
+
   return (
     <BottomSheet
       isVisible={isVisible}
+      modelBgStyles={{backgroundColor:"rgba(255, 255, 255, 0)"}}
       title="Recipients Details"
       hasBackButton
+      showFooterButton
+      buttonActive={buttonActive}
+      buttonTitle="Next"
+      handleButtonPress={handleNext}
       handleBackClick={handleBackClick}
       handleRightClick={() => {
         // setShowSheet(false)
@@ -67,7 +80,9 @@ const RecipientSheet = ({
       containerStyles={{ padding: 0 }}
     >
 
-      <View style={[commonStyles.bottomBorder, Styles.bottomViewContent]}>
+      <View style={[commonStyles.bottomBorder, Styles.bottomViewContent,{
+        borderColor:isDark ? uiColours.GRAYED_BUTTON : uiColours.LIGHT_GRAY
+      }]}>
         <Text style={[appStyles?.smallTextBlack, { flex: 1 }]}>
           {location?.location}
         </Text>
@@ -80,7 +95,9 @@ const RecipientSheet = ({
 
       </View>
 
-      <View style={[commonStyles.bottomBorder, Styles.recipientDetails]}>
+      <View style={[commonStyles.bottomBorder, Styles.recipientDetails,{
+        borderColor:isDark ? uiColours.GRAYED_BUTTON : uiColours.LIGHT_GRAY
+      }]}>
         <View style={commonStyles.flexRowAlnCtrJutySpaceBetween}>
           <Text style={appStyles.mediumTextBlackBold}>
             Recipient details<Text style={{ color: uiColours.RED }}>*</Text>
@@ -107,7 +124,7 @@ const RecipientSheet = ({
           setShowError={setShowError}
         />
       </View>
-      <CustomButton
+      {/* <CustomButton
         buttonStyle={{
           backgroundColor: buttonActive ? uiColours.PRIMARY :
             !buttonActive && isDark ? uiColours.GRAYED_BUTTON :
@@ -122,7 +139,7 @@ const RecipientSheet = ({
         NavigationHandle={handleNext}
         disabled={!buttonActive}
 
-      />
+      /> */}
     </BottomSheet>
   )
 }

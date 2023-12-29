@@ -7,15 +7,20 @@ import styles from './Styles'
 import { moderateScale, verticalScale } from 'react-native-size-matters'
 import { uiColours } from '../../utils/Styles/uiColors'
 import { AppContext } from '../../context/AppContext'
+import CustomButton from '../Button/CustomButton'
+import { buttonTypes } from '../../utils/Constents/constentStrings'
 
 const ConfirmationSheet = ({
     isVisible,
     setShowSheet,
-    handleButtonClick = () => {},
+    handleButton2Click = () => { },
+    handleButton1Click = () => { },
     renderIcon = () => { },
     title,
     discription,
-    buttonTitle
+    button1Title = "button1Title",
+    button2Title = "button2Title",
+    headerTitle
 }) => {
     const { appStyles } = useContext(AppContext)
 
@@ -23,7 +28,7 @@ const ConfirmationSheet = ({
         <BottomSheet
             isVisible={isVisible}
             hasCloseIcon
-            title="Confirmation"
+            title={headerTitle}
             onBackdropPress={() => {
                 setShowSheet(false)
             }}
@@ -31,29 +36,34 @@ const ConfirmationSheet = ({
                 setShowSheet(false)
             }}
         >
-            <View style={{ alignItems: 'center', gap: verticalScale(6), paddingBottom: verticalScale(16) }}>
+            <View style={{ alignItems: 'center', gap: verticalScale(10), paddingBottom: verticalScale(16) }}>
                 <View>
-                    <View style={styles.iconView}>
-                        {renderIcon()}
-                    </View>
-                    <View style={styles.warningIconView}>
-                        <Images.warning height={moderateScale(15)} width={moderateScale(15)} />
-                    </View>
+                    {renderIcon()}
                 </View>
 
-                <Text style={appStyles.smallTextPrimaryBold}>
+                <Text style={[appStyles.mediumTextPrimaryBold, { color: uiColours.RED, textAlign: 'center' }]}>
                     {title}
                 </Text>
-                {discription && <Text style={[appStyles.smallTextPrimary, { color: uiColours.RED }]}>
+                {discription && <Text style={[appStyles.smallTextGray, { textAlign: 'center' }]}>
                     {discription}
                 </Text>}
             </View>
+            <View style={styles.footer}>
 
-            <SheetFooter
-                buttonActive={true}
-                buttonTitle={buttonTitle}
-                handleButtonPress={handleButtonClick}
-            />
+                <CustomButton
+                    hasOutLine
+                    hasBackground={false}
+                    title={button1Title}
+                    buttonType={buttonTypes.MEDIUM}
+                    NavigationHandle={handleButton1Click}
+                />
+                <CustomButton
+                    title={button2Title}
+                    buttonType={buttonTypes.MEDIUM}
+                    NavigationHandle={handleButton2Click}
+                />
+            </View>
+
         </BottomSheet>
     )
 }

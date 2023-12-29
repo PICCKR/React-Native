@@ -15,15 +15,18 @@ import { showToast } from '../../../components/tostConfig/tostConfig'
 import { tostMessagetypes } from '../../../utils/Constents/constentStrings'
 import ShowPaymentSheet from './ShowPaymentSheet'
 import AddPaymentMethodSheet from './AddPaymentMethodSheet'
-import { AuthRouteStrings } from '../../../utils/Constents/RouteStrings'
+import { AuthRouteStrings, MainRouteStrings } from '../../../utils/Constents/RouteStrings'
 import ChooseMediaTypeSheet from '../../../components/ChooseMediaTypeSheet/ChooseMediaTypeSheet'
 import { chooseMedia, openCamara } from '../../../helper/imagePickerFunctions'
 import ProfileView from '../../../components/PrifileView/ProfileView'
+import useBackButton from '../../../customHooks/useBackButton'
+import SetLocationModal from '../../../components/SetLocationModal/SetLocationModal'
 
 const ProfileInformation = ({ route }) => {
     const data = route?.params?.data
+    const addresData = route?.params?.addresData
 
-    const { appStyles, isDark } = useContext(AppContext)
+    const { appStyles, isDark, currentLocation } = useContext(AppContext)
 
     const navigation = useNavigation()
     const [buttonActive, setButtonActive] = useState(false)
@@ -32,6 +35,7 @@ const ProfileInformation = ({ route }) => {
         showAddress: false,
         addAddress: false,
         mediaType: false,
+        setLocation: false
     })
 
     const [profileInformation, setProfileInformation] = useState({
@@ -45,7 +49,7 @@ const ProfileInformation = ({ route }) => {
         addressType: "",
         buildingName: "",
         homeNumber: "",
-        location: "",
+        location: addresData?.location,
     })
     const [paymentData, setPaymentData] = useState({
         id: "",
@@ -181,12 +185,20 @@ const ProfileInformation = ({ route }) => {
         }
     }, [profileInformation]);
 
+    useBackButton(() => {
+        navigation.navigate(AuthRouteStrings.USER_SIGN_UP)
+        return true
+    })
+
     return (
         <WrapperContainer
             centerTitle="Profile information"
-            rightTitle="Skip"
+            // rightTitle="Skip"
             showBackButton
             buttonTitle={"Save"}
+            handleBack={() => {
+                navigation.navigate(AuthRouteStrings.USER_SIGN_UP)
+            }}
             handleButtonPress={handleSave}
             buttonActive={buttonActive}
             containerPadding={{ paddingHorizontal: 0 }}
@@ -215,13 +227,14 @@ const ProfileInformation = ({ route }) => {
                         email: true
                     })}
                     title="Email Address"
+                    val={profileInformation.email}
                 />
                 <EditAction
                     appStyles={appStyles}
                     handlePress={() => setShowSheet({
                         showAddress: true
                     })}
-                    addressVal={profileInformation.address?.length !== 0 && `${profileInformation.address?.length} Address`}
+                    val={profileInformation.address?.length !== 0 && `${profileInformation.address?.length} Address`}
                     title="Address"
                 />
                 {/* <EditAction
@@ -294,6 +307,13 @@ const ProfileInformation = ({ route }) => {
                 setAddresData={setAddresData}
                 action={action}
                 handleEditAddress={handleEditAddress}
+                handleSetLocationPress={() => {
+                    setShowSheet({
+                        ...showSheet,
+                        addAddress: false,
+                        setLocation: true
+                    })
+                }}
             />
 
             <ChooseMediaTypeSheet
@@ -323,6 +343,26 @@ const ProfileInformation = ({ route }) => {
                     })
                 }}
             />
+
+            {/* <SetLocationModal
+                setShowModal={setShowSheet}
+                isVisible={showSheet.setLocation}
+                placeholder={"Set location"}
+                handleSelectFromMap={() => {
+                    setShowSheet({
+                        ...showSheet,
+                        setLocation: false,
+                        addAddress: true
+                    })
+                    // return
+                    navigation.navigate(MainRouteStrings.SELECT_ADDRRESS_FROM_MAP, {
+                        toScreen: AuthRouteStrings.PROFILE_INFORMATION,
+                        geometry: currentLocation
+                    })
+                }}
+            // handleSelectLocation={handleSelectLocation}
+            // handleSelectFromMap={}
+            /> */}
 
             {/* i have kept this for future refrence */}
             {/* <ShowPaymentSheet

@@ -1,4 +1,4 @@
-import { View, Text, TextInput } from 'react-native'
+import { View, Text, TextInput, TouchableOpacity } from 'react-native'
 import React, { useState } from 'react'
 import { moderateScale, scale, verticalScale } from 'react-native-size-matters'
 import styles from './Styles'
@@ -15,15 +15,22 @@ import CancelOrderSheet from './CancelOrderSheet'
 const Ongoing = ({
     data,
     appStyles,
-    navigation
+    navigation,
+    isDark
 }) => {
+    
     const [showSheet, setShowSheet] = useState({
         confirmation: false
     })
+
     return (
         <View style={{ padding: moderateScale(16), gap: verticalScale(16) }}>
-            <View style={styles.onGoingContentSection}>
-                <View style={styles.pickerProfile}>
+            <View style={[styles.onGoingContentSection,{
+                borderColor:!isDark ? uiColours.LIGHT_GRAY : uiColours.GRAYED_BUTTON,
+            }]}>
+                <View style={[styles.pickerProfile,{
+                     borderColor:!isDark ? uiColours.LIGHT_GRAY : uiColours.GRAYED_BUTTON,
+                }]}>
                     <View style={styles.pickerProfileView}>
                         {data?.profileImg ? <Image source={{ uri: data.profileImg }} /> : <Images.profile height={moderateScale(50)} width={moderateScale(50)} />}
                     </View>
@@ -40,17 +47,28 @@ const Ongoing = ({
                     </View>
                 </View>
                 <View style={styles.sendMsg}>
-                    <TextInput
-                        style={styles.msgInput}
-                        placeholder="Send message to Cooper Septimus"
-                    />
+
+                    <TouchableOpacity
+                        style={[styles.msgInput,{
+                            backgroundColor: !isDark ? uiColours.LIGHT_GRAY : uiColours.GRAYED_BUTTON,
+                        }]}
+                        onPress={() => {
+                            navigation.navigate(MainRouteStrings.USER_CHAT_SCREEN)
+                        }}
+                    >
+                        <Text style={appStyles.smallTextGray}>Send message to Cooper Septimus</Text>
+                    </TouchableOpacity>
+
                     <View style={styles.heartIcon}>
                         <Images.heartRed />
                     </View>
+
                 </View>
             </View>
 
-            <View style={styles.onGoingContentSection}>
+            <View style={[styles.onGoingContentSection,{
+                borderColor:!isDark ? uiColours.LIGHT_GRAY : uiColours.GRAYED_BUTTON,
+            }]}>
                 <Text style={[appStyles.mediumTextBlackBold, { marginBottom: verticalScale(5) }]}>
                     Item details
                 </Text>
@@ -62,7 +80,7 @@ const Ongoing = ({
                     textBox={{ color: uiColours.GRAY_TEXT }}
                     editable={false}
                     inputContainer={{ width: '100%' }}
-                    inPutStyles={{ backgroundColor: uiColours.LIGHT_GRAY }}
+                    inPutStyles={{backgroundColor: !isDark ? uiColours.LIGHT_GRAY : uiColours.GRAYED_BUTTON, }}
                 />
                 <InputText
                     hasTitle
@@ -71,12 +89,14 @@ const Ongoing = ({
                     textBox={{ color: uiColours.GRAY_TEXT }}
                     editable={false}
                     inputContainer={{ width: '100%', marginTop: verticalScale(16) }}
-                    inPutStyles={{ backgroundColor: uiColours.LIGHT_GRAY }}
+                    inPutStyles={{backgroundColor: !isDark ? uiColours.LIGHT_GRAY : uiColours.GRAYED_BUTTON, }}
                 />
 
             </View>
 
-            <View style={styles.onGoingContentSection}>
+            <View style={[styles.onGoingContentSection,{
+                borderColor:!isDark ? uiColours.LIGHT_GRAY : uiColours.GRAYED_BUTTON,
+            }]}>
                 <Text style={[appStyles.mediumTextBlackBold, { marginBottom: verticalScale(5) }]}>
                     Delivery destination
                 </Text>
@@ -126,7 +146,9 @@ const Ongoing = ({
                 </View>
             </View>
 
-            <View style={styles.onGoingContentSection}>
+            <View style={[styles.onGoingContentSection,{
+                borderColor:!isDark ? uiColours.LIGHT_GRAY : uiColours.GRAYED_BUTTON,
+            }]}>
                 <Text style={[appStyles.mediumTextBlackBold, { marginBottom: verticalScale(5) }]}>
                     Payment method
                 </Text>
@@ -145,7 +167,9 @@ const Ongoing = ({
 
             </View>
 
-            <View style={styles.onGoingFooter}>
+            <View style={[styles.onGoingFooter,{
+                 borderColor:!isDark ? uiColours.LIGHT_GRAY : uiColours.GRAYED_BUTTON,
+            }]}>
                 <CustomButton
                     buttonType={buttonTypes.MEDIUM}
                     hasBackground={false}
@@ -158,26 +182,26 @@ const Ongoing = ({
                 <CustomButton
                     buttonType={buttonTypes.MEDIUM}
                     title={"Cancel order"}
-                    NavigationHandle={()=>{
+                    NavigationHandle={() => {
                         setShowSheet({
                             ...showSheet,
-                            confirmation:true
+                            confirmation: true
                         })
                     }}
                 />
             </View>
 
-            {
+    
                 <CancelOrderSheet
                     isVisible={showSheet.confirmation}
                     appStyles={appStyles}
                     setShowSheet={setShowSheet}
-                    handleCancelOrder={()=>{
+                    handleCancelOrder={() => {
                         setShowSheet(false)
                         navigation.navigate(MainRouteStrings.PICKER_REVIEW_WHEN_CANCELLED)
                     }}
                 />
-            }
+            
 
         </View>
     )

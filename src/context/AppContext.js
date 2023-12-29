@@ -1,5 +1,6 @@
 import { useColorScheme, Appearance, StyleSheet, Alert } from "react-native";
 import React, { useEffect, useState, } from "react";
+import { PermissionsAndroid, Platform } from 'react-native';
 import { getLocalData } from "../helper/AsyncStorage";
 import { storageKeys } from "../helper/AsyncStorage/storageKeys";
 import { screenSize } from "../utils/Styles/CommonStyles";
@@ -39,10 +40,8 @@ const AppProvider = ({ children }) => {
     }
 
     const getCurrentLocation = async () => {
-        Geolocation.getCurrentPosition(
-            (position) => {
-                console.log('position =======>', position);
-                // Geocoder.from(position?.coords?.latitude, position?.coords?.longitude)
+        try {
+            Geolocation.getCurrentPosition((position) => {
                 const latitude = position?.coords?.latitude
                 const longitude = position?.coords?.longitude
                 // convert lat lng to address
@@ -56,12 +55,6 @@ const AppProvider = ({ children }) => {
                             lat: latitude,
                             lng: longitude
                         })
-                        // setDestination({
-                        //     ...destination,
-                        //     lat: latitude,
-                        //     lng: longitude,
-                        //     location: adddress
-                        // })
                         setSource({
                             ...source,
                             lat: latitude,
@@ -69,17 +62,21 @@ const AppProvider = ({ children }) => {
                             location: adddress
                         })
                     })
-                    .catch(function (error) {
+                    .catch((error) => {
                         console.log('errr', error);
                         Alert.alert("", "Something went wrong please try again")
                     });
 
                 // Actions.currentLoaction(position)
             },
-            (error) => {
-                console.log('location err', error);
-            }
-        );
+                (error) => {
+                    console.log('Error getting location:', error);
+                },
+            )
+        } catch (error) {
+            console.log("error===>", error);
+        }
+
     }
 
     useEffect(() => {
@@ -87,14 +84,19 @@ const AppProvider = ({ children }) => {
         getCurrentLocation()
     }, [])
 
-    // storing the color mode of the mobile 
-    // const isDark = useColorScheme() === "dark"
+    const isDarkSystem = useColorScheme() === "dark"
+
+    useEffect(() => {
+        setIsDark(isDarkSystem)
+    }, [isDarkSystem])
+
 
     // state variables
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [userData, setuserData] = useState(null)
     const [isNew, setisNew] = useState(null)
-    const [isDark, setIsDark] = useState(useColorScheme() === "dark")
+    const [isDark, setIsDark] = useState(isDarkSystem)
+    const [selectedVehicle, setSelectedVehicle] = useState(null)
     const [destination, setDestination] = useState({
         lat: "",
         lng: "",
@@ -147,11 +149,15 @@ const AppProvider = ({ children }) => {
             color: uiColours?.GRAY_TEXT,
             fontSize: scale(12),
             fontFamily: "Poppins-Regular",
-            lineHeight: 18
+        },
+        smallTextGrayBold: {
+            color: uiColours?.GRAY_TEXT,
+            fontSize: scale(12),
+            fontFamily: "Poppins-Bold"
         },
 
         mediumTextBlack: {
-            color: uiColours?.BLACK_TEXT,
+            color: isDark ? uiColours?.WHITE_TEXT : uiColours?.BLACK_TEXT,
             fontSize: scale(14),
             fontFamily: "Poppins-Regular"
         },
@@ -169,7 +175,7 @@ const AppProvider = ({ children }) => {
         },
 
         mediumTextBlackBold: {
-            color: uiColours?.BLACK_TEXT,
+            color: isDark ? uiColours?.WHITE_TEXT : uiColours?.BLACK_TEXT,
             fontSize: scale(14),
             fontFamily: "Poppins-Bold"
         },
@@ -247,7 +253,18 @@ const AppProvider = ({ children }) => {
             paddingHorizontal: moderateScale(16),
             flex: 1,
         },
+        bottomBorder: {
+            borderBottomWidth: moderateScale(1),
+            borderColor: isDark ? uiColours.GRAYED_BUTTON : uiColours.LIGHT_GRAY,
+        },
+        borderColor: {
+            borderColor: isDark ? uiColours.GRAYED_BUTTON : uiColours.LIGHT_GRAY,
+        }
     }
+
+    // storing the color mode of the mobile 
+
+    // setIsDark(isDark1)
 
     return (
         <AppContext.Provider
@@ -266,7 +283,9 @@ const AppProvider = ({ children }) => {
                 currentLocation,
                 setCurrentLocation,
                 source,
-                setSource
+                setSource,
+                selectedVehicle,
+                setSelectedVehicle
             }}
         >
             {children}

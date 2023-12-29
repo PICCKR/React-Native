@@ -20,7 +20,8 @@ const PickUpSheet = ({
     isVisible,
     handleBackClick,
     handleEdit,
-    handlePickDate
+    handlePickDate,
+    userData
 
 }) => {
 
@@ -65,11 +66,18 @@ const PickUpSheet = ({
             isVisible={isVisible}
             // hasCloseIcon
             title="Pick-up Details"
+            modelBgStyles={{backgroundColor:"rgba(255, 255, 255, 0)"}}
             hasBackButton
             handleBackClick={handleBackClick}
             containerStyles={{ padding: 0 }}
+            showFooterButton
+            buttonActive={buttonActive}
+            buttonTitle="Next"
+            handleButtonPress={handleNext}
         >
-            <View style={[commonStyles.bottomBorder, Styles.bottomViewContent]}>
+            <View style={[commonStyles.bottomBorder, Styles.bottomViewContent,{
+                borderColor:isDark ? uiColours.GRAYED_BUTTON : uiColours.LIGHT_GRAY
+            }]}>
                 <Text style={[appStyles?.smallTextBlack, { flex: 1 }]}>
                     {location?.location}
                 </Text>
@@ -82,7 +90,9 @@ const PickUpSheet = ({
 
             </View>
 
-            <View style={[commonStyles.bottomBorder, Styles.recipientDetails]}>
+            <View style={[commonStyles.bottomBorder, Styles.recipientDetails,{
+                borderColor:isDark ? uiColours.GRAYED_BUTTON : uiColours.LIGHT_GRAY
+            }]}>
                 <View style={commonStyles.flexRowAlnCtrJutySpaceBetween}>
                     <Text style={appStyles.mediumTextBlackBold}>
                         Sender details<Text style={{ color: uiColours.RED }}>*</Text>
@@ -113,17 +123,19 @@ const PickUpSheet = ({
                     Pick-up date
                 </Text>
                 <TouchableOpacity
-                    style={Styles.pickupButton}
+                    style={[Styles.pickupButton,{
+                        borderColor:isDark ? uiColours.GRAYED_BUTTON : uiColours.LIGHT_GRAY
+                    }]}
                     onPress={handlePickDate}
                 >
-                    <Text>
+                    <Text style ={appStyles.smallTextBlack} >
                         {formData?.pickupDate}
                     </Text>
                     <Images.downArrow />
                 </TouchableOpacity>
             </View>
 
-            <CustomButton
+            {/* <CustomButton
                 buttonStyle={{
                     backgroundColor: buttonActive ? uiColours.PRIMARY :
                         !buttonActive && isDark ? uiColours.GRAYED_BUTTON :
@@ -137,7 +149,7 @@ const PickUpSheet = ({
                 title="Next"
                 NavigationHandle={handleNext}
                 disabled={!buttonActive}
-            />
+            /> */}
         </BottomSheet>
     )
 }

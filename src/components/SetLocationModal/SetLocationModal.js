@@ -16,17 +16,12 @@ const SetLocationModal = ({
     isVisible,
     handleSelectFromMap,
     placeholder,
-    handleSelectLocation
+    handleSelectLocation,
+    showSelectfromMap = true
 }) => {
-    const { appStyles } = useContext(AppContext)
+    const { appStyles, isDark } = useContext(AppContext)
     const inputRef = useRef(null);
 
-
-    useEffect(() => {
-        if (inputRef.current) {
-            inputRef.current.focus();
-        }
-    }, []);
     return (
         <Modal
             isVisible={isVisible}
@@ -47,8 +42,14 @@ const SetLocationModal = ({
                             setShowModal(false)
                         }}
                     />
+                    <View style={{position:"absolute", top:verticalScale(70), left:scale(25)}}>
+                        <Images.locationPin />
+                    </View>
                     <GooglePlacesAutocomplete
-                        inbetweenCompo={
+                        textInputProps={{
+                            autoFocus: true,
+                        }}
+                        inbetweenCompo={showSelectfromMap ?
                             <TouchableOpacity
                                 style={styles.selectMap}
                                 onPress={handleSelectFromMap}
@@ -57,7 +58,8 @@ const SetLocationModal = ({
                                 <Text>
                                     Select via map
                                 </Text>
-                            </TouchableOpacity>
+                            </TouchableOpacity> :
+                            <View></View>
                         }
                         listLoaderComponent={<ActivityIndicator ></ActivityIndicator>}
                         placeholder={placeholder}
@@ -75,14 +77,24 @@ const SetLocationModal = ({
                                 width: "100%",
                                 borderWidth: moderateScale(1),
                                 borderRadius: moderateScale(6),
-                                borderColor: uiColours.LIGHT_GRAY,
-                                marginTop: verticalScale(25),
-                                paddingLeft: scale(10),
+                                borderColor: isDark ? uiColours.GRAYED_BUTTON : uiColours.LIGHT_GRAY,
+                                marginTop: verticalScale(5),
+                                paddingLeft: scale(20),
+                            },
+                            textInput: {
+                                backgroundColor: isDark ? uiColours.DARK_BG : null,
+                            },
+                            row: {
+                                backgroundColor: isDark ? uiColours.DARK_BG : null,
                             },
                             description: {
                                 fontWeight: 'bold',
                             },
+                            poweredContainer: {
+                                backgroundColor: isDark ? uiColours.DARK_BG : null,
+                            },
                             predefinedPlacesDescription: {
+                                backgroundColor: isDark ? uiColours.DARK_BG : null,
                                 color: '#1faadb',
                             },
                         }}

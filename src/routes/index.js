@@ -31,6 +31,19 @@ import EditProfile from "../screens/UserScreens/EditProfile/EditProfile";
 import FindDestination from "../screens/UserScreens/FindDestination/FindDestination";
 import SelectAddresFromMap from "../screens/CommonScreens/SelectAddresFromMap/SelectAddresFromMap";
 import ItemsDetails from "../screens/UserScreens/ItemsDetails/ItemsDetails";
+import TrackingScreen from "../screens/UserScreens/TrackingScreen/TrackingScreen";
+import FindingPicker from "../screens/UserScreens/FindingPicker/FindingPicker";
+import UserChatScreen from "../screens/UserScreens/UserChatScreen/UserChatScreen";
+import ManageAccount from "../screens/UserScreens/ManageAccount/ManageAccount";
+import ChangePassword from "../screens/AuthScreens/ChangePassword/ChangePassword";
+import PickerBottomTabRoutes from "./PickerBottomTabRoutes";
+import TripScreen from "../screens/PickerScreens/TripScreen/TripScreen";
+import PickerMessagesScreen from "../screens/PickerScreens/PickerMessagesScreen/PickerMessagesScreen";
+import PickerProfileScreen from "../screens/PickerScreens/PickerProfileScreen/PickerProfileScreen";
+import PickerFindDestination from "../screens/PickerScreens/FindDestination/PickerFindDestination";
+import PickerOrderHistory from "../screens/PickerScreens/PickerOrderHistory/PickerOrderHistory";
+import WalletScreen from "../screens/PickerScreens/WalletScreen/WalletScreen";
+import PickkerRatingAndReviews from "../screens/PickerScreens/PickkerRatingAndReviews/PickkerRatingAndReviews";
 
 export const screens = {
     USER_HOME_SCREEN: UserHomeScreen,
@@ -64,7 +77,21 @@ export const screens = {
     FIND_DESTINATON:FindDestination,
     SELECT_ADDRRESS_FROM_MAP:SelectAddresFromMap,
     ITEMS_DETAILS:ItemsDetails,
+    TRACKING_SCREEN:TrackingScreen,
+    FINDING_PICKER:FindingPicker,
+    USER_CHAT_SCREEN:UserChatScreen,
+    MANAGE_ACCOUNT:ManageAccount,
+    CHANGE_PASSWORD:ChangePassword,
 
-    PICKER_HOME_SCREEN:PickerHomeScreen
+    PICKER_BOTTOM_ROUTES:PickerBottomTabRoutes,
+    PICKER_HOME_SCREEN:PickerHomeScreen,
+    PICKER_PROFILE:PickerProfileScreen,
+    TRIPS_SCREEN:TripScreen,
+    PICKER_MESSAGES_SCREEN:PickerMessagesScreen,
+    PICKER_FIND_DESTINATION:PickerFindDestination,
+    PICKER_ORDER_HISTORY:PickerOrderHistory,
+    WALLET_SCREEN:WalletScreen,
+    PICKKER_RATING_AND_REVIEW:PickkerRatingAndReviews
+
 
 }

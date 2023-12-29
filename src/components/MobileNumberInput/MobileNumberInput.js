@@ -9,6 +9,7 @@ import { moderateScale, scale, verticalScale } from 'react-native-size-matters'
 import BottomSheet from '../BottomSheet/BottomSheet'
 import RadioButton from '../RadioButton/RadioButton'
 import { toggleAnimation } from '../../animations/toggleAnimation'
+import { uiColours } from '../../utils/Styles/uiColors'
 
 const MobileNumberInput = ({
     handleChange,
@@ -21,10 +22,11 @@ const MobileNumberInput = ({
     setFormData,
     formData,
     value,
-    country
+    country,
+    inPutStyles
 }) => {
 
-    const { appStyles } = useContext(AppContext)
+    const { appStyles, isDark } = useContext(AppContext)
     const [showSheet, setShowSheet] = useState(false)
     const [mobileNumber, setMobileNumber] = useState("")
     const [selectedCountry, setSelctedCountry] = useState(
@@ -85,9 +87,9 @@ const MobileNumberInput = ({
         const cleanedNumber = phoneNumber.replace(/\D/g, '');
         // console.log('Cleaned Number:', cleanedNumber);
 
-        const formattedNumber = `${cleanedNumber.slice(0, 3)} ${cleanedNumber.slice(3, 6)} ${cleanedNumber.slice(6)}`
-        setMobileNumber(formattedNumber);
-        handleChange(formattedNumber, selectedCountry)
+        // const formattedNumber = `${cleanedNumber.slice(0, 3)} ${cleanedNumber.slice(3, 6)} ${cleanedNumber.slice(6)}`
+        setMobileNumber(cleanedNumber);
+        handleChange(cleanedNumber, selectedCountry)
     }
 
     const renderFlag = () => {
@@ -126,6 +128,7 @@ const MobileNumberInput = ({
             <InputText
                 isRequired={isRequired}
                 inputContainer={inputContainer}
+                inPutStyles={[{paddingRight:scale(120)},inPutStyles]}
                 hasTitle
                 inputTitle="Phone Number"
                 handleChange={handleMobileNumberChange}
@@ -141,7 +144,9 @@ const MobileNumberInput = ({
                     return (
                         <TouchableOpacity
                             onPress={() => setShowSheet(true)}
-                            style={Styles.countryView}
+                            style={[Styles.countryView,{
+                                borderColor:isDark ? uiColours.GRAYED_BUTTON : uiColours.LIGHT_GRAY,
+                            }]}
                         >
                             <View style={Styles.flagView}>
                                 {selectedCountry?.flag ? <selectedCountry.flag height={moderateScale(20)} width={moderateScale(35)} /> :
@@ -150,7 +155,7 @@ const MobileNumberInput = ({
                             </View>
 
                             <Text style={appStyles.smallTextBlack}>{selectedCountry?.code}</Text>
-                            <Images.downArrow />
+                            {!isDark ? <Images.downArrow /> : <Images.downArrowWhite />}
                         </TouchableOpacity>
                     )
                 }}

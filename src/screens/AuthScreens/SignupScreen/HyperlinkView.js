@@ -8,14 +8,16 @@ const HyperlinkView = ({
     handleCheck,
     selected,
     leftText,
-    rightText
+    rightText,
+    termsView
 }) => {
     const { appStyles, isDark} = useContext(AppContext)
     return (
-        <View style={Styles.termsView}>
+        <View style={[Styles.termsView,termsView]}>
             <CheckBox
                 handleCheck={handleCheck}
                 selected={selected}
+                isDark={isDark}
             />
             <View style={{ flexDirection: 'row', alignItems: "center" }}>
                 <Text style={appStyles.smallTextBlack}>

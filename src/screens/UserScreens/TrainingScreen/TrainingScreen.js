@@ -8,13 +8,12 @@ import { AppContext } from '../../../context/AppContext'
 import styles from './Styles'
 import Video from 'react-native-video';
 import { Images } from '../../../assets/images'
+import useBackButton from '../../../customHooks/useBackButton'
 
 const TrainingScreen = () => {
 
     const { appStyles, setuserData,userData } = useContext(AppContext)
     const navigation = useNavigation()
-
-
 
     const videoData = [
         {
@@ -38,6 +37,11 @@ const TrainingScreen = () => {
     ]
 
     const [data, setData] = useState(videoData)
+
+    useBackButton(()=>{
+        setuserData({ ...userData, type: "picker" })
+        return true
+    })
 
     const handleNext = () => {
         setuserData({ ...userData, type: "picker" })
@@ -63,6 +67,9 @@ const TrainingScreen = () => {
             showBackButton
             buttonTitle={"Next"}
             handleButtonPress={handleNext}
+            handleBack={()=>{
+                setuserData({ ...userData, type: "picker" })
+            }}
             buttonActive={true}
             containerPadding={{}}
         >

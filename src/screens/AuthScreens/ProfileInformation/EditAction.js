@@ -8,7 +8,7 @@ import { commonStyles } from '../../../utils/Styles/CommonStyles'
 const EditAction = ({
     title,
     handlePress,
-    addressVal,
+    val,
     appStyles
 }) => {
     return (
@@ -19,10 +19,13 @@ const EditAction = ({
             <Text style={appStyles.smallTextGray}>
                 {title}
             </Text>
-            <View style={{flexDirection:"row", alignItems:'center', gap:scale(10)}}>
-                {addressVal && <Text>
-                {addressVal}
-                </Text>}
+            <View style={{ flexDirection: "row", alignItems: 'center', gap: scale(10), }}>
+                <Text numberOfLines={1} ellipsizeMode="tail" style={
+                    [appStyles.smallTextBlack, {
+                        maxWidth: scale(200),
+                    }]}>
+                    {val}
+                </Text>
                 <Images.rightArrow height={moderateScale(24)} />
             </View>
 

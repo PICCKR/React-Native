@@ -1,4 +1,4 @@
-import { View, Text } from 'react-native'
+import { View, Text, Alert } from 'react-native'
 import React, { useContext, useState } from 'react'
 import WrapperContainer from '../../../components/WrapperContainer/WrapperContainer'
 import { AppContext } from '../../../context/AppContext'
@@ -11,47 +11,90 @@ import { commonStyles } from '../../../utils/Styles/CommonStyles'
 import { RegEx } from '../../../utils/Constents/regulerexpressions'
 import { useNavigation } from '@react-navigation/native'
 import { AuthRouteStrings } from '../../../utils/Constents/RouteStrings'
+import useBackButton from '../../../customHooks/useBackButton'
+import MobileNumberInput from '../../../components/MobileNumberInput/MobileNumberInput'
+import { resetPassword } from '@aws-amplify/auth'
+import Actions from '../../../redux/Actions'
 
 const ForgotPassword = () => {
   const { appStyles, isDark } = useContext(AppContext)
   const navigation = useNavigation()
 
-  const [email, setEmail] = useState("")
+  const [formData, setFormData] = useState({
+    phoneNumber: "",
+    selectedCountry: {}
+  })
   const [buttonActive, setButtonActive] = useState(false)
+  const [ShowError, setShowError] = useState(false)
+  const [errorMsg, setErrorMsg] = useState("")
 
-  const handleChange = (e) => {
-    setEmail(e)
-    if (RegEx.email__regEx.test(e)) {
+  const handleChange = (number, selectedCountry) => {
+    setFormData({
+      ...formData,
+      phoneNumber: number,
+      selectedCountry: selectedCountry
+    })
+    if (RegEx.only__number__regEx.test(number)) {
       setButtonActive(true)
     } else {
       setButtonActive(false)
     }
   }
 
+  useBackButton(() => {
+    navigation.goBack();
+    return true;
+  });
+
+  const handleNext = async () => {
+    Actions.showLoader(true)
+    try {
+      await resetPassword({ username: `${formData?.selectedCountry?.code?.replace(/[()]/g, '')}${formData?.phoneNumber.replace(/\s+/g, '')}` }).then((res, result) => {
+        console.log("res===>", res, result);
+        navigation.navigate(AuthRouteStrings.OTP_SCREEN, {
+          from: AuthRouteStrings.FORGOT_PASSWORD,
+          phoneNumber: `${formData?.selectedCountry?.code?.replace(/[()]/g, '')} ${formData?.phoneNumber.replace(/\s+/g, '')}`
+        })
+      });
+
+    } catch (err) {
+      console.log(err);
+      Alert.alert("Error During Reset Password", err.message);
+    }
+    finally {
+      Actions.showLoader(false)
+      // setLoading(false)
+    }
+    return
+   
+  }
 
   return (
     <WrapperContainer
       centerTitle={"Forgot Password"}
       showBackButton
-      buttonActive = {buttonActive}
-      buttonTitle="Reset Password"
-      handleButtonPress={()=>{
-        navigation.navigate(AuthRouteStrings.WELCOME_SCREEN)
+      buttonActive={buttonActive}
+      buttonTitle="Send OTP"
+      handleBack={() => {
+        navigation.goBack()
       }}
+      handleButtonPress={handleNext}
     >
       <Text style={[appStyles.mediumTextPrimaryBold]}>
-        Enter your email address to reset password
+        Enter your email address to find your account
       </Text>
 
-      <InputText
-        hasTitle
-        inputTitle="Email Address"
-        placeholder={"Input your email address"}
-        inputContainer={styles.input}
+      <MobileNumberInput
         handleChange={handleChange}
+        ErrorMsg={errorMsg}
+        ShowError={ShowError?.phoneNumber}
+        onPressIn={() => {
+          setShowError(false)
+        }}
+        setFormData={setFormData}
       />
       <Text style={appStyles.smallTextGray}>
-        Authentication link will be sent to the email
+        If your phone number is correct, you can enter the OTP code that will be sent to the connected phone number.
       </Text>
 
 

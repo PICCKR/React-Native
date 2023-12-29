@@ -1,0 +1,31 @@
+import { StyleSheet } from "react-native"
+import { moderateScale, scale, verticalScale } from "react-native-size-matters"
+import { uiColours } from "../../../utils/Styles/uiColors"
+
+const styles = StyleSheet.create({
+    picckerCard: {
+        padding: moderateScale(16),
+        borderWidth:moderateScale(1),
+        borderRadius:moderateScale(8),
+        marginBottom:verticalScale(16)
+        // gap:verticalScale(16)
+    },
+    pickerProfile: {
+        flexDirection: 'row',
+        gap: scale(10),
+    },
+    pickerProfileView: {
+        height: moderateScale(40),
+        width: moderateScale(40),
+        borderRadius: moderateScale(20),
+        backgroundColor: "#F0E796",
+        alignItems: "center",
+        justifyContent: 'center',
+    },
+    buttonsView:{
+        flexDirection:"row",
+        alignItems:"center",
+        justifyContent:'space-between'
+    }
+})
+export default styles

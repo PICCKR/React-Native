@@ -11,10 +11,12 @@ const styles = StyleSheet.create({
   },
   modalContainerItmes:{
     alignItems:'center',
-    padding:moderateScale(16),
     borderWidth:moderateScale(1),
-    borderRadius:moderateScale(6),
-    borderColor:uiColours.LIGHT_GRAY
+    borderRadius:moderateScale(40),
+    borderColor:uiColours.LIGHT_GRAY,
+    height:moderateScale(72),
+    width:moderateScale(72),
+    justifyContent:"center"
   }
 });
 

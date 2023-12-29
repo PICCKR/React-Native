@@ -51,7 +51,7 @@ const OnBoardingScreen = () => {
           })
         }}
       >
-        <Text style={[appStyles.mediumTextBlackGray]}>
+        <Text style={[appStyles.mediumTextPrimary]}>
           Skip
         </Text>
       </TouchableOpacity>

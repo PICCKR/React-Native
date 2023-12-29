@@ -40,15 +40,18 @@ export const Styles = StyleSheet.create({
         alignItems: 'center'
     },
     bottomView: {
-        position:"absolute",
-        alignSelf:"flex-start",
-        backgroundColor:uiColours.WHITE_TEXT,
-        width:screenSize.width,
-        borderTopRightRadius:moderateScale(8),
-        borderTopLeftRadius:moderateScale(8),
-        bottom:0
+        position: "absolute",
+        alignSelf: "flex-start",
+        backgroundColor: uiColours.WHITE_TEXT,
+        width: screenSize.width,
+        borderTopRightRadius: moderateScale(8),
+        borderTopLeftRadius: moderateScale(8),
+        bottom: 0
     },
-    bottomViewContent:{
-        padding:moderateScale(16)
-    }
+    bottomViewContent: {
+        padding: moderateScale(16)
+    },
+    map: {
+        ...StyleSheet.absoluteFillObject,
+    },
 })

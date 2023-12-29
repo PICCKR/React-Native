@@ -28,7 +28,8 @@ const styles = StyleSheet.create({
         gap: scale(10)
     },
     walletView: {
-        padding: moderateScale(16),
+        paddingHorizontal: scale(16),
+        paddingVertical:verticalScale(10),
         backgroundColor: uiColours.WHITE_TEXT,
         flexDirection: 'row',
         justifyContent: 'space-between',
@@ -41,8 +42,8 @@ const styles = StyleSheet.create({
         marginTop: verticalScale(16)
     },
     becomePickerView: {
-        height: verticalScale(110),
-        width: screenSize.width - scale(32),
+        height:"100%",
+        width: "100%",
         borderRadius: moderateScale(8)
     },
     VehicleType: {

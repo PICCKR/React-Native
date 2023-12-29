@@ -9,7 +9,6 @@ const styles = StyleSheet.create({
         height: moderateScale(50),
         borderRadius:moderateScale(6),
         borderWidth:moderateScale(1),
-        borderColor:uiColours.LIGHT_GRAY,
         fontSize:scale(20),
         color:uiColours.BLACK_TEXT
     },

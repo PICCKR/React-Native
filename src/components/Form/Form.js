@@ -2,7 +2,7 @@ import { View, Text, TouchableOpacity } from 'react-native'
 import React, { useState } from 'react'
 import InputText from '../InputText/InputText'
 import styles from './Styles'
-import { moderateScale, scale } from 'react-native-size-matters'
+import { moderateScale, scale, verticalScale } from 'react-native-size-matters'
 import MobileNumberInput from '../MobileNumberInput/MobileNumberInput'
 import { screenSize } from '../../utils/Styles/CommonStyles'
 import { Images } from '../../assets/images'
@@ -14,9 +14,12 @@ const Form = ({
     ShowError = {},
     setShowError,
     style,
+    setErrorMsg,
+    errorMsg,
     // handleOnBlur = () => {},
     textChange = () => { },
 }) => {
+    console.log("formData", formData);
 
     const [showPassword, setShowPassword] = useState(false)
 
@@ -68,9 +71,10 @@ const Form = ({
                                 <MobileNumberInput
                                     handleChange={(e, selectedCountry) => handleTextChange(e, item, selectedCountry)}
                                     isRequired={item?.isRequired}
+                                    inPutStyles={{marginTop:verticalScale(-5)}}
                                     inputContainer={{ width: screenSize.width - scale(32) }}
                                     handleBlur={() => handleOnBlur(item)}
-                                    ErrorMsg={item?.errorMsg}
+                                    ErrorMsg={errorMsg ? errorMsg[item?.type] : item?.errorMsg}
                                     ShowError={ShowError[item?.type]}
                                     setFormData={setFormData}
                                     formData={formData}
@@ -87,6 +91,8 @@ const Form = ({
                                             [item?.type]: false
                                         }));
                                     }}
+                                    keyboardType={item?.keyboardType ? item?.keyboardType : "default"}
+                                    inPutStyles={{marginTop:verticalScale(-5)}}
                                     inputTitle={item?.title}
                                     inputContainer={{}}
                                     key={item?.id.toString()}
@@ -94,7 +100,7 @@ const Form = ({
                                     value={formData[item.type]}
                                     handleChange={(e) => handleTextChange(e, item)}
                                     ShowError={ShowError[item?.type]}
-                                    ErrorMsg={item?.errorMsg}
+                                    ErrorMsg={errorMsg ? errorMsg[item?.type]: item?.errorMsg}
                                     OnBlur={() => handleOnBlur(item)}
                                     secureTextEntry={item.type === "password" ? !showPassword : false}
                                     maxLength={item?.maxLenght}

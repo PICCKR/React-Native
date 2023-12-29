@@ -5,7 +5,7 @@ import { uiColours } from '../../../utils/Styles/uiColors'
 
 export const Styles = StyleSheet.create({
     formView: {
-        marginBottom: verticalScale(60)
+       
     },
     termsView: {
         flexDirection: "row",

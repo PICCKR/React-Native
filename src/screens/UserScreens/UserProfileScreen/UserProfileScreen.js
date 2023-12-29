@@ -38,7 +38,6 @@ const UserProfileScreen = () => {
 
   const [showSheet, setShowSheet] = useState({
     addPayment: false,
-    signOut: false
   })
 
   const [walletBalance, seWalletBalance] = useState({
@@ -83,13 +82,8 @@ const UserProfileScreen = () => {
     },
     {
       id: "8",
-      title: "Sign out",
-      type: "Signout"
-    },
-    {
-      id: "9",
-      title: "Delete Account",
-      type: "deleteAccount"
+      title: "Manage Account",
+      type: "ManageAccount"
     }
   ]
 
@@ -108,16 +102,13 @@ const UserProfileScreen = () => {
         navigation.navigate(MainRouteStrings.RATING_AND_REVIEW)
         break;
       case "KYC":
-        navigation.navigate(MainRouteStrings.USER_KYC_SCREEN)
+        // navigation.navigate(MainRouteStrings.USER_KYC_SCREEN)
         break;
       case "BecomePicckR":
         navigation.navigate(MainRouteStrings.BECOME_PICKER)
         break;
-      case "Signout":
-        setShowSheet({
-          ...showSheet,
-          signOut: true
-        })
+      case "ManageAccount":
+        navigation.navigate(MainRouteStrings.MANAGE_ACCOUNT)
         break;
 
       default:
@@ -144,7 +135,7 @@ const UserProfileScreen = () => {
           userData={userData}
         />
 
-        <View style={{paddingHorizontal:scale(16), paddingTop:verticalScale(10)}}>
+        <View style={{ paddingHorizontal: scale(16), paddingTop: verticalScale(10) }}>
           <Text style={appStyles.mediumTextBlackBold}>
             Account
           </Text>
@@ -155,13 +146,11 @@ const UserProfileScreen = () => {
                 <TouchableOpacity
 
                   key={item.id}
-                  disabled={(item.type === "PicckRMode" || item.type === "Appearance") ? true : false}
+                  disabled={(item.type === "PicckRMode" || item.type === "Appearance" || item.type === "KYC") ? true : false}
                   style={styles.deatilsEditbutton}
                   onPress={() => handleOptionClick(item)}
                 >
-                  <Text style={[appStyles.smallTextGray, {
-                    color: item?.type == "Signout" ? uiColours.RED : uiColours.GRAY_TEXT
-                  }]}>
+                  <Text style={[appStyles.smallTextGray]}>
                     {item.title}
                   </Text>
                   <View style={{ flexDirection: "row", alignItems: 'center', gap: scale(10) }}>
@@ -172,21 +161,22 @@ const UserProfileScreen = () => {
                     </Text>
                     }
                     {item?.type === "address" &&
-                      <Text>
+                      <Text style={appStyles.smallTextGray}>
                         {profileInformation?.address?.length} Address
                       </Text>
                     }
-                    {(item.type === "PicckRMode" || item.type === "Appearance") ?
+                    {(item.type === "PicckRMode" || item.type === "Appearance") &&
                       <View style={commonStyles.flexRowAlnCtr}>
                         {item.type === "PicckRMode" &&
-                          <Text>off</Text>
+                          <Text style={appStyles.smallTextGray}>off</Text>
                         }
 
                         {item.type === "Appearance" &&
-                          <Text>{isDark ? "Dark Mode" : "Light Mode"}</Text>
+                          <Text style={appStyles.smallTextGray}>{isDark ? "Dark Mode" : "Light Mode"}</Text>
                         }
 
                         <Switch
+                          initialValue={item.type === "Appearance" && isDark}
                           handleSwitchClicked={(status) => {
                             // console.log("status==>", status);
                             if (item.type === "Appearance") {
@@ -197,9 +187,15 @@ const UserProfileScreen = () => {
 
                           }}
                         />
-                      </View>
-                      :
-                      <Images.rightArrow height={moderateScale(24)} />}
+                      </View>}
+                    {item.type === "KYC" &&
+                      <Text style={appStyles.smallTextGray}>{userData?.bvn}</Text>
+                    }
+
+
+                    {(item.type !== "PicckRMode" && item.type !== "Appearance" && item?.type !== "KYC") &&
+                      <Images.rightArrow height={moderateScale(24)} />
+                    }
                   </View>
 
                 </TouchableOpacity>
@@ -208,21 +204,6 @@ const UserProfileScreen = () => {
           }
         </View>
       </ScrollView>
-      <ConfirmationSheet
-        isVisible={showSheet.signOut}
-        setShowSheet={setShowSheet}
-        renderIcon={() => {
-          return (
-            <Image source={Images.logOut} style={commonStyles.icon} tintColor={uiColours.GRAY_TEXT} />
-          )
-        }}
-        title="Are you sure want to Sign out"
-        buttonTitle="Sign out"
-        handleButtonClick={() => {
-          clearLocalData()
-          setuserData(null)
-        }}
-      />
 
       <AddTopUp
         isVisible={showSheet.addPayment}

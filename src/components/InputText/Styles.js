@@ -18,7 +18,7 @@ export const styles = StyleSheet.create({
         borderWidth:moderateScale(1),
         borderRadius:moderateScale(6),
         paddingLeft:scale(10),
-        marginTop: Platform.OS === 'android' ? verticalScale(4) : verticalScale(0)
+        marginTop: Platform.OS === 'android' ? verticalScale(6) : verticalScale(0)
     },
     errorText: {
         fontSize: scale(12),

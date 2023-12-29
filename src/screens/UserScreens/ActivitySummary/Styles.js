@@ -47,7 +47,6 @@ const styles = StyleSheet.create({
         borderRadius: moderateScale(8),
         borderWidth: moderateScale(1),
         borderColor: uiColours.LIGHT_GRAY,
-        backgroundColor: "#F2F4F8",
         justifyContent: 'center',
         alignItems: "center"
     },
@@ -99,10 +98,10 @@ const styles = StyleSheet.create({
     },
     msgInput: {
         flex: 1,
-        backgroundColor: uiColours.LIGHT_GRAY,
         paddingLeft: scale(10),
         borderRadius: moderateScale(10),
         height: moderateScale(36),
+        justifyContent:"center"
     },
     heartIcon: {
         height: moderateScale(36),
@@ -119,6 +118,7 @@ const styles = StyleSheet.create({
         padding:moderateScale(16),
         borderTopWidth:moderateScale(1),
         borderColor:uiColours.LIGHT_GRAY,
+        width:'100%'
     },
     pickerVehicleInSheet: {
         backgroundColor: uiColours.PRIMARY_LIGHT,

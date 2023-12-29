@@ -12,11 +12,13 @@ const ProfileView = ({
     profileViewStyles,
     userData,
     showEdit,
-    handleEdit = () => {}
+    handleEdit = () => {},
+    hasBottomLine = true
 }) => {
     const { appStyles } = useContext(AppContext)
+    console.log("usre dta", userData);
     return (
-        <View style={Styles.profileSection}>
+        <View style={[Styles.profileSection, hasBottomLine && appStyles.bottomBorder]}>
             <View style={[Styles.profileView, {
                 height: moderateScale(size),
                 width: moderateScale(size),

@@ -9,10 +9,11 @@ import { uiColours } from '../../../utils/Styles/uiColors'
 import { Images } from '../../../assets/images'
 import { setLocalData } from '../../../helper/AsyncStorage'
 import { storageKeys } from '../../../helper/AsyncStorage/storageKeys'
+import useBackButton from '../../../customHooks/useBackButton'
 
 const ApprovalScreen = ({ route }) => {
     const data = route?.params?.data
-    const { appStyles, isDark, setuserData } = useContext(AppContext)
+    const { appStyles, isDark, setuserData, setIsLoggedIn } = useContext(AppContext)
     const navigation = useNavigation()
 
     const [buttonActive, setButtonActive] = useState(true)
@@ -24,11 +25,27 @@ const ApprovalScreen = ({ route }) => {
         const useData = { ...data, type: "user" }
         setLocalData(storageKeys.userData, useData)
         setuserData({ ...data, type: "user" })
+        setIsLoggedIn(true)
     }
+
+    useBackButton(() => {
+        if (status === "failed" || status === "waiting") {
+            navigation.goBack()
+            return true
+        } else {
+            const useData = { ...data, type: "user" }
+            setLocalData(storageKeys.userData, useData)
+            setuserData({ ...data, type: "user" })
+            return true
+        }
+    })
     return (
         <WrapperContainer
             centerTitle="KYC"
-            showBackButton
+            showBackButton={(status === "failed" || status === "waiting") ? true : false}
+            handleBack={() => {
+                navigation.goBack()
+            }}
             buttonTitle={status === "failed" ? "Try Again" : "Continue"}
             showFooterButton={status !== "waiting" ? true : false}
             handleButtonPress={() => {

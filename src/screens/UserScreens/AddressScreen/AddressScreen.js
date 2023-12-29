@@ -96,6 +96,9 @@ const AddressScreen = () => {
             centerTitle="Address"
             showFooterButton={false}
             showBackButton
+            handleBack={()=>{
+                navigation.goBack()
+            }}
             containerPadding={{ paddingTop: verticalScale(16) }}
         >
             <View style={commonStyles.flexRowAlnCtrJutySpaceBetween}>
@@ -131,10 +134,10 @@ const AddressScreen = () => {
                                 <View style={[commonStyles.flexRowAlnCtr, { flex: 1 }]}>
                                     {item?.addressType === "Home" ? <Image source={Images.home} style={[commonStyles.icon,{tintColor:uiColours.PRIMARY}]} /> : <Image source={Images.work} style={[commonStyles.icon,{tintColor:uiColours.PRIMARY}]} />}
                                     <View style={{ width: "84%" }}>
-                                        <Text>
+                                        <Text style={appStyles.smallTextPrimary}>
                                             {item?.addressType}
                                         </Text>
-                                        <Text>
+                                        <Text style={appStyles.smallTextGray}>
                                             {item?.location}
                                         </Text>
                                     </View>

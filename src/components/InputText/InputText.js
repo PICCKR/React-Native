@@ -35,7 +35,7 @@ const InputText = ({
     textBox,
     hasLeftView
 }) => {
-    const { appStyles } = useContext(AppContext)
+    const { appStyles, isDark } = useContext(AppContext)
 
     return (
         <View style={[styles.inputContainer, inputContainer]}>
@@ -48,7 +48,7 @@ const InputText = ({
                 </Text>}
             </View>}
             <View style={[styles.inputBox, {
-                borderColor: ShowError ? uiColours.RED : uiColours.LIGHT_GRAY,
+                borderColor: (isDark && !ShowError) ? uiColours.GRAYED_BUTTON :  ShowError ? uiColours.RED : uiColours.LIGHT_GRAY,
             }, inPutStyles]}>
                 {hasLeftView && renderLeftView()}
                 <TextInput
@@ -61,6 +61,7 @@ const InputText = ({
                         ...appStyles.mediumTextBlack,
                         paddingLeft: hasLeftView ? scale(10) : scale(0), 
                         width:showRenderRightView ? "90%" : "100%",
+                        color: !isDark ? uiColours.BLACK_TEXT : uiColours.WHITE_TEXT,
                         ...textBox 
                     }}
                     autoCapitalize="none"

@@ -15,9 +15,10 @@ import Ongoing from './Ongoing'
 import CustomButton from '../../../components/Button/CustomButton'
 import { buttonTypes } from '../../../utils/Constents/constentStrings'
 import { ReviewsData } from '../../../json/reviewData'
+import { MainRouteStrings } from '../../../utils/Constents/RouteStrings'
 
 const ActivitySummary = ({ route }) => {
-    const { appStyles } = useContext(AppContext)
+    const { appStyles, isDark } = useContext(AppContext)
     const navigation = useNavigation()
     const data = route.params?.data
 
@@ -29,18 +30,27 @@ const ActivitySummary = ({ route }) => {
         <WrapperContainer
             centerTitle="Activity Summary"
             showBackButton
+            handleBack={() => {
+                navigation.goBack()
+            }}
             showFooterButton={data?.status != "Ongoing" ? true : false}
             buttonTitle="Reorder"
             buttonActive={true}
-            handleButtonPress={() => { }}
+            handleButtonPress={() => {
+                navigation.navigate(MainRouteStrings.SET_DESTINATION, {
+                    from: MainRouteStrings.ACTIVITY_SUMMERY
+                })
+            }}
             containerPadding={{ paddingHorizontal: 0 }}
         >
             <ScrollView style={{
                 marginBottom: data?.status != "Ongoing" ? verticalScale(76) : 0,
-                paddingTop: verticalScale(16)
+                // paddingTop: verticalScale(16)
             }}>
 
-                <View style={styles.ActivitySummaryConatiner}>
+                <View style={[styles.ActivitySummaryConatiner,{
+                     borderColor:!isDark ? uiColours.LIGHT_GRAY : uiColours.GRAYED_BUTTON,
+                }]}>
                     <View style={styles.vehicle}>
                         <Images.car height={moderateScale(34)} width={moderateScale(34)} />
                     </View>
@@ -61,21 +71,32 @@ const ActivitySummary = ({ route }) => {
                     </View>
                 </View>
 
-                {data?.status != "Ongoing" && <View style={styles.profileSection}>
+                {data?.status != "Ongoing" && <View style={[styles.profileSection,{
+                     borderColor:!isDark ? uiColours.LIGHT_GRAY : uiColours.GRAYED_BUTTON,
+                }]}>
+
                     <View style={styles.profileView}>
                         {data?.profileImg ? <Image source={{ uri: profileInformation.profileImg }} /> : <Images.profile />}
                     </View>
+
                     <Text style={appStyles.mediumTextGray}>
                         {data?.status === "Completed" && `Let’s rate `}
                         <Text style={appStyles.mediumTextPrimaryBold}>{data?.picker}</Text>
                     </Text>
+
                     {data?.status === "Completed" && <Rating
                         ratingCount={5}
                         imageSize={moderateScale(22)}
+                        style={{
+                            width:200,
+                        }}
+                        tintColor={isDark ? uiColours.DARK_BG : uiColours.WHITE_TEXT}
+                        ratingBackgroundColor="#000000"
                         onFinishRating={(e) => {
                             // console.log('eee', e);
                         }}
                     />}
+
                 </View>}
 
                 {data?.status === "Completed" && <View>
@@ -87,7 +108,9 @@ const ActivitySummary = ({ route }) => {
                             {
                                 ReviewsData.map((item) => {
                                     return (
-                                        <TouchableOpacity key={item.id} style={styles.reviewCard}>
+                                        <TouchableOpacity key={item.id} style={[styles.reviewCard,{
+                                            backgroundColor: isDark ? uiColours.GRAYED_BUTTON : "#F2F4F8",
+                                        }]}>
                                             <Text style={[appStyles.smallTextGray, { fontSize: scale(10) }]}>
                                                 {item.title}
                                             </Text>
@@ -167,6 +190,7 @@ const ActivitySummary = ({ route }) => {
                         data={data}
                         appStyles={appStyles}
                         navigation={navigation}
+                        isDark={isDark}
                     />
 
                 }

@@ -5,9 +5,11 @@ import styles from './Styles'
 import { AppContext } from '../../../context/AppContext'
 import { Images } from '../../../assets/images'
 import { moderateScale, scale, verticalScale } from 'react-native-size-matters'
+import { useNavigation } from '@react-navigation/native'
 
 const PickerDetails = ({ route }) => {
     const data = route?.params?.data
+    const navigation = useNavigation()
     const { appStyles, isDark } = useContext(AppContext)
     const [selectedHistory, setSelectedHistory] = useState(false)
 
@@ -35,6 +37,9 @@ const PickerDetails = ({ route }) => {
         <WrapperContainer
             centerTitle="PicckR Details"
             showBackButton
+            handleBack={()=>{
+                navigation.goBack()
+            }}
             buttonTitle={"Request PicckR"}
             handleButtonPress={handleRequestPicker}
             buttonActive={true}

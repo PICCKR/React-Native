@@ -23,6 +23,11 @@ const styles = StyleSheet.create({
         position:'absolute',
         bottom:0,
         left:scale(45)
+    },
+    footer:{
+        flexDirection:"row",
+        justifyContent:"space-between",
+        alignItems:"center"
     }
 });
 

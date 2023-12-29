@@ -29,6 +29,10 @@ const UserRoutes = () => {
                 <Stack.Screen name={MainRouteStrings.FIND_DESTINATON} component={screens.FIND_DESTINATON} />
                 <Stack.Screen name={MainRouteStrings.SELECT_ADDRRESS_FROM_MAP} component={screens.SELECT_ADDRRESS_FROM_MAP} />
                 <Stack.Screen name={MainRouteStrings.ITEMS_DETAILS} component={screens.ITEMS_DETAILS} />
+                <Stack.Screen name={MainRouteStrings.FINDING_PICKER} component={screens.FINDING_PICKER} />
+                <Stack.Screen name={MainRouteStrings.TRACKING_SCREEN} component={screens.TRACKING_SCREEN} />
+                <Stack.Screen name={MainRouteStrings.USER_CHAT_SCREEN} component={screens.USER_CHAT_SCREEN} />
+                <Stack.Screen name={MainRouteStrings.MANAGE_ACCOUNT} component={screens.MANAGE_ACCOUNT} />
             </Stack.Navigator>
         </NavigationContainer>
     )

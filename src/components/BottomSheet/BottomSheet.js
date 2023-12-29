@@ -13,7 +13,7 @@ import { uiColours } from '../../utils/Styles/uiColors'
 const BottomSheet = ({
     isVisible,
     children,
-    onBackdropPress = () => {},
+    onBackdropPress = () => { },
     title,
     hasCloseIcon,
     handleRightClick,
@@ -23,24 +23,31 @@ const BottomSheet = ({
     handleBackClick,
     showFooterButton = false,
     buttonActive,
-    isDark,
     buttonTitle,
-    handleButtonPress
+    handleButtonPress,
+    renderRightView = () => { },
+    modelBgStyles
 }) => {
-    const { appStyles } = useContext(AppContext)
+    const { appStyles, isDark } = useContext(AppContext)
     return (
         <Modal
             isVisible={isVisible}
             onBackdropPress={onBackdropPress}
-            style={{ margin: 0 }}
+            style={[{ margin: 0,  backgroundColor: isDark ? 'rgba(255, 255, 255, 0.1)' : 'rgba(255, 255, 255,0.1)'}, modelBgStyles]}
+            animationInTiming={500}
+            animationOutTiming={500}
             animationIn="fadeInUp"
-            animationOut="fadeOut"
+
         >
-            <View style={[styles.modal, modelStyles]}>
-                <View style={styles.header}>
+            <View style={[styles.modal, {
+                backgroundColor: isDark ? uiColours.DARK_BG : uiColours.WHITE_TEXT
+            }, modelStyles]}>
+                <View style={[styles.header, {
+                    borderColor: isDark ? uiColours.GRAYED_BUTTON : uiColours.LIGHT_GRAY
+                }]}>
                     <View style={commonStyles.flexRowAlnCtr}>
                         {hasBackButton && <TouchableOpacity
-                         onPress={handleBackClick}
+                            onPress={handleBackClick}
                         >
                             <Images.backArrow height={moderateScale(24)} width={moderateScale(24)} />
 
@@ -54,7 +61,8 @@ const BottomSheet = ({
                         onPress={handleRightClick}
                     >
                         {
-                            hasCloseIcon ? <Images.close height={moderateScale(24)} width={moderateScale(24)} /> : <Text></Text>
+                            hasCloseIcon ? <Images.close height={moderateScale(24)} width={moderateScale(24)} />
+                                : renderRightView()
                         }
                     </TouchableOpacity>
                 </View>
@@ -62,7 +70,9 @@ const BottomSheet = ({
                     {children}
                 </View>
 
-                {showFooterButton && <View style={styles.footer}>
+                {showFooterButton && <View style={[styles.footer,{
+                    borderColor: isDark ? uiColours.GRAYED_BUTTON : uiColours.LIGHT_GRAY
+                }]}>
                     <CustomButton
                         disabled={!buttonActive}
                         buttonStyle={{
@@ -71,7 +81,7 @@ const BottomSheet = ({
                                     uiColours.LIGHT_GRAY
                         }}
                         titleStyle={{
-                            color: buttonActive ? uiColours.WHITE_TEXT : !buttonActive && isDark ? uiColours.GRAYED_BUTTON :
+                            color: buttonActive ? uiColours.WHITE_TEXT : (!buttonActive && isDark) ? uiColours.GRAY_TEXT :
                                 uiColours.GRAY_TEXT
                         }}
                         title={buttonTitle}

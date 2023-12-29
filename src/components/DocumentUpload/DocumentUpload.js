@@ -7,6 +7,7 @@ import { moderateScale, scale } from 'react-native-size-matters'
 import BottomSheet from '../BottomSheet/BottomSheet'
 import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
 import { requestCameraPermission, requestGallaryPermission } from '../../helper/requestPermissions'
+import { uiColours } from '../../utils/Styles/uiColors'
 
 const DocumentUpload = ({
     setDocument,
@@ -22,7 +23,7 @@ const DocumentUpload = ({
     }, [])
 
 
-    const { appStyles } = useContext(AppContext)
+    const { appStyles, isDark } = useContext(AppContext)
     const [showModel, setShowMode] = useState(false)
 
     const openCamara = async () => {
@@ -101,7 +102,9 @@ const DocumentUpload = ({
             <Text style={[appStyles.smallTextBlack, { fontFamily: "Poppins-Medium" }]}>{title}</Text>
             <TouchableOpacity
                 onPress={() => setShowMode(true)}
-                style={styles.inputContainer}>
+                style={[styles.inputContainer,{
+                    borderColor: isDark ? uiColours.GRAYED_BUTTON : uiColours.LIGHT_GRAY
+                }]}>
                 <View style={{ flexDirection: 'row', alignItems: 'center', gap: scale(10), width: '80%' }}>
                     <Images.camera />
                     <Text style={appStyles.smallTextGray}>

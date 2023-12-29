@@ -7,7 +7,8 @@ import { moderateScale } from 'react-native-size-matters'
 
 const CheckBox = ({
     selected = false,
-    handleCheck
+    handleCheck,
+    isDark
 }) => {
     return (
         <TouchableOpacity
@@ -15,7 +16,8 @@ const CheckBox = ({
             style={[styles.CheckBox,
             {
                 backgroundColor: selected ? uiColours.PRIMARY : null,
-                borderWidth: selected ? 0 : moderateScale(2)
+                borderWidth: selected ? 0 : moderateScale(2),
+                borderColor: isDark ? uiColours.GRAYED_BUTTON : uiColours.LIGHT_GRAY
             }
             ]}>
             {selected && <Images.check />}

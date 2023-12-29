@@ -23,12 +23,12 @@
 15    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 15-->/Users/mahammadsuelc/Desktop/ve/pikkerapp/android/app/src/main/AndroidManifest.xml:6:5-79
 15-->/Users/mahammadsuelc/Desktop/ve/pikkerapp/android/app/src/main/AndroidManifest.xml:6:22-76
-16    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" /> <!-- Include required permissions for Google Maps API to run. -->
+16    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
 16-->[com.facebook.flipper:flipper:0.182.0] /Users/mahammadsuelc/.gradle/caches/transforms-3/e13f88164840fe641a466d05cd8edac7/transformed/jetified-flipper-0.182.0/AndroidManifest.xml:16:5-76
 16-->[com.facebook.flipper:flipper:0.182.0] /Users/mahammadsuelc/.gradle/caches/transforms-3/e13f88164840fe641a466d05cd8edac7/transformed/jetified-flipper-0.182.0/AndroidManifest.xml:16:22-73
 17    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-17-->[com.google.android.gms:play-services-maps:18.0.2] /Users/mahammadsuelc/.gradle/caches/transforms-3/4fe486e3c16899c67b1f49a3e3ae28f6/transformed/jetified-play-services-maps-18.0.2/AndroidManifest.xml:23:5-79
-17-->[com.google.android.gms:play-services-maps:18.0.2] /Users/mahammadsuelc/.gradle/caches/transforms-3/4fe486e3c16899c67b1f49a3e3ae28f6/transformed/jetified-play-services-maps-18.0.2/AndroidManifest.xml:23:22-76
+17-->[:react-native-community_netinfo] /Users/mahammadsuelc/Desktop/ve/pikkerapp/node_modules/@react-native-community/netinfo/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:7:5-79
+17-->[:react-native-community_netinfo] /Users/mahammadsuelc/Desktop/ve/pikkerapp/node_modules/@react-native-community/netinfo/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:7:22-76
 18
 19    <uses-feature
 19-->[com.google.android.gms:play-services-maps:18.0.2] /Users/mahammadsuelc/.gradle/caches/transforms-3/4fe486e3c16899c67b1f49a3e3ae28f6/transformed/jetified-play-services-maps-18.0.2/AndroidManifest.xml:26:5-28:35

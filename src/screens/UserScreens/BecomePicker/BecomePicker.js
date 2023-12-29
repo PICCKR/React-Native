@@ -16,7 +16,7 @@ import { uiColours } from '../../../utils/Styles/uiColors'
 import InputText from '../../../components/InputText/InputText'
 
 const BecomePicker = () => {
-    const { appStyles, userData } = useContext(AppContext)
+    const { appStyles, userData, isDark } = useContext(AppContext)
     console.log("userData", userData);
     const navigation = useNavigation()
 
@@ -62,14 +62,19 @@ const BecomePicker = () => {
         <WrapperContainer
             centerTitle="Vehicle Verification"
             showBackButton
+            handleBack={()=>{
+                navigation.goBack()
+            }}
             buttonTitle={status === "unapproved" ? "Submit" : status === "waiting" ? "Next" : "Next"}
             handleButtonPress={() => { status === "unapproved" ? handleSubmit() : status === "waiting" ? setButtonActive(false) : handleNext() }}
             buttonActive={buttonActive}
             containerPadding={{ paddingHorizontal: 0 }}
         >
-            {status === "unapproved" && <ScrollView style={{ marginBottom: verticalScale(70) }}>
+            {status === "unapproved" && <ScrollView style={{}}>
 
-                <View style={styles.profileSection}>
+                <View style={[styles.profileSection,{
+                    borderColor: isDark ? uiColours.GRAYED_BUTTON : uiColours.LIGHT_GRAY
+                }]}>
                     <PrifileView
                         profileViewStyles={{}}
                         profileImg={userData?.profileImg}

@@ -26,9 +26,7 @@ const Styles = StyleSheet.create({
     },
     profileSection: {
         alignItems: "center",
-        paddingVertical: verticalScale(16),
-        borderBottomWidth:moderateScale(1),
-        borderColor:uiColours.LIGHT_GRAY
+        paddingBottom: verticalScale(16),
     }
 })
 

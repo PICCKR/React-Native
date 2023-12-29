@@ -17,7 +17,7 @@ import { showToast } from '../../../components/tostConfig/tostConfig'
 import { tostMessagetypes } from '../../../utils/Constents/constentStrings'
 
 const UserHomeScreen = () => {
-  const { appStyles, userData, isDark } = useContext(AppContext)
+  const { appStyles, userData, isDark, setSelectedVehicle } = useContext(AppContext)
   const navigation = useNavigation()
 
   const [showSheet, setShowSheet] = useState({
@@ -52,22 +52,26 @@ const UserHomeScreen = () => {
     {
       id: "1",
       icon: Images.scooter,
-      type: "Bike"
+      type: "Bike",
+      price: 50
     },
     {
       id: "2",
       icon: Images.car,
-      type: "Car"
+      type: "Car",
+      price: 100
     },
     {
       id: "3",
       icon: Images.van,
-      type: "Van"
+      type: "Van",
+      price: 125
     },
     {
       id: "4",
       icon: Images.truck,
-      type: "Truck"
+      type: "Truck",
+      price: 150
     }
   ]
 
@@ -104,10 +108,14 @@ const UserHomeScreen = () => {
           setShowSheet={setShowSheet}
           showSheet={showSheet}
           topUpAmount={topUpAmount}
+          isDark={isDark}
         />
         <View style={styles.homeScreenContainer}>
           <InputText
             placeholder="Find a destination"
+            onPressIn={()=>{
+              navigation.navigate(MainRouteStrings.FIND_DESTINATON)
+            }}
             hasLeftView
             renderLeftView={() => {
               return (
@@ -115,7 +123,7 @@ const UserHomeScreen = () => {
               )
             }}
           />
-          <View style={styles.recentDestinationView}>
+          {/* <View style={styles.recentDestinationView}>
             <Text style={appStyles.mediumTextBlack}>Recent destination</Text>
             {
               recentDestinationData.map((item) => {
@@ -134,21 +142,25 @@ const UserHomeScreen = () => {
                 )
               })
             }
-          </View>
+          </View> */}
 
-          <TouchableOpacity
+         {userData?.type === "user" && <TouchableOpacity
             activeOpacity={0.7}
-            style={{ marginVertical: verticalScale(16) }}
+            style={{ marginVertical: verticalScale(16), height:verticalScale(110), width:screenSize.width - scale(32) }}
             onPress={() => {
               navigation.navigate(MainRouteStrings.BECOME_PICKER)
             }}
           >
-            <Image source={Images.becomePicckr}
+            <Image 
+            source={Images.becomePicckr}
+            resizeMode = "stretch"
               style={styles.becomePickerView}
             />
-          </TouchableOpacity>
+          </TouchableOpacity>}
 
-          <Text style={appStyles.mediumTextBlack}>Choose Vehicle</Text>
+          <Text style={[appStyles.mediumTextBlack,{
+            marginTop: userData?.type === "user" ? 0 : verticalScale(10)
+          }]}>Choose Vehicle</Text>
           <View style={styles.vehicleTypeList}>
             {
               VehicleType.map((item) => {
@@ -157,6 +169,7 @@ const UserHomeScreen = () => {
                     <TouchableOpacity
                       style={styles.vehicleTypeIcon}
                       onPress={() => {
+                        setSelectedVehicle(item)
                         navigation.navigate(MainRouteStrings.FIND_DESTINATON, {
 
                         })
@@ -203,7 +216,8 @@ const UserHomeScreen = () => {
         setShowSheet={setShowSheet}
         topUpAmount={topUpAmount}
         setTopUpAmount={setTopUpAmount}
-        handleAddTopUp={() => {
+        handleAddTopUp={(item) => {
+          setTopUpAmount(item)
           setShowSheet({
             ...showSheet,
             addPayment: false,

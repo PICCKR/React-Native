@@ -11,7 +11,7 @@ import { useNavigation } from '@react-navigation/native'
 import { MainRouteStrings } from '../../../utils/Constents/RouteStrings'
 
 const ActivityScreen = () => {
-  const { appStyles } = useContext(AppContext)
+  const { appStyles, isDark } = useContext(AppContext)
   const navigation = useNavigation()
   const [currentTab, setCurrentTab] = useState({
     title: "Ongoing",
@@ -44,7 +44,7 @@ const ActivityScreen = () => {
           dateAndTime: "June 20 2023, 13:02 PM",
           amount: "100",
           status: "Cancelled",
-          by:"sender"
+          by: "sender"
         },
         {
           id: "2",
@@ -87,7 +87,7 @@ const ActivityScreen = () => {
           dateAndTime: "June 20 2023, 13:02 PM",
           amount: "100",
           status: "Cancelled",
-          by:"picker"
+          by: "picker"
         },
         {
           id: "8",
@@ -121,7 +121,7 @@ const ActivityScreen = () => {
             <TouchableOpacity
               key={item.title}
               style={[styles.tabContainerItem, {
-                borderColor: selected ? uiColours.PRIMARY : uiColours.LIGHT_GRAY
+                borderColor: selected ? uiColours.PRIMARY : (isDark && !selected) ? uiColours.GRAYED_BUTTON : uiColours.LIGHT_GRAY
               }]}
               onPress={() => {
                 setCurrentTab(item)
@@ -137,7 +137,6 @@ const ActivityScreen = () => {
                   </Text>
                 </View>}
               </View>
-
             </TouchableOpacity>
           )
         })}
@@ -149,14 +148,20 @@ const ActivityScreen = () => {
         style={{ paddingHorizontal: scale(16), marginTop: verticalScale(16) }}
         renderItem={({ item }) => {
           return (
-            <TouchableOpacity 
-            style={[commonStyles.flexRowAlnCtrJutySpaceBetween, commonStyles.bottomBorder, { paddingBottom: verticalScale(16) }]}
-            onPress={()=>{
-              navigation.navigate(MainRouteStrings.ACTIVITY_SUMMERY,{
-                data:item
-              })
+            <TouchableOpacity
+              style={[commonStyles.flexRowAlnCtrJutySpaceBetween, commonStyles.bottomBorder,
+              {
+                paddingBottom: verticalScale(16),
+                borderColor: isDark ? uiColours.GRAYED_BUTTON : uiColours.LIGHT_GRAY
 
-            }}
+              }
+              ]}
+              onPress={() => {
+                navigation.navigate(MainRouteStrings.ACTIVITY_SUMMERY, {
+                  data: item
+                })
+
+              }}
             >
               <View style={commonStyles.flexRowAlnCtr}>
                 <Images.profile height={moderateScale(40)} width={moderateScale(40)} />

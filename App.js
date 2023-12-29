@@ -7,18 +7,20 @@ import Loader from './src/components/Loader/index'
 import Toast from 'react-native-toast-message'
 import { toastConfig } from './src/components/tostConfig/tostConfig'
 import { uiColours } from './src/utils/Styles/uiColors'
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
 const App = () => {
 
   const showLoader = useSelector((state) => state?.showLoader?.loader)
 
   return (
-    <AppProvider>
-      <StatusBar backgroundColor={uiColours.PRIMARY}/>
-      <CheckRoutes />
-      {showLoader && <Loader />}
-      <Toast config={toastConfig} />
-    </AppProvider>
+    <GestureHandlerRootView style={{flex:1}}>
+      <AppProvider>
+        <CheckRoutes />
+        {showLoader && <Loader />}
+        <Toast config={toastConfig} />
+      </AppProvider>
+    </GestureHandlerRootView>
   )
 }
 

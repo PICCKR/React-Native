@@ -11,7 +11,6 @@ const styles = StyleSheet.create({
         alignItems: "center",
         borderBottomWidth:moderateScale(1),
         justifyContent:"space-between",
-        borderColor:uiColours.LIGHT_GRAY
     },
     leftView: {
         width: (screenSize.width - moderateScale(32)) / 3,

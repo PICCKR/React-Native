@@ -13,6 +13,7 @@ import { commonStyles } from '../../../utils/Styles/CommonStyles'
 import InputText from '../../../components/InputText/InputText'
 import { ReviewsData } from '../../../json/reviewData'
 import { MainRouteStrings } from '../../../utils/Constents/RouteStrings'
+import useBackButton from '../../../customHooks/useBackButton'
 
 const PickerReviewWhenCancelled = () => {
     const { appStyles } = useContext(AppContext)
@@ -55,12 +56,20 @@ const PickerReviewWhenCancelled = () => {
 
     }, [userReview])
 
+    useBackButton(()=>{
+        navigation.navigate(MainRouteStrings.USER_HOME_SCREEN)
+        return true
+    })
+
 
     return (
 
         <WrapperContainer
             centerTitle="Activity Summary"
             showBackButton
+            handleBack={()=>{
+                navigation.navigate(MainRouteStrings.USER_HOME_SCREEN)
+            }}
             showFooterButton={data?.status != "Ongoing" ? true : false}
             buttonTitle="Submit"
             buttonActive={buttonActive}
@@ -155,10 +164,6 @@ const PickerReviewWhenCancelled = () => {
                         }}
                     />
                 </View>
-
-
-
-
             </ScrollView>
         </WrapperContainer>
 

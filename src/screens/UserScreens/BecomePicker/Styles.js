@@ -24,7 +24,8 @@ const styles = StyleSheet.create({
         flexDirection: "row",
         alignItems: "center",
         gap: scale(10),
-        marginVertical: verticalScale(16),
+        marginTop: verticalScale(16),
+        marginBottom: verticalScale(70) 
     },
     linkTextView: {
         paddingVertical: verticalScale(6),

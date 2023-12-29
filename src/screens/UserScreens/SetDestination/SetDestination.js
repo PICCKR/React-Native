@@ -1,7 +1,7 @@
 import { View, Text, SafeAreaView, DatePickerAndroid } from 'react-native'
-import React, { useContext, useRef, useState } from 'react'
+import React, { useContext, useEffect, useRef, useState } from 'react'
 import { AppContext } from '../../../context/AppContext'
-import { useNavigation } from '@react-navigation/native'
+import { useIsFocused, useNavigation } from '@react-navigation/native'
 import { screenSize } from '../../../utils/Styles/CommonStyles'
 import MapView, { PROVIDER_GOOGLE } from 'react-native-maps'
 import { Images } from '../../../assets/images'
@@ -12,50 +12,29 @@ import { MainRouteStrings } from '../../../utils/Constents/RouteStrings'
 import moment from 'moment'
 import { uiColours } from '../../../utils/Styles/uiColors'
 import DatePicker from '../../../components/DatePicker'
+import useBackButton from '../../../customHooks/useBackButton'
 
 
-const SetDestination = () => {
-  // const toScreen = route?.params?.toScreen
+const SetDestination = ({route}) => {
+  const from = route?.params?.from
   const {
     appStyles,
+    userData,
     destination,
     source,
     isDark
   } = useContext(AppContext)
 
-  console.log("destination", destination);
+  console.log("destination", userData);
 
   const navigation = useNavigation()
+  const isFocused = useIsFocused();
 
   const mapRef = useRef()
   const ASPECT_RATIO = screenSize.width / screenSize.height;
   const LATITUDE_DELTA = 0.04;
   const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
 
-  const onLocationSelect = async (e, d) => {
-    // console.log("e", e);
-    // const location = await convertLanLngToAddress(e)
-  }
-
-
-  // const convertLanLngToAddress = async (coords) => {
-  //   Geocoder.init(GOOGLE_MAP_API_KEY);
-  //   Geocoder.from(coords.latitude, coords.longitude)
-  //     .then(async json => {
-  //       console.log('lat lan', json.results[0]);
-  //       const adddress = json.results[0]?.formatted_address
-  //       setDestination({
-  //         ...destination,
-  //         lat: coords.latitude,
-  //         lng: coords.longitude,
-  //         location: adddress
-  //       })
-  //     })
-  //     .catch(function (error) {
-  //       console.log('errr', error);
-  //       Alert.alert("", "Something went wrong please try again")
-  //     });
-  // }
 
   const [showBottomSheet, setShowBottomSheet] = useState({
     recipient: true,
@@ -68,12 +47,25 @@ const SetDestination = () => {
     phoneNumber: ""
   })
   const [pickUpData, setPickUpData] = useState({
-    name: "",
-    phoneNumber: "",
+    name: userData?.firstName ? `${userData?.firstName} ${userData?.lastName}` : "",
+    phoneNumber: userData?.phoneNumber ? userData?.phoneNumber : "",
+    selectedCountry:userData?.selectedCountry,
     pickupDate: "Now"
   })
 
   const [date, setDate] = useState(new Date(1598051730000));
+
+  useEffect(() => {
+    // This will run every time the screen comes into focus
+    if (isFocused) {
+      setShowBottomSheet({
+        ...showBottomSheet,
+        recipient: true
+      })
+    }
+  }, [isFocused]);
+
+
 
   return (
     <SafeAreaView style={{ alignItems: "center", justifyContent: 'center', flex: 1 }}>
@@ -106,6 +98,7 @@ const SetDestination = () => {
 
       <RecipientSheet
         isVisible={showBottomSheet.recipient}
+        modelBgStyles={{backgroundColor:"rgba(255, 255, 255, 0)"}}
         formData={recipientData}
         setFormData={setRecipientData}
         location={destination}
@@ -125,7 +118,8 @@ const SetDestination = () => {
             recipient: false,
             pickup: false
           })
-          navigation.navigate(MainRouteStrings.FIND_DESTINATON)
+          navigation.goBack()
+          
         }}
         handleNext={() => {
           setShowBottomSheet({
@@ -141,6 +135,7 @@ const SetDestination = () => {
       <PickUpSheet
         isVisible={showBottomSheet.pickup}
         formData={pickUpData}
+        userData={userData}
         setFormData={setPickUpData}
         location={source}
         appStyles={appStyles}
@@ -167,25 +162,33 @@ const SetDestination = () => {
             pickup: false
           })
         }}
+
         handleNext={() => {
           setShowBottomSheet({
             ...showBottomSheet,
-            recipient: false,
             pickup: false
           })
-          navigation.navigate(MainRouteStrings.ITEMS_DETAILS)
+          navigation.navigate(MainRouteStrings.ITEMS_DETAILS,{
+            data:{
+              pickUpData,
+              recipientData
+            }
+          })
         }}
+
       />
 
       <DatePicker
         isVisible={showBottomSheet.datePicker}
         mode={'single'}
         colorOptions={{
-          headerColor: uiColours.WHITE_TEXT,
-          headerTextColor: uiColours.BLACK_TEXT
+          headerColor:isDark ? uiColours.DARK_BG : uiColours.WHITE_TEXT,
+          headerTextColor:isDark ? uiColours.WHITE_TEXT : uiColours.WHITE_TEXT,
+          backgroundColor:isDark ? uiColours.DARK_BG :uiColours.WHITE_TEXT,
+          dateTextColor:isDark ? uiColours.WHITE_TEXT : uiColours.GRAY_TEXT,
         }}
-        minDate= {new Date()}
-        onSeclectTime={(data)=>{
+        minDate={new Date()}
+        onSeclectTime={(data) => {
           setShowBottomSheet({
             ...showBottomSheet,
             datePicker: false,
@@ -193,7 +196,7 @@ const SetDestination = () => {
           })
           setPickUpData({
             ...pickUpData,
-          pickupDate:data?.time
+            pickupDate: data?.time
           })
         }}
         onBackdropPress={() => {
@@ -202,9 +205,9 @@ const SetDestination = () => {
             datePicker: false,
             pickup: true
           })
-          
+
         }}
-        handleClose={()=>{
+        handleClose={() => {
           setShowBottomSheet({
             ...showBottomSheet,
             datePicker: false,
@@ -220,7 +223,7 @@ const SetDestination = () => {
           })
           setPickUpData({
             ...pickUpData,
-          pickupDate:output?.dateString
+            pickupDate: output?.dateString
           })
         }}
       />

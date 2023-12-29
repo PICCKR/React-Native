@@ -13,12 +13,17 @@ import { commonStyles } from '../../../utils/Styles/CommonStyles'
 import WrapperContainer from '../../../components/WrapperContainer/WrapperContainer'
 
 const WelcomeScreen = () => {
-    const { appStyles } = useContext(AppContext)
+    const { appStyles, setuserData } = useContext(AppContext)
     const navigation = useNavigation()
     return (
         <WrapperContainer
             rightTitle={"Cancel"}
             showFooterButton={false}
+            handlerRightViewPress={() => {
+                setuserData({
+                    type: "guest"
+                })
+            }}
         >
 
             <View style={styles.contentView}>

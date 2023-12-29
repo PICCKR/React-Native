@@ -34,14 +34,32 @@ const EditProfile = () => {
     })
 
     const handleSave = () => {
-        setuserData({ ...userData, ...formData })
-        setLocalData(storageKeys.userData, { ...userData, ...formData })
-        const toastMsgConfg = {
-            isDark: isDark,
-            msg: "You have updated your profile"
+        if (!RegEx.email__regEx.test(formData?.email)) {
+            setShowError({
+                ...ShowError,
+                email: true
+            })
+        } else if(!RegEx.name__regEx.test(formData?.firstName)){
+            setShowError({
+                ...ShowError,
+                firstName: true
+            })
+        } else if(!RegEx.name__regEx.test(formData?.lastName)){
+            setShowError({
+                ...ShowError,
+                lastName: true
+            })
+        }else {
+            setuserData({ ...userData, ...formData })
+            setLocalData(storageKeys.userData, { ...userData, ...formData })
+            const toastMsgConfg = {
+                isDark: isDark,
+                msg: "You have updated your profile"
+            }
+            showToast(toastMsgConfg, tostMessagetypes.SUCCESS, isDark)
+            navigation.navigate(MainRouteStrings.USER_PROFILE_SCREEN)
         }
-        showToast(toastMsgConfg, tostMessagetypes.SUCCESS, isDark)
-        navigation.navigate(MainRouteStrings.USER_PROFILE_SCREEN)
+
     }
 
     useEffect(() => {
@@ -62,6 +80,9 @@ const EditProfile = () => {
         <WrapperContainer
             centerTitle="Edit Profile"
             showBackButton
+            handleBack={() => {
+                navigation.goBack()
+            }}
             buttonTitle={"Save changes"}
             handleButtonPress={handleSave}
             buttonActive={buttonActive}

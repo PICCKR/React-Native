@@ -50,19 +50,27 @@ const FindDestination = () => {
     const recentDestinationData = [
         {
             title: "Harvard University",
-            details: 'Massachusetts Hall, Cambridge, MA 02138'
+            details: 'Massachusetts Hall, Cambridge, MA 02138',
+            lat: 12.30536215259088,
+            lng: 76.65516416694614
         },
         {
             title: "Houghton Library",
-            details: 'Quincy Street &, Harvard St, Cambridge, MA 02138'
+            details: 'Quincy Street &, Harvard St, Cambridge, MA 02138',
+            lat: 12.30536215259088,
+            lng: 76.65516416694614
         },
         {
             title: "Cambridge Historical Tours",
-            details: '1400 Massachusetts Ave, Cambridge, MA 02138'
+            details: '1400 Massachusetts Ave, Cambridge, MA 02138',
+            lat: 12.30536215259088,
+            lng: 76.65516416694614
         },
         {
             title: "John Harvard Statue",
-            details: 'Harvard Yard, 1, Cambridge, MA 02138'
+            details: 'Harvard Yard, 1, Cambridge, MA 02138',
+            lat: 12.30536215259088,
+            lng: 76.65516416694614
         }
     ]
 
@@ -149,14 +157,27 @@ const FindDestination = () => {
             style={[appStyles?.container, { paddingVertical: verticalScale(16) }]}
         >
             <ScrollView>
-                <View style={styles.header}>
-                    <Images.backArrow height={moderateScale(20)} width={moderateScale(20)} />
+                <View style={[styles.header, {
+                    borderColor: isDark ? uiColours.GRAYED_BUTTON : uiColours.LIGHT_GRAY
+                }]}>
+                    <TouchableOpacity
+                        onPress={() => {
+                            navigation.goBack()
+                        }}
+                    >
+                        <Images.backArrow height={moderateScale(20)} width={moderateScale(20)} />
+                    </TouchableOpacity>
+
                     <View>
-                        <View style={styles.inputContainer}>
+                        <View style={[styles.inputContainer, {
+                            borderColor: isDark ? uiColours.GRAYED_BUTTON : uiColours.LIGHT_GRAY
+                        }]}>
                             <View style={[styles.inputView]}>
                                 <Images.source height={moderateScale(16)} width={moderateScale(16)} />
                                 <TouchableOpacity
-                                    style={[styles.locationView, commonStyles.bottomBorder]}
+                                    style={[styles.locationView, commonStyles.bottomBorder,{
+                                        borderColor:isDark ? uiColours.GRAYED_BUTTON : uiColours.LIGHT_GRAY
+                                    }]}
                                     onPress={() => {
                                         setAction("source")
                                         setShowSheet({
@@ -165,7 +186,7 @@ const FindDestination = () => {
                                         })
                                     }}
                                 >
-                                    <Text>
+                                    <Text style={appStyles.smallTextBlack}>
                                         {currentLocation.location === source.location ? "Current location" : source.location}
                                     </Text>
                                 </TouchableOpacity>
@@ -183,7 +204,7 @@ const FindDestination = () => {
                                         })
                                     }}
                                 >
-                                    <Text>
+                                    <Text style={appStyles.smallTextBlack}>
                                         {destination.location ? destination.location : "Find a destination"}
                                     </Text>
                                 </TouchableOpacity>
@@ -207,7 +228,7 @@ const FindDestination = () => {
                     </View>
 
                 </View>
-                <View style={styles.savedLocationsView}>
+                {userData?.type === "user" && <View style={styles.savedLocationsView}>
                     <Text style={[appStyles.mediumTextBlack, {
                         paddingHorizontal: scale(16)
                     }]}>
@@ -219,7 +240,10 @@ const FindDestination = () => {
                         style={{ marginTop: verticalScale(10) }}>
                         <View style={commonStyles.flexRowAlnCtr}>
                             <TouchableOpacity
-                                style={[styles.AddButton, { marginLeft: scale(16) }]}
+                                style={[styles.AddButton, {
+                                     marginLeft: scale(16),
+                                     borderColor:isDark ? uiColours.GRAYED_BUTTON : uiColours.LIGHT_GRAY
+                                    }]}
                                 onPress={() => {
                                     setShowSheet({
                                         ...showSheet,
@@ -245,7 +269,9 @@ const FindDestination = () => {
                                         return (
                                             <TouchableOpacity
                                                 key={item?.id}
-                                                style={styles.AddButton}
+                                                style={[styles.AddButton,{
+                                                    borderColor:isDark ? uiColours.GRAYED_BUTTON : uiColours.LIGHT_GRAY
+                                                }]}
                                                 onPress={() => {
                                                     setDestination({
                                                         ...destination,
@@ -276,9 +302,9 @@ const FindDestination = () => {
                         </View>
 
                     </ScrollView>
-                </View>
+                </View>}
 
-                <View style={styles.recentDestinationView}>
+                {userData?.type === "user" && <View style={styles.recentDestinationView}>
                     <Text style={appStyles.mediumTextBlack}>Recent destination</Text>
                     {
                         recentDestinationData.map((item) => {
@@ -289,7 +315,9 @@ const FindDestination = () => {
                                     onPress={() => {
                                         setDestination({
                                             ...destination,
-                                            location: item?.title
+                                            lat: item.lat,
+                                            location: item?.title,
+                                            lng: item.lng
                                         })
                                     }}
                                 >
@@ -306,7 +334,7 @@ const FindDestination = () => {
                             )
                         })
                     }
-                </View>
+                </View>}
             </ScrollView>
             <AddAddressSheet
                 isVisible={showSheet.addAddress}
@@ -319,14 +347,14 @@ const FindDestination = () => {
             <SetLocationModal
                 setShowModal={setShowSheet}
                 isVisible={showSheet.setLocation}
-                
+
                 handleSelectFromMap={() => {
                     setShowSheet({
                         ...showSheet,
                         setLocation: false
                     })
                     console.log("sorce", source);
-                    if (action === "destination" && (destination?.lat === ""|| destination?.lng === "")) {
+                    if (action === "destination" && (destination?.lat === "" || destination?.lng === "")) {
                         setDestination({
                             ...destination,
                             lat: source?.lat,
@@ -341,7 +369,7 @@ const FindDestination = () => {
                         geometry: (destination?.lat && destination?.lng) ? destination : source
                     })
                 }}
-                placeholder={ action === "source" ? "Input source location" : "Input destination location"}
+                placeholder={action === "source" ? "Input source location" : "Input destination location"}
                 handleSelectLocation={handleSelectLocation}
             />
 

@@ -12,13 +12,13 @@ import BottomSheet from '../../../components/BottomSheet/BottomSheet'
 const AddTopUp = ({
     isVisible,
     setShowSheet,
-
     appStyles,
     handleAddTopUp = () => { },
     topUpAmount,
     setTopUpAmount
 }) => {
     const [buttonActive, setButtonActive] = useState(false)
+    const [seletedAmount, setSelectedAmount] = useState("")
 
     const priceData = [
         {
@@ -53,7 +53,7 @@ const AddTopUp = ({
             hasCloseIcon
             setShowModal={setShowSheet}
             buttonActive={buttonActive}
-            handleButtonPress={handleAddTopUp}
+            handleButtonPress={()=>handleAddTopUp(seletedAmount)}
             handleRightClick={()=>{
                 setShowSheet(false)
             }}
@@ -67,7 +67,7 @@ const AddTopUp = ({
                 <View style={{ flexDirection: "row", flexWrap: "wrap", justifyContent: 'space-between' }}>
                     {
                         priceData.map((item) => {
-                            const selected = topUpAmount?.id === item.id
+                            const selected = seletedAmount?.id === item.id
                             return (
                                 <TouchableOpacity
                                     key={item.id}
@@ -76,7 +76,8 @@ const AddTopUp = ({
                                     }]}
                                     onPress={() => {
                                         setButtonActive(true)
-                                        setTopUpAmount(item)
+                                        setSelectedAmount(item)
+                                
                                     }}
                                 >
                                     <Text style={[appStyles?.largeTextGray, {

@@ -11,7 +11,6 @@ export const Styles = StyleSheet.create({
         alignSelf: 'center',
         paddingVertical:verticalScale(16),
         borderTopWidth:moderateScale(1),
-        borderColor:uiColours.LIGHT_GRAY,
-        width:screenSize.width
+        width:screenSize.width,
     }
 })

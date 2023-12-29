@@ -3,7 +3,7 @@ import React from 'react'
 import BottomSheet from '../BottomSheet/BottomSheet'
 import styles from './Styles'
 import { Images } from '../../assets/images'
-import { moderateScale } from 'react-native-size-matters'
+import { moderateScale, verticalScale } from 'react-native-size-matters'
 
 const ChooseMediaTypeSheet = ({
     isVisible,
@@ -15,7 +15,7 @@ const ChooseMediaTypeSheet = ({
         <BottomSheet
             isVisible={isVisible}
             hasCloseIcon
-            title={"Choose media"}
+            title={"Upload Options"}
             handleRightClick={() => {
                 setShowMode(false)
             }}
@@ -24,20 +24,27 @@ const ChooseMediaTypeSheet = ({
             }}
         >
             <View style={styles.modalContainer}>
-                <TouchableOpacity
-                    style={styles.modalContainerItmes}
-                    onPress={openCamara}
-                >
-                    <Images.camera height={moderateScale(30)} width={moderateScale(30)} />
+                <View style={{alignItems:"center", gap:verticalScale(5)}}>
+                    <TouchableOpacity
+                        style={styles.modalContainerItmes}
+                        onPress={openCamara}
+                    >
+                        <Images.camera height={moderateScale(24)} width={moderateScale(24)} />
+
+                    </TouchableOpacity>
                     <Text>camera</Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                    style={styles.modalContainerItmes}
-                    onPress={chooseMedia}
-                >
-                    <Image source={Images.gallary} style={{ height: moderateScale(30), width: moderateScale(30) }} />
+                </View>
+
+                <View style={{alignItems:"center", gap:verticalScale(5)}}>
+                    <TouchableOpacity
+                        style={styles.modalContainerItmes}
+                        onPress={chooseMedia}
+                    >
+                        <Image source={Images.gallary} style={{ height: moderateScale(24), width: moderateScale(24) }} />
+                    </TouchableOpacity>
                     <Text>gallary</Text>
-                </TouchableOpacity>
+                </View>
+
             </View>
         </BottomSheet>
     )

@@ -51,12 +51,33 @@ import emailBig from "../images/emailBig.svg"
 import warning from "../images/warning.svg"
 import profilePicker from "../images/profilePicker.svg"
 import Delete from "../images/delete.svg"
-import logOut from "../images/logOut.png"
+import logOut from "../images/logOut.svg"
 import selectMap from "../images/selectMap.svg"
 import add from "../images/add.svg"
-
+import groceries from "../images/groceries.svg"
+import email from "../images/email.svg"
+import carPng from "../images/carPng.png"
+import sourcePng from "../images/sourcePng.png"
+import send from "../images/send.svg"
+import deleteRed from "../images/deleteRed.svg"
+import dots from "../images/dots.svg"
+import backArrowWhite from "../images/backArrowWhite.svg"
+import downArrowWhite from "../images/downArrowWhite.svg"
+import mesageOutline from "../images/mesageOutline.svg"
+import completeProfile from "../images/completeProfile.png"
 
 export const Images = {
+    completeProfile:completeProfile,
+    mesageOutline:mesageOutline,
+    downArrowWhite:downArrowWhite,
+    backArrowWhite:backArrowWhite,
+    dots:dots,
+    deleteRed:deleteRed,
+    send:send,
+    sourcePng:sourcePng,
+    carPng:carPng,
+    email:email,
+    groceries:groceries,
     add:add,
     selectMap:selectMap,
     logOut:logOut,

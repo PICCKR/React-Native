@@ -15,6 +15,7 @@ import { uiStrings } from '../../../utils/Constents/uiStrings'
 
 const SelectAddresFromMap = ({ route }) => {
   const toScreen = route?.params?.toScreen
+  const action = route?.params?.action
   const geometry = route?.params?.geometry
 
   const {
@@ -26,7 +27,7 @@ const SelectAddresFromMap = ({ route }) => {
     source
   } = useContext(AppContext)
 
-  console.log("source===>", destination);
+  console.log("source===>", geometry, action);
 
   const navigation = useNavigation()
 
@@ -35,15 +36,22 @@ const SelectAddresFromMap = ({ route }) => {
   const LATITUDE_DELTA = 0.04;
   const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
 
+  const [selectedAddress, setSelectedAddress] = useState({})
+
   const [mapView, setMapView] = useState('standard')
 
   const onLocationSelect = async (coords, d) => {
-    // console.log("e", e);
+    console.log("e", coords);
     Geocoder.init(GOOGLE_MAP_API_KEY);
     Geocoder.from(coords.latitude, coords.longitude)
       .then(async json => {
         // console.log('lat lan', json.results[0]);
         const adddress = json.results[0]?.formatted_address
+        setSelectedAddress({
+          lat: coords.latitude,
+          lng: coords.longitude,
+          location: adddress
+        })
         if (toScreen === MainRouteStrings.FIND_DESTINATON) {
           setSource({
             lat: coords.latitude,
@@ -58,7 +66,20 @@ const SelectAddresFromMap = ({ route }) => {
             lng: coords.longitude,
             location: adddress
           })
-        }
+        } else if (action === "source") {
+          setSource({
+            lat: coords.latitude,
+            lng: coords.longitude,
+            location: adddress
+          })
+        } else if (action === "destination") [
+          setDestination({
+            ...destination,
+            lat: coords.latitude,
+            lng: coords.longitude,
+            location: adddress
+          })
+        ]
 
       })
       .catch(function (error) {
@@ -77,8 +98,8 @@ const SelectAddresFromMap = ({ route }) => {
         initialRegion={{
           latitudeDelta: LATITUDE_DELTA,
           longitudeDelta: LONGITUDE_DELTA,
-          latitude: geometry?.lat,
-          longitude: geometry?.lng,
+          latitude: geometry?.lat ? geometry?.lat : currentLocation?.lat,
+          longitude: geometry?.lng ? geometry?.lng : currentLocation?.lng
         }}
         mapType={mapView}
         showsUserLocation={true}
@@ -113,10 +134,12 @@ const SelectAddresFromMap = ({ route }) => {
       </TouchableOpacity>
 
       <BottomView
-        destination={toScreen === MainRouteStrings.SET_DESTINATION  ? destination : source}
+        destination={(toScreen === MainRouteStrings.SET_DESTINATION || action === "destination") ? destination : source}
         appStyles={appStyles}
         handleConfirm={() => {
-          navigation.navigate(toScreen)
+          navigation.navigate(toScreen, {
+            addresData: selectedAddress
+          })
         }}
       />
     </SafeAreaView>

@@ -12,6 +12,7 @@ import DropDown from '../../../components/DropDown/DropDown'
 import WhyBvnSheet from './WhyBvnSheet'
 import { useNavigation } from '@react-navigation/native'
 import { AuthRouteStrings } from '../../../utils/Constents/RouteStrings'
+import useBackButton from '../../../customHooks/useBackButton'
 
 const KycScreen = ({route}) => {
     const data = route?.params?.data
@@ -46,14 +47,21 @@ const KycScreen = ({route}) => {
     }
 
     const animationController = useRef(new Animated.Value(0)).current
+    useBackButton(()=>{
+        navigation.goBack()
+        return true
+    })
     return (
         <WrapperContainer
             centerTitle="KYC"
-            rightTitle="Skip"
+            // rightTitle="Skip"
             showBackButton
             buttonTitle={"Upload"}
             handleButtonPress={handleSave}
             buttonActive={buttonActive}
+            handleBack={()=>{
+                navigation.goBack()
+            }}
             containerPadding={{paddingTop:verticalScale(16)}}
         >
             <View style={{ gap: verticalScale(20) }}>

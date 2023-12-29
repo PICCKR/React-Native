@@ -4,22 +4,38 @@ import { AppContext } from '../context/AppContext'
 import UserRoutes from './UserRoutes'
 import PickertRoutes from './PickertRoutes'
 import SplashScreen from '../screens/AuthScreens/splashScreen/SplashScreen'
+import { getCurrentUser } from '@aws-amplify/auth'
 
 
 const CheckRoutes = () => {
-    const { userData } = useContext(AppContext)
+    const { userData, isLoggedIn, setIsLoggedIn } = useContext(AppContext)
     const [showSplashScreen, setShowSplashScreen] = useState(true)
 
-    useEffect(() => {
-        setTimeout(() => {
+    const getUserData = async () => {
+        getCurrentUser().then((res) => {
             setShowSplashScreen(false)
-        }, 2000);
+            if (res?.userId) {
+                setIsLoggedIn(true)
+            }else{
+                setIsLoggedIn(false)
+            }
+        }).catch((error) => {
+            setShowSplashScreen(false)
+            setIsLoggedIn(false)
+            console.log("error", error);
+        });       
+    }
+    useEffect(() => {
+        getUserData()
     }, [])
+
     return (
         <>
             {showSplashScreen ? <SplashScreen /> :
-
-                !userData ? <AuthRoutes /> : (userData?.type === "user" || userData?.type === "guest") ? <UserRoutes /> : <PickertRoutes />
+                (!isLoggedIn) ? <AuthRoutes /> :
+                    (userData?.type === "user" || userData?.type === "guest") ?
+                        <UserRoutes /> :
+                        <PickertRoutes />
             }
         </>
     )

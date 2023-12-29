@@ -25,12 +25,13 @@ const WrapperContainer = ({
     hasCloseIcon,
     leftViewStyles,
     centerViewStyles,
-    righyViewStyles
+    righyViewStyles,
+    handleBack = () => {}
 }) => {
     const { appStyles, isDark } = useContext(AppContext)
     return (
         <View style={{ flex: 1, backgroundColor: uiColours.WHITE_TEXT, ...containerStyle }}>
-            <StatusBar backgroundColor={StatusBarColor} barStyle={barStyle} />
+            {/* <StatusBar backgroundColor={StatusBarColor} barStyle={barStyle} /> */}
             <SafeAreaView style={[appStyles.container,]}>
                 <Header
                    leftTitle={leftTitle}
@@ -42,17 +43,25 @@ const WrapperContainer = ({
                     leftViewStyles={leftViewStyles}
                     centerViewStyles={centerViewStyles}
                     righyViewStyles={righyViewStyles}
+                    handleBack={handleBack}
+                    isDark={isDark}
                 />
 
 
                 <View style={[appStyles.containerPadding,{
                    paddingBottom : showFooterButton ? verticalScale(16) : 0,
+                   paddingTop: verticalScale(16)
                 }, containerPadding]}>
                     {children}
                 </View>
 
 
-                {showFooterButton && <View style={Styles.footer}>
+                {showFooterButton && <View style={[Styles.footer,
+                {
+                    backgroundColor:isDark ? uiColours.DARK_BG : uiColours.WHITE_TEXT,
+                    borderColor:isDark ? uiColours.GRAYED_BUTTON : uiColours.LIGHT_GRAY , 
+                }
+                ]}>
                     <CustomButton
                         disabled={!buttonActive}
                         buttonStyle={{
@@ -61,7 +70,7 @@ const WrapperContainer = ({
                                     uiColours.LIGHT_GRAY
                         }}
                         titleStyle={{
-                            color: buttonActive ? uiColours.WHITE_TEXT : !buttonActive && isDark ? uiColours.GRAYED_BUTTON :
+                            color: buttonActive ? uiColours.WHITE_TEXT : (!buttonActive && isDark) ? uiColours.GRAY_TEXT :
                                 uiColours.GRAY_TEXT
                         }}
                         title={buttonTitle}
