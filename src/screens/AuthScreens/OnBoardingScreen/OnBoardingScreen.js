@@ -1,4 +1,4 @@
-import { View, Text, Animated, Dimensions, SafeAreaView, FlatList, TouchableOpacity } from 'react-native'
+import { View, Text, SafeAreaView, FlatList, TouchableOpacity } from 'react-native'
 import React, { useContext, useRef, useState } from 'react'
 import { useNavigation } from '@react-navigation/native'
 import { AppContext } from '../../../context/AppContext'
@@ -12,8 +12,6 @@ import { buttonTypes } from '../../../utils/Constents/constentStrings'
 import { screenSize } from '../../../utils/Styles/CommonStyles'
 
 const OnBoardingScreen = () => {
-
-  const navigation = useNavigation()
 
   const { setisNew, appStyles, setuserData } = useContext(AppContext)
   const [currentSlideIndex, setCurrentSlideIndex] = useState(0)

@@ -7,19 +7,30 @@ import styles from './Styles'
 import { toggleAnimation } from '../../../animations/toggleAnimation'
 import { scale, verticalScale } from 'react-native-size-matters'
 import InputText from '../../../components/InputText/InputText'
-import { commonStyles } from '../../../utils/Styles/CommonStyles'
-import DropDown from '../../../components/DropDown/DropDown'
 import WhyBvnSheet from './WhyBvnSheet'
 import { useNavigation } from '@react-navigation/native'
 import { AuthRouteStrings } from '../../../utils/Constents/RouteStrings'
 import useBackButton from '../../../customHooks/useBackButton'
+import Actions from '../../../redux/Actions'
+import { apiPost } from '../../../services/apiServices'
+import { endPoints } from '../../../configs/apiUrls'
+import { showSuccessToast } from '../../../helper/showSuccessToast'
+import { setLocalData } from '../../../helper/AsyncStorage'
+import { storageKeys } from '../../../helper/AsyncStorage/storageKeys'
+import { showGeneralError } from '../../../helper/showGeneralError'
 
-const KycScreen = ({route}) => {
+const KycScreen = ({ route }) => {
     const data = route?.params?.data
-    const { appStyles, isDark } = useContext(AppContext)
+    const { appStyles, isDark, setIsLoggedIn, userData, setuserData } = useContext(AppContext)
     const navigation = useNavigation()
 
-    const [selectedCountry, setSelctedCountry] = useState(null)
+    const [selectedCountry, setSelctedCountry] = useState({
+        id: 1,
+        flag: Images.NigeriaFlags,
+        name: "Nigeria",
+        code: "(+234)",
+        country: 'NG'
+    })
     const [buttonActive, setButtonActive] = useState(false)
     const [showSheet, setShowSheet] = useState(false)
     const [bvn, setBvn] = useState("")
@@ -29,40 +40,83 @@ const KycScreen = ({route}) => {
             id: 1,
             flag: Images.NigeriaFlags,
             name: "Nigeria",
-            code: "(+234)"
+            code: "(+234)",
+            country: 'NG'
         }
-        ,
-        {
-            id: 2,
-            flag: Images.usFlags,
-            name: "United States of America",
-            code: "(+1)"
-        }
+        // ,
+        // {
+        //     id: 2,
+        //     flag: Images.usFlags,
+        //     name: "United States of America",
+        //     code: "(+1)"
+        // }
     ]
 
-    const handleSave = () => {
-        navigation.navigate(AuthRouteStrings.APPROVAL_SCREEN,{
-            data:{...data, bvn:bvn}
+    const handleSave = async () => {
+        // setuserData(userData)
+        const apiData = {
+            "country": selectedCountry?.country,
+            "id_number": bvn,
+            "userId": userData?._id
+        }
+        console.log("apiData==>", apiData);
+        Actions.showLoader(true)
+        apiPost(endPoints.VERIFY_KYC, apiData).then((res) => {
+            console.log("res ===>", res?.data, res?.status);
+            if (res?.status === 200) {
+                showSuccessToast("verified successfully", isDark)
+                setuserData({
+                    ...userData, kyc: {
+                        idNumber: bvn
+                    }
+                })
+                setLocalData(storageKeys.userData, {
+                    ...userData, kyc: {
+                        idNumber: bvn
+                    }
+                })
+                setIsLoggedIn(true)
+            } else if (res?.status === 409) {
+                showSuccessToast(res?.data?.message, isDark)
+                setIsLoggedIn(true)
+            } else {
+                showGeneralError()
+            }
+            Actions.showLoader(false)
+        }).catch((error) => {
+            Actions.showLoader(false)
+            showGeneralError()
+            console.log("error kyc", error);
         })
+
+        // setIsLoggedIn(true)
+        // navigation.navigate(AuthRouteStrings.APPROVAL_SCREEN, {
+        //     data: { ...data, bvn: bvn }
+        // })
     }
 
     const animationController = useRef(new Animated.Value(0)).current
-    useBackButton(()=>{
-        navigation.goBack()
+    useBackButton(() => {
+        setIsLoggedIn(true)
         return true
     })
     return (
         <WrapperContainer
             centerTitle="KYC"
-            // rightTitle="Skip"
-            showBackButton
+            rightTitle="Skip"
+            handlerRightViewPress={() => {
+                // setuserData({ ...userData, data })
+                // setIsLoggedIn(true)
+                navigation.goBack()
+            }}
+            // showBackButton
             buttonTitle={"Upload"}
             handleButtonPress={handleSave}
             buttonActive={buttonActive}
-            handleBack={()=>{
+            handleBack={() => {
                 navigation.goBack()
             }}
-            containerPadding={{paddingTop:verticalScale(16)}}
+            containerPadding={{ paddingTop: verticalScale(16) }}
         >
             <View style={{ gap: verticalScale(20) }}>
                 {
@@ -109,17 +163,9 @@ const KycScreen = ({route}) => {
                                             maxLength={19}
                                             inputContainer={{ marginTop: verticalScale(10) }}
                                             handleChange={(e) => {
-                                                // Remove any non-digit characters
-                                                const cleanedNumber = e.replace(/\D/g, '');
-
-                                                // Define the format (adjust based on your needs)
-                                                const formattedNumber = cleanedNumber.replace(/(\d{4})/g, '$1 ');
-
-                                                // Remove trailing hyphen if present
-                                                formattedNumber.replace(/-$/, '');
-
-                                                setBvn(formattedNumber)
-                                                if (e.length > 18) {
+                                                
+                                                setBvn(e)
+                                                if (e.length > 10) {
                                                     setButtonActive(true)
                                                 } else {
                                                     setButtonActive(false)

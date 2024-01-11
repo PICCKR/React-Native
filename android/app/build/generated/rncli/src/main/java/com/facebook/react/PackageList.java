@@ -29,6 +29,8 @@ import org.linusu.RNGetRandomValuesPackage;
 import com.imagepicker.ImagePickerPackage;
 // react-native-maps
 import com.rnmaps.maps.MapsPackage;
+// react-native-pure-jwt
+import com.zaguiini.RNPureJwt.RNPureJwtPackage;
 // react-native-reanimated
 import com.swmansion.reanimated.ReanimatedPackage;
 // react-native-safe-area-context
@@ -41,6 +43,8 @@ import com.horcrux.svg.SvgPackage;
 import com.oblador.vectoricons.VectorIconsPackage;
 // react-native-video
 import com.brentvatne.react.ReactVideoPackage;
+// react-native-webview
+import com.reactnativecommunity.webview.RNCWebViewPackage;
 
 public class PackageList {
   private Application application;
@@ -95,12 +99,14 @@ public class PackageList {
       new RNGetRandomValuesPackage(),
       new ImagePickerPackage(),
       new MapsPackage(),
+      new RNPureJwtPackage(),
       new ReanimatedPackage(),
       new SafeAreaContextPackage(),
       new RNScreensPackage(),
       new SvgPackage(),
       new VectorIconsPackage(),
-      new ReactVideoPackage()
+      new ReactVideoPackage(),
+      new RNCWebViewPackage()
     ));
   }
 }

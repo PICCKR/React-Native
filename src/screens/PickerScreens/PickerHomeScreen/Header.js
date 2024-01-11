@@ -1,19 +1,38 @@
-import { View, Text, TouchableOpacity } from 'react-native'
-import React from 'react'
+import { View, Text, TouchableOpacity, Alert } from 'react-native'
+import React, { useContext, useState } from 'react'
 import { Images } from '../../../assets/images'
 import styles from './Styles'
 import { moderateScale, scale, verticalScale } from 'react-native-size-matters'
 import { uiColours } from '../../../utils/Styles/uiColors'
+import SelectAmountPopup from '../../../components/SelectAmountPopup/SelectAmountPopup'
+import { useNavigation } from '@react-navigation/native'
+import { MainRouteStrings } from '../../../utils/Constents/RouteStrings'
+import { AppContext } from '../../../context/AppContext'
 
 const Header = ({
-    userData,
     appStyles,
-    setShowSheet,
-    showSheet,
-    topUpAmount,
-    isDark
+    isDark,
 }) => {
-    console.log("userData", userData);
+    // console.log("userData", userData);
+    const {setuserData, userData} = useContext(AppContext)
+    const navigation = useNavigation()
+    const [showSheet, setShowSheet] = useState(false)
+
+    const handleWithdraw = (data, amount) => {
+        console.log("data====>", data, amount);
+        if (data?.status === "successful") {
+            setuserData({
+                ...userData, wallet: {
+                    ...userData?.wallet,
+                    balance: parseInt(userData?.wallet?.balance) - parseInt(amount)
+                }
+            })
+        } else {
+            
+        }
+        setShowSheet(false)
+    }
+
     return (
         <View style={styles.headerContainer}>
             <View style={styles.profileSection}>
@@ -37,25 +56,33 @@ const Header = ({
                         <Text style={[appStyles.smallTextBlackBold, {
                             color: uiColours.BLACK_TEXT
                         }]} >
-                            ${topUpAmount?.price}
+                            ₦{userData?.wallet?.balance}
                         </Text>
                     </View>
                 </View>
 
-                <TouchableOpacity
+                {userData?.wallet?.balance > 0 &&<TouchableOpacity
                     onPress={() =>
-                        setShowSheet({
-                            ...showSheet,
-                            addPayment: true
-                        })
+                        navigation.navigate(MainRouteStrings.WALLET_SCREEN)
                     }
                     style={{ paddingVertical: verticalScale(6) }}
                 >
                     <Text style={appStyles.smallTextPrimaryBold} >
                         Withdraw
                     </Text>
-                </TouchableOpacity>
+                </TouchableOpacity>}
             </View>
+
+            <SelectAmountPopup
+                sheetTitle={"Withdraw"}
+                isVisible={showSheet}
+                appStyles={appStyles}
+                setShowSheet={setShowSheet}
+                handleOnRedirect={handleWithdraw}
+                buttonTitle="Withdraw"
+                wallateBalance={userData?.wallet?.balance}
+                action ="withdraw"
+            />
         </View>
     )
 }

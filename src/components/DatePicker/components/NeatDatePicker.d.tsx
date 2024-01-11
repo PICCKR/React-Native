@@ -143,6 +143,10 @@ export type NeatDatePickerProps = {
    */
   onConfirm: (arg: Object) => void;
 
+  onSelectDate: () => {};
+
+  hideTime: Boolean;
+
   onSeclectTime:(arg:Object) => void;
 
   handleClose:()=> void;

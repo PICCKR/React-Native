@@ -1,4 +1,4 @@
-import { View, Text, ScrollView, TouchableOpacity } from 'react-native'
+import { ScrollView } from 'react-native'
 import React, { useContext, useEffect, useState } from 'react'
 import WrapperContainer from '../../../components/WrapperContainer/WrapperContainer'
 import { Styles } from './Styles'
@@ -6,21 +6,16 @@ import { AppContext } from '../../../context/AppContext'
 import { useNavigation } from '@react-navigation/native'
 import Form from '../../../components/Form/Form'
 import { signUpFormData } from '../../../json/signUpFormData'
-import CheckBox from '../../../components/CheckBox/CheckBox'
-import { commonStyles } from '../../../utils/Styles/CommonStyles'
 import HyperlinkView from './HyperlinkView'
-import CustomButton from '../../../components/Button/CustomButton'
-import { uiColours } from '../../../utils/Styles/uiColors'
 import { RegEx } from '../../../utils/Constents/regulerexpressions'
 import { AuthRouteStrings } from '../../../utils/Constents/RouteStrings'
 import { verticalScale } from 'react-native-size-matters'
-import { signUp } from '@aws-amplify/auth'
+import { deleteUser, signUp } from '@aws-amplify/auth'
 import Actions from '../../../redux/Actions'
-import { showToast } from '../../../components/tostConfig/tostConfig'
-import { tostMessagetypes } from '../../../utils/Constents/constentStrings'
+import { showErrorToast } from '../../../helper/showErrorToast'
 
 const UserSignupScreen = () => {
-  const { appStyles, isDark } = useContext(AppContext)
+  const { appStyles, isDark, userData, setuserData } = useContext(AppContext)
   const navigation = useNavigation()
 
   const [formData, setFormData] = useState({
@@ -40,7 +35,6 @@ const UserSignupScreen = () => {
   const [errorMsg, setErrorMsg] = useState()
 
   const handledContinue = async () => {
-
     // console.log("RegEx.name__regEx.test(formData.firstName)", formData);
     if (!RegEx.name__regEx.test(formData.firstName)) {
       setShowError({
@@ -71,15 +65,12 @@ const UserSignupScreen = () => {
             phone_number: `${formData?.selectedCountry?.code}${formData?.phoneNumber.replace(/\s+/g, '')}`,
           },
           options: {
-            userAttributes: {
-              "custom:first_name": "First Name",
-              "custom:last_name": "Last Name",
-              "custom:middle_name": "middle Name",
-            },
+            autoSignIn: true
           },
         });
 
         if (user) {
+          // setuserData({...userData, formData})
           navigation.navigate(AuthRouteStrings.OTP_SCREEN, {
             from: AuthRouteStrings.USER_SIGN_UP,
             data: formData,
@@ -87,20 +78,7 @@ const UserSignupScreen = () => {
           })
         }
       } catch (error) {
-
-        // setShowError({
-        //   ...ShowError,
-        //   phoneNumber:true
-        // })
-        // setErrorMsg({
-        //   ...errorMsg,
-        //   phoneNumber:error?.message
-        // })
-        const toastMsgConfg = {
-          isDark: isDark,
-          msg: error?.message
-        }
-        showToast(toastMsgConfg, tostMessagetypes.ERROR, isDark)
+        showErrorToast(error?.message, isDark)
         console.log("error", error?.message);
       } finally {
         Actions.showLoader(false)

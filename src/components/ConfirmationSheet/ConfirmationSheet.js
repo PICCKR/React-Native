@@ -20,7 +20,8 @@ const ConfirmationSheet = ({
     discription,
     button1Title = "button1Title",
     button2Title = "button2Title",
-    headerTitle
+    headerTitle,
+    titleStyles
 }) => {
     const { appStyles } = useContext(AppContext)
 
@@ -41,9 +42,9 @@ const ConfirmationSheet = ({
                     {renderIcon()}
                 </View>
 
-                <Text style={[appStyles.mediumTextPrimaryBold, { color: uiColours.RED, textAlign: 'center' }]}>
+               {title && <Text style={[appStyles.mediumTextPrimaryBold, { color: uiColours.RED, textAlign: 'center' },titleStyles]}>
                     {title}
-                </Text>
+                </Text>}
                 {discription && <Text style={[appStyles.smallTextGray, { textAlign: 'center' }]}>
                     {discription}
                 </Text>}

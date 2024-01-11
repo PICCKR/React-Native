@@ -25,7 +25,7 @@ const FindingPicker = ({ route }) => {
 
     const mapRef = useRef()
     const ASPECT_RATIO = screenSize.width / screenSize.height;
-    console.log("ASPECT_RATIO", ASPECT_RATIO);
+    // console.log("ASPECT_RATIO", ASPECT_RATIO);
     const LATITUDE_DELTA = (3000 / 1000) * 0.03;
     // const LATITUDE_DELTA = 0.04;
     const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;

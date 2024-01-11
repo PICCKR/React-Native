@@ -8,7 +8,7 @@ export async function getHeaders() {
     // console.log("userData", userData);
     if (userData) {
         return {
-            Authorization: `Bearer ${userData && userData.token}`,
+            Authorization: `Bearer ${userData && userData?.token}`,
         };
     }
     return {};
@@ -40,14 +40,15 @@ export async function apiReq(
 
         axios[method](endPoint, data, { headers })
             .then(result => {
-                const { data } = result;
+                // console.log("====>",endPoint, data, { headers });
                 return res(result);
             })
             .catch(error => {
-                // console.log(error, 'the error respne')
-                const { data } = error?.response ? error?.response : error;
-                if (data) {
-                    return res(data)
+                // console.log(error, 'the error respne
+                // console.log("===>",endPoint, data, { headers })
+                const data1 = error?.response ? error?.response : error;
+                if (data1) {
+                    return res(data1)
                 }else{
                     return res(error)
                 }
@@ -68,5 +69,6 @@ export function apiGet(endPoint, data, headers = {}, requestOptions) {
 }
 
 export function apiPut(endPoint, data, headers = {}) {
+    // console.log("datadata", data);
     return apiReq(endPoint, data, 'put', headers);
 }

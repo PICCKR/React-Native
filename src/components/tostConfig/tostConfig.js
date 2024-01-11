@@ -3,6 +3,7 @@ import { moderateScale, scale } from "react-native-size-matters";
 import Toast, { BaseToast, ErrorToast } from "react-native-toast-message";
 import { Images } from "../../assets/images";
 import { tostMessagetypes } from "../../utils/Constents/constentStrings";
+import { uiStrings } from "../../utils/Constents/uiStrings";
 import { commonStyles, screenSize } from "../../utils/Styles/CommonStyles";
 import { uiColours } from "../../utils/Styles/uiColors";
 
@@ -95,7 +96,7 @@ export const showGeneralErrorToast = () => {
   Toast.show({
     type: 'tomatoToast',
     props: {
-      message: "",
+      message: uiStrings.commonError,
       messageType: tostMessagetypes.ERROR
     },
     position: "bottom",

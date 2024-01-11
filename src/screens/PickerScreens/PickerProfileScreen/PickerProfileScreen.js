@@ -15,7 +15,7 @@ import ConfirmationSheet from '../../../components/ConfirmationSheet/Confirmatio
 import { uiColours } from '../../../utils/Styles/uiColors'
 import { clearLocalData, setLocalData } from '../../../helper/AsyncStorage'
 import { storageKeys } from '../../../helper/AsyncStorage/storageKeys'
-import AddTopUp from '../../UserScreens/UserHomeScreen/AddTopUp'
+import SelectAmountPopup from '../../../components/SelectAmountPopup/SelectAmountPopup'
 
 
 const PickerProfileScreen = () => {
@@ -38,12 +38,10 @@ const PickerProfileScreen = () => {
   })
 
   const [showSheet, setShowSheet] = useState({
-    addPayment: false,
+    selectAmount: false,
   })
 
-  const [walletBalance, seWalletBalance] = useState({
-    price: "0"
-  })
+  const [walletBalance, seWalletBalance] = useState("0")
 
   const editActionData = [
     {
@@ -112,7 +110,9 @@ const PickerProfileScreen = () => {
       centerTitle="Profile"
       rightTitle="Edit"
       handlerRightViewPress={() => {
-        navigation.navigate(MainRouteStrings.EDIT_PROFILE)
+        navigation.navigate(MainRouteStrings.EDIT_PROFILE, {
+          from: MainRouteStrings.PICKER_PROFILE
+        })
       }}
       showFooterButton={false}
       containerPadding={{ paddingHorizontal: 0 }}
@@ -122,7 +122,7 @@ const PickerProfileScreen = () => {
       >
 
         <PrifileView
-          profileImg={profileInformation?.profileImg}
+          profileImg={userData?.picture}
           userData={userData}
         />
 
@@ -146,11 +146,6 @@ const PickerProfileScreen = () => {
                   </Text>
                   <View style={{ flexDirection: "row", alignItems: 'center', gap: scale(10) }}>
 
-                    {item?.type === "address" &&
-                      <Text style={appStyles.smallTextGray}>
-                        {userData?.address?.length} Address
-                      </Text>
-                    }
                     {(item.type === "PicckRMode" || item.type === "Appearance") &&
                       <View style={commonStyles.flexRowAlnCtr}>
                         {item.type === "PicckRMode" &&
@@ -160,11 +155,12 @@ const PickerProfileScreen = () => {
                         {item.type === "Appearance" &&
                           <Text style={appStyles.smallTextGray}>{isDark ? "Dark Mode" : "Light Mode"}</Text>
                         }
+
                         {item.type === "Appearance" &&
                           <Switch
                             initialValue={isDark}
                             handleSwitchClicked={(status) => {
-                                setIsDark(status)
+                              setIsDark(status)
                             }}
                           />
                         }
@@ -173,20 +169,21 @@ const PickerProfileScreen = () => {
                           <Switch
                             initialValue={true}
                             handleSwitchClicked={(status) => {
-                                setuserData({ ...userData, type: "user" })
+                              setuserData({ ...userData, routeType: "user" })
                             }}
                           />
                         }
 
                       </View>}
                     {item.type === "KYC" &&
-                      <Text style={appStyles.smallTextGray}>{userData?.bvn}</Text>
+                      <Text style={appStyles.smallTextGray}>{userData?.kyc?.idNumber}</Text>
                     }
 
 
                     {(item.type !== "PicckRMode" && item.type !== "Appearance" && item?.type !== "KYC") &&
                       <Images.rightArrow height={moderateScale(24)} />
                     }
+
                   </View>
 
                 </TouchableOpacity>
@@ -196,8 +193,8 @@ const PickerProfileScreen = () => {
         </View>
       </ScrollView>
 
-      <AddTopUp
-        isVisible={showSheet.addPayment}
+      <SelectAmountPopup
+        isVisible={showSheet.selectAmount}
         appStyles={appStyles}
         setShowSheet={setShowSheet}
         topUpAmount={walletBalance}

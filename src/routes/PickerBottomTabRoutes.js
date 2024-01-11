@@ -19,7 +19,7 @@ const PickerBottomTabRoutes = () => {
 
     // Function to handle tab press based on user data
     const handleTabPress = (screenName) => {
-        if (userData?.type === "user") {
+        if (userData?.token) {
             // User data exists, navigate to the specified screen
             navigation.navigate(screenName);
         } else {
@@ -74,7 +74,7 @@ const PickerBottomTabRoutes = () => {
 
             />
 
-            <Tab.Screen name={MainRouteStrings.PICKER_MESSAGES_SCREEN} component={screens.PICKER_MESSAGES_SCREEN}
+            <Tab.Screen name={MainRouteStrings.PICKER_CHAT_SCREEN} component={screens.PICKER_CHAT_SCREEN}
                 options={{
                     tabBarStyle: {backgroundColor : isDark ? uiColours.DARK_BG : uiColours.WHITE_TEXT},
                     tabBarIcon: ({ focused }) => (

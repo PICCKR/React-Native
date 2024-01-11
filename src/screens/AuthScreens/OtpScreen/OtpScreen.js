@@ -1,29 +1,29 @@
 import { View, Text, TouchableOpacity } from 'react-native'
-import React, { useContext, useEffect, useRef, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import WrapperContainer from '../../../components/WrapperContainer/WrapperContainer'
 import { AppContext } from '../../../context/AppContext'
-import { commonStyles } from '../../../utils/Styles/CommonStyles'
 import { moderateScale, verticalScale } from 'react-native-size-matters'
 import { useNavigation } from '@react-navigation/native'
 import styles from './Styles'
 import OTPInputView from '@twotalltotems/react-native-otp-input'
 import { AuthRouteStrings, MainRouteStrings } from '../../../utils/Constents/RouteStrings'
 import { uiColours } from '../../../utils/Styles/uiColors'
-import { confirmSignUp, resendSignUpCode, signIn } from '@aws-amplify/auth'
+import { confirmSignUp, getCurrentUser, resendSignUpCode, signIn } from '@aws-amplify/auth'
 import Actions from '../../../redux/Actions'
 import { showToast } from '../../../components/tostConfig/tostConfig'
 import { tostMessagetypes } from '../../../utils/Constents/constentStrings'
 import { getLocalData, setLocalData } from '../../../helper/AsyncStorage'
 import { storageKeys } from '../../../helper/AsyncStorage/storageKeys'
+import { showGeneralError } from '../../../helper/showGeneralError'
+import { showSuccessToast } from '../../../helper/showSuccessToast'
+import { showErrorToast } from '../../../helper/showErrorToast'
 
 const OtpScreen = ({ route }) => {
   const data = route?.params?.data
   const from = route?.params?.from
   const phoneNumber = route?.params?.phoneNumber
 
-  console.log("data", data);
-
-  const { appStyles, isDark, setuserData, setIsLoggedIn } = useContext(AppContext)
+  const { appStyles, isDark, setuserData, setIsLoggedIn, userData } = useContext(AppContext)
 
   const navigation = useNavigation()
   const [otp, setOTP] = useState('')
@@ -37,47 +37,9 @@ const OtpScreen = ({ route }) => {
         data: data
       })
     } else if (from === AuthRouteStrings.USER_SIGN_UP) {
-      Actions.showLoader(true)
-      try {
-        const user = await confirmSignUp({
-          username: `${data?.selectedCountry?.code?.replace(/[()]/g, '')}${data?.phoneNumber.replace(/\s+/g, '')}`,
-          confirmationCode: otp,
-        });
-        console.log("user ======>", user);
-        if (user?.nextStep?.signUpStep === "DONE") {
-          navigation.navigate(AuthRouteStrings.PROFILE_INFORMATION, {
-            data: data
-          })
-        }
-      } catch (err) {
-        console.log("error", err?.message);
-        setShowError(true)
-      } finally {
-        Actions.showLoader(false)
-
-      }
+      handleSingUpverifyOtp()
     } else if (from === AuthRouteStrings.LOGIN_SCREEN) {
-      Actions.showLoader(true)
-      confirmSignUp({
-        username: `${data?.selectedCountry?.code?.replace(/[()]/g, '')}${data?.phoneNumber.replace(/\s+/g, '')}`,
-        confirmationCode: otp,
-      }).then(async (user) => {
-        Actions.showLoader(false)
-        if (user?.nextStep?.signUpStep === "DONE") {
-          const UserData = await getLocalData(storageKeys.userData)
-          const data = {
-            ...UserData,
-            id: 1,
-            type: "user"
-          }
-          setLocalData(storageKeys.userData, data)
-          setuserData(data)
-          setIsLoggedIn(true)
-        }
-      }).catch(() => {
-        Actions.showLoader(false)
-        console.log("error", err?.message);
-      })
+      handleConfirmSignUpVerifyOtp()
     } else if (from === AuthRouteStrings.FORGOT_PASSWORD) {
       navigation.navigate(AuthRouteStrings.CHANGE_PASSWORD, {
         data: {
@@ -85,7 +47,76 @@ const OtpScreen = ({ route }) => {
           phoneNumber: phoneNumber
         }
       })
+    } else if (from === MainRouteStrings.EDIT_PROFILE) {
+      handleEditProfileVerifyOtp()
     }
+  }
+
+  const handleSingUpverifyOtp = async () => {
+    Actions.showLoader(true)
+    try {
+      const user = await confirmSignUp({
+        username: `${data?.selectedCountry?.code?.replace(/[()]/g, '')}${data?.phoneNumber.replace(/\s+/g, '')}`,
+        confirmationCode: otp,
+      });
+      if (user?.nextStep?.signUpStep === "DONE" || user?.nextStep?.signUpStep === "COMPLETE_AUTO_SIGN_IN") {
+        const user = await signIn(
+          {
+            username: `${data?.selectedCountry?.code?.replace(/[()]/g, '')}${data?.phoneNumber.replace(/\s+/g, '')}`,
+            password: data?.password
+          }
+        );
+
+        getCurrentUser().then(async (res) => {
+          Actions.showLoader(false)
+          setLocalData(storageKeys.userData, { ...data, userId: res?.userId })
+          navigation.navigate(AuthRouteStrings.PROFILE_INFORMATION, {
+            data: { ...data, userId: res?.userId }
+          })
+        }).catch((error) => {
+          Actions.showLoader(false)
+          console.log("error while getting user", error);
+        });
+      }
+    } catch (err) {
+      // showGeneralError(isDark)
+      console.log("error", err?.message);
+      setShowError(true)
+    } finally {
+      Actions.showLoader(false)
+    }
+  }
+
+  const handleConfirmSignUpVerifyOtp = () => {
+    Actions.showLoader(true)
+    confirmSignUp({
+      username: `${data?.selectedCountry?.code?.replace(/[()]/g, '')}${data?.phoneNumber.replace(/\s+/g, '')}`,
+      confirmationCode: otp,
+    }).then(async (user) => {
+      Actions.showLoader(false)
+      if (user?.nextStep?.signUpStep === "DONE" || user?.nextStep?.signUpStep === "COMPLETE_AUTO_SIGN_IN") {
+        const UserData = await getLocalData(storageKeys.userData)
+        const data = {
+          ...UserData,
+          id: 1,
+          type: "user"
+        }
+        setLocalData(storageKeys.userData, data)
+        setuserData(data)
+        setIsLoggedIn(true)
+      }
+    }).catch(() => {
+      showGeneralError(isDark)
+      Actions.showLoader(false)
+      console.log("error", err?.message);
+    })
+  }
+
+  const handleEditProfileVerifyOtp = () => {
+    setuserData({ ...userData, ...data })
+    setLocalData(storageKeys.userData, { ...userData, ...data })
+    showSuccessToast("You have updated your profile", isDark)
+    navigation.navigate(MainRouteStrings.USER_PROFILE_SCREEN)
   }
 
   const handleResendOtp = () => {
@@ -93,25 +124,13 @@ const OtpScreen = ({ route }) => {
     resendSignUpCode({
       username: `${data?.selectedCountry?.code?.replace(/[()]/g, '')}${data?.phoneNumber.replace(/\s+/g, '')}`,
     }).then((res) => {
-      const toastMsgConfg = {
-        isDark: isDark,
-        msg: "Otp send successfully"
-      }
-      showToast(toastMsgConfg, tostMessagetypes.SUCCESS, isDark)
-      // console.log("resned otp res", res);
+      showSuccessToast("Otp send successfully", isDark)
     }).catch((error) => {
-      const toastMsgConfg = {
-        isDark: isDark,
-        msg: error?.message
-      }
-      showToast(toastMsgConfg, tostMessagetypes.ERROR, isDark)
-      console.log("error in sending otp", error);
-    }).finally(()=>{
+      showErrorToast(error?.message, isDark)
+    }).finally(() => {
       Actions.showLoader(false)
     })
   }
-
-  // 563520
 
   useEffect(() => {
     if (
@@ -183,9 +202,6 @@ const OtpScreen = ({ route }) => {
           </Text>
         </TouchableOpacity>
       </View>
-
-
-
     </WrapperContainer>
   )
 }

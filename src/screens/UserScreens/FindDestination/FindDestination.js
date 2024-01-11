@@ -32,8 +32,11 @@ const FindDestination = () => {
     } = useContext(AppContext)
     const navigation = useNavigation()
 
-    // console.log("userData", userData);
+    console.log("userData", userData);
 
+    const [address, setAddress] = useState(
+        userData?.addresses ? userData?.addresses : []
+    )
     const [showSheet, setShowSheet] = useState({
         addAddress: false,
         setLocation: false
@@ -175,8 +178,8 @@ const FindDestination = () => {
                             <View style={[styles.inputView]}>
                                 <Images.source height={moderateScale(16)} width={moderateScale(16)} />
                                 <TouchableOpacity
-                                    style={[styles.locationView, commonStyles.bottomBorder,{
-                                        borderColor:isDark ? uiColours.GRAYED_BUTTON : uiColours.LIGHT_GRAY
+                                    style={[styles.locationView, commonStyles.bottomBorder, {
+                                        borderColor: isDark ? uiColours.GRAYED_BUTTON : uiColours.LIGHT_GRAY
                                     }]}
                                     onPress={() => {
                                         setAction("source")
@@ -211,24 +214,10 @@ const FindDestination = () => {
                             </View>
 
                         </View>
-
-                        {/* <TouchableOpacity
-                            style={styles.selectMap}
-                            onPress={() => {
-                                navigation.navigate(MainRouteStrings.SELECT_ADDRRESS_FROM_MAP, {
-                                    toScreen: MainRouteStrings.SET_DESTINATION
-                                })
-                            }}
-                        >
-                            <Images.selectMap />
-                            <Text>
-                                Select via map
-                            </Text>
-                        </TouchableOpacity> */}
                     </View>
 
                 </View>
-                {userData?.type === "user" && <View style={styles.savedLocationsView}>
+                {userData?.token && <View style={styles.savedLocationsView}>
                     <Text style={[appStyles.mediumTextBlack, {
                         paddingHorizontal: scale(16)
                     }]}>
@@ -241,9 +230,9 @@ const FindDestination = () => {
                         <View style={commonStyles.flexRowAlnCtr}>
                             <TouchableOpacity
                                 style={[styles.AddButton, {
-                                     marginLeft: scale(16),
-                                     borderColor:isDark ? uiColours.GRAYED_BUTTON : uiColours.LIGHT_GRAY
-                                    }]}
+                                    marginLeft: scale(16),
+                                    borderColor: isDark ? uiColours.GRAYED_BUTTON : uiColours.LIGHT_GRAY
+                                }]}
                                 onPress={() => {
                                     setShowSheet({
                                         ...showSheet,
@@ -264,32 +253,34 @@ const FindDestination = () => {
                             </TouchableOpacity>
                             <View style={{ paddingRight: scale(16), flexDirection: "row", gap: scale(10) }}>
                                 {
-                                    userData?.address?.map((item) => {
+                                    userData?.addresses?.map((item) => {
                                         // console.log("dsdsdsad", item);
                                         return (
                                             <TouchableOpacity
-                                                key={item?.id}
-                                                style={[styles.AddButton,{
-                                                    borderColor:isDark ? uiColours.GRAYED_BUTTON : uiColours.LIGHT_GRAY
+                                                key={item?._id}
+                                                style={[styles.AddButton, {
+                                                    borderColor: isDark ? uiColours.GRAYED_BUTTON : uiColours.LIGHT_GRAY
                                                 }]}
                                                 onPress={() => {
                                                     setDestination({
                                                         ...destination,
-                                                        location: item?.location
+                                                        lat: item?.coordinates[0],
+                                                        lng: item?.coordinates[1],
+                                                        location: item?.street_address
                                                     })
                                                 }}
                                             >
                                                 {
-                                                    item?.addressType === "Home" ? <Image source={Images.home} style={commonStyles.icon} /> :
+                                                    item?.type === "Home" ? <Image source={Images.home} style={commonStyles.icon} /> :
                                                         <Image source={Images.work} style={commonStyles.icon} />
                                                 }
 
                                                 <View>
                                                     <Text style={appStyles.smallTextBlackBold}>
-                                                        {item?.addressType}
+                                                        {item?.type}
                                                     </Text>
                                                     <Text ellipsizeMode="tail" numberOfLines={1} style={appStyles.smallTextGray}>
-                                                        {item?.buildingName}
+                                                        {item?.street_address}
                                                     </Text>
                                                 </View>
 
@@ -304,7 +295,7 @@ const FindDestination = () => {
                     </ScrollView>
                 </View>}
 
-                {userData?.type === "user" && <View style={styles.recentDestinationView}>
+                {userData?.token && <View style={styles.recentDestinationView}>
                     <Text style={appStyles.mediumTextBlack}>Recent destination</Text>
                     {
                         recentDestinationData.map((item) => {
@@ -353,7 +344,7 @@ const FindDestination = () => {
                         ...showSheet,
                         setLocation: false
                     })
-                    console.log("sorce", source);
+                    // console.log("sorce", source);
                     if (action === "destination" && (destination?.lat === "" || destination?.lng === "")) {
                         setDestination({
                             ...destination,

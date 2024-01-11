@@ -64,7 +64,7 @@ const AppProvider = ({ children }) => {
                     })
                     .catch((error) => {
                         console.log('errr', error);
-                        Alert.alert("", "Something went wrong please try again")
+                        // Alert.alert("", "Something went wrong please try again")
                     });
 
                 // Actions.currentLoaction(position)
@@ -285,7 +285,7 @@ const AppProvider = ({ children }) => {
                 source,
                 setSource,
                 selectedVehicle,
-                setSelectedVehicle
+                setSelectedVehicle,
             }}
         >
             {children}

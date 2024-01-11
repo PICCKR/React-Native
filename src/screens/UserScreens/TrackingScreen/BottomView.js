@@ -292,7 +292,7 @@ const BottomView = ({
                 isVisible={showSheet.confirmation}
                 setShowSheet={setShowSheet}
                 renderIcon={() => {
-                    console.log("selectedVehicle", selectedVehicle);
+                    // console.log("selectedVehicle", selectedVehicle);
                     const VehicleIcon = selectedVehicle?.id === "1" ? Images.scooter : selectedVehicle?.id === "2" ? Images.car : selectedVehicle?.id === "3" ? Images.van : Images.truck
                     return (
                         <View style={styles.iconCircle}>

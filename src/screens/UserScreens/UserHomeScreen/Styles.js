@@ -49,7 +49,8 @@ const styles = StyleSheet.create({
     VehicleType: {
         paddingVertical: verticalScale(10),
         alignItems: 'center',
-        gap: verticalScale(5)
+        gap: verticalScale(5),
+        marginRight:scale(10)
     },
     vehicleTypeIcon: {
         backgroundColor: uiColours.CREAM,
@@ -60,9 +61,6 @@ const styles = StyleSheet.create({
         justifyContent: 'center'
     },
     vehicleTypeList: {
-        flexDirection: 'row',
-        alignItems: "center",
-        justifyContent: 'space-between'
     },
     whyPickerItemList: {
         gap:scale(16),

@@ -1,4 +1,4 @@
-import { View, Text } from 'react-native'
+import { View, Text, Linking } from 'react-native'
 import React, { useContext, useState } from 'react'
 import WrapperContainer from '../../../components/WrapperContainer/WrapperContainer'
 import { Images } from '../../../assets/images'
@@ -27,7 +27,14 @@ const DisputeScreen = () => {
             }}
             buttonTitle="Open Email"
             buttonActive={true}
-            handleButtonPress={() => { }}
+            handleButtonPress={() => {
+                const recipient = 'support@picckr.com';
+                const subject = '';
+                const body = '';
+                const mailtoLink = `mailto:${recipient}?subject=${subject}&body=${body}`;
+            
+                Linking.openURL(mailtoLink);
+             }}
             containerPadding={{}}
         >
 

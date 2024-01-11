@@ -33,16 +33,17 @@ export const editProfileData = [
         editable:false
     },
 
-    {
-        id: 4,
-        title: 'Phone Number',
-        placeHolder: "Input phone number",
-        type: "phoneNumber",
-        maxLenght: 100,
-        isRequired: true,
-        errorMsg: "Enter valid Phone Number",
-        validationString: RegEx.only__number__regEx,
-        editable:false
-    },
+    // {
+    //     id: 4,
+    //     title: 'Phone Number',
+    //     placeHolder: "Input phone number",
+    //     type: "phoneNumber",
+    //     readOnly:true,
+    //     maxLenght: 100,
+    //     isRequired: true,
+    //     errorMsg: "Enter valid Phone Number",
+    //     validationString: RegEx.only__number__regEx,
+    //     editable:false
+    // },
 
 ]

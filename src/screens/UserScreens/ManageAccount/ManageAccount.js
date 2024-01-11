@@ -29,7 +29,7 @@ const ManageAccount = () => {
         Actions.showLoader(true)
         deleteUser().then((res) => {
             Actions.showLoader(false)
-            console.log("res in delete account", res);
+            // console.log("res in delete account", res);
             // clearLocalData()
             setuserData(null)
             setIsLoggedIn(false)
@@ -99,7 +99,7 @@ const ManageAccount = () => {
                     Actions.showLoader(true)
                     try {
                         await signOut().then((res) => {
-                            console.log("res in log oput", res);
+                            // console.log("res in log oput", res);
                         });
                         setIsLoggedIn(false)
                         Actions.showLoader(false)

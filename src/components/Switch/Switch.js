@@ -10,7 +10,7 @@ const Switch = ({
     swithchStyle,
     initialValue
 }) => {
-console.log("initial value", initialValue);
+// console.log("initial value", initialValue);
     const [active, setActive] = useState(initialValue)
 
     const handleSwitchange = (val) => {

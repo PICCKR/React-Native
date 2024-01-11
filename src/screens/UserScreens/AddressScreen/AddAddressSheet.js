@@ -22,18 +22,20 @@ const AddAddressSheet = ({
     isVisible,
     setShowSheet,
     handleAddAddress,
-    setAddresData,
-    addressData,
-    handleEditAddress,
-    action,
-    handleSetLocationPress
 }) => {
     const { appStyles, isDark } = useContext(AppContext)
-
     const [buttonActive, setButtonActive] = useState(false)
-
     const [showError, setShowError] = useState()
     const [showSetLocationModal, setShowSetLocationModal] = useState(false)
+    const [addressData, setAddresData] = useState({
+        title: "",
+        coordinates: [],
+        type: "",
+        street_address: "",
+        favorite: false,
+        house_number: "",
+        building_name: ""
+    })
 
     const addresTypeData = [
         {
@@ -53,7 +55,7 @@ const AddAddressSheet = ({
             id: 1,
             title: 'Building name',
             placeHolder: "Input a building name",
-            type: "buildingName",
+            type: "building_name",
             isRequired: true,
             errorMsg: "Enter valid Building name",
             validationString: RegEx.notEmpty,
@@ -64,7 +66,7 @@ const AddAddressSheet = ({
             id: 2,
             title: 'Home number',
             placeHolder: "e.g 456",
-            type: "homeNumber",
+            type: "house_number",
             maxLenght: 100,
             errorMsg: "",
             isRequired: true,
@@ -76,10 +78,10 @@ const AddAddressSheet = ({
 
     useEffect(() => {
         if (
-            addressData.addressType !== '' &&
-            addressData?.buildingName !== "" &&
-            addressData?.homeNumber !== "" &&
-            addressData.location !== ""
+            addressData.type !== '' &&
+            addressData.building_name !== "" &&
+            addressData?.house_number !== "" &&
+            addressData.street_address !== ""
         ) {
             setButtonActive(true);
         } else {
@@ -90,18 +92,23 @@ const AddAddressSheet = ({
     return (
         <FullScreenModal
             isVisible={isVisible}
-            buttonTitle={action === "add" ? "Add address" : "Save address"}
+            buttonTitle={"Add address"}
             leftTitle="Address"
             hasCloseIcon
             setShowModal={setShowSheet}
             buttonActive={buttonActive}
             handleButtonPress={() => {
-                if (action === "add") {
-                    handleAddAddress()
-                } else {
-                    handleEditAddress()
-                }
-
+                handleAddAddress(addressData)
+                setAddresData({
+                    ...addressData,
+                    title: "",
+                    coordinates: [],
+                    type: "",
+                    street_address: "",
+                    favorite: false,
+                    house_number: "",
+                    building_name: ""
+                })
             }}
         >
             <ScrollView style={{}}>
@@ -112,7 +119,7 @@ const AddAddressSheet = ({
                     <View style={{ flexDirection: 'row', alignItems: 'center', gap: scale(10) }}>
                         {
                             addresTypeData.map((item) => {
-                                // console.log("addressData.addressType", addressData?.addressType);
+                                const selected = addressData?.type === item.type
                                 return (
                                     <TouchableOpacity key={item.id}
                                         style={{
@@ -121,20 +128,20 @@ const AddAddressSheet = ({
                                             gap: scale(5),
                                             borderWidth: moderateScale(1),
                                             borderRadius: moderateScale(6),
-                                            borderColor: (addressData?.addressType === item.type && !isDark) ? uiColours.PRIMARY : (addressData?.addressType != item.type && isDark) ? uiColours.GRAYED_BUTTON : uiColours.LIGHT_GRAY,
-                                            backgroundColor: addressData?.addressType === item.type ? uiColours.GOLDEN_LIGHT : null
+                                            borderColor: (selected && !isDark) ? uiColours.PRIMARY : (!selected && isDark) ? uiColours.GRAYED_BUTTON : uiColours.LIGHT_GRAY,
+                                            backgroundColor: selected ? uiColours.GOLDEN_LIGHT : null
                                         }}
                                         onPress={() => {
                                             setAddresData({
                                                 ...addressData,
-                                                addressType: item.type
+                                                type: item.type
                                             })
                                         }}
                                     >
                                         <Image source={item.icon} style={{
                                             height: moderateScale(20),
                                             width: moderateScale(20),
-                                            tintColor: addressData?.addressType === item.type ? uiColours.PRIMARY : uiColours.GRAY_TEXT
+                                            tintColor: selected ? uiColours.PRIMARY : uiColours.GRAY_TEXT
 
                                         }} />
                                         <Text style={appStyles.smallTextGray}>{item.type}</Text>
@@ -152,6 +159,7 @@ const AddAddressSheet = ({
                     setShowError={setShowError}
                     ShowError={showError}
                 />
+
                 <View style={{ flex: 1, marginTop: verticalScale(16), marginBottom: verticalScale(60) }}>
                     <Text style={appStyles.smallTextBlack}>Set location</Text>
                     <TouchableOpacity
@@ -160,79 +168,13 @@ const AddAddressSheet = ({
                             setShowSetLocationModal(true)
                         }}
                     >
-                        <View style={{ }}>
+                        <View style={{}}>
                             <Images.locationPin />
                         </View>
                         <Text>
-                            {addressData?.location ? addressData?.location : "Set location"}
+                            {addressData?.street_address ? addressData?.street_address : "Set location"}
                         </Text>
                     </TouchableOpacity>
-
-
-                    {/* <GooglePlacesAutocomplete
-                        value={addressData?.location}
-                        placeholder="Set location"
-                        keepResultsAfterBlur
-                        onPress={async (data, details = null) => {
-                            if (data && data.place_id) {
-                                try {
-                                    const placeId = data.place_id;
-                                    const apiKey = GOOGLE_MAP_API_KEY;
-                                    const detailsUrl = `https://maps.googleapis.com/maps/api/place/details/json?place_id=${placeId}&key=${apiKey}`;
-                                    const response = await fetch(detailsUrl);
-                                    const json = await response.json();
-                                    if (json.status === 'OK' && json.result && json.result.geometry) {
-                                        const { lat, lng } = json.result.geometry.location;
-                                        setAddresData({
-                                            ...addressData,
-                                            location: data.description,
-                                            lat: lat,
-                                            lng: lng
-                                        })
-                                    }
-                                } catch (error) {
-                                    console.error('Error fetching place details:', error);
-                                    Alert.alert("", uiStrings.commonError)
-                                }
-                            }
-                        }}
-                        inbetweenCompo={<View style={{height:100}}></View>}
-
-                        query={{
-                            key: GOOGLE_MAP_API_KEY,
-                            language: 'en', // language of the results
-                        }}
-                        nearbyPlacesAPI="GooglePlacesSearch" // Which API to use: GoogleReverseGeocoding or GooglePlacesSearch
-                        styles={{
-                            textInputContainer: {
-                                width: "100%",
-                                borderWidth: moderateScale(1),
-                                borderRadius: moderateScale(6),
-                                borderColor: isDark ? uiColours.GRAYED_BUTTON : uiColours.LIGHT_GRAY,
-                                marginTop: verticalScale(5),
-                                paddingLeft: scale(20),
-                            },
-                            textInput:{
-                                backgroundColor:isDark ? uiColours.DARK_BG : null,
-                            },
-                            row:{
-                                backgroundColor:isDark ? uiColours.DARK_BG : null,
-                            },
-                            description: {
-                                fontWeight: 'bold',
-                            },
-                            poweredContainer:{
-                                backgroundColor:isDark ? uiColours.DARK_BG : null,
-                            },
-                            predefinedPlacesDescription: {
-                                backgroundColor:isDark ? uiColours.DARK_BG : null,
-                                color: '#1faadb',
-                            },
-                        }}
-                    /> */}
-                    {/* <View style={{ position: 'absolute', top: verticalScale(43), left: scale(10) }}>
-                        <Images.locationPin />
-                    </View> */}
                 </View>
 
             </ScrollView>
@@ -240,13 +182,14 @@ const AddAddressSheet = ({
             <SetLocationModal
                 isVisible={showSetLocationModal}
                 setShowModal={setShowSetLocationModal}
-                showSelectfromMap = {false}
+                showSelectfromMap={false}
                 handleSelectFromMap={() => {
 
                 }}
                 handleSelectLocation={async (data, details = null) => {
                     if (data && data.place_id) {
                         try {
+                            setShowSetLocationModal(false)
                             const placeId = data.place_id;
                             const apiKey = GOOGLE_MAP_API_KEY;
                             const detailsUrl = `https://maps.googleapis.com/maps/api/place/details/json?place_id=${placeId}&key=${apiKey}`;
@@ -256,22 +199,18 @@ const AddAddressSheet = ({
                                 const { lat, lng } = json.result.geometry.location;
                                 setAddresData({
                                     ...addressData,
-                                    location: data.description,
-                                    lat: lat,
-                                    lng: lng
+                                    street_address: data?.description,
+                                    coordinates: [lat, lng]
                                 })
                             }
-                            setShowSetLocationModal(false)
+
                         } catch (error) {
                             console.error('Error fetching place details:', error);
-                            Alert.alert("", uiStrings.commonError)
+                            showGeneralError(isDark)
                         }
                     }
                 }}
             />
-
-
-
         </FullScreenModal>
     )
 }

@@ -3,7 +3,6 @@ import React from 'react'
 import styles from './Styles'
 import { Images } from '../../../assets/images'
 import { moderateScale, scale } from 'react-native-size-matters'
-import { commonStyles } from '../../../utils/Styles/CommonStyles'
 
 const EditAction = ({
     title,

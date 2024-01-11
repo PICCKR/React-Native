@@ -9,6 +9,8 @@ import { RegEx } from '../../../utils/Constents/regulerexpressions'
 import Form from '../../../components/Form/Form'
 import BottomSheet from '../../../components/BottomSheet/BottomSheet'
 import { Images } from '../../../assets/images'
+import InputText from '../../../components/InputText/InputText'
+import MobileNumberInput from '../../../components/MobileNumberInput/MobileNumberInput'
 
 const PickUpSheet = ({
     location,
@@ -51,7 +53,8 @@ const PickUpSheet = ({
     const [showError, setShowError] = useState(false)
     const [buttonActive, setButtonActive] = useState(false)
 
-    console.log("FORM ADTAA", formData);
+    // console.log("FORM ADTAA", formData);
+
 
     useEffect(() => {
         if (formData.name !== "" && formData.phoneNumber) {
@@ -66,7 +69,7 @@ const PickUpSheet = ({
             isVisible={isVisible}
             // hasCloseIcon
             title="Pick-up Details"
-            modelBgStyles={{backgroundColor:"rgba(255, 255, 255, 0)"}}
+            modelBgStyles={{ backgroundColor: "rgba(255, 255, 255, 0)" }}
             hasBackButton
             handleBackClick={handleBackClick}
             containerStyles={{ padding: 0 }}
@@ -75,8 +78,8 @@ const PickUpSheet = ({
             buttonTitle="Next"
             handleButtonPress={handleNext}
         >
-            <View style={[commonStyles.bottomBorder, Styles.bottomViewContent,{
-                borderColor:isDark ? uiColours.GRAYED_BUTTON : uiColours.LIGHT_GRAY
+            <View style={[commonStyles.bottomBorder, Styles.bottomViewContent, {
+                borderColor: isDark ? uiColours.GRAYED_BUTTON : uiColours.LIGHT_GRAY
             }]}>
                 <Text style={[appStyles?.smallTextBlack, { flex: 1 }]}>
                     {location?.location}
@@ -90,8 +93,8 @@ const PickUpSheet = ({
 
             </View>
 
-            <View style={[commonStyles.bottomBorder, Styles.recipientDetails,{
-                borderColor:isDark ? uiColours.GRAYED_BUTTON : uiColours.LIGHT_GRAY
+            <View style={[commonStyles.bottomBorder, Styles.recipientDetails, {
+                borderColor: isDark ? uiColours.GRAYED_BUTTON : uiColours.LIGHT_GRAY
             }]}>
                 <View style={commonStyles.flexRowAlnCtrJutySpaceBetween}>
                     <Text style={appStyles.mediumTextBlackBold}>
@@ -111,6 +114,22 @@ const PickUpSheet = ({
                     </TouchableOpacity>
                 </View>
 
+                {/* <InputText
+                    value={formData?.name}
+                    handleChange={(e) => {
+                        setFormData({
+                            ...formData,
+                            name: e
+                        })
+                    }}
+                    hasTitle
+                    inputTitle="Name"
+                />
+
+                <MobileNumberInput
+                    formData={formData}
+
+                /> */}
                 <Form
                     data={pickupFormData}
                     formData={formData}
@@ -119,16 +138,16 @@ const PickUpSheet = ({
                     setShowError={setShowError}
                 />
 
-                <Text style={[appStyles.smallTextBlack,{marginTop:verticalScale(10)}]}>
+                <Text style={[appStyles.smallTextBlack, { marginTop: verticalScale(10) }]}>
                     Pick-up date
                 </Text>
                 <TouchableOpacity
-                    style={[Styles.pickupButton,{
-                        borderColor:isDark ? uiColours.GRAYED_BUTTON : uiColours.LIGHT_GRAY
+                    style={[Styles.pickupButton, {
+                        borderColor: isDark ? uiColours.GRAYED_BUTTON : uiColours.LIGHT_GRAY
                     }]}
                     onPress={handlePickDate}
                 >
-                    <Text style ={appStyles.smallTextBlack} >
+                    <Text style={appStyles.smallTextBlack} >
                         {formData?.pickupDate}
                     </Text>
                     <Images.downArrow />

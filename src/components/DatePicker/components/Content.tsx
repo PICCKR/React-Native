@@ -21,7 +21,7 @@ const Content = ({
   colorOptions, chooseYearFirst,
   daysArray, btnDisabled,
   displayTime, setDisplayTime,
-  output, setOutput
+  output, setOutput, hideTime, onSelectDate
 }: any) => {
   const [showChangeYearModal, setShowChangeYearModal] = useState(chooseYearFirst || false)
 
@@ -60,14 +60,14 @@ const Content = ({
   const getTimeData = async () => {
     // Example usage with input 11:15 AM
     const inputTime = new Date();
-    console.log("inputTime===>", inputTime.getHours(), inputTime.getMinutes());
+    // console.log("inputTime===>", inputTime.getHours(), inputTime.getMinutes());
 
     const hours = inputTime.getHours()
     const minute = (inputTime.getMinutes() > 0 && inputTime.getMinutes() < 15) ? 15 :
       (inputTime.getMinutes() > 15 && inputTime.getMinutes() < 30) ? 30 :
         (inputTime.getMinutes() > 30 && inputTime.getMinutes() < 45) ? 45 :
           (inputTime.getMinutes() > 45 && inputTime.getMinutes() < 60) ? 60 : 0
-    console.log("minute", minute);
+    // console.log("minute", minute);
 
     inputTime.setHours(hours, minute, 0, 0);
 
@@ -85,7 +85,7 @@ const Content = ({
       // Increment the time by 15 minutes
       currentTime.setMinutes(currentTime.getMinutes() + 15);
     }
-    console.log("timeIntervals", timeIntervals);
+    // console.log("timeIntervals", timeIntervals);
     setTimeData(timeIntervals)
     return timeIntervals;
   }
@@ -166,11 +166,12 @@ const Content = ({
               selectedDateTextColor,
               selectedDateBackgroundColor
             }}
+            onSelectDate = {onSelectDate}
           />
         ))}
       </View>
       <View style={styles.footer}>
-        <ScrollView
+        {hideTime && <ScrollView
           horizontal
         >
           <View style={{ flexDirection: "row", alignItems: "center", gap: scale(10) }}>
@@ -203,7 +204,7 @@ const Content = ({
               }
             </View>
           </View>
-        </ScrollView>
+        </ScrollView>}
         <View>
           <TouchableOpacity style={styles.btn} onPress={onConfirmPress}>
             <Text style={appStyles.smallTextWhite}>

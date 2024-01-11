@@ -21,7 +21,7 @@ const DragableBottomSheet = ({
 
     // callbacks
     const handleSheetChanges = (index) => {
-        console.log('handleSheetChanges', index);
+        // console.log('handleSheetChanges', index);
         handleButtomSheet(index)
     };
 

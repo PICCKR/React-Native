@@ -15,11 +15,11 @@ export  const requestCameraPermission = async () => {
             return true
         } else {
             return false
-            console.log('Camera permission denied');
+            // console.log('Camera permission denied');
         }
     } catch (error) {
         return false
-        console.error('Error requesting camera permission:', error);
+        // console.error('Error requesting camera permission:', error);
     }
 };
 
@@ -38,7 +38,7 @@ export const requestGallaryPermission = async () =>{
             return true
         } else {
             
-            console.log('gallary permission denied');
+            // console.log('gallary permission denied');
             return false
         }
     } catch (error) {

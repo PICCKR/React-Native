@@ -25,7 +25,7 @@ const SetDestination = ({route}) => {
     isDark
   } = useContext(AppContext)
 
-  console.log("destination", userData);
+  // console.log("destination", userData);
 
   const navigation = useNavigation()
   const isFocused = useIsFocused();
@@ -49,9 +49,11 @@ const SetDestination = ({route}) => {
   const [pickUpData, setPickUpData] = useState({
     name: userData?.firstName ? `${userData?.firstName} ${userData?.lastName}` : "",
     phoneNumber: userData?.phoneNumber ? userData?.phoneNumber : "",
-    selectedCountry:userData?.selectedCountry,
+    selectedCountry:userData?.phoneNumber?.split(" ")[0],
     pickupDate: "Now"
   })
+
+  const [showTime, setShowTime] = useState(true)
 
   const [date, setDate] = useState(new Date(1598051730000));
 
@@ -187,6 +189,11 @@ const SetDestination = ({route}) => {
           backgroundColor:isDark ? uiColours.DARK_BG :uiColours.WHITE_TEXT,
           dateTextColor:isDark ? uiColours.WHITE_TEXT : uiColours.GRAY_TEXT,
         }}
+        hideTime={showTime}
+        onSelectDate={()=>{
+          console.log("sdds");
+          setShowTime(false)
+        }}
         minDate={new Date()}
         onSeclectTime={(data) => {
           setShowBottomSheet({
@@ -225,7 +232,9 @@ const SetDestination = ({route}) => {
             ...pickUpData,
             pickupDate: output?.dateString
           })
+          
         }}
+
       />
     </SafeAreaView>
   )

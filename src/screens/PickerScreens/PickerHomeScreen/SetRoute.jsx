@@ -13,7 +13,7 @@ const SetRoute = ({
     
 }) => {
     const { appStyles, userData, isDark, currentLocation, destination, source } = useContext(AppContext)
-    console.log("source", source);
+    // console.log("source", source);
     const navigation = useNavigation()
     return (
         <View style={{paddingHorizontal:scale(16), marginTop:verticalScale(16)}}>

@@ -176,7 +176,7 @@ const ActivityScreen = () => {
               </View>
               <View style={{ alignItems: 'flex-end' }}>
                 <Text style={appStyles.smallTextPrimary}>
-                  ${item?.amount}
+                ₦{item?.amount}
                 </Text>
                 <View style={[styles.label, {
                   backgroundColor: item?.status === "Completed" ? uiColours.LIGHT_GREEN : item?.status === "Cancelled" ? uiColours.LIGHT_RED : "#C9F3FB"

@@ -4,7 +4,6 @@ import WrapperContainer from '../../../components/WrapperContainer/WrapperContai
 import { useNavigation } from '@react-navigation/native'
 import { AppContext } from '../../../context/AppContext'
 import InputText from '../../../components/InputText/InputText'
-import styles from './Styles'
 import { Images } from '../../../assets/images'
 import { moderateScale, verticalScale } from 'react-native-size-matters'
 import { showToast } from '../../../components/tostConfig/tostConfig'
@@ -23,7 +22,7 @@ const ChangePassword = ({ route }) => {
 
 
     const handleChangePassword = async () => {
-        console.log("data", data);
+        // console.log("data", data);
         Actions.showLoader(true)
         await confirmResetPassword({
             username: data?.phoneNumber.replace(/\s+/g, ''),

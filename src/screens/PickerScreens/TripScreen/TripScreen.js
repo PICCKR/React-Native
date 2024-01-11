@@ -11,8 +11,9 @@ import { useNavigation } from '@react-navigation/native'
 import { MainRouteStrings } from '../../../utils/Constents/RouteStrings'
 import ProfileView from '../../../components/PrifileView/ProfileView'
 import CustomButton from '../../../components/Button/CustomButton'
-import { buttonTypes } from '../../../utils/Constents/constentStrings'
+import { buttonTypes, tostMessagetypes } from '../../../utils/Constents/constentStrings'
 import RequestTab from './RequestTab'
+import { showToast } from '../../../components/tostConfig/tostConfig'
 
 const TripScreen = () => {
   const { appStyles, isDark } = useContext(AppContext)
@@ -130,19 +131,21 @@ const TripScreen = () => {
 
 
   const handleAccept = async (item) => {
-    // const newData = []
-    const newData = await tabsData.filter((val) => {
-      console.log("val?.data?", val?.data[0]);
-      if(val?.data[0]){
+    navigation.navigate(MainRouteStrings.PICKUP_SCREEN, {
+      geometry: {
+          latitude: 12.978463866133229,
+          longitude: 77.57011765790308
+      }
+  })
+  }
 
-      }
-      return
-      if (val?.data?.id !== item?.id) {
-        return item
-      }
-    })
-    console.log("newData", newData.data?.push(item));
-    // newData.push()
+  const handleDecline = () => {
+  // console.log("tabsData", tabsData[0]);
+    const toastMsgConfg = {
+      isDark: isDark,
+      msg: "You have successfully decline your trip."
+    }
+    showToast(toastMsgConfg, tostMessagetypes.SUCCESS, isDark)
   }
   return (
     <WrapperContainer
@@ -194,7 +197,7 @@ const TripScreen = () => {
                 }
                 ]}
                 onPress={() => {
-                  navigation.navigate(MainRouteStrings.ACTIVITY_SUMMERY, {
+                  navigation.navigate(MainRouteStrings.TRIP_DETAILS_SCREEN, {
                     data: item
                   })
 
@@ -233,6 +236,7 @@ const TripScreen = () => {
                 <RequestTab
                   item={item}
                   handleAccept={handleAccept}
+                  handleDecline={handleDecline}
                 />
 
               }

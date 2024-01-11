@@ -50,7 +50,7 @@ const navigation =useNavigation()
   const [buttonActive, setButtonActive] = useState(false)
 
   useEffect(() => {
-    if (formData.name !== "" && formData.phoneNumber) {
+    if (RegEx.name__regEx.test(formData.name)  && formData.phoneNumber) {
       setButtonActive(true)
     } else {
       setButtonActive(false)

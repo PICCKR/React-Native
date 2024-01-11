@@ -12,20 +12,16 @@ import SetRoute from './SetRoute'
 import ProfileView from '../../../components/PrifileView/ProfileView'
 import TripRequest from './TripRequest'
 import DestinationHistory from './DestinationHistory'
+import ConfirmationSheet from '../../../components/ConfirmationSheet/ConfirmationSheet'
+import VehicleIconView from '../../../components/VehicleIconView/VehicleIconView'
+import { MainRouteStrings } from '../../../utils/Constents/RouteStrings'
 
 
-const PickerHomeScreen = () => {
+const PickerHomeScreen = ({ route }) => {
+  const from = route?.params?.from
+
   const { appStyles, userData, isDark } = useContext(AppContext)
   const navigation = useNavigation()
-
-  const [showSheet, setShowSheet] = useState({
-    showPayment: false,
-    addPayment: false,
-    Otp: false
-  })
-  const [topUpAmount, setTopUpAmount] = useState({
-    price: "0"
-  })
 
   const recentDestinationData = [
     {
@@ -56,27 +52,37 @@ const PickerHomeScreen = () => {
         <Header
           userData={userData}
           appStyles={appStyles}
-          setShowSheet={setShowSheet}
-          showSheet={showSheet}
-          topUpAmount={topUpAmount}
           isDark={isDark}
         />
 
         <SetRoute />
 
-        <TripRequest />
+        <TripRequest
+          from={from}
+          handleDecline={() => {
 
-        {/* <View style={styles.completeProfile}>
-          <Image
-            source={Images.completeProfile}
-            resizeMode="contain"
-            style={{ height: '100%', width: '100%' }}
-          />
-        </View> */}
+          }}
+        />
 
+        <TouchableOpacity
+          style={styles.completeImage}
+          onPress={() => {
+            navigation.navigate(MainRouteStrings.BECOME_PICKER, {
+              from: MainRouteStrings.PICKER_HOME_SCREEN
+            }
+            )
+          }}
+        >
+          <Image source={Images.completeProfile} style={{
+            height: '100%',
+            width: "100%",
+            borderRadius: moderateScale(8)
+          }} />
+        </TouchableOpacity>
 
         <DestinationHistory />
       </ScrollView>
+
     </SafeAreaView>
   )
 }

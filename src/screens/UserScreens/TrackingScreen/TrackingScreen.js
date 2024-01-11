@@ -20,7 +20,7 @@ const TrackingScreen = ({ route }) => {
     const destination = route?.params?.geometry
 
     const { appStyles, selectedVehicle, isDark, source, setSource, setDestination } = useContext(AppContext)
-    console.log("origin === > ",source)
+    // console.log("origin === > ",source)
     const navigation = useNavigation()
     // const origin1 = { latitude: 12.308905854320136, longitude: 76.63889153653533 };
     const origin1 = { latitude: source?.lat, longitude: source?.lng };
@@ -100,7 +100,7 @@ const TrackingScreen = ({ route }) => {
                     strokeColor={uiColours.BLUE}
                     optimizeWaypoints
                     onStart={(params) => {
-                        console.log(`Started routing between "${params.origin}" and "${params.destination}"`);
+                        // console.log(`Started routing between "${params.origin}" and "${params.destination}"`);
                     }}
                 />
                 <Marker

@@ -48,7 +48,7 @@ const DocumentUpload = ({
                         // console.log("source", source, response?.assets[0]?.fileName);
                         setDocument({
                             ...document,
-                            [documentType]: response?.assets[0]?.uri,
+                            [documentType]: response?.assets[0],
                             [fileName]: response?.assets[0]?.fileName
                         })
                         setShowMode(false)

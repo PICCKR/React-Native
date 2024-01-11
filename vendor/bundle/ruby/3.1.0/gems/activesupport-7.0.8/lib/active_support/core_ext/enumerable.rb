@@ -103,7 +103,7 @@ module Enumerable
   #   people.index_by(&:login)
   #   # => { "nextangle" => <Person ...>, "chade-" => <Person ...>, ...}
   #
-  #   people.index_by { |person| "#{person.first_name} #{person.last_name}" }
+  #   people.index_by { |person| "#{person.firstName} #{person.lastName}" }
   #   # => { "Chade- Fowlersburg-e" => <Person ...>, "David Heinemeier Hansson" => <Person ...>, ...}
   def index_by
     if block_given?

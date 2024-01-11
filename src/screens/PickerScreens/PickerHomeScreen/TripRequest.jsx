@@ -7,13 +7,17 @@ import { commonStyles } from '../../../utils/Styles/CommonStyles'
 import ProfileView from '../../../components/PrifileView/ProfileView'
 import { Images } from '../../../assets/images'
 import CustomButton from '../../../components/Button/CustomButton'
-import { buttonTypes } from '../../../utils/Constents/constentStrings'
+import { buttonTypes, tostMessagetypes } from '../../../utils/Constents/constentStrings'
 import { uiColours } from '../../../utils/Styles/uiColors'
 import { useNavigation } from '@react-navigation/native'
 import { MainRouteStrings } from '../../../utils/Constents/RouteStrings'
+import ConfirmationSheet from '../../../components/ConfirmationSheet/ConfirmationSheet'
+import VehicleIconView from '../../../components/VehicleIconView/VehicleIconView'
+import { showToast } from '../../../components/tostConfig/tostConfig'
 
 const TripRequest = ({
-
+    handleDecline,
+    from
 }) => {
     const { appStyles, isDark } = useContext(AppContext)
     const navigation = useNavigation()
@@ -29,6 +33,10 @@ const TripRequest = ({
         }
     )
     const [accept, setAccept] = useState(false)
+    const [showSheet, setShowSheet] = useState({
+        confirmtion: false
+    })
+
 
     return (
         <View style={{ paddingHorizontal: scale(16), marginTop: verticalScale(24) }}>
@@ -36,7 +44,7 @@ const TripRequest = ({
                 Trip Request
             </Text>
             {
-                tripRequest ?
+                (tripRequest && from !== "review") ?
                     <View style={[styles.tripCard, appStyles.borderColor]}>
                         <View style={commonStyles.flexRowAlnCtrJutySpaceBetween}>
 
@@ -67,7 +75,7 @@ const TripRequest = ({
 
                             <View style={{ alignItems: "flex-end" }}>
                                 <Text style={appStyles.smallTextPrimaryBold}>
-                                    ${tripRequest?.price}
+                                    ₦{tripRequest?.price}
                                 </Text>
                                 <Text style={appStyles.smallTextGray}>
                                     {tripRequest?.distence}kg
@@ -85,12 +93,24 @@ const TripRequest = ({
                                     title="Decline"
                                     hasBackground={false}
                                     hasOutLine
+                                    NavigationHandle={() => {
+                                        setShowSheet({
+                                            ...showSheet,
+                                            confirmtion: true
+                                        })
+                                    }}
                                     buttonStyle={{ borderColor: uiColours.RED }}
                                     titleStyle={{ color: uiColours.RED }}
                                 />
                                 <CustomButton
                                     NavigationHandle={() => {
                                         setAccept(true)
+                                        navigation.navigate(MainRouteStrings.PICKUP_SCREEN, {
+                                            geometry: {
+                                                latitude: 12.978463866133229,
+                                                longitude: 77.57011765790308
+                                            }
+                                        })
                                     }}
                                     buttonType={buttonTypes.MEDIUM}
                                     title="Accept"
@@ -115,6 +135,40 @@ const TripRequest = ({
                         Please set your route
                     </Text>
             }
+
+            <ConfirmationSheet
+                setShowSheet={setShowSheet}
+                headerTitle="Confirmation"
+                isVisible={showSheet.confirmtion}
+                title="Are you sure you want to decline this order?"
+                discription="You will not be charged a penalty if you cancel your order"
+                button1Title='Back'
+                button2Title='Yes, decline'
+                handleButton1Click={() => {
+                    setShowSheet({
+                        ...showSheet,
+                        confirmtion: false
+                    })
+                }}
+                handleButton2Click={() => {
+                    setShowSheet({
+                        ...showSheet,
+                        confirmtion: false
+                    })
+                    setTripRequest(null)
+                    const toastMsgConfg = {
+                        isDark: isDark,
+                        msg: "You have successfully decline your trip."
+                    }
+                    showToast(toastMsgConfg, tostMessagetypes.SUCCESS, isDark)
+                }}
+                renderIcon={() => {
+                    return (
+                        <VehicleIconView />
+                    )
+
+                }}
+            />
         </View>
     )
 }

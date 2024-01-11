@@ -27,7 +27,7 @@ const NeatDatePicker = ({
     onCancel, onConfirm,onSeclectTime,handleClose,
     startDate,
     chooseYearFirst,
-    withoutModal
+    withoutModal, hideTime, onSelectDate
 }: NeatDatePickerProps) => {
 
     // displayTime defines which month is going to be shown onto the screen
@@ -161,13 +161,13 @@ const NeatDatePicker = ({
     if (withoutModal) return (
         <Content
             {...{
-                language, mode,
+                language, mode, hideTime,
                 onPrev, onNext,
                 onConfirmPress, onSeclectTime,handleClose,
                 colorOptions, chooseYearFirst,
                 daysArray, btnDisabled,
                 displayTime, setDisplayTime,
-                output, setOutput
+                output, setOutput, onSelectDate
             }}
         />
     )
@@ -189,13 +189,13 @@ const NeatDatePicker = ({
         >
             <Content
                 {...{
-                    language, mode,
+                    language, mode,hideTime,
                     onPrev, onNext,
                     onConfirmPress, onSeclectTime,handleClose,
                     colorOptions, chooseYearFirst,
                     daysArray, btnDisabled,
                     displayTime, setDisplayTime,
-                    output, setOutput
+                    output, setOutput, onSelectDate
                 }}
             />
         </Modal>

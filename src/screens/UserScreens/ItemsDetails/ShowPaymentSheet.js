@@ -13,7 +13,7 @@ const ShowPaymentSheet = ({
   setShowSheet,
   handleSelectPayment,
 }) => {
-  const { appStyles, isDark } = useContext(AppContext)
+  const { appStyles, isDark, userData } = useContext(AppContext)
   return (
     <BottomSheet
       isVisible={isVisible}
@@ -41,7 +41,7 @@ const ShowPaymentSheet = ({
                 PicckRPay
               </Text>
               <Text style={appStyles.smallTextPrimaryBold}>
-                $530
+                ₦{userData?.wallet?.balance}
               </Text>
             </View>
           </View>

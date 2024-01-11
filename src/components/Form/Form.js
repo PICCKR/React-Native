@@ -19,7 +19,7 @@ const Form = ({
     // handleOnBlur = () => {},
     textChange = () => { },
 }) => {
-    console.log("formData", formData);
+    // console.log("formData", formData);
 
     const [showPassword, setShowPassword] = useState(false)
 
@@ -69,9 +69,10 @@ const Form = ({
                             {item.type === "phoneNumber" ?
 
                                 <MobileNumberInput
+                                    editable={item?.readOnly ? false : true}
                                     handleChange={(e, selectedCountry) => handleTextChange(e, item, selectedCountry)}
                                     isRequired={item?.isRequired}
-                                    inPutStyles={{marginTop:verticalScale(-5)}}
+                                    inPutStyles={{ marginTop: verticalScale(-5) }}
                                     inputContainer={{ width: screenSize.width - scale(32) }}
                                     handleBlur={() => handleOnBlur(item)}
                                     ErrorMsg={errorMsg ? errorMsg[item?.type] : item?.errorMsg}
@@ -92,7 +93,7 @@ const Form = ({
                                         }));
                                     }}
                                     keyboardType={item?.keyboardType ? item?.keyboardType : "default"}
-                                    inPutStyles={{marginTop:verticalScale(-5)}}
+                                    inPutStyles={{ marginTop: verticalScale(-5) }}
                                     inputTitle={item?.title}
                                     inputContainer={{}}
                                     key={item?.id.toString()}
@@ -100,7 +101,7 @@ const Form = ({
                                     value={formData[item.type]}
                                     handleChange={(e) => handleTextChange(e, item)}
                                     ShowError={ShowError[item?.type]}
-                                    ErrorMsg={errorMsg ? errorMsg[item?.type]: item?.errorMsg}
+                                    ErrorMsg={errorMsg ? errorMsg[item?.type] : item?.errorMsg}
                                     OnBlur={() => handleOnBlur(item)}
                                     secureTextEntry={item.type === "password" ? !showPassword : false}
                                     maxLength={item?.maxLenght}
@@ -115,7 +116,7 @@ const Form = ({
                                                     setShowPassword(!showPassword)
                                                 }}
                                             >
-                                                {!showPassword ? <Images.eyeOpen height={moderateScale(25)} width={moderateScale(25)} /> :
+                                                {showPassword ? <Images.eyeOpen height={moderateScale(25)} width={moderateScale(25)} /> :
                                                     <Images.eyeClose height={moderateScale(25)} width={moderateScale(25)} />
                                                 }
                                             </TouchableOpacity>

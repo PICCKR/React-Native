@@ -24,7 +24,6 @@ import PickerReviewWhenCancelled from "../screens/UserScreens/PickerReviewWhenCa
 import SetDestination from "../screens/UserScreens/SetDestination/SetDestination";
 import PickerHomeScreen from "../screens/PickerScreens/PickerHomeScreen/PickerHomeScreen";
 import AddressScreen from "../screens/UserScreens/AddressScreen/AddressScreen";
-import PaymentMethod from "../screens/UserScreens/PaymentMethod/PaymentMethod";
 import RatingAndReviews from "../screens/UserScreens/RatingAndReviews/RatingAndReviews";
 import UserKycScreen from "../screens/UserScreens/UserKycScreen/UserKycScreen";
 import EditProfile from "../screens/UserScreens/EditProfile/EditProfile";
@@ -44,6 +43,11 @@ import PickerFindDestination from "../screens/PickerScreens/FindDestination/Pick
 import PickerOrderHistory from "../screens/PickerScreens/PickerOrderHistory/PickerOrderHistory";
 import WalletScreen from "../screens/PickerScreens/WalletScreen/WalletScreen";
 import PickkerRatingAndReviews from "../screens/PickerScreens/PickkerRatingAndReviews/PickkerRatingAndReviews";
+import PickupScreen from "../screens/PickerScreens/PickupScreen/PickupScreen";
+import WriteUserReview from "../screens/PickerScreens/UserReview/WriteUserReview";
+import TripDetailsScreen from "../screens/PickerScreens/TripDetailsScreen/TripDetailsScreen";
+import PickerChatScreen from "../screens/PickerScreens/PickerChatScreen/PickerChatScreen";
+
 
 export const screens = {
     USER_HOME_SCREEN: UserHomeScreen,
@@ -70,7 +74,6 @@ export const screens = {
     PICKER_REVIEW_WHEN_CANCELLED:PickerReviewWhenCancelled,
     SET_DESTINATION:SetDestination,
     ADDRESS_SCREEN:AddressScreen,
-    PAYMENT_METHOD:PaymentMethod,
     RATING_AND_REVIEW:RatingAndReviews,
     USER_KYC_SCREEN:UserKycScreen,
     EDIT_PROFILE:EditProfile,
@@ -91,7 +94,9 @@ export const screens = {
     PICKER_FIND_DESTINATION:PickerFindDestination,
     PICKER_ORDER_HISTORY:PickerOrderHistory,
     WALLET_SCREEN:WalletScreen,
-    PICKKER_RATING_AND_REVIEW:PickkerRatingAndReviews
-
-
+    PICKKER_RATING_AND_REVIEW:PickkerRatingAndReviews,
+    PICKUP_SCREEN:PickupScreen,
+    WRITE_USER_REVIEW:WriteUserReview,
+    TRIP_DETAILS_SCREEN:TripDetailsScreen,
+    PICKER_CHAT_SCREEN:PickerChatScreen
 }

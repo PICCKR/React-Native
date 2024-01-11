@@ -6,8 +6,8 @@ import CheckRoutes from './src/routes/CheckRoutes'
 import Loader from './src/components/Loader/index'
 import Toast from 'react-native-toast-message'
 import { toastConfig } from './src/components/tostConfig/tostConfig'
-import { uiColours } from './src/utils/Styles/uiColors'
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
+
 
 const App = () => {
 

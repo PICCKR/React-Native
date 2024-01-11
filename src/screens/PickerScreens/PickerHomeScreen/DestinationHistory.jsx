@@ -68,7 +68,7 @@ const DestinationHistory = () => {
                                                 </Text>
                                             </View>
                                             <Text style={appStyles.smallTextGrayBold}>
-                                                ${item.amount}
+                                            ₦{item.amount}
                                             </Text>
                                         </View>
                                     </TouchableOpacity>

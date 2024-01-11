@@ -161,7 +161,7 @@ const Ongoing = ({
                         </Text>
                     </View>
                     <Text style={appStyles.smallTextGray}>
-                        $100
+                    ₦100
                     </Text>
                 </View>
 

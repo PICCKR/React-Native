@@ -23,7 +23,8 @@ const MobileNumberInput = ({
     formData,
     value,
     country,
-    inPutStyles
+    inPutStyles,
+    editable = true
 }) => {
 
     const { appStyles, isDark } = useContext(AppContext)
@@ -93,31 +94,32 @@ const MobileNumberInput = ({
     }
 
     const renderFlag = () => {
-        switch (selectedCountry?.id) {
-            case 1:
+        console.log(selectedCountry);
+        switch (selectedCountry) {
+            case "+234":
                 return <Images.NigeriaFlags height={moderateScale(20)} width={moderateScale(35)} />
                 break;
-            case 2:
+            case "+1":
                 return <Images.usFlags height={moderateScale(20)} width={moderateScale(35)} />
                 break;
-            case 3:
+            case "+91":
                 return <Images.indianFlag height={moderateScale(20)} width={moderateScale(35)} />
                 break;
-            case 4:
+            case "+92":
                 return <Images.pakFlag height={moderateScale(20)} width={moderateScale(35)} />
                 break;
-            case 5:
+            case "+62":
                 return <Images.indonatiaFlag height={moderateScale(20)} width={moderateScale(35)} />
                 break;
-            case 6:
+            case "+44":
                 return <Images.ukFlag height={moderateScale(20)} width={moderateScale(35)} />
                 break;
-            case 7:
+            case "+1":
                 return <Images.canadaFlag height={moderateScale(20)} width={moderateScale(35)} />
                 break;
 
             default:
-                return <Images.canadaFlag height={moderateScale(20)} width={moderateScale(35)} />
+                return <Images.NigeriaFlags height={moderateScale(20)} width={moderateScale(35)} />
                 break;
         }
 
@@ -127,8 +129,12 @@ const MobileNumberInput = ({
         <>
             <InputText
                 isRequired={isRequired}
-                inputContainer={inputContainer}
-                inPutStyles={[{paddingRight:scale(120)},inPutStyles]}
+                inputContainer={[inputContainer]}
+                inPutStyles={[{
+                    paddingRight: scale(120),
+                    backgroundColor: editable ? uiColours.WHITE_TEXT : uiColours.LIGHT_GRAY,
+                }, inPutStyles]}
+                textBox={{ color: editable ? uiColours.BLACK_TEXT : uiColours.GRAY_TEXT }}
                 hasTitle
                 inputTitle="Phone Number"
                 handleChange={handleMobileNumberChange}
@@ -139,13 +145,18 @@ const MobileNumberInput = ({
                 ErrorMsg={ErrorMsg}
                 onPressIn={onPressIn}
                 hasLeftView
+                editable={editable}
                 keyboardType="phone-pad"
                 renderLeftView={() => {
                     return (
                         <TouchableOpacity
-                            onPress={() => setShowSheet(true)}
-                            style={[Styles.countryView,{
-                                borderColor:isDark ? uiColours.GRAYED_BUTTON : uiColours.LIGHT_GRAY,
+                            disabled={!editable}
+                            onPress={() => {
+                                setShowSheet(true)
+                            }}
+                            style={[Styles.countryView, {
+                                borderColor: isDark ? uiColours.GRAYED_BUTTON : uiColours.LIGHT_GRAY,
+
                             }]}
                         >
                             <View style={Styles.flagView}>
@@ -154,7 +165,9 @@ const MobileNumberInput = ({
                                 }
                             </View>
 
-                            <Text style={appStyles.smallTextBlack}>{selectedCountry?.code}</Text>
+                            <Text style={[appStyles.smallTextBlack, {
+                                color: editable ? uiColours.BLACK_TEXT : uiColours.GRAY_TEXT
+                            }]}>{selectedCountry?.code}</Text>
                             {!isDark ? <Images.downArrow /> : <Images.downArrowWhite />}
                         </TouchableOpacity>
                     )

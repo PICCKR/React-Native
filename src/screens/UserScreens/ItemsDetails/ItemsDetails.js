@@ -20,7 +20,7 @@ import useBackButton from '../../../customHooks/useBackButton'
 const ItemsDetails = ({ route }) => {
   const data = route?.params?.data
   const { appStyles, isDark, selectedVehicle, setSelectedVehicle, setuserData, userData } = useContext(AppContext)
-  console.log("selectedVehicle?.type", selectedVehicle);
+  // console.log("selectedVehicle?.type", selectedVehicle);
   const navigation = useNavigation()
 
   const [showSheet, setShowSheet] = useState({
@@ -162,7 +162,7 @@ const ItemsDetails = ({ route }) => {
 
                   <View style={commonStyles.flexRowAlnCtr}>
                     <Text style={appStyles.smallTextGray}>
-                      ${item.price}
+                      ₦{item.price}
                     </Text>
                     <TouchableOpacity
                       style={[styles.radioButton, {
@@ -239,7 +239,8 @@ const ItemsDetails = ({ route }) => {
               setItemsDetails({
                 ...itemsDetails,
                 packagetype: {
-                  type: e
+                  ...itemsDetails?.packagetype,
+                  type: e,
                 }
               })
             }}
@@ -273,12 +274,12 @@ const ItemsDetails = ({ route }) => {
               borderColor: isDark ? uiColours.GRAYED_BUTTON : uiColours.LIGHT_GRAY,
             }]}
             onPress={() => {
-              if (userData?.type === "user") {
+              if (userData?.token) {
                 setShowSheet({
                   ...showSheet,
                   paymentMethod: true
                 })
-              }else{
+              } else {
                 setuserData(null)
               }
 
@@ -293,7 +294,7 @@ const ItemsDetails = ({ route }) => {
                     PicckRPay
                   </Text>
                   <Text style={appStyles.smallTextPrimaryBold}>
-                    $530
+                    ₦{userData?.wallet?.balance}
                   </Text>
                 </View>
               </View> :
@@ -314,7 +315,7 @@ const ItemsDetails = ({ route }) => {
               Applicable Fees
             </Text>
             <Text style={appStyles.smallTextGray}>
-              ${itemsDetails.vehicleType.price}
+              ₦{itemsDetails.vehicleType.price}
             </Text>
           </View>
 
@@ -323,7 +324,7 @@ const ItemsDetails = ({ route }) => {
               Product Taxes (estimated)
             </Text>
             <Text style={appStyles.smallTextGray}>
-              ${itemsDetails.vehicleType?.tax}
+              ₦{itemsDetails.vehicleType?.tax}
             </Text>
           </View>
 
@@ -332,7 +333,7 @@ const ItemsDetails = ({ route }) => {
               Total Payment
             </Text>
             <Text style={appStyles.smallTextGray}>
-              ${itemsDetails.vehicleType?.totalPrice}
+              ₦{itemsDetails.vehicleType?.totalPrice}
             </Text>
           </View>
         </View>
@@ -348,7 +349,7 @@ const ItemsDetails = ({ route }) => {
             Total Payment
           </Text>
           <Text style={appStyles.mediumTextPrimaryBold}>
-            ${itemsDetails.vehicleType.totalPrice}
+            ₦{itemsDetails.vehicleType.totalPrice}
           </Text>
         </View>
 

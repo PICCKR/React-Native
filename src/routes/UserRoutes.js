@@ -22,7 +22,6 @@ const UserRoutes = () => {
                 <Stack.Screen name={MainRouteStrings.PICKER_REVIEW_WHEN_CANCELLED} component={screens.PICKER_REVIEW_WHEN_CANCELLED} />
                 <Stack.Screen name={MainRouteStrings.SET_DESTINATION} component={screens.SET_DESTINATION} />
                 <Stack.Screen name={MainRouteStrings.ADDRESS_SCREEN} component={screens.ADDRESS_SCREEN} />
-                <Stack.Screen name={MainRouteStrings.PAYMENT_METHOD} component={screens.PAYMENT_METHOD} />
                 <Stack.Screen name={MainRouteStrings.RATING_AND_REVIEW} component={screens.RATING_AND_REVIEW} />
                 <Stack.Screen name={MainRouteStrings.USER_KYC_SCREEN} component={screens.USER_KYC_SCREEN} />
                 <Stack.Screen name={MainRouteStrings.EDIT_PROFILE} component={screens.EDIT_PROFILE} />
@@ -33,6 +32,7 @@ const UserRoutes = () => {
                 <Stack.Screen name={MainRouteStrings.TRACKING_SCREEN} component={screens.TRACKING_SCREEN} />
                 <Stack.Screen name={MainRouteStrings.USER_CHAT_SCREEN} component={screens.USER_CHAT_SCREEN} />
                 <Stack.Screen name={MainRouteStrings.MANAGE_ACCOUNT} component={screens.MANAGE_ACCOUNT} />
+                <Stack.Screen name={AuthRouteStrings.OTP_SCREEN} component={screens.OTP_SCREEN} />
             </Stack.Navigator>
         </NavigationContainer>
     )

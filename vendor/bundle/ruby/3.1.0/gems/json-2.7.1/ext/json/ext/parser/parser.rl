@@ -137,10 +137,10 @@ static ID i_json_creatable_p, i_json_create, i_create_id, i_create_additions,
             fhold; fbreak;
         } else {
             if (NIL_P(json->object_class)) {
-                OBJ_FREEZE(last_name);
-                rb_hash_aset(*result, last_name, v);
+                OBJ_FREEZE(lastName);
+                rb_hash_aset(*result, lastName, v);
             } else {
-                rb_funcall(*result, i_aset, 2, last_name, v);
+                rb_funcall(*result, i_aset, 2, lastName, v);
             }
             fexec np;
         }
@@ -149,7 +149,7 @@ static ID i_json_creatable_p, i_json_create, i_create_id, i_create_additions,
     action parse_name {
         char *np;
         json->parsing_name = 1;
-        np = JSON_parse_string(json, fpc, pe, &last_name);
+        np = JSON_parse_string(json, fpc, pe, &lastName);
         json->parsing_name = 0;
         if (np == NULL) { fhold; fbreak; } else fexec np;
     }
@@ -169,7 +169,7 @@ static ID i_json_creatable_p, i_json_create, i_create_id, i_create_additions,
 static char *JSON_parse_object(JSON_Parser *json, char *p, char *pe, VALUE *result, int current_nesting)
 {
     int cs = EVIL;
-    VALUE last_name = Qnil;
+    VALUE lastName = Qnil;
     VALUE object_class = json->object_class;
 
     if (json->max_nesting && current_nesting > json->max_nesting) {

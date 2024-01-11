@@ -18,7 +18,7 @@ const WaitingSheet = ({
 
     useEffect(() => {
         setTimeout(() => {
-            console.log("ssss", );
+            // console.log("ssss", );
             handlePickerAccepted()
         }, 2000);
     }, [])

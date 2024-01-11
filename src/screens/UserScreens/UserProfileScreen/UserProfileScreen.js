@@ -15,16 +15,17 @@ import ConfirmationSheet from '../../../components/ConfirmationSheet/Confirmatio
 import { uiColours } from '../../../utils/Styles/uiColors'
 import { clearLocalData, setLocalData } from '../../../helper/AsyncStorage'
 import { storageKeys } from '../../../helper/AsyncStorage/storageKeys'
-import AddTopUp from '../UserHomeScreen/AddTopUp'
+import SelectAmountPopup from '../../../components/SelectAmountPopup/SelectAmountPopup'
+import { showErrorToast } from '../../../helper/showErrorToast'
 
 const UserProfileScreen = () => {
 
   const { appStyles, userData, isDark, setIsDark, setuserData } = useContext(AppContext)
-  // console.log("userData", userData);
+  // console.log("userData===>", userData?.wallateBalance);
   const navigation = useNavigation()
 
   const [profileInformation, setProfileInformation] = useState({
-    profileImg: userData?.profileImg,
+    profileImg: userData?.picture,
     email: userData?.email,
     firstName: userData?.firstName,
     lastName: userData?.lastName,
@@ -33,16 +34,12 @@ const UserProfileScreen = () => {
     address: userData?.address,
     paymentMethod: userData?.paymentMethod,
     walletBalance: 0
-
   })
 
   const [showSheet, setShowSheet] = useState({
     addPayment: false,
   })
 
-  const [walletBalance, seWalletBalance] = useState({
-    price: "0"
-  })
 
   const editActionData = [
     {
@@ -93,6 +90,7 @@ const UserProfileScreen = () => {
         navigation.navigate(MainRouteStrings.ADDRESS_SCREEN)
         break;
       case "Wallet":
+
         setShowSheet({
           ...showSheet,
           addPayment: true
@@ -102,10 +100,15 @@ const UserProfileScreen = () => {
         navigation.navigate(MainRouteStrings.RATING_AND_REVIEW)
         break;
       case "KYC":
-        // navigation.navigate(MainRouteStrings.USER_KYC_SCREEN)
+        navigation.navigate(MainRouteStrings.USER_KYC_SCREEN)
         break;
       case "BecomePicckR":
-        navigation.navigate(MainRouteStrings.BECOME_PICKER)
+        if (userData?.kyc?.idNumber) {
+          navigation.navigate(MainRouteStrings.BECOME_PICKER)
+        } else {
+          showErrorToast("Please verify your KYC first", isDark)
+        }
+
         break;
       case "ManageAccount":
         navigation.navigate(MainRouteStrings.MANAGE_ACCOUNT)
@@ -116,12 +119,33 @@ const UserProfileScreen = () => {
     }
   }
 
+  const handleAddAmount = async (data, amount) => {
+    console.log("data====>", data, amount);
+    if (data?.status === "successful") {
+      setuserData({
+        ...userData, wallet: {
+          ...userData?.wallet,
+          balance: parseInt(userData?.wallet?.balance) + parseInt(amount)
+        }
+      })
+    } else {
+
+    }
+    setShowSheet({
+      ...showSheet,
+      addPayment: false,
+    })
+  }
+
+
   return (
     <WrapperContainer
       centerTitle="Profile"
       rightTitle="Edit"
       handlerRightViewPress={() => {
-        navigation.navigate(MainRouteStrings.EDIT_PROFILE)
+        navigation.navigate(MainRouteStrings.EDIT_PROFILE, {
+          from: MainRouteStrings.USER_PROFILE_SCREEN
+        })
       }}
       showFooterButton={false}
       containerPadding={{ paddingHorizontal: 0 }}
@@ -131,7 +155,7 @@ const UserProfileScreen = () => {
       >
 
         <PrifileView
-          profileImg={profileInformation?.profileImg}
+          profileImg={userData?.picture}
           userData={userData}
         />
 
@@ -144,9 +168,8 @@ const UserProfileScreen = () => {
             editActionData.map((item) => {
               return (
                 <TouchableOpacity
-
                   key={item.id}
-                  disabled={(item.type === "PicckRMode" || item.type === "Appearance" || item.type === "KYC") ? true : false}
+                  disabled={(item.type === "PicckRMode" || item.type === "Appearance" || (item.type === "KYC" && userData?.kyc?.idNumber)) ? true : false}
                   style={styles.deatilsEditbutton}
                   onPress={() => handleOptionClick(item)}
                 >
@@ -155,15 +178,8 @@ const UserProfileScreen = () => {
                   </Text>
                   <View style={{ flexDirection: "row", alignItems: 'center', gap: scale(10) }}>
                     {item?.type === "Wallet" && <Text>
-                      {
-                        walletBalance?.price
-                      }
+                      ₦{userData?.wallet?.balance}
                     </Text>
-                    }
-                    {item?.type === "address" &&
-                      <Text style={appStyles.smallTextGray}>
-                        {profileInformation?.address?.length} Address
-                      </Text>
                     }
                     {(item.type === "PicckRMode" || item.type === "Appearance") &&
                       <View style={commonStyles.flexRowAlnCtr}>
@@ -182,18 +198,22 @@ const UserProfileScreen = () => {
                             if (item.type === "Appearance") {
                               setIsDark(status)
                             } else {
-                              setuserData({ ...userData, type: "picker" })
+                              setuserData({ ...userData, routeType: "picker" })
                             }
 
                           }}
                         />
                       </View>}
                     {item.type === "KYC" &&
-                      <Text style={appStyles.smallTextGray}>{userData?.bvn}</Text>
+                      <Text style={appStyles.smallTextGray}>{userData?.kyc?.idNumber}</Text>
                     }
 
 
                     {(item.type !== "PicckRMode" && item.type !== "Appearance" && item?.type !== "KYC") &&
+                      <Images.rightArrow height={moderateScale(24)} />
+                    }
+
+                    {(item?.type == "KYC" && !userData?.kyc?.idNumber) &&
                       <Images.rightArrow height={moderateScale(24)} />
                     }
                   </View>
@@ -205,19 +225,13 @@ const UserProfileScreen = () => {
         </View>
       </ScrollView>
 
-      <AddTopUp
+      <SelectAmountPopup
+        sheetTitle={"Top Up"}
         isVisible={showSheet.addPayment}
         appStyles={appStyles}
         setShowSheet={setShowSheet}
-        topUpAmount={walletBalance}
-        setTopUpAmount={seWalletBalance}
-        handleAddTopUp={() => {
-          setShowSheet({
-            ...showSheet,
-            addPayment: false,
-          })
-        }}
-
+        wallateBalance={userData?.wallateBalance}
+        handleOnRedirect={(data, amount) => { handleAddAmount(data, amount) }}
       />
     </WrapperContainer >
   )

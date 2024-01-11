@@ -50,7 +50,7 @@ const ForgotPassword = () => {
     Actions.showLoader(true)
     try {
       await resetPassword({ username: `${formData?.selectedCountry?.code?.replace(/[()]/g, '')}${formData?.phoneNumber.replace(/\s+/g, '')}` }).then((res, result) => {
-        console.log("res===>", res, result);
+        // console.log("res===>", res, result);
         navigation.navigate(AuthRouteStrings.OTP_SCREEN, {
           from: AuthRouteStrings.FORGOT_PASSWORD,
           phoneNumber: `${formData?.selectedCountry?.code?.replace(/[()]/g, '')} ${formData?.phoneNumber.replace(/\s+/g, '')}`

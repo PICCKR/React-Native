@@ -1,14 +1,12 @@
-import { View, Text, Image, ImageBackground } from 'react-native'
+import { View, Text, ImageBackground } from 'react-native'
 import React, { useContext } from 'react'
 import { Styles } from './Styles'
-import Animated, { FadeInUp } from 'react-native-reanimated'
 import { AppContext } from '../../../context/AppContext'
 import { verticalScale } from 'react-native-size-matters'
 import { screenSize } from '../../../utils/Styles/CommonStyles'
 
 const SplashScreen = () => {
     const { appStyles } = useContext(AppContext)
-
 
     return (
         <View style={Styles.SplashScreenCantainer}>

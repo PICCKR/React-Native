@@ -19,7 +19,7 @@ const BottomTabRoutes = () => {
 
     // Function to handle tab press based on user data
     const handleTabPress = (screenName) => {
-        if (userData?.type === "user") {
+        if (userData?.token) {
             // User data exists, navigate to the specified screen
             navigation.navigate(screenName);
         } else {

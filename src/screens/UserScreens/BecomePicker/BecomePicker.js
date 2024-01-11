@@ -14,10 +14,15 @@ import PrifileView from '../../../components/PrifileView/ProfileView'
 import DocumentUpload from '../../../components/DocumentUpload/DocumentUpload'
 import { uiColours } from '../../../utils/Styles/uiColors'
 import InputText from '../../../components/InputText/InputText'
+import axios from 'axios'
+import { endPoints } from '../../../configs/apiUrls'
+import { showGeneralError } from '../../../helper/showGeneralError'
+import Actions from '../../../redux/Actions'
 
-const BecomePicker = () => {
+const BecomePicker = ({ route }) => {
+    const from = route?.params?.from
     const { appStyles, userData, isDark } = useContext(AppContext)
-    console.log("userData", userData);
+    // console.log("userData", userData);
     const navigation = useNavigation()
 
     const [buttonActive, setButtonActive] = useState(false)
@@ -34,6 +39,40 @@ const BecomePicker = () => {
 
 
     const handleSubmit = () => {
+        // var formData = new FormData();
+        // formData.append("bankVerificationInfo", userData?.bvn);
+        // formData.append("userId", userData?._id);
+        // formData.append("bankingInfo", userData?.bvn);
+        // formData.append("registrationProofDocs", {
+        //     uri: pickerData?.registration?.uri,
+        //     type: pickerData?.registration?.type,
+        //     name: pickerData?.registration?.fileName,
+        //     fileName: pickerData?.registration?.fileName
+        // });
+        // formData.append("insuranceProofDocs", {
+        //     uri: pickerData?.insurance?.uri,
+        //     type: pickerData?.insurance?.type,
+        //     name: pickerData?.insurance?.fileName,
+        //     fileName: pickerData?.insurance?.fileName
+        // });
+
+        // const config = {
+        //     headers: {
+        //         'Content-Type': 'application/json',
+        //         'Authorization': `Bearer ${userData.token}`,
+        //     },
+        // };
+        // Actions.showLoader(true)
+
+        // axios.post(endPoints.BECOME_PICKER, formData, config).then((res) => {
+        //     console.log("res in become picker", res);
+        //     Actions.showLoader(false)
+        // }).catch((error) => {
+        //     Actions.showLoader(false)
+        //     console.log("error in become picker", error);
+        //     showGeneralError()
+        // })
+
         setStatus("waiting")
         setButtonActive(false)
         setTimeout(() => {
@@ -43,7 +82,9 @@ const BecomePicker = () => {
     }
 
     const handleNext = () => {
-        navigation.navigate(MainRouteStrings.TRAINING_SCREEN)
+        navigation.navigate(MainRouteStrings.TRAINING_SCREEN, {
+            from: from
+        })
     }
 
     useEffect(() => {
@@ -62,7 +103,7 @@ const BecomePicker = () => {
         <WrapperContainer
             centerTitle="Vehicle Verification"
             showBackButton
-            handleBack={()=>{
+            handleBack={() => {
                 navigation.goBack()
             }}
             buttonTitle={status === "unapproved" ? "Submit" : status === "waiting" ? "Next" : "Next"}
@@ -72,23 +113,10 @@ const BecomePicker = () => {
         >
             {status === "unapproved" && <ScrollView style={{}}>
 
-                <View style={[styles.profileSection,{
-                    borderColor: isDark ? uiColours.GRAYED_BUTTON : uiColours.LIGHT_GRAY
-                }]}>
-                    <PrifileView
-                        profileViewStyles={{}}
-                        profileImg={userData?.profileImg}
-                    />
-                    <Text style={appStyles.mediumTextPrimaryBold}>
-                        {userData?.firstName} {userData?.lastName}
-                    </Text>
-                    <Text style={appStyles.smallTextGray}>
-                        {userData?.email}
-                    </Text>
-                    <Text style={appStyles.smallTextGray}>
-                        {userData?.selectedCountry?.code} {userData?.phoneNumber}
-                    </Text>
-                </View>
+                <PrifileView
+                    userData={userData}
+                    profileImg={userData?.picture}
+                />
 
                 <View style={{ paddingHorizontal: scale(16) }}>
                     <DocumentUpload

@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useContext, useRef, useState } from 'react';
 import {
   Image,
   Text,
@@ -8,12 +8,15 @@ import {
   Animated,
   Easing,
   LayoutAnimation,
+  FlatList,
 } from 'react-native';
 import { moderateScale } from 'react-native-size-matters';
 import { toggleAnimation } from '../../animations/toggleAnimation';
 import { Images } from '../../assets/images';
+import { AppContext } from '../../context/AppContext';
 import { getConvertedData } from '../../helper/getConvertedData';
 import { commonStyles } from '../../utils/Styles/CommonStyles';
+import { uiColours } from '../../utils/Styles/uiColors';
 import styles from './style';
 // import { dropDownTranstion } from '../../utils/Styles/transtition';
 
@@ -28,14 +31,13 @@ const DropDown = ({
   DropdownBoxStyle,
   arrowStyle,
   changeKey,
-  handleSelectItem = () => { }
+  handleSelectItem = () => { },
+  loadMoreItems = () => { }
 }) => {
-
+  const { appStyles } = useContext(AppContext)
   const [showData, setShowData] = useState(false)
   const [selectedItems, setSelectedItem] = useState(null)
-
   const modifiedData = getConvertedData(data, changeKey);
-
   const animationController = useRef(new Animated.Value(0)).current
 
   const toggleDropdown = () => {
@@ -61,11 +63,11 @@ const DropDown = ({
       style={[styles.DropdownStyle, DropdownStyle]}
     // ref={animationController}
     >
-      {title && <Text style={[commonStyles.titleText, styles.titleStyles, titleStyles]}>
+      {title && <Text style={[appStyles?.smallTextBlack, titleStyles]}>
         {title}
       </Text>}
       <TouchableOpacity
-        style={[styles.DropdownBoxStyle, DropdownBoxStyle]}
+        style={[styles.DropdownBoxStyle, appStyles?.borderColor, DropdownBoxStyle]}
         activeOpacity={0.8}
         onPress={() => {
           toggleDropdown()
@@ -88,39 +90,50 @@ const DropDown = ({
         </Animated.View >
       </TouchableOpacity>
 
-      {showData && (
+      {showData &&
         <ScrollView
-          style={[commonStyles.dropShadow, styles.itemView, itemView]}>
+          onScroll={({ nativeEvent }) => {
+            const offsetY = nativeEvent.contentOffset.y;
+            const contentHeight = nativeEvent.contentSize.height;
+            const height = nativeEvent.layoutMeasurement.height;
+            if (offsetY + height >= contentHeight - 20) {
+              loadMoreItems(); // Load more data when reaching near the bottom
+            }
+          }}
+          scrollEventThrottle={400}
+          style={[styles.itemView, appStyles?.borderColor, itemView]}
+        >
           {
-            modifiedData?.map((val, i) => {
+            modifiedData?.map((item, i) => {
               return (
                 <TouchableOpacity
-                  key={i}
+                  key={i.toString()}
                   style={[
                     styles.dropDownItem,
                     {
-                      backgroundColor: selectedItems?.id === val?.id ? "red" : "#fff"
+                      backgroundColor: selectedItems?.id === item?.id ? uiColours.PRIMARY : null
                     }
                   ]}
                   onPress={() => {
-                    setSelectedItem(val)
+                    setSelectedItem(item)
                     toggleDropdown()
-                    handleSelectItem(val)
+                    handleSelectItem(item)
                   }}
                 >
                   <Text
-                    style={[commonStyles.bodyText, styles.itemText, {
-                      color: selectedItems?.id === val?.id ? "#fff" : "#000"
+                    style={[appStyles?.smallTextBlack, {
+                      color: selectedItems?.id === item?.id ? "#fff" : "#000"
                     }]}
                   >
-                    {val?.itemName}
+                    {item?.itemName}
                   </Text>
                 </TouchableOpacity>
               )
             })
           }
-        </ScrollView>)}
-    </View>
+        </ScrollView>}
+
+    </View >
   )
 }
 export default DropDown;

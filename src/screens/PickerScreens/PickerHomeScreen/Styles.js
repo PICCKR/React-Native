@@ -90,6 +90,12 @@ const styles = StyleSheet.create({
         paddingVertical:verticalScale(8),
         backgroundColor:uiColours.LIGHT_GRAY,
         borderRadius:moderateScale(8)
+    },
+    completeImage:{
+        width:screenSize.width - scale(32),
+        alignSelf:"center",
+        height:verticalScale(100),
+        marginTop:verticalScale(16)
     }
 })
 export default styles

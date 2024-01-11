@@ -1,32 +1,29 @@
-import { View, Text, SafeAreaView, TouchableOpacity, ScrollView, BackHandler, Alert } from 'react-native'
+import { Text, TouchableOpacity, ScrollView } from 'react-native'
 import React, { useContext, useEffect, useState } from 'react'
 import styles from './Styles'
 import { AppContext } from '../../../context/AppContext'
-import Header from '../../../components/Header/Header'
 import WrapperContainer from '../../../components/WrapperContainer/WrapperContainer'
-import { commonStyles } from '../../../utils/Styles/CommonStyles'
 import InputText from '../../../components/InputText/InputText'
 import MobileNumberInput from '../../../components/MobileNumberInput/MobileNumberInput'
-import CustomButton from '../../../components/Button/CustomButton'
 import { moderateScale, scale, verticalScale } from 'react-native-size-matters'
-import { RegEx } from '../../../utils/Constents/regulerexpressions'
-import { uiColours } from '../../../utils/Styles/uiColors'
-import { useFocusEffect, useNavigation } from '@react-navigation/native'
+import { useNavigation } from '@react-navigation/native'
 import { AuthRouteStrings } from '../../../utils/Constents/RouteStrings'
 import { getLocalData, setLocalData } from '../../../helper/AsyncStorage'
 import { storageKeys } from '../../../helper/AsyncStorage/storageKeys'
-import Form from '../../../components/Form/Form'
-import { loginFormData } from '../../../json/loginFormData'
 import useBackButton from '../../../customHooks/useBackButton'
 import { Images } from '../../../assets/images'
-import { showToast } from '../../../components/tostConfig/tostConfig'
-import { tostMessagetypes } from '../../../utils/Constents/constentStrings'
-import { resendSignUpCode, signIn, signOut } from '@aws-amplify/auth'
+import { deleteUser, fetchAuthSession, resendSignUpCode, signIn, signOut } from '@aws-amplify/auth'
 import Actions from '../../../redux/Actions'
+import { endPoints } from '../../../configs/apiUrls'
+import axios from 'axios'
+import { showGeneralError } from '../../../helper/showGeneralError'
+import { showErrorToast } from '../../../helper/showErrorToast'
+import { decodeToken } from '../../../helper/decodeToken'
 
 const LoginScreen = () => {
   const { appStyles, isDark, setuserData, userData, setIsLoggedIn } = useContext(AppContext)
   const navigation = useNavigation()
+
   const [loginData, setLoginData] = useState({
     selectedCountry: {},
     phoneNumber: "",
@@ -39,50 +36,113 @@ const LoginScreen = () => {
   const [showPassword, setShowPassword] = useState(false)
 
   const handleLogin = async () => {
+
     Actions.showLoader(true)
     try {
+      // method to signIn pass phone number and password
       const user = await signIn(
         {
           username: `${loginData?.selectedCountry?.code?.replace(/[()]/g, '')}${loginData?.phoneNumber.replace(/\s+/g, '')}`,
           password: loginData?.password
         }
       );
+      // deleteUser()
+      // return
+      // if user is created but not verify the otp 
       if (user?.nextStep?.signInStep === "CONFIRM_SIGN_UP") {
-        resendSignUpCode({
-          username: `${loginData?.selectedCountry?.code?.replace(/[()]/g, '')}${loginData?.phoneNumber.replace(/\s+/g, '')}`,
-        }).then((res) => {
-          navigation.navigate(AuthRouteStrings.OTP_SCREEN, {
-            from: AuthRouteStrings.LOGIN_SCREEN,
-            data: loginData,
-            user: user
-          })
-          // console.log("resned otp res", res);
-        }).catch((error) => {
-          console.log("error in sending otp", error);
-        })
-      } else if(user?.nextStep?.signInStep === "DONE") {
+        handleConfirmSignup()
+      }
+      // if user verified
+      else if (user?.nextStep?.signInStep === "DONE") {
         const UserData = await getLocalData(storageKeys.userData)
-        const data = {
-          ...UserData,
-          id: 1,
-          type: "user"
-        }
-        setLocalData(storageKeys.userData, data)
-        setuserData(data)
-        setIsLoggedIn(true)
+        // after signin get access token from aur backend
+        handleGetAccesToken(UserData)
+      } else {
+        Actions.showLoader(false)
       }
-      console.log("user====>", user?.nextStep?.signInStep);
     } catch (error) {
-      console.log("Error During SignIn", error);
-      const toastMsgConfg = {
-        isDark: isDark,
-        msg: error?.message
+      if (error?.toString() === "UserAlreadyAuthenticatedException: There is already a signed in user.") {
+        await signOut().then((res) => {
+          handleLogin()
+        })
       }
-      showToast(toastMsgConfg, tostMessagetypes.ERROR, isDark)
+      else {
+        Actions.showLoader(false)
+        showErrorToast(error?.message, isDark)
+      }
+    }
+  }
 
-    } finally {
+  const handleConfirmSignup = async () => {
+    // call resend otp method 
+    resendSignUpCode({
+      username: `${loginData?.selectedCountry?.code?.replace(/[()]/g, '')}${loginData?.phoneNumber.replace(/\s+/g, '')}`,
+    }).then((res) => {
       Actions.showLoader(false)
-      // setLoading(false);
+      // after sending the otp take user to otp screen with data
+      navigation.navigate(AuthRouteStrings.OTP_SCREEN, {
+        from: AuthRouteStrings.LOGIN_SCREEN,
+        data: loginData,
+        user: user
+      })
+    }).catch((error) => {
+      showGeneralError(isDark)
+      Actions.showLoader(false)
+      console.log("error in sending otp", error);
+    })
+  }
+
+
+  const handleGetAccesToken = async (UserData) => {
+    try {
+      // get idToken from cognito
+      const { idToken } = (await fetchAuthSession()).tokens ?? {};
+      console.log("idToken.toString()", idToken.toString());
+      // pass this to in headers to get jwt token
+      const config = {
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${idToken.toString()}`,
+        },
+      };
+
+      axios.post(endPoints.GET_TOKEN, {}, config)
+        .then(async (result) => {
+          const { data, status } = result;
+          if (status == 200) {
+            const userInformaton = await decodeToken(data?.token)
+            // after getting token store it in local storage and also set token in context
+            setLocalData(storageKeys.userData, { ...userInformaton, token: data?.token})
+            setuserData({ ...userInformaton, token: data?.token})
+            setIsLoggedIn(true)
+          } else {
+            await signOut().then((res) => {
+              // handleLogin()
+            });
+            showGeneralError(isDark)
+          }
+          // console.log("token res====>", status);
+          Actions.showLoader(false)
+        })
+        .catch(async (error) => {
+          if (error?.response?.status === 401) {
+            showErrorToast("You dont have account please create account", isDark)
+            await deleteUser().then((res) => {
+              navigation.navigate(AuthRouteStrings.USER_SIGN_UP)
+            })
+          } else {
+            await signOut().then((res) => {
+
+            });
+            showGeneralError(isDark)
+          }
+          Actions.showLoader(false)
+          console.log("error while getting access token", error);
+        });
+    } catch (err) {
+      showGeneralError(isDark)
+      Actions.showLoader(false)
+      console.log(err);
     }
   }
 
@@ -98,8 +158,6 @@ const LoginScreen = () => {
   }, [loginData]);
 
   useBackButton(() => {
-
-
     navigation.navigate(AuthRouteStrings.WELCOME_SCREEN)
     return true
   });
@@ -122,7 +180,7 @@ const LoginScreen = () => {
       <ScrollView style={styles.formView}>
 
         <MobileNumberInput
-          handleChange={(number, selectedCountry) => {
+          handleChange={(number) => {
             setLoginData({
               ...loginData,
               phoneNumber: number
@@ -143,6 +201,7 @@ const LoginScreen = () => {
             }
           }}
           ErrorMsg={errorMsg}
+          editable
           ShowError={ShowError?.phoneNumber}
           onPressIn={() => {
             setShowError({

@@ -1,15 +1,13 @@
-import { View, Text, SafeAreaView } from 'react-native'
+import { View, Text } from 'react-native'
 import React, { useContext } from 'react'
 import { AppContext } from '../../../context/AppContext'
 import styles from './Styles'
-import Header from '../../../components/Header/Header'
 import { Images } from '../../../assets/images'
 import { moderateScale } from 'react-native-size-matters'
 import CustomButton from '../../../components/Button/CustomButton'
 import { buttonTypes } from '../../../utils/Constents/constentStrings'
 import { useNavigation } from '@react-navigation/native'
 import { AuthRouteStrings } from '../../../utils/Constents/RouteStrings'
-import { commonStyles } from '../../../utils/Styles/CommonStyles'
 import WrapperContainer from '../../../components/WrapperContainer/WrapperContainer'
 
 const WelcomeScreen = () => {
@@ -25,7 +23,6 @@ const WelcomeScreen = () => {
                 })
             }}
         >
-
             <View style={styles.contentView}>
                 <Text style={[appStyles.extraLargeTexGray, styles.titelText]}>
                     Welcome to <Text style={[appStyles.extraLargeTexPrimary, styles.titelText]}>PicckR!</Text>

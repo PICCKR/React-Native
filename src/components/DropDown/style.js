@@ -11,13 +11,13 @@ const styles = StyleSheet.create({
     marginBottom: verticalScale(5)
   },
   DropdownBoxStyle: {
-    backgroundColor: uiColours.lightGray,
     padding: moderateScale(12),
     borderRadius: moderateScale(6),
     justifyContent: 'space-between',
     flexDirection: 'row',
     alignItems: 'center',
     marginBottom: verticalScale(6),
+    borderWidth:moderateScale(1)
   },
 
   itemsStyle: {
@@ -31,13 +31,13 @@ const styles = StyleSheet.create({
   },
   itemView:
   {
-    marginTop: verticalScale(1),
     maxHeight: verticalScale(140),
-    backgroundColor: '#fff',
-    borderRadius: moderateScale(10)
+    borderRadius: moderateScale(6),
+    borderWidth:moderateScale(1),
   },
   dropDownItem: {
-    padding: moderateScale(6)
+    padding: moderateScale(6),
+    borderRadius:moderateScale(6),
   },
   itemText: {
 

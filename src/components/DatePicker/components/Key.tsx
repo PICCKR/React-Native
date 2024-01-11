@@ -31,9 +31,10 @@ type KeyProps = {
     mode: Mode;
     output: Output;
     setOutput: Dispatch<SetStateAction<Output>>;
+    onSelectDate:()=>{};
 }
 
-const Key: FC<KeyProps> = ({ colorOptions, Day, mode, output, setOutput }: KeyProps) => {
+const Key: FC<KeyProps> = ({ colorOptions, Day, mode, output, setOutput, onSelectDate }: KeyProps) => {
     const { dateTextColor, backgroundColor, selectedDateTextColor, selectedDateBackgroundColor } = colorOptions
     const singleMode = mode === 'single'
     const rangeMode = mode === 'range'
@@ -62,6 +63,7 @@ const Key: FC<KeyProps> = ({ colorOptions, Day, mode, output, setOutput }: KeyPr
                 setOutput(newOutPut)
             }
         }
+        onSelectDate()
     }
 
     const getColor = () => {

@@ -10,9 +10,10 @@ import Video from 'react-native-video';
 import { Images } from '../../../assets/images'
 import useBackButton from '../../../customHooks/useBackButton'
 
-const TrainingScreen = () => {
+const TrainingScreen = ({ route }) => {
+    const from = route?.params?.from
 
-    const { appStyles, setuserData,userData } = useContext(AppContext)
+    const { appStyles, setuserData, userData } = useContext(AppContext)
     const navigation = useNavigation()
 
     const videoData = [
@@ -20,31 +21,40 @@ const TrainingScreen = () => {
             id: '1',
             title: "How to navigate the app",
             video: 'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4',
-            paused:true
+            paused: true
         },
         {
             id: '2',
             title: "Handle delivery requests",
             video: 'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4',
-            paused:true
+            paused: true
         },
         {
             id: '3',
             title: "Provide a quality experience to senders",
             video: 'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4',
-            paused:true
+            paused: true
         }
     ]
 
     const [data, setData] = useState(videoData)
 
-    useBackButton(()=>{
-        setuserData({ ...userData, type: "picker" })
+    useBackButton(() => {
+        if (from === MainRouteStrings.PICKER_HOME_SCREEN) {
+            navigation.navigate(MainRouteStrings.PICKER_PROFILE)
+        } else {
+            setuserData({ ...userData, routeType: "picker" })
+        }
         return true
     })
 
     const handleNext = () => {
-        setuserData({ ...userData, type: "picker" })
+        if (from === MainRouteStrings.PICKER_HOME_SCREEN) {
+            navigation.navigate(MainRouteStrings.PICKER_PROFILE)
+        } else {
+            setuserData({ ...userData, routeType: "picker" })
+        }
+        // 
     }
 
     const handleClickVideo = (val) => {
@@ -53,7 +63,7 @@ const TrainingScreen = () => {
                 if (val.id === item.id) {
                     return { ...item, paused: !item.paused }; // Toggle isSelected
                 }
-                else{
+                else {
                     return { ...item, paused: false };
                 }
             });
@@ -64,12 +74,12 @@ const TrainingScreen = () => {
     return (
         <WrapperContainer
             centerTitle="PicckR Account"
-            showBackButton
+            // showBackButton
             buttonTitle={"Next"}
             handleButtonPress={handleNext}
-            handleBack={()=>{
-                setuserData({ ...userData, type: "picker" })
-            }}
+            // handleBack={()=>{
+            //     setuserData({ ...userData, type: "picker" })
+            // }}
             buttonActive={true}
             containerPadding={{}}
         >
@@ -85,13 +95,13 @@ const TrainingScreen = () => {
                     {
                         data.map((item) => {
                             return (
-                                <View key={item.id} style={{  }}>
+                                <View key={item.id} style={{}}>
                                     <Text style={[appStyles.smallTextBlack]}>
                                         {item.title}
                                     </Text>
                                     <TouchableOpacity
                                         style={{ width: '100%', height: verticalScale(180) }}
-                                        onPress={()=>handleClickVideo(item)}
+                                        onPress={() => handleClickVideo(item)}
                                     >
                                         <Video
                                             source={{ uri: item.video }}

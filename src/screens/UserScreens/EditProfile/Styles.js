@@ -4,7 +4,8 @@ import { uiColours } from "../../../utils/Styles/uiColors"
 
 const styles = StyleSheet.create({
     formView:{
-        paddingTop:verticalScale(16)
+        paddingTop:verticalScale(16),
+        alignItems:"center"
     }
 })
 export default styles

@@ -91,7 +91,7 @@ const PickerFindDestination = () => {
 
 
     const handleSelectLocation = async (data, details = null) => {
-        console.log("DDD", data);
+        // console.log("DDD", data);
         if (data && data.place_id) {
             try {
                 const placeId = data.place_id;
@@ -341,7 +341,7 @@ const PickerFindDestination = () => {
                         ...showSheet,
                         setLocation: false
                     })
-                    console.log("sorce", source);
+                    // console.log("sorce", source);
                     if (action === "destination" && (destination?.lat === "" || destination?.lng === "")) {
                         setDestination({
                             ...destination,

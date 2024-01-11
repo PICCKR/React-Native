@@ -66,6 +66,7 @@ import downArrowWhite from "../images/downArrowWhite.svg"
 import mesageOutline from "../images/mesageOutline.svg"
 import completeProfile from "../images/completeProfile.png"
 
+
 export const Images = {
     completeProfile:completeProfile,
     mesageOutline:mesageOutline,
