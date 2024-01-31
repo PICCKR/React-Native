@@ -1,5 +1,5 @@
 import { View, Text, TextInput, TouchableOpacity, SafeAreaView, ScrollView, Image, Alert } from 'react-native'
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useContext, useEffect, useLayoutEffect, useState } from 'react'
 import { AppContext } from '../../../context/AppContext'
 import { moderateScale, scale, verticalScale } from 'react-native-size-matters'
 import { Images } from '../../../assets/images'
@@ -16,6 +16,10 @@ import SetLocationModal from '../../../components/SetLocationModal/SetLocationMo
 import { GOOGLE_MAP_API_KEY } from '../../../configs/google_map_api_key'
 import { uiStrings } from '../../../utils/Constents/uiStrings'
 import SheetFooter from '../../../components/SheetFooter/SheetFooter'
+import Actions from '../../../redux/Actions'
+import { apiPost } from '../../../services/apiServices'
+import { endPoints } from '../../../configs/apiUrls'
+import { showSuccessToast } from '../../../helper/showSuccessToast'
 
 
 const FindDestination = () => {
@@ -32,7 +36,7 @@ const FindDestination = () => {
     } = useContext(AppContext)
     const navigation = useNavigation()
 
-    console.log("userData", userData);
+    // console.log("userData", userData);
 
     const [address, setAddress] = useState(
         userData?.addresses ? userData?.addresses : []
@@ -77,19 +81,31 @@ const FindDestination = () => {
         }
     ]
 
-    const handleAddAddress = async () => {
-        const newAddress = {
-            id: userData.address.length + 1,
-            addressType: addressData?.addressType,
-            buildingName: addressData?.buildingName,
-            homeNumber: addressData?.homeNumber,
-            location: addressData?.location,
-        }
+    const handleAddAddress = (newAddress) => {
+        // console.log("newAddress", newAddress);
+        setShowSheet({
+            ...showSheet,
+            addAddress: false
+        })
+        const newAddressData = { ...newAddress, userId: userData?._id }
+        Actions.showLoader(true)
+        apiPost(endPoints.ADD_ADDRESS, newAddressData).then((res) => {
+            // console.log("resss=>", res?.data, res?.status);
+            if (res?.status === 201) {
+                setuserData({ ...userData, addresses: [...userData?.addresses, res?.data?.data] })
+                // setAddress((prev) => [...prev, res?.data?.data])
+                showSuccessToast("You have successfully added an address", isDark)
+            } else {
 
-        setuserData({ ...userData, address: [...userData?.address, newAddress] })
-        setLocalData(storageKeys.userData, { ...userData, address: [...userData?.address, newAddress] })
-        setShowSheet(false)
+            }
+            Actions.showLoader(false)
+        }).catch((error) => {
+            Actions.showLoader(false)
+            showGeneralError()
+            console.log("error in add address", error);
+        })
     }
+
 
 
     const handleSelectLocation = async (data, details = null) => {
@@ -147,6 +163,7 @@ const FindDestination = () => {
     }
 
     useEffect(() => {
+
         if (destination.location !== "" && source?.location !== "") {
             setButtonActive(true)
         } else {
@@ -154,6 +171,14 @@ const FindDestination = () => {
         }
     }, [destination, source])
 
+    useLayoutEffect(() => {
+        setSource({
+            ...source,
+            lat: currentLocation?.lat,
+            lng: currentLocation?.lng,
+            location: currentLocation?.location
+        })
+    }, [])
 
     return (
         <SafeAreaView
@@ -190,7 +215,7 @@ const FindDestination = () => {
                                     }}
                                 >
                                     <Text style={appStyles.smallTextBlack}>
-                                        {currentLocation.location === source.location ? "Current location" : source.location}
+                                        {source.location ? source.location : "Select your source location"}
                                     </Text>
                                 </TouchableOpacity>
                             </View>
@@ -228,7 +253,7 @@ const FindDestination = () => {
                         showsHorizontalScrollIndicator={false}
                         style={{ marginTop: verticalScale(10) }}>
                         <View style={commonStyles.flexRowAlnCtr}>
-                            <TouchableOpacity
+                            {userData?.addresses?.length < 3 && <TouchableOpacity
                                 style={[styles.AddButton, {
                                     marginLeft: scale(16),
                                     borderColor: isDark ? uiColours.GRAYED_BUTTON : uiColours.LIGHT_GRAY
@@ -250,7 +275,7 @@ const FindDestination = () => {
                                     </Text>
                                 </View>
 
-                            </TouchableOpacity>
+                            </TouchableOpacity>}
                             <View style={{ paddingRight: scale(16), flexDirection: "row", gap: scale(10) }}>
                                 {
                                     userData?.addresses?.map((item) => {
@@ -275,7 +300,7 @@ const FindDestination = () => {
                                                         <Image source={Images.work} style={commonStyles.icon} />
                                                 }
 
-                                                <View>
+                                                <View style={{ width: '90%' }}>
                                                     <Text style={appStyles.smallTextBlackBold}>
                                                         {item?.type}
                                                     </Text>
@@ -368,7 +393,11 @@ const FindDestination = () => {
                 buttonActive={buttonActive}
                 buttonTitle="Next"
                 handleButtonPress={() => {
+                    Actions.orderDeatils({
+
+                    })
                     navigation.navigate(MainRouteStrings.SET_DESTINATION)
+
                 }}
             />
         </SafeAreaView>

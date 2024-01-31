@@ -52,16 +52,16 @@ export const toastConfig = {
         gap: scale(10),
         borderRadius: moderateScale(6),
       }}>
-       {props?.messageType === tostMessagetypes.SUCCESS ?  <Images.success /> : <Images.error />}
+        {props?.messageType === tostMessagetypes.SUCCESS ? <Images.success /> : <Images.error />}
         <View>
           <Text style={{
-            color:props?.messageType === tostMessagetypes.SUCCESS ? uiColours?.GREEN : uiColours.RED,
+            color: props?.messageType === tostMessagetypes.SUCCESS ? uiColours?.GREEN : uiColours.RED,
             fontSize: scale(12),
             fontFamily: "Poppins-Bold"
           }}>{
               (props?.messageType === tostMessagetypes.SUCCESS && props?.message?.title) ?
-              props?.message?.title : (props?.messageType === tostMessagetypes.SUCCESS && !props?.message?.title) ?
-                  "Succss" : "Error"}</Text>
+                props?.message?.title : (props?.messageType === tostMessagetypes.SUCCESS && !props?.message?.title) ?
+                  "Success" : "Error"}</Text>
           <Text style={{
             color: props?.messageType === tostMessagetypes.SUCCESS ? uiColours?.GREEN : uiColours.RED,
             fontSize: scale(12),
@@ -87,7 +87,7 @@ export const showToast = (
       messageType: messageType
     },
     position: "bottom",
-    visibilityTime: 2000,
+    visibilityTime: 3000,
 
   });
 }
@@ -100,7 +100,7 @@ export const showGeneralErrorToast = () => {
       messageType: tostMessagetypes.ERROR
     },
     position: "bottom",
-    visibilityTime: 2000,
+    visibilityTime: 3000,
 
   });
 }

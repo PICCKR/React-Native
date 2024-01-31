@@ -14,7 +14,7 @@ const Tab = createBottomTabNavigator();
 
 const BottomTabRoutes = () => {
 
-    const { appStyles, userData, setuserData, isDark } = useContext(AppContext)
+    const { appStyles, userData, setuserData, isDark, setIsLoggedIn } = useContext(AppContext)
     const navigation = useNavigation()
 
     // Function to handle tab press based on user data
@@ -24,7 +24,7 @@ const BottomTabRoutes = () => {
             navigation.navigate(screenName);
         } else {
             // User data does not exist
-            setuserData(null)
+            setIsLoggedIn(false)
         }
     };
 
@@ -36,8 +36,8 @@ const BottomTabRoutes = () => {
         >
             <Tab.Screen name={MainRouteStrings.USER_HOME_SCREEN} component={screens.USER_HOME_SCREEN}
                 options={{
-                    
-                    tabBarStyle: {backgroundColor : isDark ? uiColours.DARK_BG : uiColours.WHITE_TEXT},
+
+                    tabBarStyle: { backgroundColor: isDark ? uiColours.DARK_BG : uiColours.WHITE_TEXT },
                     tabBarIcon: ({ focused }) => (
                         focused ? <Images.ExploreFill width={moderateScale(20)} height={moderateScale(20)} /> : <Images.search width={moderateScale(20)} height={moderateScale(20)} />
                     ),
@@ -55,7 +55,7 @@ const BottomTabRoutes = () => {
 
             <Tab.Screen name={MainRouteStrings.FAVORITES_SCREEN} component={screens.FAVORITES_SCREEN}
                 options={{
-                    tabBarStyle: {backgroundColor : isDark ? uiColours.DARK_BG : uiColours.WHITE_TEXT},
+                    tabBarStyle: { backgroundColor: isDark ? uiColours.DARK_BG : uiColours.WHITE_TEXT },
                     tabBarIcon: ({ focused }) => (
                         focused ? <Images.heartFill width={moderateScale(20)} height={moderateScale(20)} /> : <Images.heartOutline width={moderateScale(20)} height={moderateScale(20)} />
                     ),
@@ -76,7 +76,7 @@ const BottomTabRoutes = () => {
 
             <Tab.Screen name={MainRouteStrings.ACTIVITY_SCREEN} component={screens.ACTIVITY_SCREEN}
                 options={{
-                    tabBarStyle: {backgroundColor : isDark ? uiColours.DARK_BG : uiColours.WHITE_TEXT},
+                    tabBarStyle: { backgroundColor: isDark ? uiColours.DARK_BG : uiColours.WHITE_TEXT },
                     tabBarIcon: ({ focused }) => (
                         focused ? <Images.activityFill width={moderateScale(20)} height={moderateScale(20)} /> : <Images.activityOutline width={moderateScale(20)} height={moderateScale(20)} />
                     ),
@@ -96,7 +96,7 @@ const BottomTabRoutes = () => {
 
             <Tab.Screen name={MainRouteStrings.USER_PROFILE_SCREEN} component={screens.USER_PROFILE_SCREEN}
                 options={{
-                    tabBarStyle: {backgroundColor : isDark ? uiColours.DARK_BG : uiColours.WHITE_TEXT},
+                    tabBarStyle: { backgroundColor: isDark ? uiColours.DARK_BG : uiColours.WHITE_TEXT },
                     tabBarIcon: ({ focused }) => (
                         focused ? <Images.profile width={moderateScale(20)} height={moderateScale(20)} /> : <Images.profileOutline width={moderateScale(20)} height={moderateScale(20)} />
                     ),

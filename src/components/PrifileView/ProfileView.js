@@ -6,14 +6,14 @@ import Styles from './Styles'
 import { AppContext } from '../../context/AppContext'
 
 const ProfileView = ({
-    size = 100,
+    size = 80,
     showVehicle = false,
     profileViewStyles,
     userData,
     showEdit,
     handleEdit = () => { },
     hasBottomLine = true,
-    profileImg
+    profileImg,
 }) => {
     const { appStyles } = useContext(AppContext)
     // console.log("lastName", userData?.picture);
@@ -46,7 +46,7 @@ const ProfileView = ({
                     <Text style={appStyles.mediumTextPrimaryBold}>
                         {userData?.firstName} {userData?.lastName}
                     </Text>
-                    {userData?.email && <Text style={appStyles.smallTextGray}>
+                    {(userData?.email) && <Text style={appStyles.smallTextGray}>
                         {userData?.email}
                     </Text>}
                     <Text style={appStyles.smallTextGray}>

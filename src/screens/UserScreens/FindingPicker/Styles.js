@@ -1,13 +1,15 @@
 import { StyleSheet } from "react-native"
 import { moderateScale, scale, verticalScale } from "react-native-size-matters"
+import { screenSize } from "../../../utils/Styles/CommonStyles"
 import { uiColours } from "../../../utils/Styles/uiColors"
 
 const styles = StyleSheet.create({
     picckerCard: {
         padding: moderateScale(16),
-        borderWidth:moderateScale(1),
-        borderRadius:moderateScale(8),
-        marginBottom:verticalScale(16)
+        borderWidth: moderateScale(1),
+        borderRadius: moderateScale(8),
+        marginBottom: verticalScale(16),
+        width: screenSize.width - scale(16)
         // gap:verticalScale(16)
     },
     pickerProfile: {
@@ -22,10 +24,10 @@ const styles = StyleSheet.create({
         alignItems: "center",
         justifyContent: 'center',
     },
-    buttonsView:{
-        flexDirection:"row",
-        alignItems:"center",
-        justifyContent:'space-between'
+    buttonsView: {
+        flexDirection: "row",
+        alignItems: "center",
+        justifyContent: 'space-between'
     }
 })
 export default styles

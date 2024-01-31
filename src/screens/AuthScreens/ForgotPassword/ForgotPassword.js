@@ -47,15 +47,18 @@ const ForgotPassword = () => {
   });
 
   const handleNext = async () => {
+
     Actions.showLoader(true)
     try {
       await resetPassword({ username: `${formData?.selectedCountry?.code?.replace(/[()]/g, '')}${formData?.phoneNumber.replace(/\s+/g, '')}` }).then((res, result) => {
         // console.log("res===>", res, result);
-        navigation.navigate(AuthRouteStrings.OTP_SCREEN, {
+        // return
+        navigation.navigate(AuthRouteStrings.CHANGE_PASSWORD, {
           from: AuthRouteStrings.FORGOT_PASSWORD,
           phoneNumber: `${formData?.selectedCountry?.code?.replace(/[()]/g, '')} ${formData?.phoneNumber.replace(/\s+/g, '')}`
         })
       });
+      Actions.showLoader(false)
 
     } catch (err) {
       console.log(err);
@@ -66,7 +69,7 @@ const ForgotPassword = () => {
       // setLoading(false)
     }
     return
-   
+
   }
 
   return (
@@ -81,7 +84,7 @@ const ForgotPassword = () => {
       handleButtonPress={handleNext}
     >
       <Text style={[appStyles.mediumTextPrimaryBold]}>
-        Enter your email address to find your account
+        Enter your phome number to find your account
       </Text>
 
       <MobileNumberInput

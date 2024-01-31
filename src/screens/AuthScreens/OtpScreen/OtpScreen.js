@@ -1,4 +1,4 @@
-import { View, Text, TouchableOpacity } from 'react-native'
+import { View, Text, TouchableOpacity, Alert } from 'react-native'
 import React, { useContext, useEffect, useState } from 'react'
 import WrapperContainer from '../../../components/WrapperContainer/WrapperContainer'
 import { AppContext } from '../../../context/AppContext'
@@ -8,7 +8,7 @@ import styles from './Styles'
 import OTPInputView from '@twotalltotems/react-native-otp-input'
 import { AuthRouteStrings, MainRouteStrings } from '../../../utils/Constents/RouteStrings'
 import { uiColours } from '../../../utils/Styles/uiColors'
-import { confirmSignUp, getCurrentUser, resendSignUpCode, signIn } from '@aws-amplify/auth'
+import { confirmSignUp, getCurrentUser, resendSignUpCode, resetPassword, signIn } from '@aws-amplify/auth'
 import Actions from '../../../redux/Actions'
 import { showToast } from '../../../components/tostConfig/tostConfig'
 import { tostMessagetypes } from '../../../utils/Constents/constentStrings'
@@ -17,6 +17,9 @@ import { storageKeys } from '../../../helper/AsyncStorage/storageKeys'
 import { showGeneralError } from '../../../helper/showGeneralError'
 import { showSuccessToast } from '../../../helper/showSuccessToast'
 import { showErrorToast } from '../../../helper/showErrorToast'
+import axios from 'axios'
+import { endPoints } from '../../../configs/apiUrls'
+import { decodeToken } from '../../../helper/decodeToken'
 
 const OtpScreen = ({ route }) => {
   const data = route?.params?.data
@@ -25,10 +28,23 @@ const OtpScreen = ({ route }) => {
 
   const { appStyles, isDark, setuserData, setIsLoggedIn, userData } = useContext(AppContext)
 
+
   const navigation = useNavigation()
   const [otp, setOTP] = useState('')
   const [buttonActive, setButtonActive] = useState(false)
   const [showError, setShowError] = useState(false)
+  const [cogId, setCogId] = useState("")
+  const [verifid, setVerified] = useState(false)
+
+  const [addressData, setAddresData] = useState({
+    title: "",
+    coordinates: [],
+    type: "",
+    street_address: "",
+    favorite: false,
+    house_number: "",
+    building_name: ""
+  })
 
 
   const handleConfirm = async () => {
@@ -37,9 +53,19 @@ const OtpScreen = ({ route }) => {
         data: data
       })
     } else if (from === AuthRouteStrings.USER_SIGN_UP) {
-      handleSingUpverifyOtp()
+      if (verifid === true) {
+        signupUser(cogId, data)
+      } else {
+        handleSingUpverifyOtp()
+      }
+
     } else if (from === AuthRouteStrings.LOGIN_SCREEN) {
-      handleConfirmSignUpVerifyOtp()
+      if (verifid === true) {
+        const userdata = await getLocalData(storageKeys.userData)
+        signupUser(cogId, userdata)
+      } else {
+        handleConfirmSignUpVerifyOtp()
+      }
     } else if (from === AuthRouteStrings.FORGOT_PASSWORD) {
       navigation.navigate(AuthRouteStrings.CHANGE_PASSWORD, {
         data: {
@@ -53,6 +79,7 @@ const OtpScreen = ({ route }) => {
   }
 
   const handleSingUpverifyOtp = async () => {
+    setShowError(false)
     Actions.showLoader(true)
     try {
       const user = await confirmSignUp({
@@ -66,13 +93,12 @@ const OtpScreen = ({ route }) => {
             password: data?.password
           }
         );
-
         getCurrentUser().then(async (res) => {
           Actions.showLoader(false)
-          setLocalData(storageKeys.userData, { ...data, userId: res?.userId })
-          navigation.navigate(AuthRouteStrings.PROFILE_INFORMATION, {
-            data: { ...data, userId: res?.userId }
-          })
+          signupUser(res?.userId, data)
+          setCogId(res?.userId)
+          setVerified(true)
+          // setLocalData(storageKeys.userData, { ...data, userId: res?.userId })
         }).catch((error) => {
           Actions.showLoader(false)
           console.log("error while getting user", error);
@@ -81,56 +107,150 @@ const OtpScreen = ({ route }) => {
     } catch (err) {
       // showGeneralError(isDark)
       console.log("error", err?.message);
-      setShowError(true)
+      if (err?.message === "User cannot be confirmed. Current status is CONFIRMED") {
+        signupUser(cogId, data)
+      } else if (err?.message === "Attempt limit exceeded, please try after some time.") {
+        showErrorToast(err?.message, isDark)
+      } else {
+        setShowError(true)
+      }
+
     } finally {
       Actions.showLoader(false)
     }
   }
 
-  const handleConfirmSignUpVerifyOtp = () => {
+  const handleConfirmSignUpVerifyOtp = async () => {
+    setShowError(false)
     Actions.showLoader(true)
-    confirmSignUp({
-      username: `${data?.selectedCountry?.code?.replace(/[()]/g, '')}${data?.phoneNumber.replace(/\s+/g, '')}`,
-      confirmationCode: otp,
-    }).then(async (user) => {
-      Actions.showLoader(false)
+    try {
+      const user = await confirmSignUp({
+        username: `${data?.selectedCountry?.code?.replace(/[()]/g, '')}${data?.phoneNumber.replace(/\s+/g, '')}`,
+        confirmationCode: otp,
+      });
       if (user?.nextStep?.signUpStep === "DONE" || user?.nextStep?.signUpStep === "COMPLETE_AUTO_SIGN_IN") {
-        const UserData = await getLocalData(storageKeys.userData)
-        const data = {
-          ...UserData,
-          id: 1,
-          type: "user"
-        }
-        setLocalData(storageKeys.userData, data)
-        setuserData(data)
-        setIsLoggedIn(true)
+        const user = await signIn(
+          {
+            username: `${data?.selectedCountry?.code?.replace(/[()]/g, '')}${data?.phoneNumber.replace(/\s+/g, '')}`,
+            password: data?.password
+          }
+        );
+        getCurrentUser().then(async (res) => {
+          Actions.showLoader(false)
+          const userdata = await getLocalData(storageKeys.userData)
+          signupUser(res?.userId, userdata)
+          setCogId(res?.userId)
+          setVerified(true)
+          // setLocalData(storageKeys.userData, { ...data, userId: res?.userId })
+        }).catch((error) => {
+          Actions.showLoader(false)
+          console.log("error while getting user", error);
+        });
       }
-    }).catch(() => {
-      showGeneralError(isDark)
-      Actions.showLoader(false)
+    } catch (err) {
+      // showGeneralError(isDark)
       console.log("error", err?.message);
-    })
+      if (err?.message === "User cannot be confirmed. Current status is CONFIRMED") {
+        const userdata = await getLocalData(storageKeys.userData)
+        signupUser(cogId, userdata)
+      } else if (err?.message === "Attempt limit exceeded, please try after some time.") {
+        showErrorToast(err?.message, isDark)
+      } else {
+        setShowError(true)
+      }
+
+    } finally {
+      Actions.showLoader(false)
+    }
   }
 
   const handleEditProfileVerifyOtp = () => {
-    setuserData({ ...userData, ...data })
-    setLocalData(storageKeys.userData, { ...userData, ...data })
-    showSuccessToast("You have updated your profile", isDark)
+    // setuserData({ ...userData, ...data })
+    // setLocalData(storageKeys.userData, { ...userData, ...data })
+    // showSuccessToast("You have updated your profile", isDark)
     navigation.navigate(MainRouteStrings.USER_PROFILE_SCREEN)
   }
 
-  const handleResendOtp = () => {
-    Actions.showLoader(true)
-    resendSignUpCode({
-      username: `${data?.selectedCountry?.code?.replace(/[()]/g, '')}${data?.phoneNumber.replace(/\s+/g, '')}`,
-    }).then((res) => {
-      showSuccessToast("Otp send successfully", isDark)
-    }).catch((error) => {
-      showErrorToast(error?.message, isDark)
-    }).finally(() => {
-      Actions.showLoader(false)
-    })
+  const handleResendOtp = async () => {
+    if (from === AuthRouteStrings.USER_SIGN_UP) {
+      Actions.showLoader(true)
+      resendSignUpCode({
+        username: `${data?.selectedCountry?.code?.replace(/[()]/g, '')}${data?.phoneNumber.replace(/\s+/g, '')}`,
+      }).then((res) => {
+        showSuccessToast("Otp send successfully", isDark)
+      }).catch((error) => {
+        showErrorToast(error?.message, isDark)
+      }).finally(() => {
+        Actions.showLoader(false)
+      })
+    } else if (from === AuthRouteStrings.FORGOT_PASSWORD) {
+      Actions.showLoader(true)
+      try {
+        await resetPassword({ username: `${data?.selectedCountry?.code?.replace(/[()]/g, '')}${data?.phoneNumber.replace(/\s+/g, '')}` }).then((res, result) => {
+          showSuccessToast("Otp send successfully", isDark)
+        }).catch((err) => {
+          showErrorToast(err?.message, isDark)
+        })
+
+      } catch (err) {
+        console.log(err);
+        showErrorToast(err?.message, isDark)
+      }
+      finally {
+        Actions.showLoader(false)
+        // setLoading(false)
+      }
+    }
   }
+
+  const signupUser = async (userId, data) => {
+    // console.log("userId", userId, data);
+    Actions.showLoader(true)
+    try {
+      var formData = new FormData();
+      formData.append("firstName", data?.firstName);
+      formData.append("lastName", data?.lastName);
+      formData.append("picture", "");
+      formData.append("email", data?.email);
+      formData.append("addresses", JSON.stringify([]));
+      formData.append("cognitoId", userId);
+      formData.append("notificationToken", "");
+      formData.append("phoneNumber", `${data?.selectedCountry?.code?.replace(/[()]/g, '')} ${data?.phoneNumber.replace(/\s+/g, '')}`);
+
+      console.log(formData);
+      // return
+      const config = {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      };
+      const res = await axios.post(endPoints.CREATE_USER, formData, config)
+      // const res = await apiPost(endPoints.CREATE_USER, createUserData)
+      if (res?.status == 200) {
+        const userInformaton = await decodeToken(res?.data?.data?.token)
+        // after getting token store it in local storage and also set token in context
+        await setLocalData(storageKeys.userData, { ...userInformaton, token: res?.data?.data?.token })
+        await setuserData({ ...userInformaton, token: res?.data?.data?.token })
+        navigation.navigate(AuthRouteStrings.PROFILE_INFORMATION)
+      } else {
+        showErrorToast(res?.data?.message, isDark)
+      }
+      Actions.showLoader(false)
+      // console.log("res===>", res?.status, res?.data);
+    } catch (error) {
+      setCogId(userId)
+      if (error?.response?.status < 500) {
+        showErrorToast(error?.response?.data?.message, isDark)
+      } else {
+        showGeneralError(isDark)
+      }
+      Actions.showLoader(false)
+      console.log("error when creating user", error?.response?.status, error?.response?.data);
+    } finally {
+      Actions.showLoader(false)
+    }
+  }
+
 
   useEffect(() => {
     if (
@@ -160,7 +280,7 @@ const OtpScreen = ({ route }) => {
         The OTP code will be sent to the phone number
       </Text>
       <Text style={appStyles.smallTextGray}>
-        {from === AuthRouteStrings.FORGOT_PASSWORD ? phoneNumber : `${data?.selectedCountry?.code} ${data?.phoneNumber}`}
+        {(from === AuthRouteStrings.FORGOT_PASSWORD || from === MainRouteStrings.EDIT_PROFILE) ? phoneNumber : `${data?.selectedCountry?.code} ${data?.phoneNumber}`}
       </Text>
 
       <OTPInputView

@@ -33,6 +33,18 @@ const UserRoutes = () => {
                 <Stack.Screen name={MainRouteStrings.USER_CHAT_SCREEN} component={screens.USER_CHAT_SCREEN} />
                 <Stack.Screen name={MainRouteStrings.MANAGE_ACCOUNT} component={screens.MANAGE_ACCOUNT} />
                 <Stack.Screen name={AuthRouteStrings.OTP_SCREEN} component={screens.OTP_SCREEN} />
+                <Stack.Screen name={MainRouteStrings.USER_WALLET_SCREEN} component={screens.USER_WALLET_SCREEN} />
+
+
+                {/* auth routes */}
+                <Stack.Screen name={AuthRouteStrings.WELCOME_SCREEN} component={screens.WELCOME_SCREEN} />
+                <Stack.Screen name={AuthRouteStrings.LOGIN_SCREEN} component={screens.LOGIN_SCREEN} />
+                <Stack.Screen name={AuthRouteStrings.FORGOT_PASSWORD} component={screens.FORGOT_PASSWORD} />
+                <Stack.Screen name={AuthRouteStrings.USER_SIGN_UP} component={screens.USER_SIGN_UP} />
+                <Stack.Screen name={AuthRouteStrings.CHANGE_PASSWORD} component={screens.CHANGE_PASSWORD} />
+                <Stack.Screen name={AuthRouteStrings.PROFILE_INFORMATION} component={screens.PROFILE_INFORMATION} />
+                <Stack.Screen name={AuthRouteStrings.KYC_SCREEN} component={screens.KYC_SCREEN} />
+                <Stack.Screen name={AuthRouteStrings.APPROVAL_SCREEN} component={screens.APPROVAL_SCREEN} />
             </Stack.Navigator>
         </NavigationContainer>
     )

@@ -9,9 +9,9 @@ export const openCamara = async () => {
             storageOptions: {
                 path: 'images',
                 mediaType: 'photo',
-                quality: 0.2,
             },
             includeBase64: true,
+            quality: 0,
         };
 
      const imgRes = await launchCamera(options, response => {
@@ -20,7 +20,7 @@ export const openCamara = async () => {
                 } else if (response.error) {
                 } else if (response.customButton) {
                 } else {
-                    // console.log("response", response);
+                    
                 return response
                 }
             } catch (err) {
@@ -43,13 +43,14 @@ export const chooseMedia = async () => {
         storageOptions: {
             path: 'images',
             mediaType: 'photo',
-            quality: 0.2,
         },
         includeBase64: true,
+        quality: 0,
     };
     const imgRes = await launchImageLibrary(options, response => {
         try {
             if (response) {
+                // console.log("response", response);
             return response
             }
         } catch (err) {

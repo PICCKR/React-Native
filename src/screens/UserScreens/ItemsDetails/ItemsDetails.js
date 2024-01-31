@@ -1,77 +1,72 @@
-import { View, Text, TouchableOpacity, ScrollView, Alert } from 'react-native'
-import React, { useContext, useEffect, useState } from 'react'
+import { View, Text, TouchableOpacity, ScrollView, Image, Alert } from 'react-native'
+import React, { useCallback, useContext, useEffect, useState } from 'react'
 import WrapperContainer from '../../../components/WrapperContainer/WrapperContainer'
-import { AppContext } from '../../../context/AppContext'
+import { AppContext, useSocket } from '../../../context/AppContext'
 import { uiColours } from '../../../utils/Styles/uiColors'
 import { moderateScale, scale, verticalScale } from 'react-native-size-matters'
 import styles from './Styles'
 import { Images } from '../../../assets/images'
-import { validateData } from '../../../helper/valiadateData'
 import { commonStyles } from '../../../utils/Styles/CommonStyles'
 import CustomButton from '../../../components/Button/CustomButton'
 import ShowPaymentSheet from './ShowPaymentSheet'
-import RadioButton from '../../../components/RadioButton/RadioButton'
 import InputText from '../../../components/InputText/InputText'
-import OtpPopUp from './OtpPopUp'
 import { useNavigation } from '@react-navigation/native'
-import { MainRouteStrings } from '../../../utils/Constents/RouteStrings'
+import { AuthRouteStrings, MainRouteStrings } from '../../../utils/Constents/RouteStrings'
 import useBackButton from '../../../customHooks/useBackButton'
+import { showErrorToast } from '../../../helper/showErrorToast'
+import SelectAmountPopup from '../../../components/SelectAmountPopup/SelectAmountPopup'
+import Actions from '../../../redux/Actions'
+import { apiGet, apiPost } from '../../../services/apiServices'
+import { endPoints } from '../../../configs/apiUrls'
+import { showGeneralError } from '../../../helper/showGeneralError'
+import { getPreciseDistance } from 'geolib'
+import AddAmountSheet from './AddAmountSheet'
+import { useSelector } from 'react-redux'
+import { formatAmount } from '../../../helper/formatter'
 
 const ItemsDetails = ({ route }) => {
-  const data = route?.params?.data
-  const { appStyles, isDark, selectedVehicle, setSelectedVehicle, setuserData, userData } = useContext(AppContext)
-  // console.log("selectedVehicle?.type", selectedVehicle);
+
+  const {
+    appStyles,
+    isDark,
+    selectedVehicle,
+    setSelectedVehicle,
+    setuserData,
+    userData,
+    vehicleType,
+    setOrderDeatils,
+    source,
+    destination,
+    setFromGuestUserScreen
+  } = useContext(AppContext)
+
+  const { Socket } = useSocket()
+
+  const orderDeatils = useSelector((state) => state?.orderDeatilsReducer?.orderDeatils)
+  // console.log("orderd deatils", orderDeatils);
+
+
   const navigation = useNavigation()
 
   const [showSheet, setShowSheet] = useState({
     paymentMethod: false,
-    Otp: false
+    Otp: false,
+    payment: false
   })
+  const [showCustomPackage, setShowCustomPackage] = useState(false)
   const [buttonActive, setButtonActive] = useState(false)
-  const [itemsDetails, setItemsDetails] = useState({
-    packagetype: {},
-    estimatedItemWeight: "0",
-    paymentMethod: null,
-    vehicleType: {
-      id: selectedVehicle?.id,
-      type: selectedVehicle?.type,
-      price: selectedVehicle?.price,
-      tax: 0,
-      totalPrice: ((selectedVehicle?.price * (0.02)) + selectedVehicle?.price)
-    },
 
+  const [itemsDetails, setItemsDetails] = useState({
+    packagetype: orderDeatils?.itemsDetails?.packagetype ? orderDeatils?.itemsDetails?.packagetype : null,
+    estimatedItemWeight: orderDeatils?.itemsDetails?.estimatedItemWeight ? orderDeatils?.itemsDetails?.estimatedItemWeight : 1,
+    paymentMethod: null,
+    vehicleType: selectedVehicle,
+    price: 0,
+    amountToBeAdded: 0
   })
 
-  const VehicleTypeData = [
-    {
-      id: "1",
-      icon: Images.scooter,
-      type: "Bike",
-      des: "For small items, max 10kg",
-      price: 50
-    },
-    {
-      id: "2",
-      icon: Images.car,
-      type: "Car",
-      des: "For big items, max. 100kg",
-      price: 100
-    },
-    {
-      id: "3",
-      icon: Images.van,
-      type: "Van",
-      des: "For bigger items, max. 150kg",
-      price: 125
-    },
-    {
-      id: "4",
-      icon: Images.truck,
-      type: "Truck",
-      des: "For biggest items, max. 300kg",
-      price: 150
-    }
-  ]
+  const [packageData, setPackageData] = useState([])
+
 
   const pckgeTypeData = [
     {
@@ -94,11 +89,185 @@ const ItemsDetails = ({ route }) => {
     },
   ]
 
+
+  // Function to handle addition of amount to wallet balance
+  const handleAddAmount = async (data, amount) => {
+    setShowSheet({
+      ...showSheet,
+      payment: false
+    })
+    // console.log("data====>", data, amount);
+    if (data?.status === "successful") {
+      updateTransaction(data, amount)
+    } else {
+      // Handle unsuccessful transaction
+    }
+  }
+
+  const updateTransaction = async (data, amount) => {
+    Actions.showLoader(true)
+    const transactionData = {
+      "userId": userData?._id,
+      "amount": amount,
+      "flutterwaveDetails": { ...data, amount: amount }
+    }
+    apiPost(endPoints.UPDATE_TOP_UP, transactionData).then((res) => {
+      // console.log("res in transaction update", res?.status, res?.data);
+      if (res?.status === 201) {
+        setuserData({
+          ...userData, wallet: {
+            ...userData?.wallet,
+            balance: parseInt(userData?.wallet?.balance) + parseInt(amount)
+          }
+        })
+
+      } else {
+        showGeneralError()
+      }
+      Actions.showLoader(false)
+    }).catch((err) => {
+      showGeneralError()
+      Actions.showLoader(false)
+      console.log("error in update transaction", err);
+    })
+  }
+
+
+  const calculatePrice = async () => {
+    if (itemsDetails?.estimatedItemWeight) {
+      var pdis = await getPreciseDistance(
+        { latitude: source?.lat, longitude: source?.lng },
+        { latitude: destination?.lat, longitude: destination?.lng }
+      );
+      const d = ((pdis * 15) / 100) + pdis
+      const dis = Math.round((d / 1000) * 10) / 10
+      // console.log("dis====>", dis);
+
+      // TotalCost= distance*distance cost + weight* weight cost
+      const totalCost = (dis * itemsDetails?.vehicleType?.distance?.cost) + (parseInt(itemsDetails?.estimatedItemWeight) * itemsDetails?.vehicleType?.weight?.cost)
+      const reminingAmount = (totalCost + (totalCost * 0.075)).toFixed(2) - userData?.wallet?.balance
+      setItemsDetails({
+        ...itemsDetails,
+        price: totalCost,
+      })
+      Actions.orderDeatils({
+        ...orderDeatils, amountToBeAdded: reminingAmount
+      })
+    } else {
+      setItemsDetails({
+        ...itemsDetails,
+        price: 0,
+      })
+      Actions.orderDeatils({
+        ...orderDeatils, amountToBeAdded: 0
+      })
+    }
+
+
+    // console.log("total cost", totalCost, itemsDetails);
+  }
+
+
+  const handleOrder = async () => {
+    const reminingAmount = (itemsDetails?.price + (itemsDetails?.price * 0.075)).toFixed(2) - userData?.wallet?.balance
+    await Actions.orderDeatils({
+      ...orderDeatils, amountToBeAdded: reminingAmount
+    })
+    console.log("itemsDetails?.amountToBeAdded", reminingAmount);
+    // return
+    if (userData?.wallet?.balance < reminingAmount) {
+      setShowSheet({
+        ...showSheet,
+        payment: true
+      })
+
+    } else {
+      Actions.orderDeatils({
+        ...orderDeatils,
+        itemsDetails: itemsDetails
+      })
+      setOrderDeatils({
+        ...orderDeatils,
+        itemsDetails: itemsDetails
+      })
+      setSelectedVehicle(itemsDetails.vehicleType)
+
+      const orderData = {
+        "userId": userData?._id,
+        "packageId": itemsDetails?.packagetype?._id,
+        "vehicleType": selectedVehicle?._id,
+        "pickupLocation": {
+          "type": "Point",
+          "coordinates": [source?.lat, source?.lng]
+        },
+        "dropOffLocation": {
+          "type": "Point",
+          "coordinates": [destination?.lat, destination?.lng]
+        },
+        "dropOffAddress": destination?.location,
+        "pickupAddress": source?.location,
+        "parcelDescription": {
+          "weight": `${itemsDetails?.estimatedItemWeight} lbs`,
+          "unit": "kg",
+          "description": itemsDetails?.packagetype?.name
+        },
+        "sender": {
+          "phone": orderDeatils?.pickUpData?.phoneNumber,
+          "name": orderDeatils?.pickUpData?.name
+        },
+        "recipient": {
+          "phone": orderDeatils?.recipientData?.phoneNumber,
+          "name": orderDeatils?.recipientData?.name
+        },
+        "specialInstructions": "Handle with care",
+        "pickupDate": orderDeatils?.pickUpData?.pickupDate,
+        "requestAmount": (itemsDetails?.price + (itemsDetails?.price * 0.075)).toFixed(2)
+      }
+
+      // console.log("data====>", orderData);
+      Socket.emit("create-request", orderData)
+      Actions.showLoader(true)
+    }
+  }
+
+  const getPackageData = async () => {
+    Actions.showLoader(true)
+    apiGet(endPoints.PAKAGES).then(async (res) => {
+      Actions.showLoader(false)
+      if (res?.status === 200) {
+        const packages = res?.data?.data
+
+        await packages.push({
+          _id: "3",
+          name: "More",
+        })
+
+        // console.log("packages===>",);
+        setPackageData(packages)
+        console.log("res ===>", res?.data?.data);
+      }
+
+    }).catch((error) => {
+      Actions.showLoader(false)
+      console.log("error ===>", error);
+    })
+  }
+
   useEffect(() => {
-    if (itemsDetails.paymentMethod &&
-      itemsDetails.vehicleType?.id &&
+    getPackageData()
+  }, [])
+
+
+  useEffect(() => {
+    calculatePrice()
+  }, [itemsDetails?.estimatedItemWeight, itemsDetails?.vehicleType])
+
+
+  useEffect(() => {
+    if ((itemsDetails.paymentMethod || !userData?.token) &&
+      itemsDetails.vehicleType &&
       itemsDetails.estimatedItemWeight !== "" &&
-      itemsDetails.packagetype?.type
+      itemsDetails.packagetype
     ) {
       setButtonActive(true)
     } else {
@@ -106,8 +275,34 @@ const ItemsDetails = ({ route }) => {
     }
   }, [itemsDetails])
 
+
+  const handleOrderCreated = useCallback(async (data) => {
+    console.log("orderAccepted", data);
+    Actions.showLoader(false)
+    navigation.navigate(MainRouteStrings.FINDING_PICKER)
+  }, [Socket])
+
+  const handleOrderError = useCallback(async (data) => {
+    // showErrorToast("")
+    Actions.showLoader(false)
+    console.log("order error", data);
+  }, [Socket])
+
+
+
+  useEffect(() => {
+    Socket.on('request-created', handleOrderCreated)
+    Socket.on('request-error', handleOrderError)
+
+    return () => {
+      Socket.off('request-created', handleOrderCreated)
+      Socket.off('request-error', handleOrderError)
+    }
+  }, [Socket, handleOrderCreated, handleOrderError])
+
+
   useBackButton(() => {
-    navigation.navigate(MainRouteStrings.SET_DESTINATION)
+    navigation.goBack()
     return true
   })
 
@@ -121,7 +316,7 @@ const ItemsDetails = ({ route }) => {
       handleButtonPress={() => {
         setShowSheet({
           ...showSheet,
-          Otp: true
+          paymentMethod: true
         })
       }}
       showFooterButton={false}
@@ -142,50 +337,54 @@ const ItemsDetails = ({ route }) => {
             Choose Vehicle
           </Text>
           {
-            VehicleTypeData.map((item) => {
-              const selected = itemsDetails.vehicleType?.id === item?.id
+            vehicleType.map((item) => {
+              const selected = itemsDetails.vehicleType?._id === item?._id
+              // console.log("item?.catImage", item?.catImage);
               return (
-                <View key={item.id} style={commonStyles.flexRowAlnCtrJutySpaceBetween}>
+                <TouchableOpacity
+                  key={item.id}
+                  style={commonStyles.flexRowAlnCtrJutySpaceBetween}
+                  onPress={() => {
+                    setSelectedVehicle(item)
+                    setItemsDetails({
+                      ...itemsDetails,
+                      vehicleType: item
+                    })
+                  }}
+                >
                   <View style={commonStyles.flexRowAlnCtr}>
                     <View style={styles.vehicleTypeIcon}>
-                      <item.icon height={moderateScale(24)} width={moderateScale(24)} />
+                      <Image source={{ uri: item?.catImage }} style={{
+                        height: "75%",
+                        width: "75%",
+                      }} />
                     </View>
                     <View>
                       <Text style={appStyles.smallTextPrimaryBold}>
-                        {item.type}
+                        {item.name}
                       </Text>
                       <Text style={[appStyles.smallTextGray, { fontSize: scale(10) }]}>
-                        {item.des}
+                        {item.description}
                       </Text>
                     </View>
                   </View>
 
                   <View style={commonStyles.flexRowAlnCtr}>
-                    <Text style={appStyles.smallTextGray}>
-                      ₦{item.price}
-                    </Text>
-                    <TouchableOpacity
+                    {/* <Text style={appStyles.smallTextGray}>
+                      ₦{item?.}
+                    </Text> */}
+                    <View
                       style={[styles.radioButton, {
                         borderColor: selected ? uiColours.PRIMARY : uiColours.GRAY_TEXT
                       }]}
-                      onPress={() => {
-                        setSelectedVehicle(item)
-                        setItemsDetails({
-                          ...itemsDetails,
-                          vehicleType: {
-                            ...item,
-                            tax: (item.price * 2) / 100,
-                            totalPrice: ((item.price * 2) / 100) + item.price
-                          }
-                        })
-                      }}
+
                     >
                       {selected && <View style={styles.redioActive}>
                       </View>}
-                    </TouchableOpacity>
+                    </View>
 
                   </View>
-                </View>
+                </TouchableOpacity>
               )
             })
           }
@@ -197,39 +396,48 @@ const ItemsDetails = ({ route }) => {
           <Text style={appStyles.smallTextBlackBold}>Package type</Text>
           <View style={commonStyles.flexRowAlnCtr}>
             {
-              pckgeTypeData.map((item) => {
+              packageData.map((item, index) => {
                 return (
                   <TouchableOpacity
+                    key={index.toString()}
                     style={[styles.packageTypeCard, {
-                      backgroundColor: itemsDetails.packagetype?.id === item?.id ? uiColours.GOLDEN_LIGHT : null,
-                      borderColor: (!isDark && itemsDetails.packagetype?.id === item?.id) ? uiColours.PRIMARY : (isDark && itemsDetails.packagetype?.id !== item?.id) ? uiColours.GRAYED_BUTTON : uiColours.LIGHT_GRAY,
+                      backgroundColor: itemsDetails?.packagetype?._id === item?._id ? uiColours.GOLDEN_LIGHT : null,
+                      borderColor: (!isDark && itemsDetails.packagetype?._id === item?._id) ? uiColours.PRIMARY : (isDark && itemsDetails.packagetype?._id !== item?._id) ? uiColours.GRAYED_BUTTON : uiColours.LIGHT_GRAY,
                     }]}
                     onPress={() => {
-                      if (item.id !== "3") {
-                        setItemsDetails({
-                          ...itemsDetails,
-                          packagetype: { ...item, type: item?.typeDisply }
-                        })
-                      } else {
+                      if (item._id !== "3") {
+                        setShowCustomPackage(false)
                         setItemsDetails({
                           ...itemsDetails,
                           packagetype: item
                         })
+                      } else {
+                        // setItemsDetails({
+                        //   ...itemsDetails,
+                        //   packagetype: item
+                        // })
+                        setItemsDetails({
+                          ...itemsDetails,
+                          packagetype: null
+                        })
+                        setShowCustomPackage(true)
                       }
 
                     }}
                   >
-                    <item.icon height={moderateScale(18)} width={moderateScale(18)} />
+                    {/* <item.icon height={moderateScale(18)} width={moderateScale(18)} /> */}
                     <Text style={[appStyles.smallTextGray, {
                       color: itemsDetails.packagetype?.id === item?.id ? uiColours.PRIMARY : uiColours.GRAY_TEXT,
-                    }]}>{item.typeDisply}</Text>
+                    }]}>
+                      {item.name}
+                    </Text>
                   </TouchableOpacity>
                 )
               })
             }
           </View>
 
-          {itemsDetails.packagetype?.typeDisply === "More" && <InputText
+          {showCustomPackage && <InputText
             hasTitle
             inputTitle="Fill the custom package type"
             inputContainer={{ marginTop: verticalScale(16) }}
@@ -240,7 +448,7 @@ const ItemsDetails = ({ route }) => {
                 ...itemsDetails,
                 packagetype: {
                   ...itemsDetails?.packagetype,
-                  type: e,
+                  name: e,
                 }
               })
             }}
@@ -262,7 +470,7 @@ const ItemsDetails = ({ route }) => {
           />
         </View>
 
-        <View style={[commonStyles.bottomBorder, {
+        {userData?.token && <View style={[commonStyles.bottomBorder, {
           paddingVertical: verticalScale(16),
           borderColor: isDark ? uiColours.GRAYED_BUTTON : uiColours.LIGHT_GRAY,
         }]}>
@@ -294,7 +502,7 @@ const ItemsDetails = ({ route }) => {
                     PicckRPay
                   </Text>
                   <Text style={appStyles.smallTextPrimaryBold}>
-                    ₦{userData?.wallet?.balance}
+                    {formatAmount(userData?.wallet?.balance)}
                   </Text>
                 </View>
               </View> :
@@ -303,7 +511,12 @@ const ItemsDetails = ({ route }) => {
               </Text>}
             <Images.downArrow />
           </TouchableOpacity>
-        </View>
+        </View>}
+
+        {/* <CustomButton
+          buttonType={buttonTypes.MEDIUM}
+          buttonStyle={{ marginTop: verticalScale(30) }}
+        /> */}
 
         <View style={{ gap: verticalScale(7), marginTop: verticalScale(16), marginVertical: verticalScale(100) }}>
           <Text style={appStyles.smallTextBlackBold}>
@@ -315,7 +528,8 @@ const ItemsDetails = ({ route }) => {
               Applicable Fees
             </Text>
             <Text style={appStyles.smallTextGray}>
-              ₦{itemsDetails.vehicleType.price}
+              {formatAmount(itemsDetails?.price)}
+              {/* ₦20 */}
             </Text>
           </View>
 
@@ -324,7 +538,8 @@ const ItemsDetails = ({ route }) => {
               Product Taxes (estimated)
             </Text>
             <Text style={appStyles.smallTextGray}>
-              ₦{itemsDetails.vehicleType?.tax}
+              {formatAmount(itemsDetails?.price * 0.075)}
+              {/* ₦{(itemsDetails?.price * 0.075).toFixed(2)} */}
             </Text>
           </View>
 
@@ -333,7 +548,7 @@ const ItemsDetails = ({ route }) => {
               Total Payment
             </Text>
             <Text style={appStyles.smallTextGray}>
-              ₦{itemsDetails.vehicleType?.totalPrice}
+              {formatAmount((itemsDetails?.price + itemsDetails?.price * 0.075))}
             </Text>
           </View>
         </View>
@@ -349,7 +564,7 @@ const ItemsDetails = ({ route }) => {
             Total Payment
           </Text>
           <Text style={appStyles.mediumTextPrimaryBold}>
-            ₦{itemsDetails.vehicleType.totalPrice}
+            {formatAmount((itemsDetails?.price + itemsDetails?.price * 0.075))}
           </Text>
         </View>
 
@@ -367,10 +582,22 @@ const ItemsDetails = ({ route }) => {
           }}
           title="Order"
           NavigationHandle={() => {
-            setShowSheet({
-              ...showSheet,
-              Otp: true
-            })
+            // if (!userData?._id) {
+            //   setFromGuestUserScreen(MainRouteStrings?.ITEMS_DETAILS)
+            //   navigation.navigate(AuthRouteStrings.WELCOME_SCREEN)
+            // } else if (userData?.kycStatus != "approved") {
+            //   showErrorToast("Please complete your kyc first", isDark)
+            //   navigation.navigate(MainRouteStrings.USER_KYC_SCREEN)
+            // } else {
+            //   handleOrder()
+            // }
+
+            if (!userData?._id) {
+              setFromGuestUserScreen(MainRouteStrings?.ITEMS_DETAILS)
+              navigation.navigate(AuthRouteStrings.WELCOME_SCREEN)
+            } else {
+              handleOrder()
+            }
           }}
         />
       </View>
@@ -386,7 +613,7 @@ const ItemsDetails = ({ route }) => {
         }}
       />
 
-      <OtpPopUp
+      {/* <OtpPopUp
         isVisible={showSheet.Otp}
         appStyles={appStyles}
         isDark={isDark}
@@ -399,7 +626,29 @@ const ItemsDetails = ({ route }) => {
           setSelectedVehicle(itemsDetails.vehicleType)
           navigation.navigate(MainRouteStrings.FINDING_PICKER)
         }}
+      /> */}
+
+      {/* SelectAmountPopup component for topping up the wallet */}
+      <AddAmountSheet
+        sheetTitle={"Top Up"}
+        isVisible={showSheet.payment}
+        appStyles={appStyles}
+        orderDeatils={orderDeatils}
+        setItemsDetails={setItemsDetails}
+        handleOnRedirect={(data, amount) => { handleAddAmount(data, amount) }}
+        setShowSheet={setShowSheet}
+
       />
+      {/* <SelectAmountPopup
+        sheetTitle={"Top Up"}
+        isVisible={showSheet.payment}
+        appStyles={appStyles}
+        wallateBalance={`Add ₦${(itemsDetails?.price + itemsDetails?.price * 0.075).toFixed(2) - userData?.wallet?.balance} to proceed with order`}
+        setShowSheet={setShowSheet}
+        handleOnRedirect={(data, amount) => { handleAddAmount(data, amount) }}
+        from={"itemDetails"}
+        amountToBeAdded={(itemsDetails?.price + itemsDetails?.price * 0.075).toFixed(2) - userData?.wallet?.balance}
+      /> */}
     </WrapperContainer>
   )
 }

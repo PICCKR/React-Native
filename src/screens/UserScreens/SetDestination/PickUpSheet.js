@@ -57,7 +57,7 @@ const PickUpSheet = ({
 
 
     useEffect(() => {
-        if (formData.name !== "" && formData.phoneNumber) {
+        if (formData.name !== "" && formData.phoneNumber && formData?.pickupDate) {
             setButtonActive(true)
         } else {
             setButtonActive(false)

@@ -17,9 +17,8 @@ import Actions from '../../../redux/Actions'
 
 const UserHomeScreen = () => {
   // Context and Navigation
-  const { appStyles, userData, isDark, setSelectedVehicle } = useContext(AppContext)
+  const { appStyles, userData, isDark, setSelectedVehicle, vehicleType, setVehicleType } = useContext(AppContext)
   const navigation = useNavigation()
-  const [vehicleType, setVehicleType] = useState([])
 
   // Mock Data for Vehicle Types and Reasons to Choose
   const VehicleType = [
@@ -74,7 +73,7 @@ const UserHomeScreen = () => {
   const getVehicleData = () => {
     Actions.showLoader(true)
     apiGet(endPoints.GET_VEHICLE_DATA).then((res) => {
-      console.log("ress in vehical", res?.data?.data);
+      // console.log("ress in vehical", res?.data);
       if (res?.status === 200) {
         setVehicleType(res?.data?.data)
       }
@@ -139,7 +138,7 @@ const UserHomeScreen = () => {
           }]}>Choose Vehicle</Text>
           <ScrollView
             horizontal
-            showsHorizontalScrollIndicator = {false}
+            showsHorizontalScrollIndicator={false}
             style={styles.vehicleTypeList}>
             {
               vehicleType.map((item) => {

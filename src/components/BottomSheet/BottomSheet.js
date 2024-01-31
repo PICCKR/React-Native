@@ -33,7 +33,7 @@ const BottomSheet = ({
         <Modal
             isVisible={isVisible}
             onBackdropPress={onBackdropPress}
-            style={[{ margin: 0,  backgroundColor: isDark ? 'rgba(255, 255, 255, 0.1)' : 'rgba(255, 255, 255,0.1)'}, modelBgStyles]}
+            style={[{ margin: 0, backgroundColor: isDark ? 'rgba(255, 255, 255, 0.1)' : 'rgba(255, 255, 255,0.1)' }, modelBgStyles]}
             animationInTiming={500}
             animationOutTiming={500}
             animationIn="fadeInUp"
@@ -70,7 +70,7 @@ const BottomSheet = ({
                     {children}
                 </View>
 
-                {showFooterButton && <View style={[styles.footer,{
+                {showFooterButton && <View style={[styles.footer, {
                     borderColor: isDark ? uiColours.GRAYED_BUTTON : uiColours.LIGHT_GRAY
                 }]}>
                     <CustomButton

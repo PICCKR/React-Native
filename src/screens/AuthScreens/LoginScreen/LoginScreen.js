@@ -1,7 +1,7 @@
 import { Text, TouchableOpacity, ScrollView } from 'react-native'
 import React, { useContext, useEffect, useState } from 'react'
 import styles from './Styles'
-import { AppContext } from '../../../context/AppContext'
+import { AppContext, useSocket } from '../../../context/AppContext'
 import WrapperContainer from '../../../components/WrapperContainer/WrapperContainer'
 import InputText from '../../../components/InputText/InputText'
 import MobileNumberInput from '../../../components/MobileNumberInput/MobileNumberInput'
@@ -21,8 +21,10 @@ import { showErrorToast } from '../../../helper/showErrorToast'
 import { decodeToken } from '../../../helper/decodeToken'
 
 const LoginScreen = () => {
-  const { appStyles, isDark, setuserData, userData, setIsLoggedIn } = useContext(AppContext)
+  const { appStyles, isDark, setuserData, userData, setIsLoggedIn, fromGuestUserScreen, setFromGuestUserScreen } = useContext(AppContext)
   const navigation = useNavigation()
+
+  const { Socket } = useSocket()
 
   const [loginData, setLoginData] = useState({
     selectedCountry: {},
@@ -83,7 +85,6 @@ const LoginScreen = () => {
       navigation.navigate(AuthRouteStrings.OTP_SCREEN, {
         from: AuthRouteStrings.LOGIN_SCREEN,
         data: loginData,
-        user: user
       })
     }).catch((error) => {
       showGeneralError(isDark)
@@ -97,7 +98,7 @@ const LoginScreen = () => {
     try {
       // get idToken from cognito
       const { idToken } = (await fetchAuthSession()).tokens ?? {};
-      console.log("idToken.toString()", idToken.toString());
+      // console.log("idToken.toString()", idToken.toString());
       // pass this to in headers to get jwt token
       const config = {
         headers: {
@@ -111,10 +112,26 @@ const LoginScreen = () => {
           const { data, status } = result;
           if (status == 200) {
             const userInformaton = await decodeToken(data?.token)
+            console.log("userInformaton", userInformaton);
             // after getting token store it in local storage and also set token in context
-            setLocalData(storageKeys.userData, { ...userInformaton, token: data?.token})
-            setuserData({ ...userInformaton, token: data?.token})
-            setIsLoggedIn(true)
+            setLocalData(storageKeys.userData, { ...userInformaton, token: data?.token })
+            setuserData({ ...userInformaton, token: data?.token })
+            if (fromGuestUserScreen) {
+              navigation.navigate(fromGuestUserScreen)
+              setFromGuestUserScreen(null)
+            } else {
+              setIsLoggedIn(true)
+              if (userInformaton?.userRole[1]) {
+                Socket.emit("driver-connect",
+                  {
+                    "userId": userInformaton?._id
+                  }
+                )
+              } else {
+                console.log("it is user");
+              }
+            }
+
           } else {
             await signOut().then((res) => {
               // handleLogin()
@@ -156,6 +173,20 @@ const LoginScreen = () => {
       setButtonActive(false);
     }
   }, [loginData]);
+
+  const handleConnectDriversuccess = (data) => {
+    console.log("driver-connect-successfully", data);
+  }
+
+
+  useEffect(() => {
+    Socket.on("driver-connect-successfully", handleConnectDriversuccess)
+
+    return () => {
+      Socket.off("driver-connect-successfully", handleConnectDriversuccess)
+    }
+  }, [Socket, handleConnectDriversuccess])
+
 
   useBackButton(() => {
     navigation.navigate(AuthRouteStrings.WELCOME_SCREEN)
@@ -247,7 +278,7 @@ const LoginScreen = () => {
                   setShowPassword(!showPassword)
                 }}
               >
-                {!showPassword ? <Images.eyeOpen height={moderateScale(25)} width={moderateScale(25)} /> :
+                {showPassword ? <Images.eyeOpen height={moderateScale(25)} width={moderateScale(25)} /> :
                   <Images.eyeClose height={moderateScale(25)} width={moderateScale(25)} />
                 }
               </TouchableOpacity>

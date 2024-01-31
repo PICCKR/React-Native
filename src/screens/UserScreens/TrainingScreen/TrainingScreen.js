@@ -19,22 +19,22 @@ const TrainingScreen = ({ route }) => {
     const videoData = [
         {
             id: '1',
-            title: "How to navigate the app",
-            video: 'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4',
+            title: "How a trip works ",
+            video: 'https://www.youtube.com/watch?v=-xLBm_GfyHg',
             paused: true
         },
-        {
-            id: '2',
-            title: "Handle delivery requests",
-            video: 'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4',
-            paused: true
-        },
-        {
-            id: '3',
-            title: "Provide a quality experience to senders",
-            video: 'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4',
-            paused: true
-        }
+        // {
+        //     id: '2',
+        //     title: "Handle delivery requests",
+        //     video: 'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4',
+        //     paused: true
+        // },
+        // {
+        //     id: '3',
+        //     title: "Provide a quality experience to senders",
+        //     video: 'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4',
+        //     paused: true
+        // }
     ]
 
     const [data, setData] = useState(videoData)

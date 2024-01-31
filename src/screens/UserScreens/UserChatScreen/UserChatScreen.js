@@ -1,9 +1,9 @@
 import { View, Text, Image, ScrollView, TouchableOpacity, TextInput } from 'react-native'
-import React, { useContext, useRef, useState } from 'react'
+import React, { useContext, useEffect, useRef, useState } from 'react'
 import WrapperContainer from '../../../components/WrapperContainer/WrapperContainer'
 import styles from './Styles'
 import { Images } from '../../../assets/images'
-import { AppContext } from '../../../context/AppContext'
+import { AppContext, useSocket } from '../../../context/AppContext'
 import { moderateScale, scale, verticalScale } from 'react-native-size-matters'
 import { commonStyles, screenSize } from '../../../utils/Styles/CommonStyles'
 import moment from 'moment'
@@ -16,6 +16,7 @@ import { useNavigation } from '@react-navigation/native'
 
 const UserChatScreen = () => {
     const data = {}
+    const { Socket } = useSocket()
     const pickerData = {}
     const navigation = useNavigation()
     const { appStyles, userData, isDark } = useContext(AppContext)
@@ -70,6 +71,11 @@ const UserChatScreen = () => {
         setImage(null)
         setMessages([...messages, msg])
     }
+
+    useEffect(() => {
+        Socket.emit("setup", userData)
+    }, [])
+
     return (
         <WrapperContainer
             showFooterButton={false}
@@ -123,7 +129,7 @@ const UserChatScreen = () => {
                                 {moment(item?.createdAt).format("DD/MM/YYYY") === moment(new Date()).format("DD/MM/YYYY") && shouldShowDate && <Text style={[appStyles.smallTextGray, { alignSelf: 'center' }]}>
                                     Today
                                 </Text>}
-                                <View style={isSender ? styles.sentMessageCard : [styles.reviedMessageCard,{
+                                <View style={isSender ? styles.sentMessageCard : [styles.reviedMessageCard, {
                                     borderColor: isDark ? uiColours.GRAYED_BUTTON : uiColours.LIGHT_GRAY
                                 }]}>
                                     {item?.content?.type === "text" ? <Text style={[appStyles.smallTextGray, { color: isSender ? uiColours.BLACK_TEXT : uiColours.GRAY_TEXT }]}>
@@ -160,7 +166,7 @@ const UserChatScreen = () => {
                 }
             </ScrollView>
 
-            <View style={[styles.inputContainer,{
+            <View style={[styles.inputContainer, {
                 borderColor: isDark ? uiColours.GRAYED_BUTTON : uiColours.LIGHT_GRAY
             }]}>
                 {/* {(newMessage === "" && !image) && <TouchableOpacity

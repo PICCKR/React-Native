@@ -9,26 +9,26 @@
 9        android:targetSdkVersion="33" />
 10
 11    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
-11-->/Users/mahammadsuelc/Desktop/ve/pikkerapp/android/app/src/debug/AndroidManifest.xml:5:5-77
-11-->/Users/mahammadsuelc/Desktop/ve/pikkerapp/android/app/src/debug/AndroidManifest.xml:5:22-75
+11-->/Users/mahammadsuelc/Documents/ve/pikkerapp/android/app/src/debug/AndroidManifest.xml:5:5-77
+11-->/Users/mahammadsuelc/Documents/ve/pikkerapp/android/app/src/debug/AndroidManifest.xml:5:22-75
 12    <uses-permission android:name="android.permission.INTERNET" />
-12-->/Users/mahammadsuelc/Desktop/ve/pikkerapp/android/app/src/main/AndroidManifest.xml:3:5-67
-12-->/Users/mahammadsuelc/Desktop/ve/pikkerapp/android/app/src/main/AndroidManifest.xml:3:22-64
+12-->/Users/mahammadsuelc/Documents/ve/pikkerapp/android/app/src/main/AndroidManifest.xml:3:5-67
+12-->/Users/mahammadsuelc/Documents/ve/pikkerapp/android/app/src/main/AndroidManifest.xml:3:22-64
 13    <uses-permission android:name="android.permission.CAMERA" />
-13-->/Users/mahammadsuelc/Desktop/ve/pikkerapp/android/app/src/main/AndroidManifest.xml:4:5-64
-13-->/Users/mahammadsuelc/Desktop/ve/pikkerapp/android/app/src/main/AndroidManifest.xml:4:22-62
+13-->/Users/mahammadsuelc/Documents/ve/pikkerapp/android/app/src/main/AndroidManifest.xml:4:5-64
+13-->/Users/mahammadsuelc/Documents/ve/pikkerapp/android/app/src/main/AndroidManifest.xml:4:22-62
 14    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-14-->/Users/mahammadsuelc/Desktop/ve/pikkerapp/android/app/src/main/AndroidManifest.xml:5:5-79
-14-->/Users/mahammadsuelc/Desktop/ve/pikkerapp/android/app/src/main/AndroidManifest.xml:5:22-77
+14-->/Users/mahammadsuelc/Documents/ve/pikkerapp/android/app/src/main/AndroidManifest.xml:5:5-79
+14-->/Users/mahammadsuelc/Documents/ve/pikkerapp/android/app/src/main/AndroidManifest.xml:5:22-77
 15    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-15-->/Users/mahammadsuelc/Desktop/ve/pikkerapp/android/app/src/main/AndroidManifest.xml:6:5-79
-15-->/Users/mahammadsuelc/Desktop/ve/pikkerapp/android/app/src/main/AndroidManifest.xml:6:22-76
+15-->/Users/mahammadsuelc/Documents/ve/pikkerapp/android/app/src/main/AndroidManifest.xml:6:5-79
+15-->/Users/mahammadsuelc/Documents/ve/pikkerapp/android/app/src/main/AndroidManifest.xml:6:22-76
 16    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
 16-->[com.facebook.flipper:flipper:0.182.0] /Users/mahammadsuelc/.gradle/caches/transforms-3/e13f88164840fe641a466d05cd8edac7/transformed/jetified-flipper-0.182.0/AndroidManifest.xml:16:5-76
 16-->[com.facebook.flipper:flipper:0.182.0] /Users/mahammadsuelc/.gradle/caches/transforms-3/e13f88164840fe641a466d05cd8edac7/transformed/jetified-flipper-0.182.0/AndroidManifest.xml:16:22-73
 17    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-17-->[:react-native-community_netinfo] /Users/mahammadsuelc/Desktop/ve/pikkerapp/node_modules/@react-native-community/netinfo/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:7:5-79
-17-->[:react-native-community_netinfo] /Users/mahammadsuelc/Desktop/ve/pikkerapp/node_modules/@react-native-community/netinfo/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:7:22-76
+17-->[:react-native-community_netinfo] /Users/mahammadsuelc/Documents/ve/pikkerapp/node_modules/@react-native-community/netinfo/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:7:5-79
+17-->[:react-native-community_netinfo] /Users/mahammadsuelc/Documents/ve/pikkerapp/node_modules/@react-native-community/netinfo/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:7:22-76
 18
 19    <uses-feature
 19-->[com.google.android.gms:play-services-maps:18.2.0] /Users/mahammadsuelc/.gradle/caches/transforms-3/fcd8b9b2116a382f38af684df1c842a4/transformed/jetified-play-services-maps-18.2.0/AndroidManifest.xml:26:5-28:35
@@ -57,96 +57,96 @@
 31-->[androidx.work:work-runtime:2.7.1] /Users/mahammadsuelc/.gradle/caches/transforms-3/a93c68fb1d2792ca1942259f5092d83b/transformed/work-runtime-2.7.1/AndroidManifest.xml:28:22-74
 32
 33    <application
-33-->/Users/mahammadsuelc/Desktop/ve/pikkerapp/android/app/src/main/AndroidManifest.xml:8:5-30:19
+33-->/Users/mahammadsuelc/Documents/ve/pikkerapp/android/app/src/main/AndroidManifest.xml:8:5-30:19
 34        android:name="com.pickkr.MainApplication"
-34-->/Users/mahammadsuelc/Desktop/ve/pikkerapp/android/app/src/main/AndroidManifest.xml:9:7-38
+34-->/Users/mahammadsuelc/Documents/ve/pikkerapp/android/app/src/main/AndroidManifest.xml:9:7-38
 35        android:allowBackup="false"
-35-->/Users/mahammadsuelc/Desktop/ve/pikkerapp/android/app/src/main/AndroidManifest.xml:13:7-34
+35-->/Users/mahammadsuelc/Documents/ve/pikkerapp/android/app/src/main/AndroidManifest.xml:13:7-34
 36        android:appComponentFactory="androidx.core.app.CoreComponentFactory"
 36-->[androidx.core:core:1.8.0] /Users/mahammadsuelc/.gradle/caches/transforms-3/9623e378e4dfc57c47793d0ffd25ee05/transformed/core-1.8.0/AndroidManifest.xml:24:18-86
 37        android:debuggable="true"
 38        android:icon="@mipmap/ic_launcher"
-38-->/Users/mahammadsuelc/Desktop/ve/pikkerapp/android/app/src/main/AndroidManifest.xml:11:7-41
+38-->/Users/mahammadsuelc/Documents/ve/pikkerapp/android/app/src/main/AndroidManifest.xml:11:7-41
 39        android:label="@string/app_name"
-39-->/Users/mahammadsuelc/Desktop/ve/pikkerapp/android/app/src/main/AndroidManifest.xml:10:7-39
+39-->/Users/mahammadsuelc/Documents/ve/pikkerapp/android/app/src/main/AndroidManifest.xml:10:7-39
 40        android:roundIcon="@mipmap/ic_launcher_round"
-40-->/Users/mahammadsuelc/Desktop/ve/pikkerapp/android/app/src/main/AndroidManifest.xml:12:7-52
+40-->/Users/mahammadsuelc/Documents/ve/pikkerapp/android/app/src/main/AndroidManifest.xml:12:7-52
 41        android:theme="@style/AppTheme"
-41-->/Users/mahammadsuelc/Desktop/ve/pikkerapp/android/app/src/main/AndroidManifest.xml:14:7-38
+41-->/Users/mahammadsuelc/Documents/ve/pikkerapp/android/app/src/main/AndroidManifest.xml:14:7-38
 42        android:usesCleartextTraffic="true" >
-42-->/Users/mahammadsuelc/Desktop/ve/pikkerapp/android/app/src/debug/AndroidManifest.xml:8:9-44
+42-->/Users/mahammadsuelc/Documents/ve/pikkerapp/android/app/src/debug/AndroidManifest.xml:8:9-44
 43        <activity
-43-->/Users/mahammadsuelc/Desktop/ve/pikkerapp/android/app/src/debug/AndroidManifest.xml:11:9-111
+43-->/Users/mahammadsuelc/Documents/ve/pikkerapp/android/app/src/debug/AndroidManifest.xml:11:9-111
 44            android:name="com.facebook.react.devsupport.DevSettingsActivity"
-44-->/Users/mahammadsuelc/Desktop/ve/pikkerapp/android/app/src/debug/AndroidManifest.xml:11:19-83
+44-->/Users/mahammadsuelc/Documents/ve/pikkerapp/android/app/src/debug/AndroidManifest.xml:11:19-83
 45            android:exported="false" />
-45-->/Users/mahammadsuelc/Desktop/ve/pikkerapp/android/app/src/debug/AndroidManifest.xml:11:84-108
+45-->/Users/mahammadsuelc/Documents/ve/pikkerapp/android/app/src/debug/AndroidManifest.xml:11:84-108
 46        <activity
-46-->/Users/mahammadsuelc/Desktop/ve/pikkerapp/android/app/src/main/AndroidManifest.xml:15:7-26:18
+46-->/Users/mahammadsuelc/Documents/ve/pikkerapp/android/app/src/main/AndroidManifest.xml:15:7-26:18
 47            android:name="com.pickkr.MainActivity"
-47-->/Users/mahammadsuelc/Desktop/ve/pikkerapp/android/app/src/main/AndroidManifest.xml:16:9-37
+47-->/Users/mahammadsuelc/Documents/ve/pikkerapp/android/app/src/main/AndroidManifest.xml:16:9-37
 48            android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|screenSize|smallestScreenSize|uiMode"
-48-->/Users/mahammadsuelc/Desktop/ve/pikkerapp/android/app/src/main/AndroidManifest.xml:18:9-118
+48-->/Users/mahammadsuelc/Documents/ve/pikkerapp/android/app/src/main/AndroidManifest.xml:18:9-118
 49            android:exported="true"
-49-->/Users/mahammadsuelc/Desktop/ve/pikkerapp/android/app/src/main/AndroidManifest.xml:21:9-32
+49-->/Users/mahammadsuelc/Documents/ve/pikkerapp/android/app/src/main/AndroidManifest.xml:21:9-32
 50            android:label="@string/app_name"
-50-->/Users/mahammadsuelc/Desktop/ve/pikkerapp/android/app/src/main/AndroidManifest.xml:17:9-41
+50-->/Users/mahammadsuelc/Documents/ve/pikkerapp/android/app/src/main/AndroidManifest.xml:17:9-41
 51            android:launchMode="singleTask"
-51-->/Users/mahammadsuelc/Desktop/ve/pikkerapp/android/app/src/main/AndroidManifest.xml:19:9-40
+51-->/Users/mahammadsuelc/Documents/ve/pikkerapp/android/app/src/main/AndroidManifest.xml:19:9-40
 52            android:windowSoftInputMode="adjustResize" >
-52-->/Users/mahammadsuelc/Desktop/ve/pikkerapp/android/app/src/main/AndroidManifest.xml:20:9-51
+52-->/Users/mahammadsuelc/Documents/ve/pikkerapp/android/app/src/main/AndroidManifest.xml:20:9-51
 53            <intent-filter>
-53-->/Users/mahammadsuelc/Desktop/ve/pikkerapp/android/app/src/main/AndroidManifest.xml:22:9-25:25
+53-->/Users/mahammadsuelc/Documents/ve/pikkerapp/android/app/src/main/AndroidManifest.xml:22:9-25:25
 54                <action android:name="android.intent.action.MAIN" />
-54-->/Users/mahammadsuelc/Desktop/ve/pikkerapp/android/app/src/main/AndroidManifest.xml:23:13-65
-54-->/Users/mahammadsuelc/Desktop/ve/pikkerapp/android/app/src/main/AndroidManifest.xml:23:21-62
+54-->/Users/mahammadsuelc/Documents/ve/pikkerapp/android/app/src/main/AndroidManifest.xml:23:13-65
+54-->/Users/mahammadsuelc/Documents/ve/pikkerapp/android/app/src/main/AndroidManifest.xml:23:21-62
 55
 56                <category android:name="android.intent.category.LAUNCHER" />
-56-->/Users/mahammadsuelc/Desktop/ve/pikkerapp/android/app/src/main/AndroidManifest.xml:24:13-73
-56-->/Users/mahammadsuelc/Desktop/ve/pikkerapp/android/app/src/main/AndroidManifest.xml:24:23-70
+56-->/Users/mahammadsuelc/Documents/ve/pikkerapp/android/app/src/main/AndroidManifest.xml:24:13-73
+56-->/Users/mahammadsuelc/Documents/ve/pikkerapp/android/app/src/main/AndroidManifest.xml:24:23-70
 57            </intent-filter>
 58        </activity>
 59
 60        <meta-data
-60-->/Users/mahammadsuelc/Desktop/ve/pikkerapp/android/app/src/main/AndroidManifest.xml:27:7-29:66
+60-->/Users/mahammadsuelc/Documents/ve/pikkerapp/android/app/src/main/AndroidManifest.xml:27:7-29:66
 61            android:name="com.google.android.geo.API_KEY"
-61-->/Users/mahammadsuelc/Desktop/ve/pikkerapp/android/app/src/main/AndroidManifest.xml:28:9-54
+61-->/Users/mahammadsuelc/Documents/ve/pikkerapp/android/app/src/main/AndroidManifest.xml:28:9-54
 62            android:value="AIzaSyBxop3xUNPDATFY4ZDhdT2evDbUgrwVku0" />
-62-->/Users/mahammadsuelc/Desktop/ve/pikkerapp/android/app/src/main/AndroidManifest.xml:29:9-64
+62-->/Users/mahammadsuelc/Documents/ve/pikkerapp/android/app/src/main/AndroidManifest.xml:29:9-64
 63
 64        <provider
-64-->[:react-native-image-picker] /Users/mahammadsuelc/Desktop/ve/pikkerapp/node_modules/react-native-image-picker/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:8:9-16:20
+64-->[:react-native-image-picker] /Users/mahammadsuelc/Documents/ve/pikkerapp/node_modules/react-native-image-picker/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:8:9-16:20
 65            android:name="com.imagepicker.ImagePickerProvider"
-65-->[:react-native-image-picker] /Users/mahammadsuelc/Desktop/ve/pikkerapp/node_modules/react-native-image-picker/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:9:13-63
+65-->[:react-native-image-picker] /Users/mahammadsuelc/Documents/ve/pikkerapp/node_modules/react-native-image-picker/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:9:13-63
 66            android:authorities="com.pickkr.imagepickerprovider"
-66-->[:react-native-image-picker] /Users/mahammadsuelc/Desktop/ve/pikkerapp/node_modules/react-native-image-picker/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:10:13-71
+66-->[:react-native-image-picker] /Users/mahammadsuelc/Documents/ve/pikkerapp/node_modules/react-native-image-picker/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:10:13-71
 67            android:exported="false"
-67-->[:react-native-image-picker] /Users/mahammadsuelc/Desktop/ve/pikkerapp/node_modules/react-native-image-picker/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:11:13-37
+67-->[:react-native-image-picker] /Users/mahammadsuelc/Documents/ve/pikkerapp/node_modules/react-native-image-picker/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:11:13-37
 68            android:grantUriPermissions="true" >
-68-->[:react-native-image-picker] /Users/mahammadsuelc/Desktop/ve/pikkerapp/node_modules/react-native-image-picker/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:12:13-47
+68-->[:react-native-image-picker] /Users/mahammadsuelc/Documents/ve/pikkerapp/node_modules/react-native-image-picker/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:12:13-47
 69            <meta-data
-69-->[:react-native-image-picker] /Users/mahammadsuelc/Desktop/ve/pikkerapp/node_modules/react-native-image-picker/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:13:13-15:70
+69-->[:react-native-image-picker] /Users/mahammadsuelc/Documents/ve/pikkerapp/node_modules/react-native-image-picker/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:13:13-15:70
 70                android:name="android.support.FILE_PROVIDER_PATHS"
-70-->[:react-native-image-picker] /Users/mahammadsuelc/Desktop/ve/pikkerapp/node_modules/react-native-image-picker/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:14:17-67
+70-->[:react-native-image-picker] /Users/mahammadsuelc/Documents/ve/pikkerapp/node_modules/react-native-image-picker/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:14:17-67
 71                android:resource="@xml/imagepicker_provider_paths" />
-71-->[:react-native-image-picker] /Users/mahammadsuelc/Desktop/ve/pikkerapp/node_modules/react-native-image-picker/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:15:17-67
+71-->[:react-native-image-picker] /Users/mahammadsuelc/Documents/ve/pikkerapp/node_modules/react-native-image-picker/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:15:17-67
 72        </provider>
 73        <provider
-73-->[:react-native-webview] /Users/mahammadsuelc/Desktop/ve/pikkerapp/node_modules/react-native-webview/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:8:9-16:20
+73-->[:react-native-webview] /Users/mahammadsuelc/Documents/ve/pikkerapp/node_modules/react-native-webview/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:8:9-16:20
 74            android:name="com.reactnativecommunity.webview.RNCWebViewFileProvider"
-74-->[:react-native-webview] /Users/mahammadsuelc/Desktop/ve/pikkerapp/node_modules/react-native-webview/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:9:13-83
+74-->[:react-native-webview] /Users/mahammadsuelc/Documents/ve/pikkerapp/node_modules/react-native-webview/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:9:13-83
 75            android:authorities="com.pickkr.fileprovider"
-75-->[:react-native-webview] /Users/mahammadsuelc/Desktop/ve/pikkerapp/node_modules/react-native-webview/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:10:13-64
+75-->[:react-native-webview] /Users/mahammadsuelc/Documents/ve/pikkerapp/node_modules/react-native-webview/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:10:13-64
 76            android:exported="false"
-76-->[:react-native-webview] /Users/mahammadsuelc/Desktop/ve/pikkerapp/node_modules/react-native-webview/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:11:13-37
+76-->[:react-native-webview] /Users/mahammadsuelc/Documents/ve/pikkerapp/node_modules/react-native-webview/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:11:13-37
 77            android:grantUriPermissions="true" >
-77-->[:react-native-webview] /Users/mahammadsuelc/Desktop/ve/pikkerapp/node_modules/react-native-webview/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:12:13-47
+77-->[:react-native-webview] /Users/mahammadsuelc/Documents/ve/pikkerapp/node_modules/react-native-webview/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:12:13-47
 78            <meta-data
-78-->[:react-native-image-picker] /Users/mahammadsuelc/Desktop/ve/pikkerapp/node_modules/react-native-image-picker/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:13:13-15:70
+78-->[:react-native-image-picker] /Users/mahammadsuelc/Documents/ve/pikkerapp/node_modules/react-native-image-picker/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:13:13-15:70
 79                android:name="android.support.FILE_PROVIDER_PATHS"
-79-->[:react-native-image-picker] /Users/mahammadsuelc/Desktop/ve/pikkerapp/node_modules/react-native-image-picker/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:14:17-67
+79-->[:react-native-image-picker] /Users/mahammadsuelc/Documents/ve/pikkerapp/node_modules/react-native-image-picker/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:14:17-67
 80                android:resource="@xml/file_provider_paths" />
-80-->[:react-native-image-picker] /Users/mahammadsuelc/Desktop/ve/pikkerapp/node_modules/react-native-image-picker/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:15:17-67
+80-->[:react-native-image-picker] /Users/mahammadsuelc/Documents/ve/pikkerapp/node_modules/react-native-image-picker/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:15:17-67
 81        </provider>
 82
 83        <meta-data

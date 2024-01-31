@@ -6,7 +6,7 @@ import { uiColours } from "../../../utils/Styles/uiColors"
 const styles = StyleSheet.create({
     homeScreenContainer: {
         paddingHorizontal: scale(16),
-        marginTop:verticalScale(16)
+        marginTop: verticalScale(16)
     },
     profileView: {
         height: moderateScale(50),
@@ -29,7 +29,7 @@ const styles = StyleSheet.create({
     },
     walletView: {
         paddingHorizontal: scale(16),
-        paddingVertical:verticalScale(10),
+        paddingVertical: verticalScale(10),
         backgroundColor: uiColours.WHITE_TEXT,
         flexDirection: 'row',
         justifyContent: 'space-between',
@@ -42,7 +42,7 @@ const styles = StyleSheet.create({
         marginTop: verticalScale(16)
     },
     becomePickerView: {
-        height:"100%",
+        height: "100%",
         width: "100%",
         borderRadius: moderateScale(8)
     },
@@ -50,12 +50,12 @@ const styles = StyleSheet.create({
         paddingVertical: verticalScale(10),
         alignItems: 'center',
         gap: verticalScale(5),
-        marginRight:scale(10)
+        marginRight: scale(10)
     },
     vehicleTypeIcon: {
         backgroundColor: uiColours.CREAM,
-        height: moderateScale(70),
-        width: moderateScale(70),
+        height: moderateScale((screenSize.width - scale(92)) / 4),
+        width: moderateScale((screenSize.width - scale(92)) / 4),
         borderRadius: moderateScale(16),
         alignItems: 'center',
         justifyContent: 'center'
@@ -63,48 +63,48 @@ const styles = StyleSheet.create({
     vehicleTypeList: {
     },
     whyPickerItemList: {
-        gap:scale(16),
-        marginVertical:verticalScale(16)
+        gap: scale(16),
+        marginVertical: verticalScale(16)
     },
     whyPickerItem: {
         flexDirection: 'row',
         alignItems: "center",
-        gap:scale(16)
+        gap: scale(16)
     },
-    savedCardView:{
-        flexDirection:'row',
-        alignItems:'center',
-        gap:scale(10),
-        borderBottomWidth:moderateScale(1),
-        borderColor:uiColours.LIGHT_GRAY,
-        paddingVertical:verticalScale(12),
-        justifyContent:'space-between'
+    savedCardView: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        gap: scale(10),
+        borderBottomWidth: moderateScale(1),
+        borderColor: uiColours.LIGHT_GRAY,
+        paddingVertical: verticalScale(12),
+        justifyContent: 'space-between'
     },
-    cardClickCircle:{
-        height:moderateScale(20),
-        width:moderateScale(20),
-        borderRadius:moderateScale(10),
-        borderWidth:moderateScale(2),
-        borderColor:uiColours.PRIMARY
+    cardClickCircle: {
+        height: moderateScale(20),
+        width: moderateScale(20),
+        borderRadius: moderateScale(10),
+        borderWidth: moderateScale(2),
+        borderColor: uiColours.PRIMARY
     },
-    priceCard:{
-        width:(screenSize.width-scale(64)) / 3,
-        height:(screenSize.width - scale(64)) / 3,
-        borderWidth:moderateScale(1),
-        borderColor:uiColours.LIGHT_GRAY,
-        borderRadius:moderateScale(8),
-        alignItems:'center',
-        justifyContent:"center",
-        marginBottom:verticalScale(16)
+    priceCard: {
+        width: (screenSize.width - scale(64)) / 3,
+        height: (screenSize.width - scale(64)) / 3,
+        borderWidth: moderateScale(1),
+        borderColor: uiColours.LIGHT_GRAY,
+        borderRadius: moderateScale(8),
+        alignItems: 'center',
+        justifyContent: "center",
+        marginBottom: verticalScale(16)
     },
     underlineStyleBase: {
         width: moderateScale(50),
         height: moderateScale(50),
-        borderRadius:moderateScale(6),
-        borderWidth:moderateScale(1),
-        borderColor:uiColours.LIGHT_GRAY,
-        fontSize:scale(20),
-        color:uiColours.BLACK_TEXT
+        borderRadius: moderateScale(6),
+        borderWidth: moderateScale(1),
+        borderColor: uiColours.LIGHT_GRAY,
+        fontSize: scale(20),
+        color: uiColours.BLACK_TEXT
     },
     borderStyleHighLighted: {
         borderColor: uiColours.PRIMARY,
@@ -116,11 +116,11 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         alignSelf: 'center',
     },
-    resendOtpView:{
-        flexDirection:'row',
-        marginTop:verticalScale(20),
-        alignSelf:'center',
-        alignItems:"center"
+    resendOtpView: {
+        flexDirection: 'row',
+        marginTop: verticalScale(20),
+        alignSelf: 'center',
+        alignItems: "center"
     }
 
 })

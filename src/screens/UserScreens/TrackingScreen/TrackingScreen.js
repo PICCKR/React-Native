@@ -14,10 +14,13 @@ import { tostMessagetypes } from '../../../utils/Constents/constentStrings';
 import useBackButton from '../../../customHooks/useBackButton';
 import { useNavigation } from '@react-navigation/native';
 import { MainRouteStrings } from '../../../utils/Constents/RouteStrings';
+import { useSelector } from 'react-redux';
 
 const TrackingScreen = ({ route }) => {
 
+    const oderDetails = route?.params?.oderDetails
     const destination = route?.params?.geometry
+    const orderDeatils = useSelector((state) => state?.orderDeatilsReducer?.orderDeatils)
 
     const { appStyles, selectedVehicle, isDark, source, setSource, setDestination } = useContext(AppContext)
     // console.log("origin === > ",source)
@@ -64,7 +67,7 @@ const TrackingScreen = ({ route }) => {
 
     useBackButton(() => {
         navigation.navigate(MainRouteStrings.ACTIVITY_SCREEN)
-       setSource({
+        setSource({
             lat: "",
             lng: "",
             location: "Current location"
@@ -121,6 +124,7 @@ const TrackingScreen = ({ route }) => {
             <BottomView
                 appStyles={appStyles}
                 isDark={isDark}
+                orderDeatils={orderDeatils}
                 pinData={pinData}
                 selectedVehicle={selectedVehicle}
                 handleCancelOrder={() => {

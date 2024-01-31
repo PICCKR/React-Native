@@ -13,7 +13,7 @@ import useBackButton from '../../../customHooks/useBackButton'
 
 const ApprovalScreen = ({ route }) => {
     const data = route?.params?.data
-    const { appStyles, isDark, setuserData, setIsLoggedIn } = useContext(AppContext)
+    const { appStyles, isDark, setuserData, setIsLoggedIn, fromGuestUserScreen, setFromGuestUserScreen } = useContext(AppContext)
     const navigation = useNavigation()
 
     const [buttonActive, setButtonActive] = useState(true)
@@ -25,7 +25,13 @@ const ApprovalScreen = ({ route }) => {
         const useData = { ...data, type: "user" }
         setLocalData(storageKeys.userData, useData)
         setuserData({ ...data, type: "user" })
-        setIsLoggedIn(true)
+        if (fromGuestUserScreen) {
+            navigation.navigate(fromGuestUserScreen)
+            setFromGuestUserScreen(null)
+        } else {
+            setIsLoggedIn(true)
+        }
+
     }
 
     useBackButton(() => {

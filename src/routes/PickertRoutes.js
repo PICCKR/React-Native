@@ -28,6 +28,8 @@ const PickertRoutes = () => {
                 <Stack.Screen name={MainRouteStrings.PICKER_MESSAGES_SCREEN} component={screens.PICKER_MESSAGES_SCREEN} />
                 <Stack.Screen name={MainRouteStrings.BECOME_PICKER} component={screens.BECOME_PICKER} />
                 <Stack.Screen name={MainRouteStrings.TRAINING_SCREEN} component={screens.TRAINING_SCREEN} />
+                <Stack.Screen name={MainRouteStrings.VEHICLE_SCREEN} component={screens.VEHICLE_SCREEN} />
+                <Stack.Screen name={MainRouteStrings.BANK_ACCOUNT} component={screens.BANK_ACCOUNT} />
             </Stack.Navigator>
         </NavigationContainer>
     )

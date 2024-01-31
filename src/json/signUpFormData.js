@@ -32,15 +32,26 @@ export const signUpFormData = [
         errorMsg: "Enter valid Phone Number",
         validationString: RegEx.only__number__regEx
     },
-
     {
         id: 4,
+        title: 'Email',
+        placeHolder: "Input your Email",
+        type: "email",
+        maxLenght: 100,
+        isRequired: true,
+        errorMsg: "Please enter valid email",
+        validationString: RegEx.email__regEx
+    },
+
+    {
+        id: 5,
         title: 'Password',
         placeHolder: "Input your password",
         type: "password",
         maxLenght: 100,
         isRequired: true,
-        errorMsg: "The minimum password length is 6 characters",
-        validationString: RegEx.length6
-    }
+        errorMsg: "Password must contain at least 1 uppercase letter, 1 lowercase letter, 1 number, 1 special character, and be at least 8 characters long.",
+        validationString: RegEx.password
+    },
+    
 ]

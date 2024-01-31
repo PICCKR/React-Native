@@ -57,14 +57,14 @@ const PickerHomeScreen = ({ route }) => {
 
         <SetRoute />
 
-        <TripRequest
+        {/* <TripRequest
           from={from}
           handleDecline={() => {
 
           }}
-        />
+        /> */}
 
-        <TouchableOpacity
+        {/* <TouchableOpacity
           style={styles.completeImage}
           onPress={() => {
             navigation.navigate(MainRouteStrings.BECOME_PICKER, {
@@ -78,7 +78,7 @@ const PickerHomeScreen = ({ route }) => {
             width: "100%",
             borderRadius: moderateScale(8)
           }} />
-        </TouchableOpacity>
+        </TouchableOpacity> */}
 
         <DestinationHistory />
       </ScrollView>

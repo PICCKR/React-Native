@@ -64,7 +64,7 @@ const PickupScreen = ({ route }) => {
 
     useBackButton(() => {
         navigation.goBack()
-       setSource({
+        setSource({
             lat: "",
             lng: "",
             location: "Current location"

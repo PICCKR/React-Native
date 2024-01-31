@@ -10,99 +10,54 @@ import { uiColours } from '../../../utils/Styles/uiColors'
 import { commonStyles } from '../../../utils/Styles/CommonStyles'
 import DropDown from '../../../components/DropDown/DropDown'
 import axios from 'axios'
+import { apiGet } from '../../../services/apiServices'
+import { endPoints } from '../../../configs/apiUrls'
 
 const WithdrawPopUp = ({
     isVisible,
     setShowSheet,
     appStyles,
     sheetTitle,
-    wallateBalance
+    wallateBalance,
+    withDrawData,
+    setWithDrawData,
+    handleConfirm
 }) => {
     const { userData } = useContext(AppContext)
-    const [withDrawData, setWithDrawData] = useState({
-        account_bank: "",
-        account_number: "",
-        amount: "0",
-    })
     const [fullBankData, setFullBankData] = useState([])
     const [page, setPage] = useState(1);
     const [buttonActive, setButtonActive] = useState(false)
     const [seletedAmount, setSelectedAmount] = useState("0")
     const [bankData, setBankData] = useState([])
+
     const [showError, setShowError] = useState({
         amount: false,
         accountNumber: false
     })
 
 
-
-    const loadMoreItems = () => {
-        const nextPage = page + 1;
-        const endIndex = nextPage * 20;
-        const newData = fullBankData.slice(0, endIndex);
-        setBankData(newData);
-        setPage(nextPage);
-    };
-
-    const getBackData = async () => {
-        // const data = {
-        //     account_bank: withDrawData?.account_bank,
-        //     account_number: withDrawData?.account_number,
-        //     amount: parseInt(withDrawData?.amount),
-        //     narration: "withdraw",
-        //     currency: "NGN",
-        //     reference: generateTransactionReference(),
-        //     callback_url: "https://webhook.site/b3e505b0-fe02-430e-a538-22bbbce8ce0d",
-        //     debit_currency: "NGN",
-        //     meta: [
-        //         {
-        //             sender: "picker",
-        //             firstName: "Example",
-        //             lastName: "User",
-        //             email: "user@example.com",
-        //             beneficiary_country: "NG",
-        //             mobile_number: "+2348131133933",
-        //             merchant_name: "Spotify"
-        //         }]
-        // }
-        const config = {
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer FLWSECK_TEST-SANDBOXDEMOKEY-X`,
-            },
-        };
-        axios.get("https://api.flutterwave.com/v3/banks/NG", config).then((res) => {
+    const getAccountData = async () => {
+        // Actions.showLoader(true)
+        apiGet(`${endPoints.BANK_ACCOUNT}`).then((res) => {
+            // console.log("get vehicle res ", res?.data, res?.status);
             if (res?.status === 200) {
-                const sortedData = res?.data?.data?.sort((a, b) => {
-                    const nameA = a.name.toUpperCase(); // Convert names to uppercase for case-insensitive sorting
-                    const nameB = b.name.toUpperCase();
-        
-                    if (nameA < nameB) {
-                        return -1; // nameA comes before nameB
-                    }
-                    if (nameA > nameB) {
-                        return 1; // nameA comes after nameB
-                    }
-                    return 0; // names are equal
-                });
-                setFullBankData(sortedData)
-                const newData = sortedData.slice(0, 50);
-                setBankData(newData)
+                setBankData(res?.data?.data)
+            } else {
+                setBankData([])
             }
-            console.log("resss", res?.status);
-
+            // Actions.showLoader(false)
         }).catch((error) => {
-            console.log("error", error);
+            // Actions.showLoader(false)
+            console.log("error in get address", error);
         })
     }
 
     useEffect(() => {
-        getBackData()
+        getAccountData()
     }, [])
 
     useEffect(() => {
         if (parseInt(withDrawData?.amount) > 0 &&
-            withDrawData?.account_number &&
             withDrawData?.account_bank
         ) {
             setButtonActive(true)
@@ -126,8 +81,23 @@ const WithdrawPopUp = ({
             onBackdropPress={() => {
                 setShowSheet(false)
             }}
+            handleButtonPress={() => {
+                if (withDrawData?.amount > wallateBalance) {
+                    setShowError({
+                        ...showError,
+                        amount: true
+                    })
+                } else {
+                    setShowError({
+                        ...showError,
+                        amount: false
+                    })
+                    handleConfirm()
+                }
+
+            }}
             showFooterButton
-            buttonTitle={"Withdraw"}
+            buttonTitle={"Confirm"}
         >
             <ScrollView style={{}}>
                 <View style={{ gap: verticalScale(10) }}>
@@ -154,8 +124,8 @@ const WithdrawPopUp = ({
 
                     <DropDown
                         data={bankData}
-                        changeKey="name"
-                        title="Bank"
+                        changeKey="bankName"
+                        title="Bank Account"
                         palceholder={"Select Your Bank"}
                         handleSelectItem={(item) => {
                             setWithDrawData({
@@ -163,24 +133,6 @@ const WithdrawPopUp = ({
                                 account_bank: item
                             })
                         }}
-                        loadMoreItems={loadMoreItems}
-                    />
-
-                    <InputText
-                        hasTitle
-                        inputTitle="Account number"
-                        handleChange={(e) => {
-                            setWithDrawData({
-                                ...withDrawData,
-                                account_number: e
-                            })
-                        }}
-                        keyboardType="numeric"
-                        placeholder={"Input your account number"}
-                        value={withDrawData?.account_number}
-                        inputContainer={{}}
-                        ShowError={showError.accountNumber}
-                        ErrorMsg={`Enter account number`}
                     />
 
                 </View>

@@ -18,10 +18,11 @@ import { showSuccessToast } from '../../../helper/showSuccessToast'
 import { setLocalData } from '../../../helper/AsyncStorage'
 import { storageKeys } from '../../../helper/AsyncStorage/storageKeys'
 import { showGeneralError } from '../../../helper/showGeneralError'
+import { showErrorToast } from '../../../helper/showErrorToast'
 
 const KycScreen = ({ route }) => {
     const data = route?.params?.data
-    const { appStyles, isDark, setIsLoggedIn, userData, setuserData } = useContext(AppContext)
+    const { appStyles, isDark, setIsLoggedIn, userData, setuserData, fromGuestUserScreen, setFromGuestUserScreen } = useContext(AppContext)
     const navigation = useNavigation()
 
     const [selectedCountry, setSelctedCountry] = useState({
@@ -59,10 +60,10 @@ const KycScreen = ({ route }) => {
             "id_number": bvn,
             "userId": userData?._id
         }
-        console.log("apiData==>", apiData);
+        // console.log("apiData==>", apiData);
         Actions.showLoader(true)
         apiPost(endPoints.VERIFY_KYC, apiData).then((res) => {
-            console.log("res ===>", res?.data, res?.status);
+            // console.log("res ===>", res?.data, res?.status);
             if (res?.status === 200) {
                 showSuccessToast("verified successfully", isDark)
                 setuserData({
@@ -75,11 +76,24 @@ const KycScreen = ({ route }) => {
                         idNumber: bvn
                     }
                 })
-                setIsLoggedIn(true)
+                if (fromGuestUserScreen) {
+                    navigation.navigate(fromGuestUserScreen)
+                    setFromGuestUserScreen(null)
+                } else {
+                    setIsLoggedIn(true)
+                }
             } else if (res?.status === 409) {
                 showSuccessToast(res?.data?.message, isDark)
-                setIsLoggedIn(true)
-            } else {
+                if (fromGuestUserScreen) {
+                    navigation.navigate(fromGuestUserScreen)
+                    setFromGuestUserScreen(null)
+                } else {
+                    setIsLoggedIn(true)
+                }
+            } else if (res?.status === 203) {
+                showErrorToast(res?.data?.message, isDark)
+            }
+            else {
                 showGeneralError()
             }
             Actions.showLoader(false)
@@ -97,7 +111,12 @@ const KycScreen = ({ route }) => {
 
     const animationController = useRef(new Animated.Value(0)).current
     useBackButton(() => {
-        setIsLoggedIn(true)
+        if (fromGuestUserScreen) {
+            navigation.navigate(fromGuestUserScreen)
+            setFromGuestUserScreen(null)
+        } else {
+            setIsLoggedIn(true)
+        }
         return true
     })
     return (
@@ -105,9 +124,12 @@ const KycScreen = ({ route }) => {
             centerTitle="KYC"
             rightTitle="Skip"
             handlerRightViewPress={() => {
-                // setuserData({ ...userData, data })
-                // setIsLoggedIn(true)
-                navigation.goBack()
+                if (fromGuestUserScreen) {
+                    navigation.navigate(fromGuestUserScreen)
+                    setFromGuestUserScreen(null)
+                } else {
+                    setIsLoggedIn(true)
+                }
             }}
             // showBackButton
             buttonTitle={"Upload"}
@@ -160,10 +182,10 @@ const KycScreen = ({ route }) => {
                                             inputTitle="Bank Verification Number"
                                             placeholder="e.g. 1234 5678 9012 3456"
                                             value={bvn}
-                                            maxLength={19}
+                                            keyboardType="numeric"
+                                            maxLength={11}
                                             inputContainer={{ marginTop: verticalScale(10) }}
                                             handleChange={(e) => {
-                                                
                                                 setBvn(e)
                                                 if (e.length > 10) {
                                                     setButtonActive(true)

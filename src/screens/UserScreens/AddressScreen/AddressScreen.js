@@ -33,7 +33,7 @@ const AddressScreen = () => {
     const [selectedAddress, setSelectedAddress] = useState(null)
 
     const handleAddressEdit = async (newAddress) => {
-        console.log("newAddress", newAddress);
+        // console.log("newAddress", newAddress);
 
         setShowSheet({
             ...showSheet,
@@ -41,7 +41,7 @@ const AddressScreen = () => {
         })
         Actions.showLoader(true)
         apiPut(`${endPoints.ADD_ADDRESS}/${selectedAddress?._id}`, newAddress).then((res) => {
-            console.log("resss=>", res?.data, res?.status);
+            // console.log("resss=>", res?.data, res?.status);
             if (res?.status === 200) {
                 getAddress()
                 // setAddress((prev) => [...prev, res?.data?.data])
@@ -58,7 +58,7 @@ const AddressScreen = () => {
     }
 
     const handleAddAddress = (newAddress) => {
-        console.log("newAddress", newAddress);
+        // console.log("newAddress", newAddress);
         setShowSheet({
             ...showSheet,
             add: false
@@ -84,7 +84,7 @@ const AddressScreen = () => {
     const getAddress = async () => {
         Actions.showLoader(true)
         apiGet(`${endPoints.GET_ADDRESS}/${userData?._id}`).then((res) => {
-            console.log("get address res", res?.data, res?.status);
+            // console.log("get address res", res?.data, res?.status);
             if (res?.status === 200) {
                 setAddress(res?.data?.data)
             } else {

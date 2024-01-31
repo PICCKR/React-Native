@@ -133,14 +133,14 @@ const TripScreen = () => {
   const handleAccept = async (item) => {
     navigation.navigate(MainRouteStrings.PICKUP_SCREEN, {
       geometry: {
-          latitude: 12.978463866133229,
-          longitude: 77.57011765790308
+        latitude: 12.978463866133229,
+        longitude: 77.57011765790308
       }
-  })
+    })
   }
 
   const handleDecline = () => {
-  // console.log("tabsData", tabsData[0]);
+    // console.log("tabsData", tabsData[0]);
     const toastMsgConfg = {
       isDark: isDark,
       msg: "You have successfully decline your trip."

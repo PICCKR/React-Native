@@ -8,18 +8,19 @@ import SelectAmountPopup from '../../../components/SelectAmountPopup/SelectAmoun
 import { useNavigation } from '@react-navigation/native'
 import { MainRouteStrings } from '../../../utils/Constents/RouteStrings'
 import { AppContext } from '../../../context/AppContext'
+import { formatAmount, formatter } from '../../../helper/formatter'
 
 const Header = ({
     appStyles,
     isDark,
 }) => {
     // console.log("userData", userData);
-    const {setuserData, userData} = useContext(AppContext)
+    const { setuserData, userData } = useContext(AppContext)
     const navigation = useNavigation()
     const [showSheet, setShowSheet] = useState(false)
 
     const handleWithdraw = (data, amount) => {
-        console.log("data====>", data, amount);
+        // console.log("data====>", data, amount);
         if (data?.status === "successful") {
             setuserData({
                 ...userData, wallet: {
@@ -28,7 +29,7 @@ const Header = ({
                 }
             })
         } else {
-            
+
         }
         setShowSheet(false)
     }
@@ -56,12 +57,13 @@ const Header = ({
                         <Text style={[appStyles.smallTextBlackBold, {
                             color: uiColours.BLACK_TEXT
                         }]} >
-                            ₦{userData?.wallet?.balance}
+                            {formatter.format(userData?.wallet?.balance)}
+                            {/* ₦{userData?.wallet?.balance} */}
                         </Text>
                     </View>
                 </View>
 
-                {userData?.wallet?.balance > 0 &&<TouchableOpacity
+                {userData?.wallet?.balance > 0 && <TouchableOpacity
                     onPress={() =>
                         navigation.navigate(MainRouteStrings.WALLET_SCREEN)
                     }
@@ -81,7 +83,7 @@ const Header = ({
                 handleOnRedirect={handleWithdraw}
                 buttonTitle="Withdraw"
                 wallateBalance={userData?.wallet?.balance}
-                action ="withdraw"
+                action="withdraw"
             />
         </View>
     )

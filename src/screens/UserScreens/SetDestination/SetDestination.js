@@ -13,19 +13,23 @@ import moment from 'moment'
 import { uiColours } from '../../../utils/Styles/uiColors'
 import DatePicker from '../../../components/DatePicker'
 import useBackButton from '../../../customHooks/useBackButton'
+import { useSelector } from 'react-redux'
+import Actions from '../../../redux/Actions'
 
 
-const SetDestination = ({route}) => {
+const SetDestination = ({ route }) => {
   const from = route?.params?.from
   const {
     appStyles,
     userData,
     destination,
     source,
-    isDark
+    isDark,
+    // orderDeatils,
+    setOrderDeatils
   } = useContext(AppContext)
-
-  // console.log("destination", userData);
+  const orderDeatils = useSelector((state) => state?.orderDeatilsReducer?.orderDeatils)
+  // console.log("destination", orderDeatils);
 
   const navigation = useNavigation()
   const isFocused = useIsFocused();
@@ -43,19 +47,17 @@ const SetDestination = ({route}) => {
   })
 
   const [recipientData, setRecipientData] = useState({
-    name: "",
-    phoneNumber: ""
+    name: orderDeatils?.recipientData?.name,
+    phoneNumber: orderDeatils?.recipientData?.phoneNumber
   })
   const [pickUpData, setPickUpData] = useState({
-    name: userData?.firstName ? `${userData?.firstName} ${userData?.lastName}` : "",
-    phoneNumber: userData?.phoneNumber ? userData?.phoneNumber : "",
-    selectedCountry:userData?.phoneNumber?.split(" ")[0],
-    pickupDate: "Now"
+    name: orderDeatils?.pickUpData?.name ? orderDeatils?.pickUpData?.name : userData?.token ? `${userData?.firstName} ${userData?.lastName}` : "",
+    phoneNumber: orderDeatils?.pickUpData?.phoneNumber ? orderDeatils?.pickUpData?.phoneNumber : userData?.token ? userData?.phoneNumber : "",
+    selectedCountry: orderDeatils?.pickUpData?.selectedCountry ? orderDeatils?.pickUpData?.selectedCountry : userData?.token ? { code: userData?.phoneNumber?.split(" ")[0] } : { code: "+234" },
+    pickupDate: orderDeatils?.pickUpData?.pickupDate
   })
 
   const [showTime, setShowTime] = useState(true)
-
-  const [date, setDate] = useState(new Date(1598051730000));
 
   useEffect(() => {
     // This will run every time the screen comes into focus
@@ -100,7 +102,7 @@ const SetDestination = ({route}) => {
 
       <RecipientSheet
         isVisible={showBottomSheet.recipient}
-        modelBgStyles={{backgroundColor:"rgba(255, 255, 255, 0)"}}
+        modelBgStyles={{ backgroundColor: "rgba(255, 255, 255, 0)" }}
         formData={recipientData}
         setFormData={setRecipientData}
         location={destination}
@@ -121,7 +123,7 @@ const SetDestination = ({route}) => {
             pickup: false
           })
           navigation.goBack()
-          
+
         }}
         handleNext={() => {
           setShowBottomSheet({
@@ -170,12 +172,17 @@ const SetDestination = ({route}) => {
             ...showBottomSheet,
             pickup: false
           })
-          navigation.navigate(MainRouteStrings.ITEMS_DETAILS,{
-            data:{
-              pickUpData,
-              recipientData
-            }
+
+          // console.log("formData", formData);
+
+          Actions.orderDeatils({
+            ...orderDeatils,
+            recipientData: recipientData,
+            pickUpData: pickUpData
           })
+
+          // setOrderDeatils()
+          navigation.navigate(MainRouteStrings.ITEMS_DETAILS)
         }}
 
       />
@@ -184,14 +191,14 @@ const SetDestination = ({route}) => {
         isVisible={showBottomSheet.datePicker}
         mode={'single'}
         colorOptions={{
-          headerColor:isDark ? uiColours.DARK_BG : uiColours.WHITE_TEXT,
-          headerTextColor:isDark ? uiColours.WHITE_TEXT : uiColours.WHITE_TEXT,
-          backgroundColor:isDark ? uiColours.DARK_BG :uiColours.WHITE_TEXT,
-          dateTextColor:isDark ? uiColours.WHITE_TEXT : uiColours.GRAY_TEXT,
+          headerColor: isDark ? uiColours.DARK_BG : uiColours.WHITE_TEXT,
+          headerTextColor: isDark ? uiColours.WHITE_TEXT : uiColours.WHITE_TEXT,
+          backgroundColor: isDark ? uiColours.DARK_BG : uiColours.WHITE_TEXT,
+          dateTextColor: isDark ? uiColours.WHITE_TEXT : uiColours.GRAY_TEXT,
         }}
         hideTime={showTime}
-        onSelectDate={()=>{
-          console.log("sdds");
+        onSelectDate={() => {
+          // console.log("sdds");
           setShowTime(false)
         }}
         minDate={new Date()}
@@ -232,7 +239,7 @@ const SetDestination = ({route}) => {
             ...pickUpData,
             pickupDate: output?.dateString
           })
-          
+
         }}
 
       />

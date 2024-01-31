@@ -26,6 +26,7 @@ const MobileNumberInput = ({
     inPutStyles,
     editable = true
 }) => {
+    console.log("formData", formData);
 
     const { appStyles, isDark } = useContext(AppContext)
     const [showSheet, setShowSheet] = useState(false)
@@ -94,8 +95,8 @@ const MobileNumberInput = ({
     }
 
     const renderFlag = () => {
-        console.log(selectedCountry);
-        switch (selectedCountry) {
+        console.log("selectedCountry===>", selectedCountry);
+        switch (selectedCountry.code) {
             case "+234":
                 return <Images.NigeriaFlags height={moderateScale(20)} width={moderateScale(35)} />
                 break;
@@ -132,9 +133,9 @@ const MobileNumberInput = ({
                 inputContainer={[inputContainer]}
                 inPutStyles={[{
                     paddingRight: scale(120),
-                    backgroundColor: editable ? uiColours.WHITE_TEXT : uiColours.LIGHT_GRAY,
+                    backgroundColor: (editable && !isDark) ? uiColours.WHITE_TEXT : (editable && isDark) ? uiColours.DARK_BG : uiColours.LIGHT_GRAY,
                 }, inPutStyles]}
-                textBox={{ color: editable ? uiColours.BLACK_TEXT : uiColours.GRAY_TEXT }}
+                textBox={{ color: (editable && !isDark) ? uiColours.BLACK_TEXT : (editable && isDark) ? uiColours.GRAY_TEXT : uiColours.GRAY_TEXT }}
                 hasTitle
                 inputTitle="Phone Number"
                 handleChange={handleMobileNumberChange}
@@ -166,7 +167,7 @@ const MobileNumberInput = ({
                             </View>
 
                             <Text style={[appStyles.smallTextBlack, {
-                                color: editable ? uiColours.BLACK_TEXT : uiColours.GRAY_TEXT
+                                color: (editable && !isDark) ? uiColours.BLACK_TEXT : (editable && isDark) ? uiColours.GRAY_TEXT : uiColours.GRAY_TEXT
                             }]}>{selectedCountry?.code}</Text>
                             {!isDark ? <Images.downArrow /> : <Images.downArrowWhite />}
                         </TouchableOpacity>

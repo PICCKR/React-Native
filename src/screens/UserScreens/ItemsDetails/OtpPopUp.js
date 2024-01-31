@@ -1,11 +1,12 @@
 import { View, Text, TouchableOpacity, ScrollView } from 'react-native'
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import BottomSheet from '../../../components/BottomSheet/BottomSheet'
 import SheetFooter from '../../../components/SheetFooter/SheetFooter'
 import { moderateScale, verticalScale } from 'react-native-size-matters'
 import OTPInputView from '@twotalltotems/react-native-otp-input'
 import styles from './Styles'
 import { uiColours } from '../../../utils/Styles/uiColors'
+import { AppContext } from '../../../context/AppContext'
 
 const OtpPopUp = ({
     isVisible,
@@ -14,6 +15,7 @@ const OtpPopUp = ({
     appStyles,
     isDark
 }) => {
+    const {userData} = useContext(AppContext)
     const [buttonActive, setButtonActive] = useState(false)
     const [otp, setOTP] = useState('')
 
@@ -46,7 +48,7 @@ const OtpPopUp = ({
                     The OTP code will be sent to the phone number
                 </Text>
                 <Text style={appStyles.smallTextGray}>
-                    +1 555-123-4567
+                    {userData?.phoneNumber}
                 </Text>
 
                 <OTPInputView

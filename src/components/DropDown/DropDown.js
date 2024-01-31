@@ -1,4 +1,4 @@
-import React, { useContext, useRef, useState } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import {
   Image,
   Text,
@@ -32,13 +32,21 @@ const DropDown = ({
   arrowStyle,
   changeKey,
   handleSelectItem = () => { },
-  loadMoreItems = () => { }
+  loadMoreItems = () => { },
+  dropDownPress = () => { },
+  Value
 }) => {
+  // console.log("vala", Value);
   const { appStyles } = useContext(AppContext)
   const [showData, setShowData] = useState(false)
-  const [selectedItems, setSelectedItem] = useState(null)
+  const [selectedItems, setSelectedItem] = useState(Value)
   const modifiedData = getConvertedData(data, changeKey);
   const animationController = useRef(new Animated.Value(0)).current
+
+  useEffect(() => {
+    setSelectedItem(Value)
+  }, [Value])
+
 
   const toggleDropdown = () => {
 
@@ -71,11 +79,12 @@ const DropDown = ({
         activeOpacity={0.8}
         onPress={() => {
           toggleDropdown()
+          dropDownPress()
         }}
         disabled={disabled}
       >
         <Text
-          style={{ color: selectedItems ? 'black' : '#A9A9A9' }}
+          style={[appStyles?.smallTextBlack, { color: selectedItems ? 'black' : '#A9A9A9' }]}
         >
           {selectedItems ? selectedItems?.itemName : palceholder}
         </Text>
@@ -100,6 +109,7 @@ const DropDown = ({
               loadMoreItems(); // Load more data when reaching near the bottom
             }
           }}
+          nestedScrollEnabled
           scrollEventThrottle={400}
           style={[styles.itemView, appStyles?.borderColor, itemView]}
         >
@@ -109,10 +119,7 @@ const DropDown = ({
                 <TouchableOpacity
                   key={i.toString()}
                   style={[
-                    styles.dropDownItem,
-                    {
-                      backgroundColor: selectedItems?.id === item?.id ? uiColours.PRIMARY : null
-                    }
+                    styles.dropDownItem
                   ]}
                   onPress={() => {
                     setSelectedItem(item)
@@ -122,7 +129,7 @@ const DropDown = ({
                 >
                   <Text
                     style={[appStyles?.smallTextBlack, {
-                      color: selectedItems?.id === item?.id ? "#fff" : "#000"
+                      color: selectedItems?.itemName === item?.itemName ? uiColours.PRIMARY : uiColours.GRAY_TEXT
                     }]}
                   >
                     {item?.itemName}

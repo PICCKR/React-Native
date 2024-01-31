@@ -9,10 +9,15 @@ import { commonStyles } from '../../../utils/Styles/CommonStyles'
 import { uiColours } from '../../../utils/Styles/uiColors'
 import styles from './Styles'
 import { moderateScale } from 'react-native-size-matters'
-import { clearLocalData } from '../../../helper/AsyncStorage'
+import { clearLocalData, setLocalData } from '../../../helper/AsyncStorage'
 import { useNavigation } from '@react-navigation/native'
 import { deleteUser, signOut } from '@aws-amplify/auth'
 import Actions from '../../../redux/Actions'
+import { apiDelete } from '../../../services/apiServices'
+import { endPoints } from '../../../configs/apiUrls'
+import { storageKeys } from '../../../helper/AsyncStorage/storageKeys'
+import { showGeneralErrorToast } from '../../../components/tostConfig/tostConfig'
+import { showGeneralError } from '../../../helper/showGeneralError'
 
 const ManageAccount = () => {
 
@@ -24,18 +29,36 @@ const ManageAccount = () => {
         signOut: false
     })
 
+    // const handleDeleteAccount = async () => {
+
+    //     deleteUser().then((res) => {
+    //         // console.log("res===>", res);
+    //         deleteAccount()
+    //     }).catch((err) => {
+    //         Actions.showLoader(false)
+    //         console.log("error while deleting account", err);
+    //     })
+    // }
+
     const handleDeleteAccount = async () => {
         setShowSheet(false)
         Actions.showLoader(true)
-        deleteUser().then((res) => {
+        apiDelete(`${endPoints.DELETE_USER}/${userData?._id}`).then((res) => {
+            // console.log("res?.status", res?.status, res);
+            if (res?.status === 200) {
+                deleteUser().then((res) => {
+                }).catch((err) => {
+                })
+                setuserData(null)
+                setIsLoggedIn(false)
+                setLocalData(storageKeys.userData, null)
+            } else {
+                showGeneralError()
+            }
             Actions.showLoader(false)
-            // console.log("res in delete account", res);
-            // clearLocalData()
-            setuserData(null)
-            setIsLoggedIn(false)
-        }).catch((err) => {
+        }).catch((error) => {
             Actions.showLoader(false)
-            console.log("error while deleting account", err);
+            showGeneralError()
         })
     }
 
@@ -98,13 +121,18 @@ const ManageAccount = () => {
                     setShowSheet(false)
                     Actions.showLoader(true)
                     try {
-                        await signOut().then((res) => {
-                            // console.log("res in log oput", res);
-                        });
-                        setIsLoggedIn(false)
-                        Actions.showLoader(false)
+                        await signOut().then(async (res) => {
+                            setIsLoggedIn(false)
+                            setuserData(null)
+                            await clearLocalData()
+                            Actions.showLoader(false)
+                        }).catch((error) => {
+                            showGeneralErrorToast()
+                        })
+
                     } catch (error) {
                         Actions.showLoader(false)
+                        showGeneralErrorToast()
                         console.log('error signing out: ', error);
                     }
                     // clearLocalData()

@@ -7,6 +7,7 @@ import { commonStyles } from '../../../utils/Styles/CommonStyles'
 import { moderateScale, scale, verticalScale } from 'react-native-size-matters'
 import { Images } from '../../../assets/images'
 import RadioButton from '../../../components/RadioButton/RadioButton'
+import { formatAmount } from '../../../helper/formatter'
 
 const ShowPaymentSheet = ({
   isVisible,
@@ -41,7 +42,7 @@ const ShowPaymentSheet = ({
                 PicckRPay
               </Text>
               <Text style={appStyles.smallTextPrimaryBold}>
-                ₦{userData?.wallet?.balance}
+                {formatAmount(userData?.wallet?.balance)}
               </Text>
             </View>
           </View>

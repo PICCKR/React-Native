@@ -10,79 +10,85 @@ import DotsLoader from '../../CommonScreens/DotsLoader/DotsLoader'
 import CustomButton from '../../../components/Button/CustomButton'
 import { buttonTypes } from '../../../utils/Constents/constentStrings'
 import { uiColours } from '../../../utils/Styles/uiColors'
+import DragableBottomSheet from '../../../components/DragableBottomSheet/DragableBottomSheet'
 
 const NearByPickers = ({
     isVisible,
     setShowSheet,
     handleDecline,
     handleAccept,
-    handleCancelRide
+    handleCancelRide,
+    nearByPickersData = []
 }) => {
     const { appStyles, isDark } = useContext(AppContext)
 
-    const nearByPickersData = [
-        {
-            id: "1",
-            lat: 12.293049583717883,
-            lng: 76.63101437360515,
-        },
-        {
-            id: "2",
-            lat: 12.302739640568026,
-            lng: 76.62731305608372
-        },
-        {
-            id: "3",
-            lat: 12.306077759217404,
-            lng: 76.65507293749431
-        },
-        {
-            id: "4",
-            lat: 12.295053579462769,
-            lng: 76.64540017987146
-        },
-    ]
+    // const nearByPickersData = [
+    //     {
+    //         id: "1",
+    //         lat: 12.293049583717883,
+    //         lng: 76.63101437360515,
+    //     },
+    //     {
+    //         id: "2",
+    //         lat: 12.302739640568026,
+    //         lng: 76.62731305608372
+    //     },
+    //     {
+    //         id: "3",
+    //         lat: 12.306077759217404,
+    //         lng: 76.65507293749431
+    //     },
+    //     {
+    //         id: "4",
+    //         lat: 12.295053579462769,
+    //         lng: 76.64540017987146
+    //     },
+    // ]
 
     return (
-        <BottomSheet
-            isVisible={isVisible}
+        <DragableBottomSheet
+            index={nearByPickersData?.length}
+        >
+            {/* isVisible={isVisible}
             title="Choose PicckR"
             renderRightView={() => {
                 return (
                     <TouchableOpacity
-                    onPress={handleCancelRide}
+                        onPress={handleCancelRide}
                     >
                         <Text style={appStyles.mediumTextGray}>
                             Cancel the ride
                         </Text>
                     </TouchableOpacity>
                 )
-            }}
+            }} */}
 
 
-            onBackdropPress={() => {
+            {/* onBackdropPress={() => {
                 // setShowSheet(false)
             }}
             handleRightClick={() => {
                 setShowSheet(false)
             }}
-            containerStyles={{ maxHeight: screenSize.height - verticalScale(150) }}
-        >
-            <FlatList
+            containerStyles={{ maxHeight: screenSize.height - verticalScale(150) }} */}
+
+            {nearByPickersData?.length > 0 ? <FlatList
                 data={nearByPickersData}
-                keyExtractor={(item) => item?.id}
-                showsVerticalScrollIndicator = {false}
+                keyExtractor={(item) => item?._id}
+                showsVerticalScrollIndicator={false}
                 renderItem={({ item }) => {
                     return (
-                        <View style={[styles.picckerCard,{
+                        <View style={[styles.picckerCard, {
                             borderColor: isDark ? uiColours.GRAYED_BUTTON : uiColours.LIGHT_GRAY
                         }]}>
                             <View style={styles.pickerProfile}>
                                 <View style={styles.pickerProfileView}>
-                                    {item?.profileImg ? <Image source={{ uri: item.profileImg }} /> : <Images.profile height={moderateScale(50)} width={moderateScale(50)} />}
+                                    {item?.picckrId?.picture ? <Image source={{ uri: picckrId?.picture }} style={{
+                                        height: moderateScale(30), width: moderateScale(30)
+                                    }} /> : <Images.profile height={moderateScale(30)} width={moderateScale(30)} />}
                                 </View>
                                 <View>
-                                    <Text style={appStyles?.smallTextPrimaryBold}>Cooper Septimus</Text>
+                                    <Text style={appStyles?.smallTextPrimaryBold}>{item?.picckrId?.firstName}</Text>
                                     <Text style={appStyles?.smallTextGray}>AM666EE • Toyota Prius Hybris</Text>
                                     <View style={commonStyles.flexRowAlnCtr}>
                                         <Images.star />
@@ -98,12 +104,12 @@ const NearByPickers = ({
                                     buttonStyle={{ borderColor: uiColours.RED }}
                                     title={"Decline"}
                                     titleStyle={{ color: uiColours.RED }}
-                                    NavigationHandl={()=>handleDecline(item)}
+                                    NavigationHandl={() => handleDecline(item)}
                                 />
                                 <CustomButton
                                     buttonType={buttonTypes.MEDIUM}
                                     title={"Accept"}
-                                    NavigationHandle={()=>{
+                                    NavigationHandle={() => {
 
                                         handleAccept(item)
                                     }}
@@ -115,9 +121,18 @@ const NearByPickers = ({
                 }}
             >
 
-            </FlatList>
+            </FlatList> :
 
-        </BottomSheet>
+                <View style={{ justifyContent: 'center', alignItems: "center", width: '90%' }}>
+                    <Text style={[appStyles?.mediumTextBlack, { textAlign: 'center' }]}>
+                        Please wait, we are connecting to nearby pickers
+                    </Text>
+                </View>
+
+
+            }
+        </DragableBottomSheet>
+
     )
 }
 

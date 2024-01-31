@@ -170,7 +170,15 @@ const Content = ({
           />
         ))}
       </View>
+
       <View style={styles.footer}>
+          <TouchableOpacity style={styles.btn} onPress={onConfirmPress}>
+            <Text style={appStyles.smallTextWhite}>
+              Save date
+            </Text>
+          </TouchableOpacity>
+        </View>
+      {/* <View style={styles.footer}>
         {hideTime && <ScrollView
           horizontal
         >
@@ -213,7 +221,7 @@ const Content = ({
           </TouchableOpacity>
         </View>
 
-      </View>
+      </View> */}
 
 
       <ChangeYearModal
@@ -272,7 +280,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     flexWrap: 'wrap',
     borderBottomWidth: moderateScale(1),
-    borderColor: uiColours.LIGHT_GRAY
+    borderColor: uiColours.LIGHT_GRAY,
+    // marginBottom:verticalScale(60)
   },
   weekDays: {
     fontSize: 16
@@ -286,7 +295,8 @@ const styles = StyleSheet.create({
   footer: {
     width: screenSize.width,
     padding: moderateScale(16),
-    borderColor: uiColours.LIGHT_GRAY
+    borderColor: uiColours.LIGHT_GRAY,
+    marginBottom:verticalScale(40)
   },
   timeDataView: {
     flexDirection: "row",
@@ -315,6 +325,7 @@ const styles = StyleSheet.create({
     margin: moderateScale(16),
     alignItems: "center",
     justifyContent: "center",
+    marginBottom:30
   },
   changeMonthTO: {
     justifyContent: 'center',

@@ -5,37 +5,65 @@ import styles from './Styles'
 import { moderateScale, scale, verticalScale } from 'react-native-size-matters'
 import { uiColours } from '../../../utils/Styles/uiColors'
 import SelectAmountPopup from '../../../components/SelectAmountPopup/SelectAmountPopup'
-import { apiGet } from '../../../services/apiServices'
+import { apiGet, apiPost } from '../../../services/apiServices'
 import { endPoints } from '../../../configs/apiUrls'
 import { AppContext } from '../../../context/AppContext'
 import Actions from '../../../redux/Actions'
+import { showGeneralError } from '../../../helper/showGeneralError'
+import { showErrorToast } from '../../../helper/showErrorToast'
+import { useNavigation } from '@react-navigation/native'
+import { MainRouteStrings } from '../../../utils/Constents/RouteStrings'
+import { formatCurrency } from 'react-native-format-currency'
+import { formatAmount, formatter } from '../../../helper/formatter'
 
 const Header = ({
     appStyles,
     isDark
 }) => {
-    // console.log("userData", userData);
-    // State for showing/hiding SelectAmountPopup and wallet balance
+
+    const navigation = useNavigation()
     const { setuserData, userData } = useContext(AppContext)
     const [showSheet, setShowSheet] = useState(false)
 
     // Function to handle addition of amount to wallet balance
     const handleAddAmount = async (data, amount) => {
-        
-        console.log("data====>", data, amount);
+        // console.log("data====>", data, amount);
         if (data?.status === "successful") {
-            setuserData({
-                ...userData, wallet: {
-                    ...userData?.wallet,
-                    balance: parseInt(userData?.wallet?.balance) + parseInt(amount)
-                }
-            })
+            updateTransaction(data, amount)
+
         } else {
             // Handle unsuccessful transaction
         }
         setShowSheet(false)  // Close SelectAmountPopup after handling transaction
     }
 
+    const updateTransaction = async (data, amount) => {
+        Actions.showLoader(true)
+        const transactionData = {
+            "userId": userData?._id,
+            "amount": amount,
+            "flutterwaveDetails": { ...data, amount: amount }
+        }
+        apiPost(endPoints.UPDATE_TOP_UP, transactionData).then((res) => {
+            // console.log("res in transaction update", res?.status, res?.data);
+            if (res?.status === 201) {
+                setuserData({
+                    ...userData, wallet: {
+                        ...userData?.wallet,
+                        balance: parseInt(userData?.wallet?.balance) + parseInt(amount)
+                    }
+                })
+
+            } else {
+                showGeneralError()
+            }
+            Actions.showLoader(false)
+        }).catch((err) => {
+            showGeneralError()
+            Actions.showLoader(false)
+            console.log("error in update transaction", err);
+        })
+    }
 
     return (
         <View style={styles.headerContainer}>
@@ -68,19 +96,24 @@ const Header = ({
                         <Text style={[appStyles.smallTextBlackBold, {
                             color: uiColours.BLACK_TEXT
                         }]} >
-                            ₦{userData?.wallet?.balance}
+                            {formatAmount(userData?.wallet?.balance)}
                         </Text>
                     </View>
                 </View>
 
                 {/* Button to open SelectAmountPopup for topping up wallet */}
                 <TouchableOpacity
-                    onPress={() =>
-                        setShowSheet({
-                            ...showSheet,
-                            addPayment: true
-                        })
-                    }
+                    onPress={() => {
+                        if (userData?.kyc?.idNumber) {
+                            setShowSheet({
+                                ...showSheet,
+                                addPayment: true
+                            })
+                        } else {
+                            showErrorToast("Plase verify KYC Before doing transation", isDark)
+                            navigation.navigate(MainRouteStrings.USER_KYC_SCREEN)
+                        }
+                    }}
                     style={{ paddingVertical: verticalScale(6) }}
                 >
                     <Text style={appStyles.smallTextPrimaryBold} >
@@ -94,7 +127,7 @@ const Header = ({
                 sheetTitle={"Top Up"}
                 isVisible={showSheet}
                 appStyles={appStyles}
-                wallateBalance={userData?.wallateBalance}
+                wallateBalance={userData?.wallet?.balance}
                 setShowSheet={setShowSheet}
                 handleOnRedirect={(data, amount) => { handleAddAmount(data, amount) }}
             />

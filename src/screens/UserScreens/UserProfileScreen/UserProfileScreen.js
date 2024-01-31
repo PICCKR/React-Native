@@ -17,6 +17,10 @@ import { clearLocalData, setLocalData } from '../../../helper/AsyncStorage'
 import { storageKeys } from '../../../helper/AsyncStorage/storageKeys'
 import SelectAmountPopup from '../../../components/SelectAmountPopup/SelectAmountPopup'
 import { showErrorToast } from '../../../helper/showErrorToast'
+import Actions from '../../../redux/Actions'
+import { apiPost } from '../../../services/apiServices'
+import { endPoints } from '../../../configs/apiUrls'
+import { showGeneralError } from '../../../helper/showGeneralError'
 
 const UserProfileScreen = () => {
 
@@ -36,105 +40,40 @@ const UserProfileScreen = () => {
     walletBalance: 0
   })
 
-  const [showSheet, setShowSheet] = useState({
-    addPayment: false,
-  })
-
-
-  const editActionData = [
-    {
-      id: "1",
-      title: "Address",
-      type: "address"
-    },
-    {
-      id: "2",
-      title: "Wallet",
-      type: "Wallet"
-    },
-    {
-      id: "3",
-      title: "Rating & Reviews",
-      type: "addresRatingReviewss"
-    },
-    {
-      id: "4",
-      title: "KYC",
-      type: "KYC"
-    },
-    {
-      id: "5",
-      title: "Become PicckR",
-      type: "BecomePicckR"
-    },
-    {
-      id: "6",
-      title: "PicckR Mode",
-      type: "PicckRMode"
-    },
-    {
-      id: "7",
-      title: "Appearance",
-      type: "Appearance"
-    },
-    {
-      id: "8",
-      title: "Manage Account",
-      type: "ManageAccount"
-    }
-  ]
 
   const handleOptionClick = (item) => {
-    switch (item?.type) {
-      case "address":
+
+    console.log("item", item);
+    switch (item) {
+      case "Address":
         navigation.navigate(MainRouteStrings.ADDRESS_SCREEN)
         break;
       case "Wallet":
-
-        setShowSheet({
-          ...showSheet,
-          addPayment: true
-        })
+        navigation.navigate(MainRouteStrings.USER_WALLET_SCREEN)
         break;
-      case "addresRatingReviewss":
+      case "Rating & Reviews":
         navigation.navigate(MainRouteStrings.RATING_AND_REVIEW)
         break;
       case "KYC":
         navigation.navigate(MainRouteStrings.USER_KYC_SCREEN)
         break;
-      case "BecomePicckR":
-        if (userData?.kyc?.idNumber) {
+      case "Become PicckR":
+        navigation.navigate(MainRouteStrings.BECOME_PICKER)
+        return
+        if (userData?.kycStatus === "approved") {
           navigation.navigate(MainRouteStrings.BECOME_PICKER)
         } else {
           showErrorToast("Please verify your KYC first", isDark)
         }
 
         break;
-      case "ManageAccount":
+      case "Manage Account":
         navigation.navigate(MainRouteStrings.MANAGE_ACCOUNT)
         break;
 
       default:
         break;
     }
-  }
-
-  const handleAddAmount = async (data, amount) => {
-    console.log("data====>", data, amount);
-    if (data?.status === "successful") {
-      setuserData({
-        ...userData, wallet: {
-          ...userData?.wallet,
-          balance: parseInt(userData?.wallet?.balance) + parseInt(amount)
-        }
-      })
-    } else {
-
-    }
-    setShowSheet({
-      ...showSheet,
-      addPayment: false,
-    })
   }
 
 
@@ -152,87 +91,147 @@ const UserProfileScreen = () => {
     >
       <ScrollView
         style={{ paddingHorizontal: scale(0) }}
+        showsVerticalScrollIndicator={false}
       >
 
         <PrifileView
           profileImg={userData?.picture}
-          userData={userData}
+          userData={{ ...userData, email: userData?.email === " " ? "" : userData?.email }}
         />
 
         <View style={{ paddingHorizontal: scale(16), paddingTop: verticalScale(10) }}>
           <Text style={appStyles.mediumTextBlackBold}>
             Account
           </Text>
-
-          {
-            editActionData.map((item) => {
-              return (
-                <TouchableOpacity
-                  key={item.id}
-                  disabled={(item.type === "PicckRMode" || item.type === "Appearance" || (item.type === "KYC" && userData?.kyc?.idNumber)) ? true : false}
-                  style={styles.deatilsEditbutton}
-                  onPress={() => handleOptionClick(item)}
-                >
-                  <Text style={[appStyles.smallTextGray]}>
-                    {item.title}
+          {/* 
+          {editActionData.map((item) => {
+            return (
+              <TouchableOpacity
+                key={item.id}
+                disabled={(item.type === "PicckRMode" || item.type === "Appearance" || (item.type === "KYC" && userData?.kyc?.idNumber)) ? true : false}
+                style={styles.deatilsEditbutton}
+                onPress={() => handleOptionClick(item)}
+              >
+                <Text style={[appStyles.smallTextGray]}>
+                  {item.title}
+                </Text>
+                <View style={{ flexDirection: "row", alignItems: 'center', gap: scale(10) }}>
+                  {item?.type === "Wallet" && <Text>
+                    ₦{userData?.wallet?.balance}
                   </Text>
-                  <View style={{ flexDirection: "row", alignItems: 'center', gap: scale(10) }}>
-                    {item?.type === "Wallet" && <Text>
-                      ₦{userData?.wallet?.balance}
-                    </Text>
-                    }
-                    {(item.type === "PicckRMode" || item.type === "Appearance") &&
-                      <View style={commonStyles.flexRowAlnCtr}>
-                        {item.type === "PicckRMode" &&
-                          <Text style={appStyles.smallTextGray}>off</Text>
-                        }
+                  }
+                  {(item.type === "PicckRMode" || item.type === "Appearance") &&
+                    <View style={commonStyles.flexRowAlnCtr}>
+                      {item.type === "PicckRMode" &&
+                        <Text style={appStyles.smallTextGray}>off</Text>
+                      }
 
-                        {item.type === "Appearance" &&
-                          <Text style={appStyles.smallTextGray}>{isDark ? "Dark Mode" : "Light Mode"}</Text>
-                        }
+                      {item.type === "Appearance" &&
+                        <Text style={appStyles.smallTextGray}>{isDark ? "Dark Mode" : "Light Mode"}</Text>
+                      }
 
-                        <Switch
-                          initialValue={item.type === "Appearance" && isDark}
-                          handleSwitchClicked={(status) => {
-                            // console.log("status==>", status);
-                            if (item.type === "Appearance") {
-                              setIsDark(status)
-                            } else {
-                              setuserData({ ...userData, routeType: "picker" })
-                            }
+                      <Switch
+                        initialValue={item.type === "Appearance" && isDark}
+                        handleSwitchClicked={(status) => {
+                          // console.log("status==>", status);
+                          if (item.type === "Appearance") {
+                            setIsDark(!isDark)
+                          } else {
+                            setuserData({ ...userData, routeType: "picker" })
+                          }
 
-                          }}
-                        />
-                      </View>}
-                    {item.type === "KYC" &&
-                      <Text style={appStyles.smallTextGray}>{userData?.kyc?.idNumber}</Text>
-                    }
+                        }}
+                      />
+                    </View>}
+                  {item.type === "KYC" &&
+                    <Text style={appStyles.smallTextGray}>{userData?.kyc?.idNumber}</Text>
+                  }
 
 
-                    {(item.type !== "PicckRMode" && item.type !== "Appearance" && item?.type !== "KYC") &&
-                      <Images.rightArrow height={moderateScale(24)} />
-                    }
+                  {(item.type !== "PicckRMode" && item.type !== "Appearance" && item?.type !== "KYC") &&
+                    <Images.rightArrow height={moderateScale(24)} />
+                  }
 
-                    {(item?.type == "KYC" && !userData?.kyc?.idNumber) &&
-                      <Images.rightArrow height={moderateScale(24)} />
-                    }
-                  </View>
+                  {(item?.type == "KYC" && !userData?.kyc?.idNumber) &&
+                    <Images.rightArrow height={moderateScale(24)} />
+                  }
+                </View>
 
-                </TouchableOpacity>
-              )
-            })
+              </TouchableOpacity>
+            )
+          })
+          } */}
+
+
+          <EditAction
+            appStyles={appStyles}
+            title="Address"
+            showArrow
+            handlePress={handleOptionClick}
+          />
+
+          <EditAction
+            appStyles={appStyles}
+            title="Wallet"
+            showArrow
+            handlePress={handleOptionClick}
+          />
+
+          <EditAction
+            appStyles={appStyles}
+            title="Rating & Reviews"
+            showArrow
+            handlePress={handleOptionClick}
+          />
+
+          <EditAction
+            appStyles={appStyles}
+            title="KYC"
+            showArrow={userData?.kycStatus === "approved" ? false : true}
+            disabled={userData?.kycStatus === "approved" ? true : false}
+            handlePress={handleOptionClick}
+            value={userData?.kycStatus === "approved" ? userData?.kyc?.idNumber : ""}
+          />
+
+          {userData?.userRole?.length < 2 && <EditAction
+            appStyles={appStyles}
+            title="Become PicckR"
+            showArrow
+            handlePress={handleOptionClick}
+          />}
+
+          {userData?.userRole?.length == 2 && <EditAction
+            appStyles={appStyles}
+            title="PicckR Mode"
+            disabled={true}
+            showSwitch
+            showSwitchValue={"off"}
+            handleSwitchClicked={(value) => {
+              setuserData({ ...userData, routeType: "picker" })
+            }}
+          />
           }
+          <EditAction
+            appStyles={appStyles}
+            title="Appearance"
+            disabled={true}
+            showSwitch
+            showSwitchValue={isDark ? "Dark Mode" : "Light Mode"}
+            handleSwitchClicked={(value) => {
+              setIsDark(!isDark)
+            }}
+          />
+
+          <EditAction
+            appStyles={appStyles}
+            title="Manage Account"
+            showArrow
+            handlePress={handleOptionClick}
+          />
+
         </View>
       </ScrollView>
 
-      <SelectAmountPopup
-        sheetTitle={"Top Up"}
-        isVisible={showSheet.addPayment}
-        appStyles={appStyles}
-        setShowSheet={setShowSheet}
-        wallateBalance={userData?.wallateBalance}
-        handleOnRedirect={(data, amount) => { handleAddAmount(data, amount) }}
-      />
     </WrapperContainer >
   )
 }

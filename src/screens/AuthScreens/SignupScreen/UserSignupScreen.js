@@ -1,4 +1,4 @@
-import { ScrollView } from 'react-native'
+import { ScrollView, Text } from 'react-native'
 import React, { useContext, useEffect, useState } from 'react'
 import WrapperContainer from '../../../components/WrapperContainer/WrapperContainer'
 import { Styles } from './Styles'
@@ -9,10 +9,12 @@ import { signUpFormData } from '../../../json/signUpFormData'
 import HyperlinkView from './HyperlinkView'
 import { RegEx } from '../../../utils/Constents/regulerexpressions'
 import { AuthRouteStrings } from '../../../utils/Constents/RouteStrings'
-import { verticalScale } from 'react-native-size-matters'
+import { scale, verticalScale } from 'react-native-size-matters'
 import { deleteUser, signUp } from '@aws-amplify/auth'
 import Actions from '../../../redux/Actions'
 import { showErrorToast } from '../../../helper/showErrorToast'
+import { setLocalData } from '../../../helper/AsyncStorage'
+import { storageKeys } from '../../../helper/AsyncStorage/storageKeys'
 
 const UserSignupScreen = () => {
   const { appStyles, isDark, userData, setuserData } = useContext(AppContext)
@@ -23,6 +25,7 @@ const UserSignupScreen = () => {
     lastName: "",
     phoneNumber: "",
     password: "",
+    email: "",
     selectedCountry: null
   })
   const [checkData, setCheckData] = useState({
@@ -48,8 +51,8 @@ const UserSignupScreen = () => {
         lastName: true
       })
     }
-    else if (formData.password.length < 6) {
-      // console.log("!formData.password.length >= 6");
+    else if (!RegEx.password.test(formData.password)) {
+      // console.log("!formData.password.length >= 6", formData.password, RegEx.password.test(formData.password.trim()));
       setShowError({
         ...ShowError,
         password: true
@@ -68,9 +71,9 @@ const UserSignupScreen = () => {
             autoSignIn: true
           },
         });
-
+        // console.log("user==>", user);
         if (user) {
-          // setuserData({...userData, formData})
+          setLocalData(storageKeys.userData, formData)
           navigation.navigate(AuthRouteStrings.OTP_SCREEN, {
             from: AuthRouteStrings.USER_SIGN_UP,
             data: formData,
@@ -92,6 +95,7 @@ const UserSignupScreen = () => {
       formData?.phoneNumber !== "" &&
       formData?.firstName !== "" &&
       formData?.lastName !== "" &&
+      RegEx.email__regEx.test(formData?.email) &&
       checkData?.termsCheck &&
       checkData?.privecyCheck
     ) {
@@ -112,7 +116,10 @@ const UserSignupScreen = () => {
       buttonActive={buttonActive}
       handleButtonPress={handledContinue}
     >
-      <ScrollView style={Styles.formView}>
+      <ScrollView
+        style={Styles.formView}
+        showsVerticalScrollIndicator={false}
+      >
 
         <Form
           data={signUpFormData}
@@ -123,6 +130,10 @@ const UserSignupScreen = () => {
           errorMsg={errorMsg}
           setErrorMsg={setErrorMsg}
         />
+
+        {/* <Text style={[appStyles.smallTextGray,{fontSize:scale(8)}]}>
+          Password must contain at least 1 uppercase letter, 1 lowercase letter, 1 number, 1 special character, and be at least 8 characters long.
+        </Text> */}
 
         <HyperlinkView
           handleCheck={() => {

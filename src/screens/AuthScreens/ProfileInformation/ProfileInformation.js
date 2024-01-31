@@ -30,7 +30,7 @@ import { deleteUser } from '@aws-amplify/auth'
 
 const ProfileInformation = ({ route }) => {
     const data = route?.params?.data
-    const { appStyles, isDark, userData, setuserData, setIsLoggedIn } = useContext(AppContext)
+    const { appStyles, isDark, userData, setuserData, setIsLoggedIn, fromGuestUserScreen, setFromGuestUserScreen } = useContext(AppContext)
     // console.log("data ====>", data);
     const navigation = useNavigation()
     const [buttonActive, setButtonActive] = useState(false)
@@ -113,8 +113,6 @@ const ProfileInformation = ({ route }) => {
 
     const handleSave = async (from) => {
         var formData = new FormData();
-        formData.append("firstName", data?.firstName);
-        formData.append("lastName", data?.lastName);
         if (profileInformation.profileImg) {
             formData.append("picture", {
                 uri: profileInformation.profileImg?.uri,
@@ -125,48 +123,42 @@ const ProfileInformation = ({ route }) => {
         } else {
             formData.append("picture", "");
         }
-
-        formData.append("email", profileInformation?.email);
         formData.append("addresses", JSON.stringify(profileInformation?.address));
-        formData.append("cognitoId", data?.userId);
-        formData.append("notificationToken", "");
-        formData.append("phoneNumber", `${data?.selectedCountry?.code?.replace(/[()]/g, '')} ${data?.phoneNumber.replace(/\s+/g, '')}`);
 
         console.log(formData);
         // return
         const config = {
             headers: {
                 'Content-Type': 'multipart/form-data',
+                'Authorization': `Bearer ${userData?.token}`,
             },
         };
+
         // return
         Actions.showLoader(true)
         try {
-            const res = await axios.post(endPoints.CREATE_USER, formData, config)
+            const res = await axios.put(`${endPoints.UPDATE_PROFILE}/${userData?._id}`, formData, config)
             // const res = await apiPost(endPoints.CREATE_USER, createUserData)
             if (res?.status == 200) {
-                const userInformaton = await decodeToken(res?.data?.data?.token)
+                // console.log(res?.data?.data);
+                // const userInformaton = await decodeToken(res?.data?.data?.token)
                 // after getting token store it in local storage and also set token in context
-                setLocalData(storageKeys.userData, { ...userInformaton, token: res?.data?.data?.token })
-                setuserData({ ...userInformaton, token: res?.data?.data?.token })
-                if (from === "back") {
-                    setIsLoggedIn(true)
-                } else {
-                    navigation.navigate(AuthRouteStrings.KYC_SCREEN, {
-                        data: { ...data, ...profileInformation }
-                    })
-                }
+                setLocalData(storageKeys.userData, { ...userData, addresses: res?.data?.data?.addresses, picture: res?.data?.data?.picture })
+                setuserData({ ...userData, addresses: res?.data?.data?.addresses, picture: res?.data?.data?.picture })
+                navigation.navigate(AuthRouteStrings.KYC_SCREEN, {
+                    data: { ...data, ...profileInformation }
+                })
             } else {
                 showErrorToast(res?.data?.message, isDark)
             }
-            console.log("res===>", res?.status, res?.data);
+            // console.log("res===>", res?.status, res?.data);
         } catch (error) {
             if (error?.response?.status < 500) {
                 showErrorToast(error?.response?.data?.message, isDark)
-            }else{
+            } else {
                 showGeneralError(isDark)
             }
-            
+
             console.log("error when creating user", error?.response?.status, error?.response?.data);
         } finally {
             Actions.showLoader(false)
@@ -177,7 +169,7 @@ const ProfileInformation = ({ route }) => {
 
     useEffect(() => {
         if (
-            profileInformation?.email !== ""
+            profileInformation?.profileImg || profileInformation?.address.length > 1
         ) {
             setButtonActive(true);
         } else {
@@ -186,7 +178,12 @@ const ProfileInformation = ({ route }) => {
     }, [profileInformation]);
 
     useBackButton(() => {
-        handleSave("back")
+        if (fromGuestUserScreen) {
+            navigation.navigate(fromGuestUserScreen)
+            setFromGuestUserScreen(null)
+        } else {
+            setIsLoggedIn(true)
+        }
         return true
     })
 
@@ -194,11 +191,18 @@ const ProfileInformation = ({ route }) => {
         <WrapperContainer
             centerTitle="Profile information"
             rightTitle="Skip"
-            handlerRightViewPress={handleSave}
+            handlerRightViewPress={() => {
+                navigation.navigate(AuthRouteStrings.KYC_SCREEN)
+            }}
             // showBackButton
             buttonTitle={"Save"}
             handleBack={() => {
-                handleSave()
+                if (fromGuestUserScreen) {
+                    navigation.navigate(fromGuestUserScreen)
+                    setFromGuestUserScreen(null)
+                } else {
+                    setIsLoggedIn(true)
+                }
                 // navigation.navigate(AuthRouteStrings.USER_SIGN_UP)
             }}
             handleButtonPress={handleSave}
@@ -209,7 +213,7 @@ const ProfileInformation = ({ route }) => {
             <ProfileView
                 showEdit
                 profileImg={profileInformation.profileImg?.uri}
-                userData={data}
+                userData={{ ...userData, email: userData?.email === " " ? "" : userData?.email }}
                 handleEdit={() => {
                     setShowSheet({
                         ...showSheet,
@@ -222,15 +226,6 @@ const ProfileInformation = ({ route }) => {
                 <Text style={appStyles.mediumTextBlackBold}>
                     Other Information
                 </Text>
-
-                <EditAction
-                    appStyles={appStyles}
-                    handlePress={() => setShowSheet({
-                        email: true
-                    })}
-                    title="Email Address"
-                    val={profileInformation.email}
-                />
                 <EditAction
                     appStyles={appStyles}
                     handlePress={() => setShowSheet({

@@ -11,16 +11,19 @@ import { AuthRouteStrings } from '../../../utils/Constents/RouteStrings'
 import WrapperContainer from '../../../components/WrapperContainer/WrapperContainer'
 
 const WelcomeScreen = () => {
-    const { appStyles, setuserData } = useContext(AppContext)
+
+    const { appStyles, setIsLoggedIn, fromGuestUserScreen } = useContext(AppContext)
     const navigation = useNavigation()
     return (
         <WrapperContainer
             rightTitle={"Cancel"}
             showFooterButton={false}
             handlerRightViewPress={() => {
-                setuserData({
-                    type: "guest"
-                })
+                if (fromGuestUserScreen) {
+                    navigation.goBack()
+                } else {
+                    setIsLoggedIn(true)
+                }
             }}
         >
             <View style={styles.contentView}>
@@ -44,6 +47,7 @@ const WelcomeScreen = () => {
                         navigation.navigate(AuthRouteStrings.LOGIN_SCREEN)
                     }}
                 />
+
                 <CustomButton
                     buttonType={buttonTypes.BIG}
                     hasOutLine

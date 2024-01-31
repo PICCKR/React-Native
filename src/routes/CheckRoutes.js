@@ -22,7 +22,7 @@ const CheckRoutes = () => {
         const UserData = await getLocalData(storageKeys.userData)
         // get current loggedin user
         getCurrentUser().then((res) => {
-            setShowSplashScreen(false)
+
             console.log(UserData);
             // if we found user the take to home screen else take to login screen
             if (res?.userId && UserData?.token) {
@@ -30,6 +30,7 @@ const CheckRoutes = () => {
                 getAdditionalData(UserData?.token)
 
             } else {
+                setShowSplashScreen(false)
                 setIsLoggedIn(false)
             }
         }).catch((error) => {
@@ -43,7 +44,7 @@ const CheckRoutes = () => {
         try {
             // get idToken from cognito
             const { idToken } = (await fetchAuthSession()).tokens ?? {};
-            console.log("idToken.toString()", idToken.toString());
+            // console.log("idToken.toString()", idToken.toString());
             // pass this to in headers to get jwt token
             const config = {
                 headers: {
@@ -55,23 +56,29 @@ const CheckRoutes = () => {
             axios.post(endPoints.GET_TOKEN, {}, config)
                 .then(async (result) => {
                     const { data, status } = result;
+                    setShowSplashScreen(false)
                     if (status == 200) {
                         const userInformaton = await decodeToken(data?.token)
+                        // console.log("userInformaton", userInformaton);
                         // after getting token store it in local storage and also set token in context
                         setLocalData(storageKeys.userData, { ...userInformaton, token: data?.token })
                         setuserData({ ...userInformaton, token: data?.token })
                     }
                 })
                 .catch(async (error) => {
+                    setShowSplashScreen(false)
                     console.log("error while getting access token", error);
                 });
         } catch (err) {
+            setShowSplashScreen(false)
             console.log(err);
         }
     }
 
     useEffect(() => {
-        getUserData()
+        setTimeout(() => {
+            getUserData()
+        }, 1000);
     }, [])
 
     return (
@@ -86,6 +93,7 @@ const CheckRoutes = () => {
             }
             {/* <NoRoutesScreen /> */}
         </>
+        // <PickertRoutes />
     )
 }
 

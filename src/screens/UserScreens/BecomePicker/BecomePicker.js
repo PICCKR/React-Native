@@ -18,16 +18,22 @@ import axios from 'axios'
 import { endPoints } from '../../../configs/apiUrls'
 import { showGeneralError } from '../../../helper/showGeneralError'
 import Actions from '../../../redux/Actions'
+import { showErrorToast } from '../../../helper/showErrorToast'
+import { fetchAuthSession } from '@aws-amplify/auth'
+import { decodeToken } from '../../../helper/decodeToken'
+import { setLocalData } from '../../../helper/AsyncStorage'
+import { storageKeys } from '../../../helper/AsyncStorage/storageKeys'
 
 const BecomePicker = ({ route }) => {
     const from = route?.params?.from
-    const { appStyles, userData, isDark } = useContext(AppContext)
+    const { appStyles, userData, isDark, vehicleType, setuserData } = useContext(AppContext)
     // console.log("userData", userData);
     const navigation = useNavigation()
 
     const [buttonActive, setButtonActive] = useState(false)
     const [status, setStatus] = useState("unapproved")
     const [pickerData, setPickerData] = useState({
+        vehicleType: null,
         insurance: "",
         insuranceFileName: "",
         registration: "",
@@ -39,46 +45,91 @@ const BecomePicker = ({ route }) => {
 
 
     const handleSubmit = () => {
-        // var formData = new FormData();
-        // formData.append("bankVerificationInfo", userData?.bvn);
-        // formData.append("userId", userData?._id);
-        // formData.append("bankingInfo", userData?.bvn);
-        // formData.append("registrationProofDocs", {
-        //     uri: pickerData?.registration?.uri,
-        //     type: pickerData?.registration?.type,
-        //     name: pickerData?.registration?.fileName,
-        //     fileName: pickerData?.registration?.fileName
-        // });
-        // formData.append("insuranceProofDocs", {
-        //     uri: pickerData?.insurance?.uri,
-        //     type: pickerData?.insurance?.type,
-        //     name: pickerData?.insurance?.fileName,
-        //     fileName: pickerData?.insurance?.fileName
-        // });
+        var formData = new FormData();
+        formData.append("userId", userData?._id);
+        formData.append("registrationProofDocs", {
+            uri: pickerData?.registration?.uri,
+            type: pickerData?.registration?.type,
+            name: pickerData?.registration?.fileName,
+            fileName: pickerData?.registration?.fileName
+        });
+        formData.append("insuranceProofDocs", {
+            uri: pickerData?.insurance?.uri,
+            type: pickerData?.insurance?.type,
+            name: pickerData?.insurance?.fileName,
+            fileName: pickerData?.insurance?.fileName
+        });
 
-        // const config = {
-        //     headers: {
-        //         'Content-Type': 'application/json',
-        //         'Authorization': `Bearer ${userData.token}`,
-        //     },
-        // };
-        // Actions.showLoader(true)
+        const config = {
+            headers: {
+                'Content-Type': 'multipart/form-data',
+                'Authorization': `Bearer ${userData.token}`,
+            },
+        };
+        Actions.showLoader(true)
 
-        // axios.post(endPoints.BECOME_PICKER, formData, config).then((res) => {
-        //     console.log("res in become picker", res);
-        //     Actions.showLoader(false)
-        // }).catch((error) => {
-        //     Actions.showLoader(false)
-        //     console.log("error in become picker", error);
-        //     showGeneralError()
-        // })
+        axios.post(endPoints.BECOME_PICKER, formData, config).then((res) => {
+            console.log("res in become picker", res?.data);
+            if (res?.status === 201) {
+                handleGetAccesToken()
+            } else {
+                showErrorToast(res?.data?.message, isDark)
+            }
+            Actions.showLoader(false)
+        }).catch((error) => {
+            Actions.showLoader(false)
+            console.log("error in become picker", error?.response?.data);
+            showGeneralError()
+        })
 
-        setStatus("waiting")
-        setButtonActive(false)
-        setTimeout(() => {
-            setStatus("approved")
-            setButtonActive(true)
-        }, 2000);
+
+        // setButtonActive(false)
+        // setTimeout(() => {
+        //     setStatus("approved")
+        //     setButtonActive(true)
+        // }, 2000);
+    }
+
+    const handleGetAccesToken = async () => {
+        try {
+            // get idToken from cognito
+            const { idToken } = (await fetchAuthSession()).tokens ?? {};
+            // console.log("idToken.toString()", idToken.toString());
+            // pass this to in headers to get jwt token
+            const config = {
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${idToken.toString()}`,
+                },
+            };
+
+            axios.post(endPoints.GET_TOKEN, {}, config)
+                .then(async (result) => {
+                    const { data, status } = result;
+                    if (status == 200) {
+                        const userInformaton = await decodeToken(data?.token)
+                        // after getting token store it in local storage and also set token in context
+                        setLocalData(storageKeys.userData, { ...userInformaton, token: data?.token })
+                        setuserData({ ...userInformaton, token: data?.token })
+                        setButtonActive(false)
+                        setStatus("waiting")
+
+                    } else {
+
+                    }
+                    // console.log("token res====>", status);
+                    Actions.showLoader(false)
+                })
+                .catch(async (error) => {
+                    showGeneralError(isDark)
+                    Actions.showLoader(false)
+                    console.log("error while getting access token", error);
+                });
+        } catch (err) {
+            showGeneralError(isDark)
+            Actions.showLoader(false)
+            console.log(err);
+        }
     }
 
     const handleNext = () => {
@@ -114,11 +165,12 @@ const BecomePicker = ({ route }) => {
             {status === "unapproved" && <ScrollView style={{}}>
 
                 <PrifileView
-                    userData={userData}
+                    userData={{ ...userData, email: userData?.email === " " ? "" : userData?.email }}
                     profileImg={userData?.picture}
                 />
 
                 <View style={{ paddingHorizontal: scale(16) }}>
+
                     <DocumentUpload
                         title={"Proof of insurance"}
                         placeHolder={pickerData?.insuranceFileName ? pickerData?.insuranceFileName : "Take a vehicle registration photo"}
@@ -136,14 +188,6 @@ const BecomePicker = ({ route }) => {
                         fileName="registrationFileName"
                     />
 
-                    <InputText
-                        hasTitle
-                        inputTitle="Bank Verification Number"
-                        editable={false}
-                        value={pickerData?.bvn}
-                        inputContainer={{ marginTop: verticalScale(10) }}
-                        inPutStyles={{ marginTop: verticalScale(4) }}
-                    />
 
                     <View style={styles.termsView}>
                         <CheckBox

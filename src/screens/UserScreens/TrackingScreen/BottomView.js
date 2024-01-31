@@ -1,5 +1,5 @@
 import { View, Text, Image, TextInput, TouchableOpacity } from 'react-native'
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import styles from './Styles'
 import { commonStyles } from '../../../utils/Styles/CommonStyles'
 import { Images } from '../../../assets/images'
@@ -13,6 +13,7 @@ import { ScrollView } from 'react-native-gesture-handler'
 import CustomButton from '../../../components/Button/CustomButton'
 import { buttonTypes } from '../../../utils/Constents/constentStrings'
 import ConfirmationSheet from '../../../components/ConfirmationSheet/ConfirmationSheet'
+import { AppContext } from '../../../context/AppContext'
 
 const BottomView = ({
     appStyles,
@@ -20,8 +21,11 @@ const BottomView = ({
     pinData,
     selectedVehicle,
     handleCancelOrder,
-    isDark
+    isDark,
+    orderDeatils
 }) => {
+    const { destination, source } = useContext(AppContext)
+    // console.log("orderDeatils", orderDeatils);
     const navigation = useNavigation()
     const [showSheet, setShowSheet] = useState({
         confirmation: false,
@@ -30,8 +34,8 @@ const BottomView = ({
         <DragableBottomSheet
             index={2}
         >
-            <View style={[styles.sheetHeader,{
-                borderColor:isDark ? uiColours.GRAYED_BUTTON : uiColours.LIGHT_GRAY
+            <View style={[styles.sheetHeader, {
+                borderColor: isDark ? uiColours.GRAYED_BUTTON : uiColours.LIGHT_GRAY
             }]}>
                 <Text style={[appStyles.mediumTextPrimary, {
                     flex: 1,
@@ -46,12 +50,12 @@ const BottomView = ({
                 nestedScrollEnabled
                 contentContainerStyle={{ flexGrow: 1 }}
                 style={styles.bottomSheetContainer}>
-                <View style={[styles.pickerSection,{
-                    borderColor:isDark ? uiColours.GRAYED_BUTTON : uiColours.LIGHT_GRAY
+                <View style={[styles.pickerSection, {
+                    borderColor: isDark ? uiColours.GRAYED_BUTTON : uiColours.LIGHT_GRAY
                 }]}>
-                    <View style={{ borderWidth: moderateScale(1), borderColor:isDark ? uiColours.GRAYED_BUTTON : uiColours.LIGHT_GRAY, borderRadius: moderateScale(6), padding: moderateScale(16) }}>
-                        <View style={[styles.pickerProfile,{
-                            borderColor:isDark ? uiColours.GRAYED_BUTTON : uiColours.LIGHT_GRAY
+                    <View style={{ borderWidth: moderateScale(1), borderColor: isDark ? uiColours.GRAYED_BUTTON : uiColours.LIGHT_GRAY, borderRadius: moderateScale(6), padding: moderateScale(16) }}>
+                        <View style={[styles.pickerProfile, {
+                            borderColor: isDark ? uiColours.GRAYED_BUTTON : uiColours.LIGHT_GRAY
                         }]}>
                             <View style={styles.pickerProfileView}>
                                 {data?.profileImg ? <Image source={{ uri: data.profileImg }} /> : <Images.profile height={moderateScale(50)} width={moderateScale(50)} />}
@@ -84,11 +88,11 @@ const BottomView = ({
                     </View>
                 </View>
 
-                <View style={[styles.pinCodeView,{
-                    borderColor:isDark ? uiColours.GRAYED_BUTTON : uiColours.LIGHT_GRAY
+                <View style={[styles.pinCodeView, {
+                    borderColor: isDark ? uiColours.GRAYED_BUTTON : uiColours.LIGHT_GRAY
                 }]}>
-                    <View style={[styles.pinCodeInnerView,{
-                        borderColor:isDark ? uiColours.GRAYED_BUTTON : uiColours.LIGHT_GRAY
+                    <View style={[styles.pinCodeInnerView, {
+                        borderColor: isDark ? uiColours.GRAYED_BUTTON : uiColours.LIGHT_GRAY
                     }]}>
                         <Text style={appStyles.mediumTextBlackBold}>
                             Transaction pin code
@@ -110,11 +114,11 @@ const BottomView = ({
                     </View>
                 </View>
 
-                <View style={[styles.pinCodeView,{
-                    borderColor:isDark ? uiColours.GRAYED_BUTTON : uiColours.LIGHT_GRAY
+                <View style={[styles.pinCodeView, {
+                    borderColor: isDark ? uiColours.GRAYED_BUTTON : uiColours.LIGHT_GRAY
                 }]}>
-                    <View style={[styles.pinCodeInnerView,{
-                        borderColor:isDark ? uiColours.GRAYED_BUTTON : uiColours.LIGHT_GRAY
+                    <View style={[styles.pinCodeInnerView, {
+                        borderColor: isDark ? uiColours.GRAYED_BUTTON : uiColours.LIGHT_GRAY
                     }]}>
                         <Text style={[appStyles.mediumTextBlackBold, { marginBottom: verticalScale(5) }]}>
                             Item details
@@ -123,7 +127,7 @@ const BottomView = ({
                         <InputText
                             hasTitle
                             inputTitle="Package type"
-                            value={"Electronics"}
+                            value={orderDeatils?.itemsDetails?.packagetype?.type}
                             textBox={{ color: uiColours.GRAY_TEXT }}
                             editable={false}
                             inputContainer={{ width: '100%' }}
@@ -132,7 +136,7 @@ const BottomView = ({
                         <InputText
                             hasTitle
                             inputTitle="Extimates item weight (kg)"
-                            value={"5"}
+                            value={orderDeatils?.itemsDetails?.estimatedItemWeight}
                             textBox={{ color: uiColours.GRAY_TEXT }}
                             editable={false}
                             inputContainer={{ width: '100%', marginTop: verticalScale(16) }}
@@ -143,11 +147,11 @@ const BottomView = ({
                 </View>
 
 
-                <View style={[styles.pinCodeView,{
-                    borderColor:isDark ? uiColours.GRAYED_BUTTON : uiColours.LIGHT_GRAY
+                <View style={[styles.pinCodeView, {
+                    borderColor: isDark ? uiColours.GRAYED_BUTTON : uiColours.LIGHT_GRAY
                 }]}>
-                    <View style={[styles.pinCodeInnerView,{
-                        borderColor:isDark ? uiColours.GRAYED_BUTTON : uiColours.LIGHT_GRAY
+                    <View style={[styles.pinCodeInnerView, {
+                        borderColor: isDark ? uiColours.GRAYED_BUTTON : uiColours.LIGHT_GRAY
                     }]}>
                         <Text style={[appStyles.mediumTextBlackBold, { marginBottom: verticalScale(5) }]}>
                             Delivery destination
@@ -161,17 +165,15 @@ const BottomView = ({
                                         Sender
                                     </Text>
                                     <Text style={appStyles.smallTextGray}>
-                                        Jeremy Jason
+                                        {orderDeatils?.pickUpData?.name}
                                     </Text>
                                     <Text style={appStyles.smallTextGray}>
-                                        212-111-2222
+                                        {orderDeatils?.itemsDetails?.pickUpData}
                                     </Text>
                                     <Text style={appStyles.smallTextGray}>
-                                        Lesley University
+                                        {destination?.location}
                                     </Text>
-                                    <Text style={appStyles.smallTextGray}>
-                                        29 Everett St, Cambridge, MA 02138
-                                    </Text>
+
                                 </View>
                             </View>
 
@@ -182,16 +184,13 @@ const BottomView = ({
                                         Recipient
                                     </Text>
                                     <Text style={appStyles.smallTextGray}>
-                                        John Cena
+                                        {orderDeatils?.recipientData?.name}
                                     </Text>
                                     <Text style={appStyles.smallTextGray}>
-                                        212-111-2222
+                                        {orderDeatils?.recipientData?.pickUpData}
                                     </Text>
                                     <Text style={appStyles.smallTextGray}>
-                                        Harvard University
-                                    </Text>
-                                    <Text style={appStyles.smallTextGray}>
-                                        Massachusetts Hall, Cambridge, MA 02138, United States of America
+                                        {source?.location}
                                     </Text>
                                 </View>
                             </View>
@@ -199,11 +198,11 @@ const BottomView = ({
                     </View>
                 </View>
 
-                <View style={[styles.pinCodeView,{
-                    borderColor:isDark ? uiColours.GRAYED_BUTTON : uiColours.LIGHT_GRAY
+                <View style={[styles.pinCodeView, {
+                    borderColor: isDark ? uiColours.GRAYED_BUTTON : uiColours.LIGHT_GRAY
                 }]}>
-                    <View style={[styles.pinCodeInnerView,{
-                        borderColor:isDark ? uiColours.GRAYED_BUTTON : uiColours.LIGHT_GRAY
+                    <View style={[styles.pinCodeInnerView, {
+                        borderColor: isDark ? uiColours.GRAYED_BUTTON : uiColours.LIGHT_GRAY
                     }]}>
                         <Text style={appStyles.smallTextBlackBold}>
                             Total
@@ -238,11 +237,11 @@ const BottomView = ({
                     </View>
                 </View>
 
-                <View style={[styles.pinCodeView,{
-                    borderColor:isDark ? uiColours.GRAYED_BUTTON : uiColours.LIGHT_GRAY
+                <View style={[styles.pinCodeView, {
+                    borderColor: isDark ? uiColours.GRAYED_BUTTON : uiColours.LIGHT_GRAY
                 }]}>
-                    <View style={[styles.pinCodeInnerView,{
-                        borderColor:isDark ? uiColours.GRAYED_BUTTON : uiColours.LIGHT_GRAY
+                    <View style={[styles.pinCodeInnerView, {
+                        borderColor: isDark ? uiColours.GRAYED_BUTTON : uiColours.LIGHT_GRAY
                     }]}>
                         <Text style={[appStyles.mediumTextBlackBold, { marginBottom: verticalScale(5) }]}>
                             Payment method

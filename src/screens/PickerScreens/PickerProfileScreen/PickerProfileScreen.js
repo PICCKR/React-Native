@@ -1,4 +1,4 @@
-import { View, Text, Image, TouchableOpacity, ScrollView } from 'react-native'
+import { View, Text, Image, TouchableOpacity, ScrollView, Alert } from 'react-native'
 import React, { useContext, useState } from 'react'
 import WrapperContainer from '../../../components/WrapperContainer/WrapperContainer'
 import styles from './Styles'
@@ -56,26 +56,37 @@ const PickerProfileScreen = () => {
     },
     {
       id: "3",
+      title: "Vehicles",
+      type: "Vehicles"
+    },
+    {
+      id: "4",
+      title: "Back accounts",
+      type: "banckAccounts"
+    },
+
+    {
+      id: "5",
       title: "Rating & Reviews",
       type: "addresRatingReviewss"
     },
     {
-      id: "4",
+      id: "6",
       title: "KYC",
       type: "KYC"
     },
     {
-      id: "5",
+      id: "7",
       title: "PicckR Mode",
       type: "PicckRMode"
     },
     {
-      id: "6",
+      id: "8",
       title: "Appearance",
       type: "Appearance"
     },
     {
-      id: "7",
+      id: "9",
       title: "Manage Account",
       type: "ManageAccount"
     }
@@ -92,10 +103,16 @@ const PickerProfileScreen = () => {
       case "addresRatingReviewss":
         navigation.navigate(MainRouteStrings.PICKKER_RATING_AND_REVIEW)
         break;
+      case "Vehicles":
+        navigation.navigate(MainRouteStrings.VEHICLE_SCREEN)
+        break;
+      case "banckAccounts":
+        // Alert.alert("SS")
+        navigation.navigate(MainRouteStrings.BANK_ACCOUNT)
+        break;
       case "KYC":
         // navigation.navigate(MainRouteStrings.USER_KYC_SCREEN)
         break;
-
       case "ManageAccount":
         navigation.navigate(MainRouteStrings.MANAGE_ACCOUNT)
         break;

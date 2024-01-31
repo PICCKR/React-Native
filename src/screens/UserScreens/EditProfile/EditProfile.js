@@ -25,7 +25,7 @@ import { showGeneralError } from '../../../helper/showGeneralError'
 import InputText from '../../../components/InputText/InputText'
 import { uiColours } from '../../../utils/Styles/uiColors'
 
-const EditProfile = ({route}) => {
+const EditProfile = ({ route }) => {
     const from = route?.params?.from
     const { appStyles, userData, isDark, setIsDark, setuserData } = useContext(AppContext)
 
@@ -70,13 +70,14 @@ const EditProfile = ({route}) => {
                 ...ShowError,
                 lastName: true
             })
-        } else if (formData?.email !== userData?.email) {
-            navigation.navigate(AuthRouteStrings.OTP_SCREEN, {
-                from: MainRouteStrings.EDIT_PROFILE,
-                data: formData,
-            })
-        } else {
-
+        }
+        // else if (formData?.email !== userData?.email) {
+        //     navigation.navigate(AuthRouteStrings.OTP_SCREEN, {
+        //         from: MainRouteStrings.EDIT_PROFILE,
+        //         data: formData,
+        //     })
+        // } 
+        else {
             var editFormdata = new FormData();
             editFormdata.append("firstName", formData?.firstName);
             editFormdata.append("lastName", formData?.lastName);
@@ -101,18 +102,18 @@ const EditProfile = ({route}) => {
             axios.put(`${endPoints.UPDATE_PROFILE}/${userData?._id}`, editFormdata, config).then((res) => {
                 if (res?.status === 200) {
                     setLocalData(storageKeys.userData, { ...res?.data?.data, token: userData?.token })
-                    setuserData({ ...res?.data?.data, token: userData?.token})
-                    if(from ===  MainRouteStrings.PICKER_PROFILE){
+                    setuserData({ ...res?.data?.data, token: userData?.token })
+                    if (from === MainRouteStrings.PICKER_PROFILE) {
                         navigation.navigate(MainRouteStrings.PICKER_PROFILE)
-                    }else{
+                    } else {
                         navigation.navigate(MainRouteStrings.USER_PROFILE_SCREEN)
                     }
-                    
+
                     showSuccessToast("You have updated your profile", isDark)
                 } else {
                     showGeneralError()
                 }
-                console.log("update profile res", res?.data?.data, res?.status);
+                // console.log("update profile res", res?.data?.data, res?.status);
                 Actions.showLoader(false)
             }).catch((err) => {
                 Actions.showLoader(false)

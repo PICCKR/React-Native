@@ -8,7 +8,7 @@ import { styles } from './Styles';
 
 const InputText = ({
     inputContainer,
-    hasTitle,
+    hasTitle = true,
     isRequired,
     inputTitleStyles,
     inputTitle,
@@ -39,8 +39,8 @@ const InputText = ({
 
     return (
         <View style={[styles.inputContainer, inputContainer]}>
-           {hasTitle && <View style={[styles.inputTitle, inputTitleStyles]}>
-                <Text style={[appStyles.smallTextBlack,{fontFamily:"Poppins-Medium"}]}>
+            {hasTitle && <View style={[styles.inputTitle, inputTitleStyles]}>
+                <Text style={[appStyles.smallTextBlack, { fontFamily: "Poppins-Medium" }]}>
                     {inputTitle}
                 </Text>
                 {isRequired && <Text style={[styles.star, starStyle]}>
@@ -48,7 +48,7 @@ const InputText = ({
                 </Text>}
             </View>}
             <View style={[styles.inputBox, {
-                borderColor: (isDark && !ShowError) ? uiColours.GRAYED_BUTTON :  ShowError ? uiColours.RED : uiColours.LIGHT_GRAY,
+                borderColor: (isDark && !ShowError) ? uiColours.GRAYED_BUTTON : ShowError ? uiColours.RED : uiColours.LIGHT_GRAY,
             }, inPutStyles]}>
                 {hasLeftView && renderLeftView()}
                 <TextInput
@@ -56,13 +56,13 @@ const InputText = ({
                     editable={editable}
                     placeholder={placeholder}
                     placeholderTextColor={uiColours.GRAY_TEXT}
-                    style={{ 
-                        ...styles.textBox, 
+                    style={{
+                        ...styles.textBox,
                         ...appStyles.mediumTextBlack,
-                        paddingLeft: hasLeftView ? scale(10) : scale(0), 
-                        width:showRenderRightView ? "90%" : "100%",
+                        paddingLeft: hasLeftView ? scale(10) : scale(0),
+                        width: showRenderRightView ? "90%" : "100%",
                         color: !isDark ? uiColours.BLACK_TEXT : uiColours.WHITE_TEXT,
-                        ...textBox 
+                        ...textBox
                     }}
                     autoCapitalize="none"
                     value={value}

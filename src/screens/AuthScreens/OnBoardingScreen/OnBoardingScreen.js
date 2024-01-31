@@ -44,8 +44,9 @@ const OnBoardingScreen = () => {
         style={styles.skipButton}
         onPress={() => {
           setisNew(false)
+          setLocalData(storageKeys.isNew, false)
           setuserData({
-            type : "guest"
+            type: "guest"
           })
         }}
       >

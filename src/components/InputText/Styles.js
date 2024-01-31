@@ -21,7 +21,7 @@ export const styles = StyleSheet.create({
         marginTop: Platform.OS === 'android' ? verticalScale(6) : verticalScale(0)
     },
     errorText: {
-        fontSize: scale(12),
+        fontSize: scale(10),
         color: uiColours.RED,
         zIndex: 10
     },
