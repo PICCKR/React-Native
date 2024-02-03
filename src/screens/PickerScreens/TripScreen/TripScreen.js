@@ -1,0 +1,149 @@
+import { View, Text, TouchableOpacity, FlatList } from 'react-native'
+import React, { useContext, useState } from 'react'
+import WrapperContainer from '../../../components/WrapperContainer/WrapperContainer'
+import styles from './Styles'
+import { commonStyles } from '../../../utils/Styles/CommonStyles'
+import { moderateScale, scale, verticalScale } from 'react-native-size-matters'
+import { uiColours } from '../../../utils/Styles/uiColors'
+import { Images } from '../../../assets/images'
+import { AppContext } from '../../../context/AppContext'
+import { useNavigation } from '@react-navigation/native'
+import { MainRouteStrings } from '../../../utils/Constents/RouteStrings'
+import ProfileView from '../../../components/PrifileView/ProfileView'
+import CustomButton from '../../../components/Button/CustomButton'
+import { buttonTypes, tostMessagetypes } from '../../../utils/Constents/constentStrings'
+import RequestTab from './RequestTab'
+import { showToast } from '../../../components/tostConfig/tostConfig'
+import PicckrActivityTabs from '../../../routes/PicckrActivityTabs'
+
+const TripScreen = () => {
+  const { appStyles, isDark } = useContext(AppContext)
+  const navigation = useNavigation()
+
+  const handleAccept = async (item) => {
+    navigation.navigate(MainRouteStrings.PICKUP_SCREEN, {
+      geometry: {
+        latitude: 12.978463866133229,
+        longitude: 77.57011765790308
+      }
+    })
+  }
+
+  const handleDecline = () => {
+    // console.log("tabsData", tabsData[0]);
+    const toastMsgConfg = {
+      isDark: isDark,
+      msg: "You have successfully decline your trip."
+    }
+    showToast(toastMsgConfg, tostMessagetypes.SUCCESS, isDark)
+  }
+
+  return (
+    <WrapperContainer
+      centerTitle="Activity"
+      showFooterButton={false}
+      containerPadding={{ paddingHorizontal: 0 }}
+    >
+      {/* <View style={[commonStyles.flexRowAlnCtrJutySpaceBetween, styles.tabContainer]}>
+        {tabsData.map((item) => {
+          const selected = currentTab?.title === item.title
+          return (
+            <TouchableOpacity
+              key={item.title}
+              style={[styles.tabContainerItem, {
+                borderColor: selected ? uiColours.PRIMARY : (isDark && !selected) ? uiColours.GRAYED_BUTTON : uiColours.LIGHT_GRAY
+              }]}
+              onPress={() => {
+                setCurrentTab(item)
+              }}
+            >
+              <View style={commonStyles.flexRowAlnCtr}>
+                <Text style={selected ? appStyles.smallTextPrimary : appStyles.smallTextBlack}>
+                  {item.title}
+                </Text>
+                {item.title === "Ongoing" && <View style={styles.bubble}>
+                  <Text style={appStyles.smallTextWhite}>
+                    {item.data.length}
+                  </Text>
+                </View>}
+              </View>
+            </TouchableOpacity>
+          )
+        })}
+      </View>
+
+      <FlatList
+        data={currentTab.data}
+        keyExtractor={(item) => item.id}
+        style={{ paddingHorizontal: scale(16), marginTop: verticalScale(16) }}
+        renderItem={({ item }) => {
+          return (
+            <View>
+              {item?.status !== "Request" ? <TouchableOpacity
+                style={[commonStyles.flexRowAlnCtrJutySpaceBetween, appStyles.borderColor,
+                {
+                  padding: moderateScale(16),
+                  borderWidth: moderateScale(1),
+                  borderRadius: moderateScale(8)
+                }
+                ]}
+                onPress={() => {
+                  navigation.navigate(MainRouteStrings.TRIP_DETAILS_SCREEN, {
+                    data: item
+                  })
+
+                }}
+              >
+                <View style={commonStyles.flexRowAlnCtr}>
+                  <Images.profile height={moderateScale(40)} width={moderateScale(40)} />
+                  <View>
+                    <Text style={appStyles.smallTextPrimaryBold}>
+                      {item?.picker}
+                    </Text>
+                    <Text style={appStyles.smallTextGray}>
+                      {item?.dateAndTime}
+                    </Text>
+                  </View>
+                </View>
+                <View style={{ alignItems: 'flex-end' }}>
+                  <Text style={appStyles.smallTextPrimary}>
+                    ${item?.amount}
+                  </Text>
+                  <View style={[styles.label, {
+                    backgroundColor: item?.status === "Completed" ? uiColours.LIGHT_GREEN : item?.status === "Cancelled" ? uiColours.LIGHT_RED : "#C9F3FB"
+                  }]}>
+                    <Text style={[appStyles.smallTextPrimary, {
+                      color: item?.status === "Completed" ? uiColours.GREEN : item?.status === "Cancelled" ? uiColours.RED : uiColours.BLUE
+
+                    }]}>
+                      {item?.status}
+                    </Text>
+                  </View>
+                </View>
+
+              </TouchableOpacity> :
+
+                // Request design start
+                <RequestTab
+                  item={item}
+                  handleAccept={handleAccept}
+                  handleDecline={handleDecline}
+                />
+
+              }
+
+            </View>
+
+          )
+        }}
+      >
+
+      </FlatList> */}
+
+      <PicckrActivityTabs />
+
+    </WrapperContainer>
+  )
+}
+
+export default TripScreen

@@ -6,6 +6,7 @@ export const Styles = StyleSheet.create({
     SplashScreenCantainer:{
         alignItems:"center",
         justifyContent:"center",
-        height: screenSize.height
+        height: screenSize.height,
+        width:screenSize.width
     }
 })

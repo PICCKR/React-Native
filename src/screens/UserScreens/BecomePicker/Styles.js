@@ -19,16 +19,35 @@ const styles = StyleSheet.create({
         alignItems: "center",
         justifyContent: 'center',
     },
+
     termsView: {
         flexDirection: "row",
         alignItems: "center",
         gap: scale(10),
-        marginVertical: verticalScale(16),
-        paddingHorizontal: scale(16)
+        marginTop: verticalScale(16),
+        marginBottom: verticalScale(70) 
     },
     linkTextView: {
         paddingVertical: verticalScale(6),
         paddingRight: scale(10)
     },
+    VehicleType: {
+        paddingVertical: verticalScale(5),
+        alignItems: 'center',
+        gap: verticalScale(5),
+        marginRight:scale(10),
+        width: moderateScale((screenSize.width - scale(92))/4),
+        borderRadius:moderateScale(6),
+        borderColor:uiColours.PRIMARY
+    },
+    vehicleTypeIcon: {
+        backgroundColor: uiColours.CREAM,
+        borderRadius: moderateScale(30),
+        height: moderateScale(40),
+        width: moderateScale(40),
+        alignItems: 'center',
+        justifyContent: 'center'
+    },
+
 })
 export default styles

@@ -4,20 +4,29 @@ import { uiColours } from '../../utils/Styles/uiColors'
 
 const Styles = StyleSheet.create({
     profileView: {
-        backgroundColor: "#F0E796",
         alignItems: "center",
         justifyContent: 'center',
-        marginBottom: verticalScale(10),
-        alignSelf:"center"
+        alignSelf: "center"
     },
-    vehicle:{
-        position:"absolute",
-        bottom:0,
-        right:0,
-        backgroundColor:uiColours.PRIMARY_LIGHT,
-        padding:moderateScale(5),
-        borderRadius:moderateScale(15)
-
+    vehicle: {
+        position: "absolute",
+        bottom: 0,
+        right: 0,
+        backgroundColor: uiColours.PRIMARY_LIGHT,
+        padding: moderateScale(5),
+        borderRadius: moderateScale(15)
+    },
+    editIcon: {
+        position: "absolute",
+        bottom: 0,
+        right: 0,
+        backgroundColor: uiColours.BLACK,
+        padding: moderateScale(5),
+        borderRadius: moderateScale(15)
+    },
+    profileSection: {
+        alignItems: "center",
+        paddingBottom: verticalScale(16),
     }
 })
 

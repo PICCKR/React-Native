@@ -1,0 +1,25 @@
+{
+  "staging": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-amplify300ab7e471894-staging-04126-authRole",
+      "UnauthRoleArn": "arn:aws:iam::384549422462:role/amplify-amplify300ab7e471894-staging-04126-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::384549422462:role/amplify-amplify300ab7e471894-staging-04126-authRole",
+      "Region": "us-east-1",
+      "DeploymentBucketName": "amplify-amplify300ab7e471894-staging-04126-deployment",
+      "UnauthRoleName": "amplify-amplify300ab7e471894-staging-04126-unauthRole",
+      "StackName": "amplify-amplify300ab7e471894-staging-04126",
+      "StackId": "arn:aws:cloudformation:us-east-1:384549422462:stack/amplify-amplify300ab7e471894-staging-04126/da0b8a00-96f4-11ee-bd27-0ead82b70ab9",
+      "AmplifyAppId": "di3xxlxxbrefc"
+    },
+    "categories": {
+      "auth": {
+        "picckr": {
+          "nativeClientId": "5jqlpbbhbbti745433fg7vtpa0",
+          "userPoolId": "us-east-1_qeG3IyrM8",
+          "userPoolName": "PICCKRUserPool",
+          "webClientId": "5jqlpbbhbbti745433fg7vtpa0"
+        }
+      }
+    }
+  }
+}

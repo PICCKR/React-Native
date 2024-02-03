@@ -2,14 +2,17 @@ import { View, Text, FlatList } from 'react-native'
 import React, { useContext } from 'react'
 import WrapperContainer from '../../../components/WrapperContainer/WrapperContainer'
 import styles from './Styles'
-import PrifileView from '../../../components/PrifileView/PrifileView'
+import PrifileView from '../../../components/PrifileView/ProfileView'
 import { moderateScale, verticalScale } from 'react-native-size-matters'
 import { AppContext } from '../../../context/AppContext'
 import { Images } from '../../../assets/images'
 import { commonStyles } from '../../../utils/Styles/CommonStyles'
+import { useNavigation } from '@react-navigation/native'
+import { uiColours } from '../../../utils/Styles/uiColors'
 
 const RatingAndReviews = () => {
-    const { appStyles } = useContext(AppContext)
+    const { appStyles, isDark } = useContext(AppContext)
+    const navigation = useNavigation()
     const reviewData = [
         {
             id: "1",
@@ -59,6 +62,9 @@ const RatingAndReviews = () => {
             centerTitle="Rating & Reviews"
             showFooterButton={false}
             showBackButton
+            handleBack={()=>{
+                navigation.goBack()
+            }}
             containerPadding={{}}
         >
 
@@ -76,8 +82,12 @@ const RatingAndReviews = () => {
                 }}
                 renderItem={({ item }) => {
                     return (
-                        <View style={styles.card}>
-                            <View style={styles.profileSection}>
+                        <View style={[styles.card,{
+                            borderColor : isDark ? uiColours.GRAYED_BUTTON : uiColours.LIGHT_GRAY
+                        }]}>
+                            <View style={[styles.profileSection,{
+                                borderColor : isDark ? uiColours.GRAYED_BUTTON : uiColours.LIGHT_GRAY
+                            }]}>
                                 <PrifileView
                                     size={moderateScale(40)}
                                 />

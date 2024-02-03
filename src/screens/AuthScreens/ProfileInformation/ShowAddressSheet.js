@@ -3,7 +3,6 @@ import React, { useContext, useState } from 'react'
 import BottomSheet from '../../../components/BottomSheet/BottomSheet'
 import { AppContext } from '../../../context/AppContext'
 import styles from './Styles'
-import { commonStyles } from '../../../utils/Styles/CommonStyles'
 import { moderateScale, scale, verticalScale } from 'react-native-size-matters'
 import { Images } from '../../../assets/images'
 
@@ -65,13 +64,13 @@ const ShowAddressSheet = ({
 
                                         <View style={{ marginLeft: scale(10) }}>
                                             <Text style={appStyles.smallTextPrimary}>
-                                                {item?.addressType}
+                                                {item?.type}
                                             </Text>
                                             <Text style={appStyles.smallTextPrimary}>
-                                                {item?.buildingName} {item?.homeNumber}
+                                                {item?.building_name} {item?.house_number}
                                             </Text>
                                             <Text style={appStyles.smallTextPrimary}>
-                                                {item?.location}
+                                                {item?.street_address}
                                             </Text>
                                         </View>
                                     </View>

@@ -3,6 +3,7 @@ import { moderateScale, scale } from "react-native-size-matters";
 import Toast, { BaseToast, ErrorToast } from "react-native-toast-message";
 import { Images } from "../../assets/images";
 import { tostMessagetypes } from "../../utils/Constents/constentStrings";
+import { uiStrings } from "../../utils/Constents/uiStrings";
 import { commonStyles, screenSize } from "../../utils/Styles/CommonStyles";
 import { uiColours } from "../../utils/Styles/uiColors";
 
@@ -45,24 +46,27 @@ export const toastConfig = {
       <View style={{
         padding: moderateScale(10),
         width: screenSize.width - scale(32),
-        backgroundColor: props?.messageType === tostMessagetypes.SUCCESS ? uiColours.TOAST_BG : uiColours.redTransperent,
+        backgroundColor: props?.messageType === tostMessagetypes.SUCCESS ? uiColours.TOAST_BG : uiColours.LIGHT_RED,
         alignItems: "flex-start",
         flexDirection: "row",
-        gap:scale(10),
+        gap: scale(10),
         borderRadius: moderateScale(6),
       }}>
-        <Images.success />
+        {props?.messageType === tostMessagetypes.SUCCESS ? <Images.success /> : <Images.error />}
         <View>
           <Text style={{
-            color: props?.message?.isDark ? uiColours?.WHITE_TEXT : uiColours?.GREEN,
+            color: props?.messageType === tostMessagetypes.SUCCESS ? uiColours?.GREEN : uiColours.RED,
             fontSize: scale(12),
             fontFamily: "Poppins-Bold"
-          }}>{props?.messageType === tostMessagetypes.SUCCESS ? "Success" : ""}</Text>
+          }}>{
+              (props?.messageType === tostMessagetypes.SUCCESS && props?.message?.title) ?
+                props?.message?.title : (props?.messageType === tostMessagetypes.SUCCESS && !props?.message?.title) ?
+                  "Success" : "Error"}</Text>
           <Text style={{
-            color: props?.message?.isDark ? uiColours?.WHITE_TEXT : uiColours?.GREEN,
+            color: props?.messageType === tostMessagetypes.SUCCESS ? uiColours?.GREEN : uiColours.RED,
             fontSize: scale(12),
             fontFamily: "Poppins-Regular",
-            // maxWidth:"99%"
+            width: screenSize.width - scale(100),
           }}>{props?.message?.msg}</Text>
         </View>
 
@@ -83,7 +87,7 @@ export const showToast = (
       messageType: messageType
     },
     position: "bottom",
-    visibilityTime: 2000,
+    visibilityTime: 3000,
 
   });
 }
@@ -92,11 +96,11 @@ export const showGeneralErrorToast = () => {
   Toast.show({
     type: 'tomatoToast',
     props: {
-      message: "",
+      message: uiStrings.commonError,
       messageType: tostMessagetypes.ERROR
     },
     position: "bottom",
-    visibilityTime: 2000,
+    visibilityTime: 3000,
 
   });
 }

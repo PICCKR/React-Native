@@ -8,39 +8,57 @@ import { AppContext } from '../../../context/AppContext'
 import styles from './Styles'
 import Video from 'react-native-video';
 import { Images } from '../../../assets/images'
+import useBackButton from '../../../customHooks/useBackButton'
+import { useSelector } from 'react-redux'
 
-const TrainingScreen = () => {
+const TrainingScreen = ({ route }) => {
+    const from = route?.params?.from
 
-    const { appStyles } = useContext(AppContext)
+    const { appStyles, setuserData } = useContext(AppContext)
+    const userData = useSelector((state) => state?.userDataReducer?.userData)
     const navigation = useNavigation()
-
-
 
     const videoData = [
         {
             id: '1',
-            title: "How to navigate the app",
-            video: 'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4',
-            paused:true
+            title: "How a trip works ",
+            video: 'https://www.youtube.com/watch?v=-xLBm_GfyHg',
+            paused: true
         },
-        {
-            id: '2',
-            title: "Handle delivery requests",
-            video: 'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4',
-            paused:true
-        },
-        {
-            id: '3',
-            title: "Provide a quality experience to senders",
-            video: 'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4',
-            paused:true
-        }
+        // {
+        //     id: '2',
+        //     title: "Handle delivery requests",
+        //     video: 'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4',
+        //     paused: true
+        // },
+        // {
+        //     id: '3',
+        //     title: "Provide a quality experience to senders",
+        //     video: 'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4',
+        //     paused: true
+        // }
     ]
 
     const [data, setData] = useState(videoData)
 
+    useBackButton(() => {
+        if (from === MainRouteStrings.PICKER_HOME_SCREEN) {
+            navigation.navigate(MainRouteStrings.PICKER_PROFILE)
+        } else {
+            Actions.userData({ ...userData, routeType: "picker" })
+            // setuserData({ ...userData, routeType: "picker" })
+        }
+        return true
+    })
+
     const handleNext = () => {
-        navigation.navigate(MainRouteStrings.TRAINING_SCREEN)
+        if (from === MainRouteStrings.PICKER_HOME_SCREEN) {
+            navigation.navigate(MainRouteStrings.PICKER_PROFILE)
+        } else {
+            Actions.userData({ ...userData, routeType: "picker" })
+            // setuserData({ ...userData, routeType: "picker" })
+        }
+        // 
     }
 
     const handleClickVideo = (val) => {
@@ -49,7 +67,7 @@ const TrainingScreen = () => {
                 if (val.id === item.id) {
                     return { ...item, paused: !item.paused }; // Toggle isSelected
                 }
-                else{
+                else {
                     return { ...item, paused: false };
                 }
             });
@@ -60,9 +78,12 @@ const TrainingScreen = () => {
     return (
         <WrapperContainer
             centerTitle="PicckR Account"
-            showBackButton
+            // showBackButton
             buttonTitle={"Next"}
             handleButtonPress={handleNext}
+            // handleBack={()=>{
+            //     setuserData({ ...userData, type: "picker" })
+            // }}
             buttonActive={true}
             containerPadding={{}}
         >
@@ -78,13 +99,13 @@ const TrainingScreen = () => {
                     {
                         data.map((item) => {
                             return (
-                                <View key={item.id} style={{  }}>
+                                <View key={item.id} style={{}}>
                                     <Text style={[appStyles.smallTextBlack]}>
                                         {item.title}
                                     </Text>
                                     <TouchableOpacity
                                         style={{ width: '100%', height: verticalScale(180) }}
-                                        onPress={()=>handleClickVideo(item)}
+                                        onPress={() => handleClickVideo(item)}
                                     >
                                         <Video
                                             source={{ uri: item.video }}

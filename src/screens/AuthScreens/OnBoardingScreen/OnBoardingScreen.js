@@ -1,4 +1,4 @@
-import { View, Text, Animated, Dimensions, SafeAreaView, FlatList, TouchableOpacity } from 'react-native'
+import { View, Text, SafeAreaView, FlatList, TouchableOpacity } from 'react-native'
 import React, { useContext, useRef, useState } from 'react'
 import { useNavigation } from '@react-navigation/native'
 import { AppContext } from '../../../context/AppContext'
@@ -10,10 +10,9 @@ import styles from './Styles'
 import CustomButton from '../../../components/Button/CustomButton'
 import { buttonTypes } from '../../../utils/Constents/constentStrings'
 import { screenSize } from '../../../utils/Styles/CommonStyles'
+import Actions from '../../../redux/Actions'
 
 const OnBoardingScreen = () => {
-
-  const navigation = useNavigation()
 
   const { setisNew, appStyles, setuserData } = useContext(AppContext)
   const [currentSlideIndex, setCurrentSlideIndex] = useState(0)
@@ -46,12 +45,16 @@ const OnBoardingScreen = () => {
         style={styles.skipButton}
         onPress={() => {
           setisNew(false)
-          setuserData({
-            type : "guest"
+          setLocalData(storageKeys.isNew, false)
+          Actions.userData({
+            type: "guest"
           })
+          // setuserData({
+          //   type: "guest"
+          // })
         }}
       >
-        <Text style={[appStyles.mediumTextBlackGray]}>
+        <Text style={[appStyles.mediumTextPrimary]}>
           Skip
         </Text>
       </TouchableOpacity>

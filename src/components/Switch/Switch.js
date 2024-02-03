@@ -7,10 +7,11 @@ import { toggleAnimation } from '../../animations/toggleAnimation'
 
 const Switch = ({
     handleSwitchClicked = () => { },
-    swithchStyle
+    swithchStyle,
+    initialValue
 }) => {
-
-    const [active, setActive] = useState(false)
+// console.log("initial value", initialValue);
+    const [active, setActive] = useState(initialValue)
 
     const handleSwitchange = (val) => {
         LayoutAnimation.configureNext(toggleAnimation)

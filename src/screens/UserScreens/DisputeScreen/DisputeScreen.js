@@ -1,4 +1,4 @@
-import { View, Text } from 'react-native'
+import { View, Text, Linking } from 'react-native'
 import React, { useContext, useState } from 'react'
 import WrapperContainer from '../../../components/WrapperContainer/WrapperContainer'
 import { Images } from '../../../assets/images'
@@ -6,19 +6,35 @@ import { moderateScale } from 'react-native-size-matters'
 import { screenSize } from '../../../utils/Styles/CommonStyles'
 import { AppContext } from '../../../context/AppContext'
 import { useNavigation } from '@react-navigation/native'
+import useBackButton from '../../../customHooks/useBackButton'
 
 const DisputeScreen = () => {
     const { appStyles } = useContext(AppContext)
     const navigation = useNavigation()
+
+    useBackButton(()=>{
+        navigation.goBack()
+        return true
+    })
 
 
     return (
         <WrapperContainer
             centerTitle="Dispute"
             showBackButton
+            handleBack={()=>{
+                navigation.goBack()
+            }}
             buttonTitle="Open Email"
             buttonActive={true}
-            handleButtonPress={() => { }}
+            handleButtonPress={() => {
+                const recipient = 'support@picckr.com';
+                const subject = '';
+                const body = '';
+                const mailtoLink = `mailto:${recipient}?subject=${subject}&body=${body}`;
+            
+                Linking.openURL(mailtoLink);
+             }}
             containerPadding={{}}
         >
 

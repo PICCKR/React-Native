@@ -4,90 +4,79 @@ import WrapperContainer from '../../../components/WrapperContainer/WrapperContai
 import { AppContext } from '../../../context/AppContext'
 import { useNavigation } from '@react-navigation/native'
 import styles from './Styles'
-import { Images } from '../../../assets/images'
-import { commonStyles } from '../../../utils/Styles/CommonStyles'
-import { moderateScale } from 'react-native-size-matters'
 import EditAction from './EditAction'
 import EmailSheet from './EmailSheet'
 import ShowAddressSheet from './ShowAddressSheet'
 import AddAddressSheet from './AddAddressSheet'
 import { showToast } from '../../../components/tostConfig/tostConfig'
 import { tostMessagetypes } from '../../../utils/Constents/constentStrings'
-import ShowPaymentSheet from './ShowPaymentSheet'
-import AddPaymentMethodSheet from './AddPaymentMethodSheet'
 import { AuthRouteStrings } from '../../../utils/Constents/RouteStrings'
+import ChooseMediaTypeSheet from '../../../components/ChooseMediaTypeSheet/ChooseMediaTypeSheet'
+import { chooseMedia, openCamara } from '../../../helper/imagePickerFunctions'
+import ProfileView from '../../../components/PrifileView/ProfileView'
+import useBackButton from '../../../customHooks/useBackButton'
+import { apiPost } from '../../../services/apiServices'
+import { endPoints } from '../../../configs/apiUrls'
+import Actions from '../../../redux/Actions'
+import { showGeneralError } from '../../../helper/showGeneralError'
+import { setLocalData } from '../../../helper/AsyncStorage'
+import { storageKeys } from '../../../helper/AsyncStorage/storageKeys'
+import { showErrorToast } from '../../../helper/showErrorToast'
+import { showSuccessToast } from '../../../helper/showSuccessToast'
+import { decodeToken } from '../../../helper/decodeToken'
+import axios from 'axios'
+import { deleteUser } from '@aws-amplify/auth'
+// import jwt from 'jsonwebtoken';
 
 const ProfileInformation = ({ route }) => {
     const data = route?.params?.data
-
-    const { appStyles, isDark } = useContext(AppContext)
-
+    const { appStyles, isDark, userData, setuserData, setIsLoggedIn, fromGuestUserScreen, setFromGuestUserScreen } = useContext(AppContext)
+    // console.log("data ====>", data);
     const navigation = useNavigation()
     const [buttonActive, setButtonActive] = useState(false)
     const [showSheet, setShowSheet] = useState({
         email: false,
         showAddress: false,
         addAddress: false,
-        showPayment: false,
-        addPayment: false
+        mediaType: false,
+        setLocation: false
     })
 
     const [profileInformation, setProfileInformation] = useState({
         profileImg: null,
         email: "",
         address: [],
-        paymentMethod: []
     })
     const [addressData, setAddresData] = useState({
-        id: "",
-        addressType: "",
-        buildingName: "",
-        homeNumber: "",
-        location: "",
+        title: "",
+        coordinates: [],
+        type: "",
+        street_address: "",
+        favorite: false,
+        house_number: "",
+        building_name: ""
     })
-    const [paymentData, setPaymentData] = useState({
-        id: "",
-        cardType: "",
-        cardHolderName: "",
-        cardNumber: "",
-        expiredDate: {
-            mm: "",
-            yy: ""
-        },
-        cvv: ""
-    })
-    const [action, setAction] = useState("add")
 
+    const [action, setAction] = useState("add")
 
     const handleAddAddress = () => {
         setShowSheet({
             addAddress: false
         })
-        const newAddress = {
-            id: profileInformation.address.length + 1,
-            addressType: addressData?.addressType,
-            buildingName: addressData?.buildingName,
-            homeNumber: addressData?.homeNumber,
-            location: addressData?.location,
-        }
-
-        // console.log("[...profileInformation.address, ...newAddress]", [...profileInformation.address, newAddress]);
         setProfileInformation({
             ...profileInformation,
-            address: [...profileInformation.address, newAddress]
+            address: [...profileInformation.address, addressData]
         })
         setAddresData({
-            id: "",
-            addressType: "",
-            buildingName: "",
-            homeNumber: "",
-            location: "",
+            title: "",
+            coordinates: [],
+            type: "",
+            street_address: "",
+            favorite: false,
+            house_number: "",
+            building_name: ""
         })
-        const toastMsgConfg = {
-            isDark: isDark,
-            msg: "You have successfully added an address"
-        }
-        showToast(toastMsgConfg, tostMessagetypes.SUCCESS, isDark)
+        showSuccessToast("You have successfully added an address", isDark)
     }
 
     const handleEditAddress = async () => {
@@ -111,68 +100,77 @@ const ProfileInformation = ({ route }) => {
             address: newAddress
         })
         setAddresData({
-            id: "",
-            addressType: "",
-            buildingName: "",
-            homeNumber: "",
-            location: "",
+            title: "",
+            coordinates: [],
+            type: "",
+            street_address: "",
+            favorite: false,
+            house_number: "",
+            building_name: ""
         })
-        const toastMsgConfg = {
-            isDark: isDark,
-            msg: "You have successfully edited an address"
-        }
-        showToast(toastMsgConfg, tostMessagetypes.SUCCESS, isDark)
+        showSuccessToast("You have successfully edited an address", isDark)
     }
 
-    const handleAddPayment = () => {
-
-        // console.log("sdjsgd");
-
-        setShowSheet({
-            addPayment: false,
-        })
-
-        setProfileInformation({
-            ...profileInformation,
-            paymentMethod: [...profileInformation?.paymentMethod, paymentData]
-
-        })
-
-        setPaymentData({
-            ...paymentData,
-            id: "",
-            cardType: "",
-            cardHolderName: "",
-            cardNumber: "",
-            expiredDate: {
-                mm: "",
-                yy: ""
-            },
-            cvv: ""
-        })
-
-        const toastMsgConfg = {
-            isDark: isDark,
-            msg: "You have successfully added an card details"
+    const handleSave = async (from) => {
+        var formData = new FormData();
+        if (profileInformation.profileImg) {
+            formData.append("picture", {
+                uri: profileInformation.profileImg?.uri,
+                type: profileInformation.profileImg?.type,
+                name: profileInformation.profileImg?.fileName,
+                fileName: profileInformation.profileImg?.fileName
+            });
+        } else {
+            formData.append("picture", "");
         }
+        formData.append("addresses", JSON.stringify(profileInformation?.address));
 
-        showToast(toastMsgConfg, tostMessagetypes.SUCCESS, isDark)
-    }
-
-    const handleSave = () => {
-        // console.log("...data, profileInformation", {...data, ...profileInformation});
+        // console.log(formData);
         // return
-         navigation.navigate(AuthRouteStrings.KYC_SCREEN,{
-            data : {...data, ...profileInformation}
-         })
+        const config = {
+            headers: {
+                'Content-Type': 'multipart/form-data',
+                'Authorization': `Bearer ${userData?.token}`,
+            },
+        };
+
+        // return
+        Actions.showLoader(true)
+        try {
+            const res = await axios.put(`${endPoints.UPDATE_PROFILE}/${userData?._id}`, formData, config)
+            // const res = await apiPost(endPoints.CREATE_USER, createUserData)
+            if (res?.status == 200) {
+                // console.log(res?.data?.data);
+                // const userInformaton = await decodeToken(res?.data?.data?.token)
+                // after getting token store it in local storage and also set token in context
+                setLocalData(storageKeys.userData, { ...userData, addresses: res?.data?.data?.addresses, picture: res?.data?.data?.picture })
+                Actions.userData({ ...userData, addresses: res?.data?.data?.addresses, picture: res?.data?.data?.picture })
+                // setuserData({ ...userData, addresses: res?.data?.data?.addresses, picture: res?.data?.data?.picture })
+                navigation.navigate(AuthRouteStrings.KYC_SCREEN, {
+                    data: { ...data, ...profileInformation }
+                })
+            } else {
+                showErrorToast(res?.data?.message, isDark)
+            }
+            // console.log("res===>", res?.status, res?.data);
+        } catch (error) {
+            if (error?.response?.status < 500) {
+                showErrorToast(error?.response?.data?.message, isDark)
+            } else {
+                showGeneralError(isDark)
+            }
+
+            console.log("error when creating user", error?.response?.status, error?.response?.data);
+        } finally {
+            Actions.showLoader(false)
+        }
+        return
     }
 
 
     useEffect(() => {
         if (
-            profileInformation?.email !== "" &&
-            profileInformation?.address.length > 0 &&
-            profileInformation.paymentMethod.length > 0
+            profileInformation?.profileImg || profileInformation?.address.length > 1
         ) {
             setButtonActive(true);
         } else {
@@ -180,58 +178,62 @@ const ProfileInformation = ({ route }) => {
         }
     }, [profileInformation]);
 
+    useBackButton(() => {
+        if (fromGuestUserScreen) {
+            navigation.navigate(fromGuestUserScreen)
+            setFromGuestUserScreen(null)
+        } else {
+            setIsLoggedIn(true)
+        }
+        return true
+    })
+
     return (
         <WrapperContainer
             centerTitle="Profile information"
             rightTitle="Skip"
-            showBackButton
+            handlerRightViewPress={() => {
+                navigation.navigate(AuthRouteStrings.KYC_SCREEN)
+            }}
+            // showBackButton
             buttonTitle={"Save"}
+            handleBack={() => {
+                if (fromGuestUserScreen) {
+                    navigation.navigate(fromGuestUserScreen)
+                    setFromGuestUserScreen(null)
+                } else {
+                    setIsLoggedIn(true)
+                }
+                // navigation.navigate(AuthRouteStrings.USER_SIGN_UP)
+            }}
             handleButtonPress={handleSave}
             buttonActive={buttonActive}
             containerPadding={{ paddingHorizontal: 0 }}
         >
 
-            <View style={styles.profileSection}>
-                <View style={styles.profileView}>
-                    {profileInformation.profileImg ? <Image source={{ uri: profileInformation.profileImg }} /> : <Images.profile />}
-                    <TouchableOpacity style={styles.cameraIconView}>
-                        <Images.camera />
-                    </TouchableOpacity>
-                </View>
-                <Text>
-                    {data?.firstName} {data?.lastName}
-                </Text>
-                <Text>
-                    {`${data?.selectedCountry?.code} ${data?.phoneNumber}`}
-                </Text>
-            </View>
+            <ProfileView
+                showEdit
+                profileImg={profileInformation.profileImg?.uri}
+                userData={{ ...userData, email: userData?.email === " " ? "" : userData?.email }}
+                handleEdit={() => {
+                    setShowSheet({
+                        ...showSheet,
+                        mediaType: true
+                    })
+                }}
+            />
+
             <View style={styles.contentView}>
                 <Text style={appStyles.mediumTextBlackBold}>
                     Other Information
                 </Text>
-
-                <EditAction
-                    appStyles={appStyles}
-                    handlePress={() => setShowSheet({
-                        email: true
-                    })}
-                    title="Email Address"
-                />
                 <EditAction
                     appStyles={appStyles}
                     handlePress={() => setShowSheet({
                         showAddress: true
                     })}
-                    addressVal={profileInformation.address?.length !== 0 && `${profileInformation.address?.length} Address`}
+                    val={profileInformation.address?.length !== 0 && `${profileInformation.address?.length} Address`}
                     title="Address"
-                />
-                <EditAction
-                    appStyles={appStyles}
-                    title="Payment Method"
-                    addressVal={ profileInformation.paymentMethod?.length !== 0 && `${profileInformation.paymentMethod?.length} Card`}
-                    handlePress={() => setShowSheet({
-                        showPayment: true
-                    })}
                 />
             </View>
 
@@ -257,11 +259,13 @@ const ProfileInformation = ({ route }) => {
                 handleAddAddress={() => {
                     setAction("add")
                     setAddresData({
-                        id: "",
-                        addressType: "",
-                        buildingName: "",
-                        homeNumber: "",
-                        location: "",
+                        title: "",
+                        coordinates: [],
+                        type: "",
+                        street_address: "",
+                        favorite: false,
+                        house_number: "",
+                        building_name: ""
                     })
                     setShowSheet({
                         addAddress: true,
@@ -276,11 +280,11 @@ const ProfileInformation = ({ route }) => {
                         showAddress: false
                     })
                     setAddresData({
-                        id: address?.id,
-                        addressType: address?.addressType,
-                        buildingName: address?.buildingName,
-                        homeNumber: address?.homeNumber,
-                        location: address?.location,
+                        coordinates: address?.coordinates,
+                        street_address: address?.street_address,
+                        house_number: address?.house_number,
+                        building_name: address?.building_name,
+                        type: address?.type
                     })
                 }}
             />
@@ -295,44 +299,42 @@ const ProfileInformation = ({ route }) => {
                 setAddresData={setAddresData}
                 action={action}
                 handleEditAddress={handleEditAddress}
-            />
-
-            <ShowPaymentSheet
-                isVisible={showSheet.showPayment}
-                setShowSheet={setShowSheet}
-                profileInformation={profileInformation}
-                setAction={setAction}
-                handleAddPayment={() => {
-                    setAction("add")
-                    setPaymentData({
-                        id: "",
-                        cardType: "",
-                        cardHolderName: "",
-                        cardNumber: "",
-                        expiredDate: {
-                            mm: "",
-                            yy: ""
-                        },
-                        cvv: ""
-                    })
+                handleSetLocationPress={() => {
                     setShowSheet({
-                        addPayment: true,
-                        showPayment: false
+                        ...showSheet,
+                        addAddress: false,
+                        setLocation: true
                     })
                 }}
             />
 
-            <AddPaymentMethodSheet
-                isVisible={showSheet.addPayment}
-                setShowSheet={setShowSheet}
-                profileInformation={profileInformation}
-                setProfileInformation={setProfileInformation}
-                handleAddCard={handleAddPayment}
-                paymentData={paymentData}
-                setPaymentData={setPaymentData}
-                action={action}
+            <ChooseMediaTypeSheet
+                isVisible={showSheet.mediaType}
+                setShowMode={setShowSheet}
+                openCamara={async () => {
+                    const res = await openCamara()
+                    setProfileInformation({
+                        ...profileInformation,
+                        profileImg: res?.assets[0]
+                    })
+                    setShowSheet({
+                        ...showSheet,
+                        mediaType: false
+                    })
+                }}
+                chooseMedia={async () => {
+                    const res = await chooseMedia()
+                    // console.log("res===>", res);
+                    setProfileInformation({
+                        ...profileInformation,
+                        profileImg: res?.assets[0]
+                    })
+                    setShowSheet({
+                        ...showSheet,
+                        mediaType: false
+                    })
+                }}
             />
-
         </WrapperContainer>
     )
 }

@@ -29,8 +29,8 @@ const CustomButton = ({
         {
           backgroundColor: hasBackground ? uiColours.PRIMARY : null,
           height: Platform.OS === "android" ? verticalScale(40) : verticalScale(30),
-          width: buttonType === buttonTypes.SMALL ? verticalScale(100) :
-            buttonType === buttonTypes.MEDIUM ? verticalScale(150) : screenSize.width - scale(32),
+          width: buttonType === buttonTypes.SMALL ? scale(100) :
+            buttonType === buttonTypes.MEDIUM ? scale(130) : screenSize.width - scale(32),
           borderWidth: hasOutLine ? moderateScale(1) : 0,
         },
         buttonStyle,

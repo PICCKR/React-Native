@@ -5,12 +5,11 @@ import { uiColours } from "../../utils/Styles/uiColors"
 
 const styles = StyleSheet.create({
     modal:{
-        backgroundColor:"#fff",
         borderTopLeftRadius:moderateScale(16),
         borderTopRightRadius:moderateScale(16),
         position:'absolute',
         bottom:0,
-        width:screenSize.width
+        width:screenSize.width,
     },
     buttonView:{
         justifyContent:'space-around',
@@ -23,7 +22,12 @@ const styles = StyleSheet.create({
         width:'100%',
         borderBottomWidth:moderateScale(1),
         padding:moderateScale(16),
-        borderColor:uiColours.LIGHT_GRAY
     },
+    footer: {
+        alignSelf: 'center',
+        paddingVertical:verticalScale(16),
+        borderTopWidth:moderateScale(1),
+        width:screenSize.width
+    }
 })
 export default styles

@@ -1,0 +1,45 @@
+{
+  "auth": {
+    "picckr": {
+      "customAuth": false,
+      "dependsOn": [],
+      "providerPlugin": "awscloudformation",
+      "service": "Cognito",
+      "serviceType": "imported"
+    }
+  },
+  "parameters": {
+    "AMPLIFY_auth_picckr_nativeClientId": {
+      "usedBy": [
+        {
+          "category": "auth",
+          "resourceName": "picckr"
+        }
+      ]
+    },
+    "AMPLIFY_auth_picckr_userPoolId": {
+      "usedBy": [
+        {
+          "category": "auth",
+          "resourceName": "picckr"
+        }
+      ]
+    },
+    "AMPLIFY_auth_picckr_userPoolName": {
+      "usedBy": [
+        {
+          "category": "auth",
+          "resourceName": "picckr"
+        }
+      ]
+    },
+    "AMPLIFY_auth_picckr_webClientId": {
+      "usedBy": [
+        {
+          "category": "auth",
+          "resourceName": "picckr"
+        }
+      ]
+    }
+  }
+}

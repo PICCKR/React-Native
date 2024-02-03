@@ -13,7 +13,9 @@ const SheetFooter = ({
 }) => {
     const { appStyles, isDark } = useContext(AppContext)
     return (
-        <View style={[Styles.footer, footer]}>
+        <View style={[Styles.footer, footer,{
+            borderColor:isDark ? uiColours.GRAYED_BUTTON : uiColours.LIGHT_GRAY
+        }]}>
             <CustomButton
                 disabled={!buttonActive}
                 buttonStyle={{
@@ -22,7 +24,7 @@ const SheetFooter = ({
                             uiColours.LIGHT_GRAY
                 }}
                 titleStyle={{
-                    color: buttonActive ? uiColours.WHITE_TEXT : !buttonActive && isDark ? uiColours.GRAYED_BUTTON :
+                    color: buttonActive ? uiColours.WHITE_TEXT : (!buttonActive && isDark) ? uiColours.GRAY_TEXT :
                         uiColours.GRAY_TEXT
                 }}
                 title={buttonTitle}

@@ -88,7 +88,7 @@ module Concurrent
   #
   #   # -- if the record was found
   #   result.just? #=> true
-  #   result.value #=> #<Client id: 10, first_name: "Ryan">
+  #   result.value #=> #<Client id: 10, firstName: "Ryan">
   #
   #   # -- if the record was not found
   #   result.just?  #=> false

@@ -10,7 +10,7 @@ const styles = StyleSheet.create({
         borderColor: uiColours.LIGHT_GRAY,
         width: screenSize.width,
         paddingHorizontal: scale(16),
-        paddingBottom:verticalScale(16)
+        paddingBottom: verticalScale(16)
     },
     profileView: {
         height: moderateScale(100),
@@ -24,14 +24,14 @@ const styles = StyleSheet.create({
     historyCard: {
         flexDirection: "row",
         justifyContent: 'space-between',
-        alignItems:'center',
-        borderBottomWidth:moderateScale(1),
-        borderColor:uiColours.LIGHT_GRAY,
-        paddingVertical:verticalScale(12)
+        alignItems: 'center',
+        borderBottomWidth: moderateScale(1),
+        borderColor: uiColours.LIGHT_GRAY,
+        paddingVertical: verticalScale(12)
     },
-    details:{
-        paddingVertical:verticalScale(10),
-        gap:verticalScale(16)
+    details: {
+        paddingVertical: verticalScale(10),
+        gap: verticalScale(16)
     }
 })
 export default styles

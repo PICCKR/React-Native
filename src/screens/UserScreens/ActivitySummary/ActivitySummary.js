@@ -1,13 +1,12 @@
-import { View, Text, TouchableOpacity, ScrollView } from 'react-native'
-import React, { useContext } from 'react'
+import { View, Text, TouchableOpacity, ScrollView, Image } from 'react-native'
+import React, { useContext, useEffect } from 'react'
 import WrapperContainer from '../../../components/WrapperContainer/WrapperContainer'
 import { Images } from '../../../assets/images'
 import styles from './Styles'
-import { AppContext } from '../../../context/AppContext'
+import { AppContext, useSocket } from '../../../context/AppContext'
 import { useNavigation } from '@react-navigation/native'
 import { uiColours } from '../../../utils/Styles/uiColors'
 import { moderateScale, scale, verticalScale } from 'react-native-size-matters'
-import { Image } from 'react-native-svg'
 import { Rating, AirbnbRating } from 'react-native-ratings';
 import { commonStyles } from '../../../utils/Styles/CommonStyles'
 import InputText from '../../../components/InputText/InputText'
@@ -15,44 +14,67 @@ import Ongoing from './Ongoing'
 import CustomButton from '../../../components/Button/CustomButton'
 import { buttonTypes } from '../../../utils/Constents/constentStrings'
 import { ReviewsData } from '../../../json/reviewData'
+import { MainRouteStrings } from '../../../utils/Constents/RouteStrings'
+import moment from 'moment'
+import { useSelector } from 'react-redux'
+import Completed from './Completed'
+import Cancelled from './Cancelled'
+import Pending from './Pending'
 
 const ActivitySummary = ({ route }) => {
-    const { appStyles } = useContext(AppContext)
+    const { appStyles, isDark } = useContext(AppContext)
     const navigation = useNavigation()
-    const data = route.params?.data
+    const userData = useSelector((state) => state?.userDataReducer?.userData)
+    const orderDeatils = route.params?.data
 
-    const status = data?.status === "Cancelled" ? `${data?.status} by ${data?.by}` : data?.status
+    const { Socket } = useSocket()
 
-    // console.log("data===>", data);
+    const status = orderDeatils?.status === "Cancelled" ? `${orderDeatils?.status} by ${orderDeatils?.by}` : orderDeatils?.status
 
+    useEffect(() => {
+
+        return () => {
+        }
+
+    }, [Socket])
     return (
         <WrapperContainer
             centerTitle="Activity Summary"
             showBackButton
-            showFooterButton={data?.status != "Ongoing" ? true : false}
+            handleBack={() => {
+                navigation.goBack()
+            }}
+            showFooterButton={orderDeatils?.status === "delivered" ? true : false}
             buttonTitle="Reorder"
             buttonActive={true}
-            handleButtonPress={() => { }}
+            handleButtonPress={() => {
+                navigation.navigate(MainRouteStrings.SET_DESTINATION, {
+                    from: MainRouteStrings.ACTIVITY_SUMMERY
+                })
+            }}
             containerPadding={{ paddingHorizontal: 0 }}
         >
             <ScrollView style={{
-                marginBottom: data?.status != "Ongoing" ? verticalScale(76) : 0,
-                paddingTop: verticalScale(16)
+                marginBottom: (orderDeatils?.status === "delivered") ? verticalScale(76) : 0,
+                // paddingTop: verticalScale(16)
             }}>
 
-                <View style={styles.ActivitySummaryConatiner}>
+                <View style={[styles.ActivitySummaryConatiner, {
+                    borderColor: !isDark ? uiColours.LIGHT_GRAY : uiColours.GRAYED_BUTTON,
+                }]}>
                     <View style={styles.vehicle}>
+                        {/* <Image source = {{uri : data?.picckrId?.vehicle?.}} /> */}
                         <Images.car height={moderateScale(34)} width={moderateScale(34)} />
                     </View>
                     <View style={{ alignItems: "flex-end" }}>
                         <Text style={appStyles.smallTextGray}>
-                            {data?.dateAndTime}
+                            {moment(orderDeatils?.createdAt).format("DD-MM-YYYY")}
                         </Text>
                         <View style={[styles.label, {
-                            backgroundColor: data?.status === "Completed" ? uiColours.LIGHT_GREEN : data?.status === "Cancelled" ? uiColours.LIGHT_RED : "#C9F3FB"
+                            backgroundColor: orderDeatils?.status === "delivered" ? uiColours.LIGHT_GREEN : orderDeatils?.status === "cancelled" ? uiColours.LIGHT_RED : "#C9F3FB"
                         }]}>
                             <Text style={[appStyles.smallTextPrimary, {
-                                color: data?.status === "Completed" ? uiColours.GREEN : data?.status === "Cancelled" ? uiColours.RED : uiColours.BLUE
+                                color: orderDeatils?.status === "delivered" ? uiColours.GREEN : orderDeatils?.status === "cancelled" ? uiColours.RED : uiColours.BLUE
 
                             }]}>
                                 {status}
@@ -61,90 +83,48 @@ const ActivitySummary = ({ route }) => {
                     </View>
                 </View>
 
-                {data?.status != "Ongoing" && <View style={styles.profileSection}>
-                    <View style={styles.profileView}>
-                        {data?.profileImg ? <Image source={{ uri: profileInformation.profileImg }} /> : <Images.profile />}
-                    </View>
-                    <Text style={appStyles.mediumTextGray}>
-                        {data?.status === "Completed" && `Let’s rate `}
-                        <Text style={appStyles.mediumTextPrimaryBold}>{data?.picker}</Text>
-                    </Text>
-                    {data?.status === "Completed" && <Rating
-                        ratingCount={5}
-                        imageSize={moderateScale(22)}
-                        onFinishRating={(e) => {
-                            // console.log('eee', e);
+                {orderDeatils?.status === "delivered" &&
+                    <Completed
+                        orderDeatils={orderDeatils}
+                        appStyles={appStyles}
+                        navigation={navigation}
+                        isDark={isDark}
+                        userData={userData}
+                    />
+
+                }
+
+                {orderDeatils?.status === "cancelled" &&
+                    <Cancelled
+                        orderDeatils={orderDeatils}
+                        appStyles={appStyles}
+                        navigation={navigation}
+                        isDark={isDark}
+                        userData={userData}
+                    />
+
+                }
+                {orderDeatils?.status === "pending" &&
+                    <Pending
+                        orderDeatils={orderDeatils}
+                        appStyles={appStyles}
+                        navigation={navigation}
+                        isDark={isDark}
+                        userData={userData}
+                        handleJoinRoom={(data) => {
+                            Socket.emit("joinRoom", {
+                                "room": data?._id
+                            })
+                            navigation.navigate(MainRouteStrings.USER_CHAT_SCREEN, {
+                                orderDetails: data
+                            })
                         }}
-                    />}
-                </View>}
+                    />
 
-                {data?.status === "Completed" && <View>
-                    <View style={styles.reviewSection}>
-                        <Text style={appStyles.smallTextBlack}>
-                            What went great?
-                        </Text>
-                        <View style={[commonStyles.flexRowAlnCtr, { flexWrap: "wrap", gap: scale(8) }]}>
-                            {
-                                ReviewsData.map((item) => {
-                                    return (
-                                        <TouchableOpacity key={item.id} style={styles.reviewCard}>
-                                            <Text style={[appStyles.smallTextGray, { fontSize: scale(10) }]}>
-                                                {item.title}
-                                            </Text>
-                                        </TouchableOpacity>
-                                    )
-                                })
-                            }
-                        </View>
-                    </View>
+                }
 
-                    <View style={styles.tripDetails}>
-                        <View style={{ flexDirection: 'row', gap: scale(5) }}>
-                            <Images.source height={moderateScale(20)} width={moderateScale(20)} />
-                            <View>
-                                <Text style={appStyles.smallTextBlack}>
-                                    Sender
-                                </Text>
-                                <Text style={appStyles.smallTextGray}>
-                                    Jeremy Jason
-                                </Text>
-                                <Text style={appStyles.smallTextGray}>
-                                    212-111-2222
-                                </Text>
-                                <Text style={appStyles.smallTextGray}>
-                                    Lesley University
-                                </Text>
-                                <Text style={appStyles.smallTextGray}>
-                                    29 Everett St, Cambridge, MA 02138
-                                </Text>
-                            </View>
-                        </View>
-
-                        <View style={{ flexDirection: 'row', gap: scale(5) }}>
-                            <Images.locationPinRed height={moderateScale(20)} width={moderateScale(20)} />
-                            <View>
-                                <Text style={appStyles.smallTextBlack}>
-                                    Recipient
-                                </Text>
-                                <Text style={appStyles.smallTextGray}>
-                                    John Cena
-                                </Text>
-                                <Text style={appStyles.smallTextGray}>
-                                    212-111-2222
-                                </Text>
-                                <Text style={appStyles.smallTextGray}>
-                                    Harvard University
-                                </Text>
-                                <Text style={appStyles.smallTextGray}>
-                                    Massachusetts Hall, Cambridge, MA 02138, United States of America
-                                </Text>
-                            </View>
-                        </View>
-                    </View>
-                </View>}
-
-                {
-                    data?.status === "Cancelled" &&
+                {/* {
+                    orderDeatils?.status === "Cancelled" &&
                     <View style={{ padding: moderateScale(16), }}>
                         <InputText
                             inputContainer={{}}
@@ -159,15 +139,26 @@ const ActivitySummary = ({ route }) => {
                             }}
                         />
                     </View>
-                }
+                } */}
 
                 {
-                    data?.status === "Ongoing" &&
+                    orderDeatils?.status === "in-transit" &&
                     <Ongoing
-                        data={data}
+                        orderDeatils={orderDeatils}
                         appStyles={appStyles}
                         navigation={navigation}
+                        isDark={isDark}
+                        userData={userData}
+                        handleJoinRoom={(data) => {
+                            Socket.emit("joinRoom", {
+                                "room": data?._id
+                            })
+                            navigation.navigate(MainRouteStrings.USER_CHAT_SCREEN, {
+                                orderDetails: data
+                            })
+                        }}
                     />
+
 
                 }
 

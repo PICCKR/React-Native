@@ -119,7 +119,7 @@ class Module
   #
   #   class User < ActiveRecord::Base
   #     has_one :profile
-  #     delegate :first_name, to: :profile
+  #     delegate :firstName, to: :profile
   #     delegate :date_of_birth, to: :profile, private: true
   #
   #     def age
@@ -127,7 +127,7 @@ class Module
   #     end
   #   end
   #
-  #   User.new.first_name # => "Tomas"
+  #   User.new.firstName # => "Tomas"
   #   User.new.date_of_birth # => NoMethodError: private method `date_of_birth' called for #<User:0x00000008221340>
   #   User.new.age # => 2
   #

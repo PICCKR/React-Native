@@ -13,7 +13,8 @@ const styles = StyleSheet.create({
     borderWidth: moderateScale(1),
     borderColor: uiColours.LIGHT_GRAY,
     borderRadius: moderateScale(6),
-    justifyContent:'space-between'
+    justifyContent:'space-between',
+    alignItems:"center"
   },
   modalContainer:{
     flexDirection:"row",

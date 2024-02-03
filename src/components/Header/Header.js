@@ -6,6 +6,7 @@ import { AppContext } from '../../context/AppContext'
 import { commonStyles } from '../../utils/Styles/CommonStyles'
 import { useNavigation } from '@react-navigation/native'
 import { moderateScale } from 'react-native-size-matters'
+import { uiColours } from '../../utils/Styles/uiColors'
 
 const Header = ({
     showBackButton,
@@ -16,36 +17,39 @@ const Header = ({
     hasCloseIcon,
     leftViewStyles,
     centerViewStyles,
-    righyViewStyles
+    righyViewStyles,
+    headerContainer,
+    handleBack
 }) => {
-    const { appStyles } = useContext(AppContext)
+    const { appStyles, isDark } = useContext(AppContext)
     const navigation = useNavigation()
     return (
-        <View style={styles.headerContainer}>
-
-            <View style={[styles.leftView,leftViewStyles]}>
+        <View style={[styles.headerContainer, {
+            borderColor:isDark ? uiColours.GRAYED_BUTTON : uiColours.LIGHT_GRAY 
+        }, headerContainer]}>
+            <View style={[styles.leftView, leftViewStyles]}>
                 {
                     showBackButton ? <TouchableOpacity
                         style={styles.backButton}
-                        onPress={() => {
-                            navigation.goBack()
-                        }}
+                        onPress={handleBack}
                     >
-                        <Images.backArrow />
+                        {isDark ? <Images.backArrowWhite />
+                            :
+                            <Images.backArrow />}
                     </TouchableOpacity> :
-                        <Text style={[appStyles.mediumTextPrimaryBold]}>
+                        <Text style={isDark ? appStyles.mediumTextWhiteBold : appStyles.mediumTextPrimaryBold}>
                             {leftTitle}
                         </Text>
                 }
 
             </View>
 
-            <View style={[styles.centerView,centerViewStyles ]}>
-                <Text style={[appStyles.mediumTextBlack, styles.centerText]}>
+            <View style={[styles.centerView, centerViewStyles]}>
+                <Text style={[isDark ? appStyles.mediumTextWhite : appStyles.mediumTextBlack, styles.centerText]}>
                     {centerTitle}
                 </Text>
             </View>
-            <View style={[styles.righyView,righyViewStyles]}>
+            <View style={[styles.righyView, righyViewStyles]}>
                 <TouchableOpacity
                     style={{ padding: moderateScale(3) }}
                     onPress={handlerRightViewPress}
@@ -56,7 +60,6 @@ const Header = ({
                     {hasCloseIcon && <Images.close />}
                 </TouchableOpacity>
             </View>
-
         </View>
     )
 }

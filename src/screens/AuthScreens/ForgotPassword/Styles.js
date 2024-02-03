@@ -1,5 +1,6 @@
 import { StyleSheet } from "react-native"
 import { moderateScale, scale, verticalScale } from "react-native-size-matters"
+import { uiColours } from "../../../utils/Styles/uiColors"
 
 const styles = StyleSheet.create({
     input:{
@@ -11,6 +12,7 @@ const styles = StyleSheet.create({
         position:'absolute',
         bottom:verticalScale(16),
         alignSelf: 'center',
-     }
+     },
+
 })
 export default styles

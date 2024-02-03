@@ -13,15 +13,17 @@ const styles = StyleSheet.create({
         borderColor: uiColours.LIGHT_GRAY
     },
     content: {
-        marginLeft: scale(8)
+        marginLeft: scale(8),
+        flex: 1
     },
     heartIcon: {
         height: moderateScale(36),
         width: moderateScale(36),
-        justifyContent:'center',
-        alignItems:"center",
-        backgroundColor:"#FFF4F2",
-        borderRadius:moderateScale(5),
+        justifyContent: 'center',
+        alignItems: "center",
+        backgroundColor: "#FFF4F2",
+        borderRadius: moderateScale(5),
+        flex: 1
         // elevation:2
     }
 })

@@ -1,18 +1,46 @@
 import { View, Text, FlatList, TouchableOpacity } from 'react-native'
-import React, { useContext } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import WrapperContainer from '../../../components/WrapperContainer/WrapperContainer'
-import { favorateData } from '../../../json/favorateData'
 import { Images } from '../../../assets/images'
 import styles from './Styles'
 import { moderateScale, scale } from 'react-native-size-matters'
 import { AppContext } from '../../../context/AppContext'
 import { useNavigation } from '@react-navigation/native'
 import { MainRouteStrings } from '../../../utils/Constents/RouteStrings'
+import { apiGet } from '../../../services/apiServices'
+import { endPoints } from '../../../configs/apiUrls'
+import ProfileView from '../../../components/PrifileView/ProfileView'
+import Actions from '../../../redux/Actions'
 
 const FavoritesScreen = () => {
 
   const { appStyles } = useContext(AppContext)
   const navigation = useNavigation()
+
+  const [favorateData, setFavorateData] = useState([])
+
+  const getFavoritesData = () => {
+    Actions.showLoader(true)
+    apiGet(endPoints?.FAVORIES).then((res) => {
+      Actions.showLoader(false)
+      console.log("🚀 ~ getFavoritesData ~ getFavoritesData:", res?.status)
+      if (res?.status === 200) {
+        setFavorateData(res?.data?.data)
+      } else {
+
+      }
+
+    }).catch((error) => {
+      Actions.showLoader(false)
+      console.log("error in get favorates", error);
+    })
+  }
+
+
+  useEffect(() => {
+    getFavoritesData()
+  }, [])
+
 
   return (
     <WrapperContainer
@@ -22,8 +50,9 @@ const FavoritesScreen = () => {
     >
       <FlatList
         data={favorateData}
-        keyExtractor={(item) => item?.id}
+        keyExtractor={(item) => item?._id}
         renderItem={({ item }) => {
+          // console.log("item", item?.userId?.firstName);
           return (
             <TouchableOpacity
               style={styles.card}
@@ -33,14 +62,19 @@ const FavoritesScreen = () => {
                 })
               }}
             >
-              <View style={{ flexDirection: 'row' }}>
-                <Images.profile height={moderateScale(40)} width={moderateScale(40)} />
+              <View style={{ flexDirection: 'row', width: "100%" }}>
+                <ProfileView
+                  size={40}
+                  profileImg={item?.picckrId?.picture}
+                  hasBottomLine={false}
+                />
+
                 <View style={styles.content}>
                   <Text style={appStyles.smallTextPrimaryBold}>
-                    {item.picker}
+                    {item?.picckrId?.firstName} {item?.picckrId?.lastName}
                   </Text>
                   <Text style={appStyles.smallTextGray}>
-                    {item.vehicaleInfo}
+                    {item?.vehicleId?.plateNumber} - {item?.vehicleId?.model} -{item?.vehicleId?.color}
                   </Text>
                   <View style={{ flexDirection: 'row', gap: scale(5) }}>
                     <Images.star height={moderateScale(20)} width={moderateScale(20)} />

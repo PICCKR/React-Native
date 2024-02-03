@@ -14,7 +14,6 @@ const Styles = StyleSheet.create({
     countryView:{
         width:screenSize.width / 3,
         borderRightWidth:moderateScale(1),
-        borderColor:uiColours.LIGHT_GRAY,
         height:'100%',
         alignItems:'center',
         flexDirection:"row",

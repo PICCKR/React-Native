@@ -14,6 +14,8 @@ export const uiColours = {
     TOAST_BG:"#E0FAE0",
     CREAM:"#F0E796",
     BLUE:"#016DB2",
+    LIGHT_BLUE:"#C9F3FB",
     GOLDEN_DARK:"#686232",
-    GOLDEN_LIGHT:"#F0E796"
+    GOLDEN_LIGHT:"#F0E796",
+    BLACK:"#121619"
 }

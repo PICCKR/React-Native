@@ -1,20 +1,24 @@
 import { View, Text, ScrollView, TouchableOpacity } from 'react-native'
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useCallback, useContext, useEffect, useState } from 'react'
 import WrapperContainer from '../../../components/WrapperContainer/WrapperContainer'
 import { moderateScale, scale, verticalScale } from 'react-native-size-matters'
 import styles from './Styles'
 import { Images } from '../../../assets/images'
-import { AppContext } from '../../../context/AppContext'
+import { AppContext, useSocket } from '../../../context/AppContext'
 import { useNavigation } from '@react-navigation/native'
 import { uiColours } from '../../../utils/Styles/uiColors'
 import { Rating } from 'react-native-ratings'
-import PrifileView from '../../../components/PrifileView/PrifileView'
+import PrifileView from '../../../components/PrifileView/ProfileView'
 import { commonStyles } from '../../../utils/Styles/CommonStyles'
 import InputText from '../../../components/InputText/InputText'
 import { ReviewsData } from '../../../json/reviewData'
 import { MainRouteStrings } from '../../../utils/Constents/RouteStrings'
+import useBackButton from '../../../customHooks/useBackButton'
 
-const PickerReviewWhenCancelled = () => {
+const PickerReviewWhenCancelled = ({ route }) => {
+    const data = route?.params?.data
+    const { Socket } = useSocket()
+    // console.log("data===>", data);
     const { appStyles } = useContext(AppContext)
     const navigation = useNavigation()
     const [reviewsData, setReviewsData] = useState(ReviewsData)
@@ -24,7 +28,6 @@ const PickerReviewWhenCancelled = () => {
         review: '',
         rating: ""
     })
-    const data = ""
 
 
 
@@ -55,17 +58,51 @@ const PickerReviewWhenCancelled = () => {
 
     }, [userReview])
 
+    useBackButton(() => {
+        navigation.navigate(MainRouteStrings.USER_HOME_SCREEN)
+        return true
+    })
+
+    const handleSubmit = async () => {
+        Socket.emit("feedback-passenger", {
+            "bookingId": data?._id,
+            "passengerRating": userReview?.rating,
+            "passengerReview": userReview?.review
+        })
+    }
+
+    const handleReviewError = useCallback(async (data) => {
+        console.log("feedback-passenger-error", data);
+    }, [Socket])
+
+    const handleReviewSuccess = useCallback(async (data) => {
+        console.log("feedback-passenger-success", data);
+        navigation.navigate(MainRouteStrings.ACTIVITY_SCREEN)
+    }, [Socket])
+
+
+    useEffect(() => {
+        Socket.on("feedback-passenger-error", handleReviewError)
+        Socket.on("feedback-passenger-success", handleReviewSuccess)
+        return () => {
+            Socket.off("feedback-passenger-error", handleReviewError)
+            Socket.off('feedback-passenger-success', handleReviewSuccess)
+        }
+    }, [Socket, handleReviewSuccess, handleReviewError])
 
     return (
 
         <WrapperContainer
             centerTitle="Activity Summary"
             showBackButton
+            handleBack={() => {
+                navigation.navigate(MainRouteStrings.USER_HOME_SCREEN)
+            }}
             showFooterButton={data?.status != "Ongoing" ? true : false}
             buttonTitle="Submit"
             buttonActive={buttonActive}
-            handleButtonPress={() => { 
-                navigation.navigate(MainRouteStrings.ACTIVITY_SCREEN)
+            handleButtonPress={() => {
+                handleSubmit()
             }}
             containerPadding={{ paddingHorizontal: 0 }}
         >
@@ -79,9 +116,9 @@ const PickerReviewWhenCancelled = () => {
                         <Images.car height={moderateScale(34)} width={moderateScale(34)} />
                     </View>
                     <View style={{ alignItems: "flex-end" }}>
-                        <Text style={appStyles.smallTextGray}>
-                            June 20 2023, 13:02 PM
-                        </Text>
+                        {/* <Text style={appStyles.smallTextGray}>
+                            
+                        </Text> */}
                         <View style={[styles.label]}>
                             <Text style={[appStyles.smallTextPrimary, { color: uiColours.RED }]}>
                                 Cancelled by Sender
@@ -91,10 +128,12 @@ const PickerReviewWhenCancelled = () => {
                 </View>
 
                 <View style={styles.profileSection}>
-                    <PrifileView />
+                    <PrifileView
+                        profileImg={data?.picckrId?.picture}
+                    />
                     <Text style={appStyles.mediumTextGray}>
                         Let’s rate
-                        <Text style={appStyles.mediumTextPrimaryBold}> Cooper Septimus</Text>
+                        <Text style={appStyles.mediumTextPrimaryBold}> {data?.picckrId?.firstName} {data?.picckrId?.lastName}</Text>
                     </Text>
                     <Rating
                         ratingCount={5}
@@ -155,10 +194,6 @@ const PickerReviewWhenCancelled = () => {
                         }}
                     />
                 </View>
-
-
-
-
             </ScrollView>
         </WrapperContainer>
 

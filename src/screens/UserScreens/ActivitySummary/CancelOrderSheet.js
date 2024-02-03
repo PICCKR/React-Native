@@ -40,7 +40,7 @@ const CancelOrderSheet = ({
                     Are you sure you want to cancel this order?
                 </Text>
                 <Text style={[appStyles.smallTextPrimary,{color:uiColours.RED}]}>
-                You will be charged $5 if you cancel your order
+                You will be charged ₦5 if you cancel your order
                 </Text>
             </View>
 

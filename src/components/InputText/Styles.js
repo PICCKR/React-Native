@@ -18,10 +18,10 @@ export const styles = StyleSheet.create({
         borderWidth:moderateScale(1),
         borderRadius:moderateScale(6),
         paddingLeft:scale(10),
-        marginTop: Platform.OS === 'android' ? verticalScale(0) : verticalScale(4)
+        marginTop: Platform.OS === 'android' ? verticalScale(6) : verticalScale(0)
     },
     errorText: {
-        fontSize: scale(12),
+        fontSize: scale(10),
         color: uiColours.RED,
         zIndex: 10
     },

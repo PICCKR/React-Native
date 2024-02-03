@@ -117,7 +117,7 @@ enum {JSON_object_en_main = 1};
 static char *JSON_parse_object(JSON_Parser *json, char *p, char *pe, VALUE *result, int current_nesting)
 {
     int cs = EVIL;
-    VALUE last_name = Qnil;
+    VALUE lastName = Qnil;
     VALUE object_class = json->object_class;
 
     if (json->max_nesting && current_nesting > json->max_nesting) {
@@ -166,7 +166,7 @@ tr2:
 	{
         char *np;
         json->parsing_name = 1;
-        np = JSON_parse_string(json, p, pe, &last_name);
+        np = JSON_parse_string(json, p, pe, &lastName);
         json->parsing_name = 0;
         if (np == NULL) { p--; {p++; cs = 3; goto _out;} } else {p = (( np))-1;}
     }
@@ -250,10 +250,10 @@ tr11:
             p--; {p++; cs = 9; goto _out;}
         } else {
             if (NIL_P(json->object_class)) {
-                OBJ_FREEZE(last_name);
-                rb_hash_aset(*result, last_name, v);
+                OBJ_FREEZE(lastName);
+                rb_hash_aset(*result, lastName, v);
             } else {
-                rb_funcall(*result, i_aset, 2, last_name, v);
+                rb_funcall(*result, i_aset, 2, lastName, v);
             }
             {p = (( np))-1;}
         }

@@ -9,136 +9,391 @@
 9        android:targetSdkVersion="33" />
 10
 11    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
-11-->/Users/mahammadsuelc/Desktop/ve/pikkerapp/android/app/src/debug/AndroidManifest.xml:5:5-77
-11-->/Users/mahammadsuelc/Desktop/ve/pikkerapp/android/app/src/debug/AndroidManifest.xml:5:22-75
+11-->/Users/mahammadsuelc/Documents/ve/pikkerapp/android/app/src/debug/AndroidManifest.xml:5:5-77
+11-->/Users/mahammadsuelc/Documents/ve/pikkerapp/android/app/src/debug/AndroidManifest.xml:5:22-75
 12    <uses-permission android:name="android.permission.INTERNET" />
-12-->/Users/mahammadsuelc/Desktop/ve/pikkerapp/android/app/src/main/AndroidManifest.xml:3:5-67
-12-->/Users/mahammadsuelc/Desktop/ve/pikkerapp/android/app/src/main/AndroidManifest.xml:3:22-64
+12-->/Users/mahammadsuelc/Documents/ve/pikkerapp/android/app/src/main/AndroidManifest.xml:3:5-67
+12-->/Users/mahammadsuelc/Documents/ve/pikkerapp/android/app/src/main/AndroidManifest.xml:3:22-64
 13    <uses-permission android:name="android.permission.CAMERA" />
-13-->/Users/mahammadsuelc/Desktop/ve/pikkerapp/android/app/src/main/AndroidManifest.xml:4:5-64
-13-->/Users/mahammadsuelc/Desktop/ve/pikkerapp/android/app/src/main/AndroidManifest.xml:4:22-62
+13-->/Users/mahammadsuelc/Documents/ve/pikkerapp/android/app/src/main/AndroidManifest.xml:4:5-64
+13-->/Users/mahammadsuelc/Documents/ve/pikkerapp/android/app/src/main/AndroidManifest.xml:4:22-62
 14    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-14-->/Users/mahammadsuelc/Desktop/ve/pikkerapp/android/app/src/main/AndroidManifest.xml:5:5-79
-14-->/Users/mahammadsuelc/Desktop/ve/pikkerapp/android/app/src/main/AndroidManifest.xml:5:22-77
-15    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
-15-->[com.facebook.flipper:flipper:0.182.0] /Users/mahammadsuelc/.gradle/caches/transforms-3/e13f88164840fe641a466d05cd8edac7/transformed/jetified-flipper-0.182.0/AndroidManifest.xml:16:5-76
-15-->[com.facebook.flipper:flipper:0.182.0] /Users/mahammadsuelc/.gradle/caches/transforms-3/e13f88164840fe641a466d05cd8edac7/transformed/jetified-flipper-0.182.0/AndroidManifest.xml:16:22-73
-16    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-16-->[com.google.android.exoplayer:exoplayer-core:2.13.3] /Users/mahammadsuelc/.gradle/caches/transforms-3/8a268f494944fd96b8e2ac4412b206eb/transformed/jetified-exoplayer-core-2.13.3/AndroidManifest.xml:24:5-79
-16-->[com.google.android.exoplayer:exoplayer-core:2.13.3] /Users/mahammadsuelc/.gradle/caches/transforms-3/8a268f494944fd96b8e2ac4412b206eb/transformed/jetified-exoplayer-core-2.13.3/AndroidManifest.xml:24:22-76
-17
-18    <application
-18-->/Users/mahammadsuelc/Desktop/ve/pikkerapp/android/app/src/main/AndroidManifest.xml:7:5-26:19
-19        android:name="com.pickkr.MainApplication"
-19-->/Users/mahammadsuelc/Desktop/ve/pikkerapp/android/app/src/main/AndroidManifest.xml:8:7-38
-20        android:allowBackup="false"
-20-->/Users/mahammadsuelc/Desktop/ve/pikkerapp/android/app/src/main/AndroidManifest.xml:12:7-34
-21        android:appComponentFactory="androidx.core.app.CoreComponentFactory"
-21-->[androidx.core:core:1.8.0] /Users/mahammadsuelc/.gradle/caches/transforms-3/9623e378e4dfc57c47793d0ffd25ee05/transformed/core-1.8.0/AndroidManifest.xml:24:18-86
-22        android:debuggable="true"
-23        android:icon="@mipmap/ic_launcher"
-23-->/Users/mahammadsuelc/Desktop/ve/pikkerapp/android/app/src/main/AndroidManifest.xml:10:7-41
-24        android:label="@string/app_name"
-24-->/Users/mahammadsuelc/Desktop/ve/pikkerapp/android/app/src/main/AndroidManifest.xml:9:7-39
-25        android:roundIcon="@mipmap/ic_launcher_round"
-25-->/Users/mahammadsuelc/Desktop/ve/pikkerapp/android/app/src/main/AndroidManifest.xml:11:7-52
-26        android:theme="@style/AppTheme"
-26-->/Users/mahammadsuelc/Desktop/ve/pikkerapp/android/app/src/main/AndroidManifest.xml:13:7-38
-27        android:usesCleartextTraffic="true" >
-27-->/Users/mahammadsuelc/Desktop/ve/pikkerapp/android/app/src/debug/AndroidManifest.xml:8:9-44
-28        <activity
-28-->/Users/mahammadsuelc/Desktop/ve/pikkerapp/android/app/src/debug/AndroidManifest.xml:11:9-111
-29            android:name="com.facebook.react.devsupport.DevSettingsActivity"
-29-->/Users/mahammadsuelc/Desktop/ve/pikkerapp/android/app/src/debug/AndroidManifest.xml:11:19-83
-30            android:exported="false" />
-30-->/Users/mahammadsuelc/Desktop/ve/pikkerapp/android/app/src/debug/AndroidManifest.xml:11:84-108
-31        <activity
-31-->/Users/mahammadsuelc/Desktop/ve/pikkerapp/android/app/src/main/AndroidManifest.xml:14:7-25:18
-32            android:name="com.pickkr.MainActivity"
-32-->/Users/mahammadsuelc/Desktop/ve/pikkerapp/android/app/src/main/AndroidManifest.xml:15:9-37
-33            android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|screenSize|smallestScreenSize|uiMode"
-33-->/Users/mahammadsuelc/Desktop/ve/pikkerapp/android/app/src/main/AndroidManifest.xml:17:9-118
-34            android:exported="true"
-34-->/Users/mahammadsuelc/Desktop/ve/pikkerapp/android/app/src/main/AndroidManifest.xml:20:9-32
-35            android:label="@string/app_name"
-35-->/Users/mahammadsuelc/Desktop/ve/pikkerapp/android/app/src/main/AndroidManifest.xml:16:9-41
-36            android:launchMode="singleTask"
-36-->/Users/mahammadsuelc/Desktop/ve/pikkerapp/android/app/src/main/AndroidManifest.xml:18:9-40
-37            android:windowSoftInputMode="adjustResize" >
-37-->/Users/mahammadsuelc/Desktop/ve/pikkerapp/android/app/src/main/AndroidManifest.xml:19:9-51
-38            <intent-filter>
-38-->/Users/mahammadsuelc/Desktop/ve/pikkerapp/android/app/src/main/AndroidManifest.xml:21:9-24:25
-39                <action android:name="android.intent.action.MAIN" />
-39-->/Users/mahammadsuelc/Desktop/ve/pikkerapp/android/app/src/main/AndroidManifest.xml:22:13-65
-39-->/Users/mahammadsuelc/Desktop/ve/pikkerapp/android/app/src/main/AndroidManifest.xml:22:21-62
-40
-41                <category android:name="android.intent.category.LAUNCHER" />
-41-->/Users/mahammadsuelc/Desktop/ve/pikkerapp/android/app/src/main/AndroidManifest.xml:23:13-73
-41-->/Users/mahammadsuelc/Desktop/ve/pikkerapp/android/app/src/main/AndroidManifest.xml:23:23-70
-42            </intent-filter>
-43        </activity>
-44
-45        <provider
-45-->[:react-native-image-picker] /Users/mahammadsuelc/Desktop/ve/pikkerapp/node_modules/react-native-image-picker/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:8:9-16:20
-46            android:name="com.imagepicker.ImagePickerProvider"
-46-->[:react-native-image-picker] /Users/mahammadsuelc/Desktop/ve/pikkerapp/node_modules/react-native-image-picker/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:9:13-63
-47            android:authorities="com.pickkr.imagepickerprovider"
-47-->[:react-native-image-picker] /Users/mahammadsuelc/Desktop/ve/pikkerapp/node_modules/react-native-image-picker/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:10:13-71
-48            android:exported="false"
-48-->[:react-native-image-picker] /Users/mahammadsuelc/Desktop/ve/pikkerapp/node_modules/react-native-image-picker/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:11:13-37
-49            android:grantUriPermissions="true" >
-49-->[:react-native-image-picker] /Users/mahammadsuelc/Desktop/ve/pikkerapp/node_modules/react-native-image-picker/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:12:13-47
-50            <meta-data
-50-->[:react-native-image-picker] /Users/mahammadsuelc/Desktop/ve/pikkerapp/node_modules/react-native-image-picker/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:13:13-15:70
-51                android:name="android.support.FILE_PROVIDER_PATHS"
-51-->[:react-native-image-picker] /Users/mahammadsuelc/Desktop/ve/pikkerapp/node_modules/react-native-image-picker/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:14:17-67
-52                android:resource="@xml/imagepicker_provider_paths" />
-52-->[:react-native-image-picker] /Users/mahammadsuelc/Desktop/ve/pikkerapp/node_modules/react-native-image-picker/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:15:17-67
-53        </provider>
-54
-55        <activity
-55-->[com.google.android.gms:play-services-base:18.1.0] /Users/mahammadsuelc/.gradle/caches/transforms-3/7bc2107a0f24dde54b783ba4b64ec0fd/transformed/jetified-play-services-base-18.1.0/AndroidManifest.xml:20:9-22:45
-56            android:name="com.google.android.gms.common.api.GoogleApiActivity"
-56-->[com.google.android.gms:play-services-base:18.1.0] /Users/mahammadsuelc/.gradle/caches/transforms-3/7bc2107a0f24dde54b783ba4b64ec0fd/transformed/jetified-play-services-base-18.1.0/AndroidManifest.xml:20:19-85
-57            android:exported="false"
-57-->[com.google.android.gms:play-services-base:18.1.0] /Users/mahammadsuelc/.gradle/caches/transforms-3/7bc2107a0f24dde54b783ba4b64ec0fd/transformed/jetified-play-services-base-18.1.0/AndroidManifest.xml:22:19-43
-58            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
-58-->[com.google.android.gms:play-services-base:18.1.0] /Users/mahammadsuelc/.gradle/caches/transforms-3/7bc2107a0f24dde54b783ba4b64ec0fd/transformed/jetified-play-services-base-18.1.0/AndroidManifest.xml:21:19-78
+14-->/Users/mahammadsuelc/Documents/ve/pikkerapp/android/app/src/main/AndroidManifest.xml:5:5-79
+14-->/Users/mahammadsuelc/Documents/ve/pikkerapp/android/app/src/main/AndroidManifest.xml:5:22-77
+15    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+15-->/Users/mahammadsuelc/Documents/ve/pikkerapp/android/app/src/main/AndroidManifest.xml:6:5-79
+15-->/Users/mahammadsuelc/Documents/ve/pikkerapp/android/app/src/main/AndroidManifest.xml:6:22-76
+16    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+16-->[com.facebook.flipper:flipper:0.182.0] /Users/mahammadsuelc/.gradle/caches/transforms-3/e13f88164840fe641a466d05cd8edac7/transformed/jetified-flipper-0.182.0/AndroidManifest.xml:16:5-76
+16-->[com.facebook.flipper:flipper:0.182.0] /Users/mahammadsuelc/.gradle/caches/transforms-3/e13f88164840fe641a466d05cd8edac7/transformed/jetified-flipper-0.182.0/AndroidManifest.xml:16:22-73
+17    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+17-->[:react-native-community_netinfo] /Users/mahammadsuelc/Documents/ve/pikkerapp/node_modules/@react-native-community/netinfo/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:7:5-79
+17-->[:react-native-community_netinfo] /Users/mahammadsuelc/Documents/ve/pikkerapp/node_modules/@react-native-community/netinfo/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:7:22-76
+18
+19    <uses-feature
+19-->[com.google.android.gms:play-services-maps:18.2.0] /Users/mahammadsuelc/.gradle/caches/transforms-3/fcd8b9b2116a382f38af684df1c842a4/transformed/jetified-play-services-maps-18.2.0/AndroidManifest.xml:26:5-28:35
+20        android:glEsVersion="0x00020000"
+20-->[com.google.android.gms:play-services-maps:18.2.0] /Users/mahammadsuelc/.gradle/caches/transforms-3/fcd8b9b2116a382f38af684df1c842a4/transformed/jetified-play-services-maps-18.2.0/AndroidManifest.xml:27:9-41
+21        android:required="true" />
+21-->[com.google.android.gms:play-services-maps:18.2.0] /Users/mahammadsuelc/.gradle/caches/transforms-3/fcd8b9b2116a382f38af684df1c842a4/transformed/jetified-play-services-maps-18.2.0/AndroidManifest.xml:28:9-32
+22
+23    <queries>
+23-->[com.google.android.gms:play-services-maps:18.2.0] /Users/mahammadsuelc/.gradle/caches/transforms-3/fcd8b9b2116a382f38af684df1c842a4/transformed/jetified-play-services-maps-18.2.0/AndroidManifest.xml:30:5-34:15
+24
+25        <!-- Needs to be explicitly declared on Android R+ -->
+26        <package android:name="com.google.android.apps.maps" />
+26-->[com.google.android.gms:play-services-maps:18.2.0] /Users/mahammadsuelc/.gradle/caches/transforms-3/fcd8b9b2116a382f38af684df1c842a4/transformed/jetified-play-services-maps-18.2.0/AndroidManifest.xml:33:9-64
+26-->[com.google.android.gms:play-services-maps:18.2.0] /Users/mahammadsuelc/.gradle/caches/transforms-3/fcd8b9b2116a382f38af684df1c842a4/transformed/jetified-play-services-maps-18.2.0/AndroidManifest.xml:33:18-61
+27    </queries>
+28
+29    <uses-permission android:name="android.permission.WAKE_LOCK" />
+29-->[androidx.work:work-runtime:2.7.1] /Users/mahammadsuelc/.gradle/caches/transforms-3/a93c68fb1d2792ca1942259f5092d83b/transformed/work-runtime-2.7.1/AndroidManifest.xml:25:5-68
+29-->[androidx.work:work-runtime:2.7.1] /Users/mahammadsuelc/.gradle/caches/transforms-3/a93c68fb1d2792ca1942259f5092d83b/transformed/work-runtime-2.7.1/AndroidManifest.xml:25:22-65
+30    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+30-->[androidx.work:work-runtime:2.7.1] /Users/mahammadsuelc/.gradle/caches/transforms-3/a93c68fb1d2792ca1942259f5092d83b/transformed/work-runtime-2.7.1/AndroidManifest.xml:27:5-81
+30-->[androidx.work:work-runtime:2.7.1] /Users/mahammadsuelc/.gradle/caches/transforms-3/a93c68fb1d2792ca1942259f5092d83b/transformed/work-runtime-2.7.1/AndroidManifest.xml:27:22-78
+31    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+31-->[androidx.work:work-runtime:2.7.1] /Users/mahammadsuelc/.gradle/caches/transforms-3/a93c68fb1d2792ca1942259f5092d83b/transformed/work-runtime-2.7.1/AndroidManifest.xml:28:5-77
+31-->[androidx.work:work-runtime:2.7.1] /Users/mahammadsuelc/.gradle/caches/transforms-3/a93c68fb1d2792ca1942259f5092d83b/transformed/work-runtime-2.7.1/AndroidManifest.xml:28:22-74
+32
+33    <application
+33-->/Users/mahammadsuelc/Documents/ve/pikkerapp/android/app/src/main/AndroidManifest.xml:8:5-30:19
+34        android:name="com.pickkr.MainApplication"
+34-->/Users/mahammadsuelc/Documents/ve/pikkerapp/android/app/src/main/AndroidManifest.xml:9:7-38
+35        android:allowBackup="false"
+35-->/Users/mahammadsuelc/Documents/ve/pikkerapp/android/app/src/main/AndroidManifest.xml:13:7-34
+36        android:appComponentFactory="androidx.core.app.CoreComponentFactory"
+36-->[androidx.core:core:1.8.0] /Users/mahammadsuelc/.gradle/caches/transforms-3/9623e378e4dfc57c47793d0ffd25ee05/transformed/core-1.8.0/AndroidManifest.xml:24:18-86
+37        android:debuggable="true"
+38        android:icon="@mipmap/ic_launcher"
+38-->/Users/mahammadsuelc/Documents/ve/pikkerapp/android/app/src/main/AndroidManifest.xml:11:7-41
+39        android:label="@string/app_name"
+39-->/Users/mahammadsuelc/Documents/ve/pikkerapp/android/app/src/main/AndroidManifest.xml:10:7-39
+40        android:roundIcon="@mipmap/ic_launcher_round"
+40-->/Users/mahammadsuelc/Documents/ve/pikkerapp/android/app/src/main/AndroidManifest.xml:12:7-52
+41        android:theme="@style/AppTheme"
+41-->/Users/mahammadsuelc/Documents/ve/pikkerapp/android/app/src/main/AndroidManifest.xml:14:7-38
+42        android:usesCleartextTraffic="true" >
+42-->/Users/mahammadsuelc/Documents/ve/pikkerapp/android/app/src/debug/AndroidManifest.xml:8:9-44
+43        <activity
+43-->/Users/mahammadsuelc/Documents/ve/pikkerapp/android/app/src/debug/AndroidManifest.xml:11:9-111
+44            android:name="com.facebook.react.devsupport.DevSettingsActivity"
+44-->/Users/mahammadsuelc/Documents/ve/pikkerapp/android/app/src/debug/AndroidManifest.xml:11:19-83
+45            android:exported="false" />
+45-->/Users/mahammadsuelc/Documents/ve/pikkerapp/android/app/src/debug/AndroidManifest.xml:11:84-108
+46        <activity
+46-->/Users/mahammadsuelc/Documents/ve/pikkerapp/android/app/src/main/AndroidManifest.xml:15:7-26:18
+47            android:name="com.pickkr.MainActivity"
+47-->/Users/mahammadsuelc/Documents/ve/pikkerapp/android/app/src/main/AndroidManifest.xml:16:9-37
+48            android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|screenSize|smallestScreenSize|uiMode"
+48-->/Users/mahammadsuelc/Documents/ve/pikkerapp/android/app/src/main/AndroidManifest.xml:18:9-118
+49            android:exported="true"
+49-->/Users/mahammadsuelc/Documents/ve/pikkerapp/android/app/src/main/AndroidManifest.xml:21:9-32
+50            android:label="@string/app_name"
+50-->/Users/mahammadsuelc/Documents/ve/pikkerapp/android/app/src/main/AndroidManifest.xml:17:9-41
+51            android:launchMode="singleTask"
+51-->/Users/mahammadsuelc/Documents/ve/pikkerapp/android/app/src/main/AndroidManifest.xml:19:9-40
+52            android:windowSoftInputMode="adjustResize" >
+52-->/Users/mahammadsuelc/Documents/ve/pikkerapp/android/app/src/main/AndroidManifest.xml:20:9-51
+53            <intent-filter>
+53-->/Users/mahammadsuelc/Documents/ve/pikkerapp/android/app/src/main/AndroidManifest.xml:22:9-25:25
+54                <action android:name="android.intent.action.MAIN" />
+54-->/Users/mahammadsuelc/Documents/ve/pikkerapp/android/app/src/main/AndroidManifest.xml:23:13-65
+54-->/Users/mahammadsuelc/Documents/ve/pikkerapp/android/app/src/main/AndroidManifest.xml:23:21-62
+55
+56                <category android:name="android.intent.category.LAUNCHER" />
+56-->/Users/mahammadsuelc/Documents/ve/pikkerapp/android/app/src/main/AndroidManifest.xml:24:13-73
+56-->/Users/mahammadsuelc/Documents/ve/pikkerapp/android/app/src/main/AndroidManifest.xml:24:23-70
+57            </intent-filter>
+58        </activity>
 59
 60        <meta-data
-60-->[com.google.android.gms:play-services-basement:18.1.0] /Users/mahammadsuelc/.gradle/caches/transforms-3/bf9b6fb405d2f7fd8250171739588e78/transformed/jetified-play-services-basement-18.1.0/AndroidManifest.xml:21:9-23:69
-61            android:name="com.google.android.gms.version"
-61-->[com.google.android.gms:play-services-basement:18.1.0] /Users/mahammadsuelc/.gradle/caches/transforms-3/bf9b6fb405d2f7fd8250171739588e78/transformed/jetified-play-services-basement-18.1.0/AndroidManifest.xml:22:13-58
-62            android:value="@integer/google_play_services_version" />
-62-->[com.google.android.gms:play-services-basement:18.1.0] /Users/mahammadsuelc/.gradle/caches/transforms-3/bf9b6fb405d2f7fd8250171739588e78/transformed/jetified-play-services-basement-18.1.0/AndroidManifest.xml:23:13-66
-63        <meta-data
-63-->[com.facebook.soloader:soloader:0.10.5] /Users/mahammadsuelc/.gradle/caches/transforms-3/ec3312a013bd7d8a70466a1977a1dba4/transformed/jetified-soloader-0.10.5/AndroidManifest.xml:12:9-14:37
-64            android:name="com.facebook.soloader.enabled"
-64-->[com.facebook.soloader:soloader:0.10.5] /Users/mahammadsuelc/.gradle/caches/transforms-3/ec3312a013bd7d8a70466a1977a1dba4/transformed/jetified-soloader-0.10.5/AndroidManifest.xml:13:13-57
-65            android:value="false" />
-65-->[com.facebook.soloader:soloader:0.10.5] /Users/mahammadsuelc/.gradle/caches/transforms-3/ec3312a013bd7d8a70466a1977a1dba4/transformed/jetified-soloader-0.10.5/AndroidManifest.xml:14:13-34
-66
-67        <provider
-67-->[androidx.emoji2:emoji2:1.2.0] /Users/mahammadsuelc/.gradle/caches/transforms-3/259206a491dfa4b8b6052b2b1c41d979/transformed/jetified-emoji2-1.2.0/AndroidManifest.xml:24:9-32:20
-68            android:name="androidx.startup.InitializationProvider"
-68-->[androidx.emoji2:emoji2:1.2.0] /Users/mahammadsuelc/.gradle/caches/transforms-3/259206a491dfa4b8b6052b2b1c41d979/transformed/jetified-emoji2-1.2.0/AndroidManifest.xml:25:13-67
-69            android:authorities="com.pickkr.androidx-startup"
-69-->[androidx.emoji2:emoji2:1.2.0] /Users/mahammadsuelc/.gradle/caches/transforms-3/259206a491dfa4b8b6052b2b1c41d979/transformed/jetified-emoji2-1.2.0/AndroidManifest.xml:26:13-68
-70            android:exported="false" >
-70-->[androidx.emoji2:emoji2:1.2.0] /Users/mahammadsuelc/.gradle/caches/transforms-3/259206a491dfa4b8b6052b2b1c41d979/transformed/jetified-emoji2-1.2.0/AndroidManifest.xml:27:13-37
-71            <meta-data
-71-->[androidx.emoji2:emoji2:1.2.0] /Users/mahammadsuelc/.gradle/caches/transforms-3/259206a491dfa4b8b6052b2b1c41d979/transformed/jetified-emoji2-1.2.0/AndroidManifest.xml:29:13-31:52
-72                android:name="androidx.emoji2.text.EmojiCompatInitializer"
-72-->[androidx.emoji2:emoji2:1.2.0] /Users/mahammadsuelc/.gradle/caches/transforms-3/259206a491dfa4b8b6052b2b1c41d979/transformed/jetified-emoji2-1.2.0/AndroidManifest.xml:30:17-75
-73                android:value="androidx.startup" />
-73-->[androidx.emoji2:emoji2:1.2.0] /Users/mahammadsuelc/.gradle/caches/transforms-3/259206a491dfa4b8b6052b2b1c41d979/transformed/jetified-emoji2-1.2.0/AndroidManifest.xml:31:17-49
-74            <meta-data
-74-->[androidx.lifecycle:lifecycle-process:2.4.1] /Users/mahammadsuelc/.gradle/caches/transforms-3/b1c537e6049df5a2dcb1a9b20b1a8868/transformed/jetified-lifecycle-process-2.4.1/AndroidManifest.xml:31:13-33:52
-75                android:name="androidx.lifecycle.ProcessLifecycleInitializer"
-75-->[androidx.lifecycle:lifecycle-process:2.4.1] /Users/mahammadsuelc/.gradle/caches/transforms-3/b1c537e6049df5a2dcb1a9b20b1a8868/transformed/jetified-lifecycle-process-2.4.1/AndroidManifest.xml:32:17-78
-76                android:value="androidx.startup" />
-76-->[androidx.lifecycle:lifecycle-process:2.4.1] /Users/mahammadsuelc/.gradle/caches/transforms-3/b1c537e6049df5a2dcb1a9b20b1a8868/transformed/jetified-lifecycle-process-2.4.1/AndroidManifest.xml:33:17-49
-77        </provider>
-78    </application>
-79
-80</manifest>
+60-->/Users/mahammadsuelc/Documents/ve/pikkerapp/android/app/src/main/AndroidManifest.xml:27:7-29:66
+61            android:name="com.google.android.geo.API_KEY"
+61-->/Users/mahammadsuelc/Documents/ve/pikkerapp/android/app/src/main/AndroidManifest.xml:28:9-54
+62            android:value="AIzaSyBxop3xUNPDATFY4ZDhdT2evDbUgrwVku0" />
+62-->/Users/mahammadsuelc/Documents/ve/pikkerapp/android/app/src/main/AndroidManifest.xml:29:9-64
+63
+64        <provider
+64-->[:react-native-image-picker] /Users/mahammadsuelc/Documents/ve/pikkerapp/node_modules/react-native-image-picker/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:8:9-16:20
+65            android:name="com.imagepicker.ImagePickerProvider"
+65-->[:react-native-image-picker] /Users/mahammadsuelc/Documents/ve/pikkerapp/node_modules/react-native-image-picker/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:9:13-63
+66            android:authorities="com.pickkr.imagepickerprovider"
+66-->[:react-native-image-picker] /Users/mahammadsuelc/Documents/ve/pikkerapp/node_modules/react-native-image-picker/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:10:13-71
+67            android:exported="false"
+67-->[:react-native-image-picker] /Users/mahammadsuelc/Documents/ve/pikkerapp/node_modules/react-native-image-picker/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:11:13-37
+68            android:grantUriPermissions="true" >
+68-->[:react-native-image-picker] /Users/mahammadsuelc/Documents/ve/pikkerapp/node_modules/react-native-image-picker/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:12:13-47
+69            <meta-data
+69-->[:react-native-image-picker] /Users/mahammadsuelc/Documents/ve/pikkerapp/node_modules/react-native-image-picker/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:13:13-15:70
+70                android:name="android.support.FILE_PROVIDER_PATHS"
+70-->[:react-native-image-picker] /Users/mahammadsuelc/Documents/ve/pikkerapp/node_modules/react-native-image-picker/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:14:17-67
+71                android:resource="@xml/imagepicker_provider_paths" />
+71-->[:react-native-image-picker] /Users/mahammadsuelc/Documents/ve/pikkerapp/node_modules/react-native-image-picker/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:15:17-67
+72        </provider>
+73        <provider
+73-->[:react-native-webview] /Users/mahammadsuelc/Documents/ve/pikkerapp/node_modules/react-native-webview/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:8:9-16:20
+74            android:name="com.reactnativecommunity.webview.RNCWebViewFileProvider"
+74-->[:react-native-webview] /Users/mahammadsuelc/Documents/ve/pikkerapp/node_modules/react-native-webview/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:9:13-83
+75            android:authorities="com.pickkr.fileprovider"
+75-->[:react-native-webview] /Users/mahammadsuelc/Documents/ve/pikkerapp/node_modules/react-native-webview/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:10:13-64
+76            android:exported="false"
+76-->[:react-native-webview] /Users/mahammadsuelc/Documents/ve/pikkerapp/node_modules/react-native-webview/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:11:13-37
+77            android:grantUriPermissions="true" >
+77-->[:react-native-webview] /Users/mahammadsuelc/Documents/ve/pikkerapp/node_modules/react-native-webview/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:12:13-47
+78            <meta-data
+78-->[:react-native-image-picker] /Users/mahammadsuelc/Documents/ve/pikkerapp/node_modules/react-native-image-picker/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:13:13-15:70
+79                android:name="android.support.FILE_PROVIDER_PATHS"
+79-->[:react-native-image-picker] /Users/mahammadsuelc/Documents/ve/pikkerapp/node_modules/react-native-image-picker/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:14:17-67
+80                android:resource="@xml/file_provider_paths" />
+80-->[:react-native-image-picker] /Users/mahammadsuelc/Documents/ve/pikkerapp/node_modules/react-native-image-picker/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:15:17-67
+81        </provider>
+82
+83        <meta-data
+83-->[com.google.maps.android:android-maps-utils:3.8.2] /Users/mahammadsuelc/.gradle/caches/transforms-3/e4d450f858bcc3c5fccf2858f929fd85/transformed/jetified-android-maps-utils-3.8.2/AndroidManifest.xml:8:9-10:69
+84            android:name="com.google.android.gms.version"
+84-->[com.google.maps.android:android-maps-utils:3.8.2] /Users/mahammadsuelc/.gradle/caches/transforms-3/e4d450f858bcc3c5fccf2858f929fd85/transformed/jetified-android-maps-utils-3.8.2/AndroidManifest.xml:9:13-58
+85            android:value="@integer/google_play_services_version" /> <!-- Needs to be explicitly declared on P+ -->
+85-->[com.google.maps.android:android-maps-utils:3.8.2] /Users/mahammadsuelc/.gradle/caches/transforms-3/e4d450f858bcc3c5fccf2858f929fd85/transformed/jetified-android-maps-utils-3.8.2/AndroidManifest.xml:10:13-66
+86        <uses-library
+86-->[com.google.android.gms:play-services-maps:18.2.0] /Users/mahammadsuelc/.gradle/caches/transforms-3/fcd8b9b2116a382f38af684df1c842a4/transformed/jetified-play-services-maps-18.2.0/AndroidManifest.xml:39:9-41:40
+87            android:name="org.apache.http.legacy"
+87-->[com.google.android.gms:play-services-maps:18.2.0] /Users/mahammadsuelc/.gradle/caches/transforms-3/fcd8b9b2116a382f38af684df1c842a4/transformed/jetified-play-services-maps-18.2.0/AndroidManifest.xml:40:13-50
+88            android:required="false" />
+88-->[com.google.android.gms:play-services-maps:18.2.0] /Users/mahammadsuelc/.gradle/caches/transforms-3/fcd8b9b2116a382f38af684df1c842a4/transformed/jetified-play-services-maps-18.2.0/AndroidManifest.xml:41:13-37
+89
+90        <activity
+90-->[com.google.android.gms:play-services-base:18.2.0] /Users/mahammadsuelc/.gradle/caches/transforms-3/4e9e7aa2d3cb9cba6832ceb517e3ab0b/transformed/jetified-play-services-base-18.2.0/AndroidManifest.xml:20:9-22:45
+91            android:name="com.google.android.gms.common.api.GoogleApiActivity"
+91-->[com.google.android.gms:play-services-base:18.2.0] /Users/mahammadsuelc/.gradle/caches/transforms-3/4e9e7aa2d3cb9cba6832ceb517e3ab0b/transformed/jetified-play-services-base-18.2.0/AndroidManifest.xml:20:19-85
+92            android:exported="false"
+92-->[com.google.android.gms:play-services-base:18.2.0] /Users/mahammadsuelc/.gradle/caches/transforms-3/4e9e7aa2d3cb9cba6832ceb517e3ab0b/transformed/jetified-play-services-base-18.2.0/AndroidManifest.xml:22:19-43
+93            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+93-->[com.google.android.gms:play-services-base:18.2.0] /Users/mahammadsuelc/.gradle/caches/transforms-3/4e9e7aa2d3cb9cba6832ceb517e3ab0b/transformed/jetified-play-services-base-18.2.0/AndroidManifest.xml:21:19-78
+94
+95        <meta-data
+95-->[com.facebook.soloader:soloader:0.10.5] /Users/mahammadsuelc/.gradle/caches/transforms-3/ec3312a013bd7d8a70466a1977a1dba4/transformed/jetified-soloader-0.10.5/AndroidManifest.xml:12:9-14:37
+96            android:name="com.facebook.soloader.enabled"
+96-->[com.facebook.soloader:soloader:0.10.5] /Users/mahammadsuelc/.gradle/caches/transforms-3/ec3312a013bd7d8a70466a1977a1dba4/transformed/jetified-soloader-0.10.5/AndroidManifest.xml:13:13-57
+97            android:value="false" />
+97-->[com.facebook.soloader:soloader:0.10.5] /Users/mahammadsuelc/.gradle/caches/transforms-3/ec3312a013bd7d8a70466a1977a1dba4/transformed/jetified-soloader-0.10.5/AndroidManifest.xml:14:13-34
+98
+99        <provider
+99-->[androidx.work:work-runtime:2.7.1] /Users/mahammadsuelc/.gradle/caches/transforms-3/a93c68fb1d2792ca1942259f5092d83b/transformed/work-runtime-2.7.1/AndroidManifest.xml:31:9-39:20
+100            android:name="androidx.startup.InitializationProvider"
+100-->[androidx.work:work-runtime:2.7.1] /Users/mahammadsuelc/.gradle/caches/transforms-3/a93c68fb1d2792ca1942259f5092d83b/transformed/work-runtime-2.7.1/AndroidManifest.xml:32:13-67
+101            android:authorities="com.pickkr.androidx-startup"
+101-->[androidx.work:work-runtime:2.7.1] /Users/mahammadsuelc/.gradle/caches/transforms-3/a93c68fb1d2792ca1942259f5092d83b/transformed/work-runtime-2.7.1/AndroidManifest.xml:33:13-68
+102            android:exported="false" >
+102-->[androidx.work:work-runtime:2.7.1] /Users/mahammadsuelc/.gradle/caches/transforms-3/a93c68fb1d2792ca1942259f5092d83b/transformed/work-runtime-2.7.1/AndroidManifest.xml:34:13-37
+103            <meta-data
+103-->[androidx.work:work-runtime:2.7.1] /Users/mahammadsuelc/.gradle/caches/transforms-3/a93c68fb1d2792ca1942259f5092d83b/transformed/work-runtime-2.7.1/AndroidManifest.xml:36:13-38:52
+104                android:name="androidx.work.WorkManagerInitializer"
+104-->[androidx.work:work-runtime:2.7.1] /Users/mahammadsuelc/.gradle/caches/transforms-3/a93c68fb1d2792ca1942259f5092d83b/transformed/work-runtime-2.7.1/AndroidManifest.xml:37:17-68
+105                android:value="androidx.startup" />
+105-->[androidx.work:work-runtime:2.7.1] /Users/mahammadsuelc/.gradle/caches/transforms-3/a93c68fb1d2792ca1942259f5092d83b/transformed/work-runtime-2.7.1/AndroidManifest.xml:38:17-49
+106            <meta-data
+106-->[androidx.emoji2:emoji2:1.2.0] /Users/mahammadsuelc/.gradle/caches/transforms-3/259206a491dfa4b8b6052b2b1c41d979/transformed/jetified-emoji2-1.2.0/AndroidManifest.xml:29:13-31:52
+107                android:name="androidx.emoji2.text.EmojiCompatInitializer"
+107-->[androidx.emoji2:emoji2:1.2.0] /Users/mahammadsuelc/.gradle/caches/transforms-3/259206a491dfa4b8b6052b2b1c41d979/transformed/jetified-emoji2-1.2.0/AndroidManifest.xml:30:17-75
+108                android:value="androidx.startup" />
+108-->[androidx.emoji2:emoji2:1.2.0] /Users/mahammadsuelc/.gradle/caches/transforms-3/259206a491dfa4b8b6052b2b1c41d979/transformed/jetified-emoji2-1.2.0/AndroidManifest.xml:31:17-49
+109            <meta-data
+109-->[androidx.lifecycle:lifecycle-process:2.4.1] /Users/mahammadsuelc/.gradle/caches/transforms-3/b1c537e6049df5a2dcb1a9b20b1a8868/transformed/jetified-lifecycle-process-2.4.1/AndroidManifest.xml:31:13-33:52
+110                android:name="androidx.lifecycle.ProcessLifecycleInitializer"
+110-->[androidx.lifecycle:lifecycle-process:2.4.1] /Users/mahammadsuelc/.gradle/caches/transforms-3/b1c537e6049df5a2dcb1a9b20b1a8868/transformed/jetified-lifecycle-process-2.4.1/AndroidManifest.xml:32:17-78
+111                android:value="androidx.startup" />
+111-->[androidx.lifecycle:lifecycle-process:2.4.1] /Users/mahammadsuelc/.gradle/caches/transforms-3/b1c537e6049df5a2dcb1a9b20b1a8868/transformed/jetified-lifecycle-process-2.4.1/AndroidManifest.xml:33:17-49
+112        </provider>
+113
+114        <service
+114-->[androidx.work:work-runtime:2.7.1] /Users/mahammadsuelc/.gradle/caches/transforms-3/a93c68fb1d2792ca1942259f5092d83b/transformed/work-runtime-2.7.1/AndroidManifest.xml:41:9-46:35
+115            android:name="androidx.work.impl.background.systemalarm.SystemAlarmService"
+115-->[androidx.work:work-runtime:2.7.1] /Users/mahammadsuelc/.gradle/caches/transforms-3/a93c68fb1d2792ca1942259f5092d83b/transformed/work-runtime-2.7.1/AndroidManifest.xml:42:13-88
+116            android:directBootAware="false"
+116-->[androidx.work:work-runtime:2.7.1] /Users/mahammadsuelc/.gradle/caches/transforms-3/a93c68fb1d2792ca1942259f5092d83b/transformed/work-runtime-2.7.1/AndroidManifest.xml:43:13-44
+117            android:enabled="@bool/enable_system_alarm_service_default"
+117-->[androidx.work:work-runtime:2.7.1] /Users/mahammadsuelc/.gradle/caches/transforms-3/a93c68fb1d2792ca1942259f5092d83b/transformed/work-runtime-2.7.1/AndroidManifest.xml:44:13-72
+118            android:exported="false" />
+118-->[androidx.work:work-runtime:2.7.1] /Users/mahammadsuelc/.gradle/caches/transforms-3/a93c68fb1d2792ca1942259f5092d83b/transformed/work-runtime-2.7.1/AndroidManifest.xml:45:13-37
+119        <service
+119-->[androidx.work:work-runtime:2.7.1] /Users/mahammadsuelc/.gradle/caches/transforms-3/a93c68fb1d2792ca1942259f5092d83b/transformed/work-runtime-2.7.1/AndroidManifest.xml:47:9-53:35
+120            android:name="androidx.work.impl.background.systemjob.SystemJobService"
+120-->[androidx.work:work-runtime:2.7.1] /Users/mahammadsuelc/.gradle/caches/transforms-3/a93c68fb1d2792ca1942259f5092d83b/transformed/work-runtime-2.7.1/AndroidManifest.xml:48:13-84
+121            android:directBootAware="false"
+121-->[androidx.work:work-runtime:2.7.1] /Users/mahammadsuelc/.gradle/caches/transforms-3/a93c68fb1d2792ca1942259f5092d83b/transformed/work-runtime-2.7.1/AndroidManifest.xml:49:13-44
+122            android:enabled="@bool/enable_system_job_service_default"
+122-->[androidx.work:work-runtime:2.7.1] /Users/mahammadsuelc/.gradle/caches/transforms-3/a93c68fb1d2792ca1942259f5092d83b/transformed/work-runtime-2.7.1/AndroidManifest.xml:50:13-70
+123            android:exported="true"
+123-->[androidx.work:work-runtime:2.7.1] /Users/mahammadsuelc/.gradle/caches/transforms-3/a93c68fb1d2792ca1942259f5092d83b/transformed/work-runtime-2.7.1/AndroidManifest.xml:51:13-36
+124            android:permission="android.permission.BIND_JOB_SERVICE" />
+124-->[androidx.work:work-runtime:2.7.1] /Users/mahammadsuelc/.gradle/caches/transforms-3/a93c68fb1d2792ca1942259f5092d83b/transformed/work-runtime-2.7.1/AndroidManifest.xml:52:13-69
+125        <service
+125-->[androidx.work:work-runtime:2.7.1] /Users/mahammadsuelc/.gradle/caches/transforms-3/a93c68fb1d2792ca1942259f5092d83b/transformed/work-runtime-2.7.1/AndroidManifest.xml:54:9-59:35
+126            android:name="androidx.work.impl.foreground.SystemForegroundService"
+126-->[androidx.work:work-runtime:2.7.1] /Users/mahammadsuelc/.gradle/caches/transforms-3/a93c68fb1d2792ca1942259f5092d83b/transformed/work-runtime-2.7.1/AndroidManifest.xml:55:13-81
+127            android:directBootAware="false"
+127-->[androidx.work:work-runtime:2.7.1] /Users/mahammadsuelc/.gradle/caches/transforms-3/a93c68fb1d2792ca1942259f5092d83b/transformed/work-runtime-2.7.1/AndroidManifest.xml:56:13-44
+128            android:enabled="@bool/enable_system_foreground_service_default"
+128-->[androidx.work:work-runtime:2.7.1] /Users/mahammadsuelc/.gradle/caches/transforms-3/a93c68fb1d2792ca1942259f5092d83b/transformed/work-runtime-2.7.1/AndroidManifest.xml:57:13-77
+129            android:exported="false" />
+129-->[androidx.work:work-runtime:2.7.1] /Users/mahammadsuelc/.gradle/caches/transforms-3/a93c68fb1d2792ca1942259f5092d83b/transformed/work-runtime-2.7.1/AndroidManifest.xml:58:13-37
+130
+131        <receiver
+131-->[androidx.work:work-runtime:2.7.1] /Users/mahammadsuelc/.gradle/caches/transforms-3/a93c68fb1d2792ca1942259f5092d83b/transformed/work-runtime-2.7.1/AndroidManifest.xml:61:9-66:35
+132            android:name="androidx.work.impl.utils.ForceStopRunnable$BroadcastReceiver"
+132-->[androidx.work:work-runtime:2.7.1] /Users/mahammadsuelc/.gradle/caches/transforms-3/a93c68fb1d2792ca1942259f5092d83b/transformed/work-runtime-2.7.1/AndroidManifest.xml:62:13-88
+133            android:directBootAware="false"
+133-->[androidx.work:work-runtime:2.7.1] /Users/mahammadsuelc/.gradle/caches/transforms-3/a93c68fb1d2792ca1942259f5092d83b/transformed/work-runtime-2.7.1/AndroidManifest.xml:63:13-44
+134            android:enabled="true"
+134-->[androidx.work:work-runtime:2.7.1] /Users/mahammadsuelc/.gradle/caches/transforms-3/a93c68fb1d2792ca1942259f5092d83b/transformed/work-runtime-2.7.1/AndroidManifest.xml:64:13-35
+135            android:exported="false" />
+135-->[androidx.work:work-runtime:2.7.1] /Users/mahammadsuelc/.gradle/caches/transforms-3/a93c68fb1d2792ca1942259f5092d83b/transformed/work-runtime-2.7.1/AndroidManifest.xml:65:13-37
+136        <receiver
+136-->[androidx.work:work-runtime:2.7.1] /Users/mahammadsuelc/.gradle/caches/transforms-3/a93c68fb1d2792ca1942259f5092d83b/transformed/work-runtime-2.7.1/AndroidManifest.xml:67:9-77:20
+137            android:name="androidx.work.impl.background.systemalarm.ConstraintProxy$BatteryChargingProxy"
+137-->[androidx.work:work-runtime:2.7.1] /Users/mahammadsuelc/.gradle/caches/transforms-3/a93c68fb1d2792ca1942259f5092d83b/transformed/work-runtime-2.7.1/AndroidManifest.xml:68:13-106
+138            android:directBootAware="false"
+138-->[androidx.work:work-runtime:2.7.1] /Users/mahammadsuelc/.gradle/caches/transforms-3/a93c68fb1d2792ca1942259f5092d83b/transformed/work-runtime-2.7.1/AndroidManifest.xml:69:13-44
+139            android:enabled="false"
+139-->[androidx.work:work-runtime:2.7.1] /Users/mahammadsuelc/.gradle/caches/transforms-3/a93c68fb1d2792ca1942259f5092d83b/transformed/work-runtime-2.7.1/AndroidManifest.xml:70:13-36
+140            android:exported="false" >
+140-->[androidx.work:work-runtime:2.7.1] /Users/mahammadsuelc/.gradle/caches/transforms-3/a93c68fb1d2792ca1942259f5092d83b/transformed/work-runtime-2.7.1/AndroidManifest.xml:71:13-37
+141            <intent-filter>
+141-->[androidx.work:work-runtime:2.7.1] /Users/mahammadsuelc/.gradle/caches/transforms-3/a93c68fb1d2792ca1942259f5092d83b/transformed/work-runtime-2.7.1/AndroidManifest.xml:73:13-76:29
+142                <action android:name="android.intent.action.ACTION_POWER_CONNECTED" />
+142-->[androidx.work:work-runtime:2.7.1] /Users/mahammadsuelc/.gradle/caches/transforms-3/a93c68fb1d2792ca1942259f5092d83b/transformed/work-runtime-2.7.1/AndroidManifest.xml:74:17-87
+142-->[androidx.work:work-runtime:2.7.1] /Users/mahammadsuelc/.gradle/caches/transforms-3/a93c68fb1d2792ca1942259f5092d83b/transformed/work-runtime-2.7.1/AndroidManifest.xml:74:25-84
+143                <action android:name="android.intent.action.ACTION_POWER_DISCONNECTED" />
+143-->[androidx.work:work-runtime:2.7.1] /Users/mahammadsuelc/.gradle/caches/transforms-3/a93c68fb1d2792ca1942259f5092d83b/transformed/work-runtime-2.7.1/AndroidManifest.xml:75:17-90
+143-->[androidx.work:work-runtime:2.7.1] /Users/mahammadsuelc/.gradle/caches/transforms-3/a93c68fb1d2792ca1942259f5092d83b/transformed/work-runtime-2.7.1/AndroidManifest.xml:75:25-87
+144            </intent-filter>
+145        </receiver>
+146        <receiver
+146-->[androidx.work:work-runtime:2.7.1] /Users/mahammadsuelc/.gradle/caches/transforms-3/a93c68fb1d2792ca1942259f5092d83b/transformed/work-runtime-2.7.1/AndroidManifest.xml:78:9-88:20
+147            android:name="androidx.work.impl.background.systemalarm.ConstraintProxy$BatteryNotLowProxy"
+147-->[androidx.work:work-runtime:2.7.1] /Users/mahammadsuelc/.gradle/caches/transforms-3/a93c68fb1d2792ca1942259f5092d83b/transformed/work-runtime-2.7.1/AndroidManifest.xml:79:13-104
+148            android:directBootAware="false"
+148-->[androidx.work:work-runtime:2.7.1] /Users/mahammadsuelc/.gradle/caches/transforms-3/a93c68fb1d2792ca1942259f5092d83b/transformed/work-runtime-2.7.1/AndroidManifest.xml:80:13-44
+149            android:enabled="false"
+149-->[androidx.work:work-runtime:2.7.1] /Users/mahammadsuelc/.gradle/caches/transforms-3/a93c68fb1d2792ca1942259f5092d83b/transformed/work-runtime-2.7.1/AndroidManifest.xml:81:13-36
+150            android:exported="false" >
+150-->[androidx.work:work-runtime:2.7.1] /Users/mahammadsuelc/.gradle/caches/transforms-3/a93c68fb1d2792ca1942259f5092d83b/transformed/work-runtime-2.7.1/AndroidManifest.xml:82:13-37
+151            <intent-filter>
+151-->[androidx.work:work-runtime:2.7.1] /Users/mahammadsuelc/.gradle/caches/transforms-3/a93c68fb1d2792ca1942259f5092d83b/transformed/work-runtime-2.7.1/AndroidManifest.xml:84:13-87:29
+152                <action android:name="android.intent.action.BATTERY_OKAY" />
+152-->[androidx.work:work-runtime:2.7.1] /Users/mahammadsuelc/.gradle/caches/transforms-3/a93c68fb1d2792ca1942259f5092d83b/transformed/work-runtime-2.7.1/AndroidManifest.xml:85:17-77
+152-->[androidx.work:work-runtime:2.7.1] /Users/mahammadsuelc/.gradle/caches/transforms-3/a93c68fb1d2792ca1942259f5092d83b/transformed/work-runtime-2.7.1/AndroidManifest.xml:85:25-74
+153                <action android:name="android.intent.action.BATTERY_LOW" />
+153-->[androidx.work:work-runtime:2.7.1] /Users/mahammadsuelc/.gradle/caches/transforms-3/a93c68fb1d2792ca1942259f5092d83b/transformed/work-runtime-2.7.1/AndroidManifest.xml:86:17-76
+153-->[androidx.work:work-runtime:2.7.1] /Users/mahammadsuelc/.gradle/caches/transforms-3/a93c68fb1d2792ca1942259f5092d83b/transformed/work-runtime-2.7.1/AndroidManifest.xml:86:25-73
+154            </intent-filter>
+155        </receiver>
+156        <receiver
+156-->[androidx.work:work-runtime:2.7.1] /Users/mahammadsuelc/.gradle/caches/transforms-3/a93c68fb1d2792ca1942259f5092d83b/transformed/work-runtime-2.7.1/AndroidManifest.xml:89:9-99:20
+157            android:name="androidx.work.impl.background.systemalarm.ConstraintProxy$StorageNotLowProxy"
+157-->[androidx.work:work-runtime:2.7.1] /Users/mahammadsuelc/.gradle/caches/transforms-3/a93c68fb1d2792ca1942259f5092d83b/transformed/work-runtime-2.7.1/AndroidManifest.xml:90:13-104
+158            android:directBootAware="false"
+158-->[androidx.work:work-runtime:2.7.1] /Users/mahammadsuelc/.gradle/caches/transforms-3/a93c68fb1d2792ca1942259f5092d83b/transformed/work-runtime-2.7.1/AndroidManifest.xml:91:13-44
+159            android:enabled="false"
+159-->[androidx.work:work-runtime:2.7.1] /Users/mahammadsuelc/.gradle/caches/transforms-3/a93c68fb1d2792ca1942259f5092d83b/transformed/work-runtime-2.7.1/AndroidManifest.xml:92:13-36
+160            android:exported="false" >
+160-->[androidx.work:work-runtime:2.7.1] /Users/mahammadsuelc/.gradle/caches/transforms-3/a93c68fb1d2792ca1942259f5092d83b/transformed/work-runtime-2.7.1/AndroidManifest.xml:93:13-37
+161            <intent-filter>
+161-->[androidx.work:work-runtime:2.7.1] /Users/mahammadsuelc/.gradle/caches/transforms-3/a93c68fb1d2792ca1942259f5092d83b/transformed/work-runtime-2.7.1/AndroidManifest.xml:95:13-98:29
+162                <action android:name="android.intent.action.DEVICE_STORAGE_LOW" />
+162-->[androidx.work:work-runtime:2.7.1] /Users/mahammadsuelc/.gradle/caches/transforms-3/a93c68fb1d2792ca1942259f5092d83b/transformed/work-runtime-2.7.1/AndroidManifest.xml:96:17-83
+162-->[androidx.work:work-runtime:2.7.1] /Users/mahammadsuelc/.gradle/caches/transforms-3/a93c68fb1d2792ca1942259f5092d83b/transformed/work-runtime-2.7.1/AndroidManifest.xml:96:25-80
+163                <action android:name="android.intent.action.DEVICE_STORAGE_OK" />
+163-->[androidx.work:work-runtime:2.7.1] /Users/mahammadsuelc/.gradle/caches/transforms-3/a93c68fb1d2792ca1942259f5092d83b/transformed/work-runtime-2.7.1/AndroidManifest.xml:97:17-82
+163-->[androidx.work:work-runtime:2.7.1] /Users/mahammadsuelc/.gradle/caches/transforms-3/a93c68fb1d2792ca1942259f5092d83b/transformed/work-runtime-2.7.1/AndroidManifest.xml:97:25-79
+164            </intent-filter>
+165        </receiver>
+166        <receiver
+166-->[androidx.work:work-runtime:2.7.1] /Users/mahammadsuelc/.gradle/caches/transforms-3/a93c68fb1d2792ca1942259f5092d83b/transformed/work-runtime-2.7.1/AndroidManifest.xml:100:9-109:20
+167            android:name="androidx.work.impl.background.systemalarm.ConstraintProxy$NetworkStateProxy"
+167-->[androidx.work:work-runtime:2.7.1] /Users/mahammadsuelc/.gradle/caches/transforms-3/a93c68fb1d2792ca1942259f5092d83b/transformed/work-runtime-2.7.1/AndroidManifest.xml:101:13-103
+168            android:directBootAware="false"
+168-->[androidx.work:work-runtime:2.7.1] /Users/mahammadsuelc/.gradle/caches/transforms-3/a93c68fb1d2792ca1942259f5092d83b/transformed/work-runtime-2.7.1/AndroidManifest.xml:102:13-44
+169            android:enabled="false"
+169-->[androidx.work:work-runtime:2.7.1] /Users/mahammadsuelc/.gradle/caches/transforms-3/a93c68fb1d2792ca1942259f5092d83b/transformed/work-runtime-2.7.1/AndroidManifest.xml:103:13-36
+170            android:exported="false" >
+170-->[androidx.work:work-runtime:2.7.1] /Users/mahammadsuelc/.gradle/caches/transforms-3/a93c68fb1d2792ca1942259f5092d83b/transformed/work-runtime-2.7.1/AndroidManifest.xml:104:13-37
+171            <intent-filter>
+171-->[androidx.work:work-runtime:2.7.1] /Users/mahammadsuelc/.gradle/caches/transforms-3/a93c68fb1d2792ca1942259f5092d83b/transformed/work-runtime-2.7.1/AndroidManifest.xml:106:13-108:29
+172                <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
+172-->[androidx.work:work-runtime:2.7.1] /Users/mahammadsuelc/.gradle/caches/transforms-3/a93c68fb1d2792ca1942259f5092d83b/transformed/work-runtime-2.7.1/AndroidManifest.xml:107:17-79
+172-->[androidx.work:work-runtime:2.7.1] /Users/mahammadsuelc/.gradle/caches/transforms-3/a93c68fb1d2792ca1942259f5092d83b/transformed/work-runtime-2.7.1/AndroidManifest.xml:107:25-76
+173            </intent-filter>
+174        </receiver>
+175        <receiver
+175-->[androidx.work:work-runtime:2.7.1] /Users/mahammadsuelc/.gradle/caches/transforms-3/a93c68fb1d2792ca1942259f5092d83b/transformed/work-runtime-2.7.1/AndroidManifest.xml:110:9-121:20
+176            android:name="androidx.work.impl.background.systemalarm.RescheduleReceiver"
+176-->[androidx.work:work-runtime:2.7.1] /Users/mahammadsuelc/.gradle/caches/transforms-3/a93c68fb1d2792ca1942259f5092d83b/transformed/work-runtime-2.7.1/AndroidManifest.xml:111:13-88
+177            android:directBootAware="false"
+177-->[androidx.work:work-runtime:2.7.1] /Users/mahammadsuelc/.gradle/caches/transforms-3/a93c68fb1d2792ca1942259f5092d83b/transformed/work-runtime-2.7.1/AndroidManifest.xml:112:13-44
+178            android:enabled="false"
+178-->[androidx.work:work-runtime:2.7.1] /Users/mahammadsuelc/.gradle/caches/transforms-3/a93c68fb1d2792ca1942259f5092d83b/transformed/work-runtime-2.7.1/AndroidManifest.xml:113:13-36
+179            android:exported="false" >
+179-->[androidx.work:work-runtime:2.7.1] /Users/mahammadsuelc/.gradle/caches/transforms-3/a93c68fb1d2792ca1942259f5092d83b/transformed/work-runtime-2.7.1/AndroidManifest.xml:114:13-37
+180            <intent-filter>
+180-->[androidx.work:work-runtime:2.7.1] /Users/mahammadsuelc/.gradle/caches/transforms-3/a93c68fb1d2792ca1942259f5092d83b/transformed/work-runtime-2.7.1/AndroidManifest.xml:116:13-120:29
+181                <action android:name="android.intent.action.BOOT_COMPLETED" />
+181-->[androidx.work:work-runtime:2.7.1] /Users/mahammadsuelc/.gradle/caches/transforms-3/a93c68fb1d2792ca1942259f5092d83b/transformed/work-runtime-2.7.1/AndroidManifest.xml:117:17-79
+181-->[androidx.work:work-runtime:2.7.1] /Users/mahammadsuelc/.gradle/caches/transforms-3/a93c68fb1d2792ca1942259f5092d83b/transformed/work-runtime-2.7.1/AndroidManifest.xml:117:25-76
+182                <action android:name="android.intent.action.TIME_SET" />
+182-->[androidx.work:work-runtime:2.7.1] /Users/mahammadsuelc/.gradle/caches/transforms-3/a93c68fb1d2792ca1942259f5092d83b/transformed/work-runtime-2.7.1/AndroidManifest.xml:118:17-73
+182-->[androidx.work:work-runtime:2.7.1] /Users/mahammadsuelc/.gradle/caches/transforms-3/a93c68fb1d2792ca1942259f5092d83b/transformed/work-runtime-2.7.1/AndroidManifest.xml:118:25-70
+183                <action android:name="android.intent.action.TIMEZONE_CHANGED" />
+183-->[androidx.work:work-runtime:2.7.1] /Users/mahammadsuelc/.gradle/caches/transforms-3/a93c68fb1d2792ca1942259f5092d83b/transformed/work-runtime-2.7.1/AndroidManifest.xml:119:17-81
+183-->[androidx.work:work-runtime:2.7.1] /Users/mahammadsuelc/.gradle/caches/transforms-3/a93c68fb1d2792ca1942259f5092d83b/transformed/work-runtime-2.7.1/AndroidManifest.xml:119:25-78
+184            </intent-filter>
+185        </receiver>
+186        <receiver
+186-->[androidx.work:work-runtime:2.7.1] /Users/mahammadsuelc/.gradle/caches/transforms-3/a93c68fb1d2792ca1942259f5092d83b/transformed/work-runtime-2.7.1/AndroidManifest.xml:122:9-131:20
+187            android:name="androidx.work.impl.background.systemalarm.ConstraintProxyUpdateReceiver"
+187-->[androidx.work:work-runtime:2.7.1] /Users/mahammadsuelc/.gradle/caches/transforms-3/a93c68fb1d2792ca1942259f5092d83b/transformed/work-runtime-2.7.1/AndroidManifest.xml:123:13-99
+188            android:directBootAware="false"
+188-->[androidx.work:work-runtime:2.7.1] /Users/mahammadsuelc/.gradle/caches/transforms-3/a93c68fb1d2792ca1942259f5092d83b/transformed/work-runtime-2.7.1/AndroidManifest.xml:124:13-44
+189            android:enabled="@bool/enable_system_alarm_service_default"
+189-->[androidx.work:work-runtime:2.7.1] /Users/mahammadsuelc/.gradle/caches/transforms-3/a93c68fb1d2792ca1942259f5092d83b/transformed/work-runtime-2.7.1/AndroidManifest.xml:125:13-72
+190            android:exported="false" >
+190-->[androidx.work:work-runtime:2.7.1] /Users/mahammadsuelc/.gradle/caches/transforms-3/a93c68fb1d2792ca1942259f5092d83b/transformed/work-runtime-2.7.1/AndroidManifest.xml:126:13-37
+191            <intent-filter>
+191-->[androidx.work:work-runtime:2.7.1] /Users/mahammadsuelc/.gradle/caches/transforms-3/a93c68fb1d2792ca1942259f5092d83b/transformed/work-runtime-2.7.1/AndroidManifest.xml:128:13-130:29
+192                <action android:name="androidx.work.impl.background.systemalarm.UpdateProxies" />
+192-->[androidx.work:work-runtime:2.7.1] /Users/mahammadsuelc/.gradle/caches/transforms-3/a93c68fb1d2792ca1942259f5092d83b/transformed/work-runtime-2.7.1/AndroidManifest.xml:129:17-98
+192-->[androidx.work:work-runtime:2.7.1] /Users/mahammadsuelc/.gradle/caches/transforms-3/a93c68fb1d2792ca1942259f5092d83b/transformed/work-runtime-2.7.1/AndroidManifest.xml:129:25-95
+193            </intent-filter>
+194        </receiver>
+195        <receiver
+195-->[androidx.work:work-runtime:2.7.1] /Users/mahammadsuelc/.gradle/caches/transforms-3/a93c68fb1d2792ca1942259f5092d83b/transformed/work-runtime-2.7.1/AndroidManifest.xml:132:9-142:20
+196            android:name="androidx.work.impl.diagnostics.DiagnosticsReceiver"
+196-->[androidx.work:work-runtime:2.7.1] /Users/mahammadsuelc/.gradle/caches/transforms-3/a93c68fb1d2792ca1942259f5092d83b/transformed/work-runtime-2.7.1/AndroidManifest.xml:133:13-78
+197            android:directBootAware="false"
+197-->[androidx.work:work-runtime:2.7.1] /Users/mahammadsuelc/.gradle/caches/transforms-3/a93c68fb1d2792ca1942259f5092d83b/transformed/work-runtime-2.7.1/AndroidManifest.xml:134:13-44
+198            android:enabled="true"
+198-->[androidx.work:work-runtime:2.7.1] /Users/mahammadsuelc/.gradle/caches/transforms-3/a93c68fb1d2792ca1942259f5092d83b/transformed/work-runtime-2.7.1/AndroidManifest.xml:135:13-35
+199            android:exported="true"
+199-->[androidx.work:work-runtime:2.7.1] /Users/mahammadsuelc/.gradle/caches/transforms-3/a93c68fb1d2792ca1942259f5092d83b/transformed/work-runtime-2.7.1/AndroidManifest.xml:136:13-36
+200            android:permission="android.permission.DUMP" >
+200-->[androidx.work:work-runtime:2.7.1] /Users/mahammadsuelc/.gradle/caches/transforms-3/a93c68fb1d2792ca1942259f5092d83b/transformed/work-runtime-2.7.1/AndroidManifest.xml:137:13-57
+201            <intent-filter>
+201-->[androidx.work:work-runtime:2.7.1] /Users/mahammadsuelc/.gradle/caches/transforms-3/a93c68fb1d2792ca1942259f5092d83b/transformed/work-runtime-2.7.1/AndroidManifest.xml:139:13-141:29
+202                <action android:name="androidx.work.diagnostics.REQUEST_DIAGNOSTICS" />
+202-->[androidx.work:work-runtime:2.7.1] /Users/mahammadsuelc/.gradle/caches/transforms-3/a93c68fb1d2792ca1942259f5092d83b/transformed/work-runtime-2.7.1/AndroidManifest.xml:140:17-88
+202-->[androidx.work:work-runtime:2.7.1] /Users/mahammadsuelc/.gradle/caches/transforms-3/a93c68fb1d2792ca1942259f5092d83b/transformed/work-runtime-2.7.1/AndroidManifest.xml:140:25-85
+203            </intent-filter>
+204        </receiver>
+205
+206        <service
+206-->[androidx.room:room-runtime:2.2.5] /Users/mahammadsuelc/.gradle/caches/transforms-3/32f4dc14231a603560d048af81f18073/transformed/room-runtime-2.2.5/AndroidManifest.xml:25:9-28:40
+207            android:name="androidx.room.MultiInstanceInvalidationService"
+207-->[androidx.room:room-runtime:2.2.5] /Users/mahammadsuelc/.gradle/caches/transforms-3/32f4dc14231a603560d048af81f18073/transformed/room-runtime-2.2.5/AndroidManifest.xml:26:13-74
+208            android:directBootAware="true"
+208-->[androidx.room:room-runtime:2.2.5] /Users/mahammadsuelc/.gradle/caches/transforms-3/32f4dc14231a603560d048af81f18073/transformed/room-runtime-2.2.5/AndroidManifest.xml:27:13-43
+209            android:exported="false" />
+209-->[androidx.room:room-runtime:2.2.5] /Users/mahammadsuelc/.gradle/caches/transforms-3/32f4dc14231a603560d048af81f18073/transformed/room-runtime-2.2.5/AndroidManifest.xml:28:13-37
+210    </application>
+211
+212</manifest>

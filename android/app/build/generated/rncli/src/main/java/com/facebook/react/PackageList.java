@@ -11,14 +11,28 @@ import com.facebook.react.shell.MainReactPackage;
 import java.util.Arrays;
 import java.util.ArrayList;
 
+// @aws-amplify/react-native
+import com.amazonaws.amplify.rtncore.AmplifyRTNCorePackage;
 // @react-native-async-storage/async-storage
 import com.reactnativecommunity.asyncstorage.AsyncStoragePackage;
 // @react-native-community/clipboard
 import com.reactnativecommunity.clipboard.ClipboardPackage;
 // @react-native-community/geolocation
 import com.reactnativecommunity.geolocation.GeolocationPackage;
+// @react-native-community/netinfo
+import com.reactnativecommunity.netinfo.NetInfoPackage;
+// react-native-gesture-handler
+import com.swmansion.gesturehandler.RNGestureHandlerPackage;
+// react-native-get-random-values
+import org.linusu.RNGetRandomValuesPackage;
 // react-native-image-picker
 import com.imagepicker.ImagePickerPackage;
+// react-native-maps
+import com.rnmaps.maps.MapsPackage;
+// react-native-pager-view
+import com.reactnativepagerview.PagerViewPackage;
+// react-native-pure-jwt
+import com.zaguiini.RNPureJwt.RNPureJwtPackage;
 // react-native-reanimated
 import com.swmansion.reanimated.ReanimatedPackage;
 // react-native-safe-area-context
@@ -27,8 +41,12 @@ import com.th3rdwave.safeareacontext.SafeAreaContextPackage;
 import com.swmansion.rnscreens.RNScreensPackage;
 // react-native-svg
 import com.horcrux.svg.SvgPackage;
+// react-native-vector-icons
+import com.oblador.vectoricons.VectorIconsPackage;
 // react-native-video
 import com.brentvatne.react.ReactVideoPackage;
+// react-native-webview
+import com.reactnativecommunity.webview.RNCWebViewPackage;
 
 public class PackageList {
   private Application application;
@@ -74,15 +92,24 @@ public class PackageList {
   public ArrayList<ReactPackage> getPackages() {
     return new ArrayList<>(Arrays.<ReactPackage>asList(
       new MainReactPackage(mConfig),
+      new AmplifyRTNCorePackage(),
       new AsyncStoragePackage(),
       new ClipboardPackage(),
       new GeolocationPackage(),
+      new NetInfoPackage(),
+      new RNGestureHandlerPackage(),
+      new RNGetRandomValuesPackage(),
       new ImagePickerPackage(),
+      new MapsPackage(),
+      new PagerViewPackage(),
+      new RNPureJwtPackage(),
       new ReanimatedPackage(),
       new SafeAreaContextPackage(),
       new RNScreensPackage(),
       new SvgPackage(),
-      new ReactVideoPackage()
+      new VectorIconsPackage(),
+      new ReactVideoPackage(),
+      new RNCWebViewPackage()
     ));
   }
 }

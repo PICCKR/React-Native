@@ -29,19 +29,19 @@ const FullScreenModal = ({
             }}
         >
             <WrapperContainer
-               leftTitle={leftTitle}
-               hasCloseIcon={hasCloseIcon}
-               buttonTitle={buttonTitle}
-               handleButtonPress={handleButtonPress}
-               buttonActive={buttonActive}
-               leftViewStyles={leftViewStyles}
-               centerViewStyles={centerViewStyles}
-               righyViewStyles={righyViewStyles}
-               handlerRightViewPress={()=>{
-                setShowModal(false)
-               }}
+                leftTitle={leftTitle}
+                hasCloseIcon={hasCloseIcon}
+                buttonTitle={buttonTitle}
+                handleButtonPress={handleButtonPress}
+                buttonActive={buttonActive}
+                leftViewStyles={leftViewStyles}
+                centerViewStyles={centerViewStyles}
+                righyViewStyles={righyViewStyles}
+                handlerRightViewPress={() => {
+                    setShowModal(false)
+                }}
             >
-             {children}
+                {children}
             </WrapperContainer>
         </Modal>
     )

@@ -47,7 +47,6 @@ const styles = StyleSheet.create({
         borderRadius: moderateScale(8),
         borderWidth: moderateScale(1),
         borderColor: uiColours.LIGHT_GRAY,
-        backgroundColor: "#F2F4F8",
         justifyContent: 'center',
         alignItems: "center"
     },
@@ -88,7 +87,16 @@ const styles = StyleSheet.create({
         padding: moderateScale(16),
         borderWidth: moderateScale(1),
         borderColor: uiColours.LIGHT_GRAY,
-        borderRadius:moderateScale(8),
+        borderRadius: moderateScale(8),
+    },
+
+    pinCard: {
+        height: moderateScale(45),
+        width: moderateScale(45),
+        backgroundColor: uiColours.LIGHT_BLUE,
+        alignItems: 'center',
+        justifyContent: 'center',
+        borderRadius: moderateScale(4)
     },
     sendMsg: {
         flexDirection: "row",
@@ -99,10 +107,10 @@ const styles = StyleSheet.create({
     },
     msgInput: {
         flex: 1,
-        backgroundColor: uiColours.LIGHT_GRAY,
         paddingLeft: scale(10),
         borderRadius: moderateScale(10),
         height: moderateScale(36),
+        justifyContent: "center"
     },
     heartIcon: {
         height: moderateScale(36),
@@ -113,33 +121,35 @@ const styles = StyleSheet.create({
         borderRadius: moderateScale(5),
         // elevation:2
     },
-    onGoingFooter:{
-        flexDirection:"row",
-        justifyContent:'space-between',
-        padding:moderateScale(16),
-        borderTopWidth:moderateScale(1),
-        borderColor:uiColours.LIGHT_GRAY,
+    onGoingFooter: {
+        // flexDirection: "row",
+        // justifyContent: 'space-between',
+        padding: moderateScale(16),
+        borderTopWidth: moderateScale(1),
+        borderColor: uiColours.LIGHT_GRAY,
+        width: '100%',
+        alignItems: 'center'
     },
     pickerVehicleInSheet: {
         backgroundColor: uiColours.PRIMARY_LIGHT,
         padding: moderateScale(5),
-        height:moderateScale(70),
-        width:moderateScale(70),
+        height: moderateScale(70),
+        width: moderateScale(70),
         borderRadius: moderateScale(35),
-        alignItems:"center",
-        justifyContent:'center'
+        alignItems: "center",
+        justifyContent: 'center'
     },
-    warningIconView:{
+    warningIconView: {
         backgroundColor: uiColours.LIGHT_RED,
         padding: moderateScale(5),
-        height:moderateScale(28),
-        width:moderateScale(28),
+        height: moderateScale(28),
+        width: moderateScale(28),
         borderRadius: moderateScale(35),
-        alignItems:"center",
-        justifyContent:'center',
-        position:'absolute',
-        bottom:0,
-        left:scale(45)
+        alignItems: "center",
+        justifyContent: 'center',
+        position: 'absolute',
+        bottom: 0,
+        left: scale(45)
     }
 })
 export default styles

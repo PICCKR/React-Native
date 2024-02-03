@@ -1,73 +1,55 @@
 import { View, Text, SafeAreaView, ScrollView, TouchableOpacity, Image } from 'react-native'
-import React, { useContext, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { AppContext } from '../../../context/AppContext'
 import styles from './Styles'
 import Header from './Header'
 import InputText from '../../../components/InputText/InputText'
 import { Images } from '../../../assets/images'
 import { moderateScale, scale, verticalScale } from 'react-native-size-matters'
-import { uiColours } from '../../../utils/Styles/uiColors'
 import { screenSize } from '../../../utils/Styles/CommonStyles'
 import { useNavigation } from '@react-navigation/native'
 import { MainRouteStrings } from '../../../utils/Constents/RouteStrings'
-import TopUpSheet from './TopUpSheet'
-import AddTopUp from './AddTopUp'
-import OtpPopUp from './OtpPopUp'
-import { showToast } from '../../../components/tostConfig/tostConfig'
-import { tostMessagetypes } from '../../../utils/Constents/constentStrings'
+import SelectAmountPopup from '../../../components/SelectAmountPopup/SelectAmountPopup'
+import { apiGet } from '../../../services/apiServices'
+import { endPoints } from '../../../configs/apiUrls'
+import Actions from '../../../redux/Actions'
+import { useSelector } from 'react-redux'
+
 
 const UserHomeScreen = () => {
-  const { appStyles, userData, isDark } = useContext(AppContext)
+  // Context and Navigation
+  const { appStyles, isDark, setSelectedVehicle, vehicleType, setVehicleType } = useContext(AppContext)
+  const userData = useSelector((state) => state?.userDataReducer?.userData)
+  const currentLocation = useSelector((state) => state?.CurrentLocationReducer?.currentLocation)
   const navigation = useNavigation()
 
-  const [showSheet, setShowSheet] = useState({
-    showPayment: false,
-    addPayment: false,
-    Otp: false
-  })
-  const [topUpAmount, setTopUpAmount] = useState({
-    price: "0"
-  })
+  console.log("ddd", currentLocation);
 
-  const recentDestinationData = [
-    {
-      titel: "Harvard University",
-      details: 'Massachusetts Hall, Cambridge, MA 02138'
-    },
-    {
-      titel: "Houghton Library",
-      details: 'Quincy Street &, Harvard St, Cambridge, MA 02138'
-    },
-    {
-      titel: "Cambridge Historical Tours",
-      details: '1400 Massachusetts Ave, Cambridge, MA 02138'
-    },
-    {
-      titel: "John Harvard Statue",
-      details: 'Harvard Yard, 1, Cambridge, MA 02138'
-    }
-  ]
-
+  // Mock Data for Vehicle Types and Reasons to Choose
   const VehicleType = [
     {
       id: "1",
       icon: Images.scooter,
-      type: "Bike"
+      type: "Bike",
+      price: 50
     },
     {
       id: "2",
       icon: Images.car,
-      type: "Car"
+      type: "Car",
+      price: 100
     },
     {
       id: "3",
       icon: Images.van,
-      type: "Van"
+      type: "Van",
+      price: 125
     },
     {
       id: "4",
       icon: Images.truck,
-      type: "Truck"
+      type: "Truck",
+      price: 150
     }
   ]
 
@@ -92,6 +74,32 @@ const UserHomeScreen = () => {
     }
   ]
 
+  // console.log("juser dayayyaaa", userData);
+  const getVehicleData = () => {
+    try {
+      Actions.showLoader(true)
+      apiGet(endPoints.GET_VEHICLE_DATA).then((res) => {
+        // console.log("ress in vehical", res?.data);
+        if (res?.status === 200) {
+          setVehicleType(res?.data?.data)
+        }
+        Actions.showLoader(false)
+      }).catch((error) => {
+        Actions.showLoader(false)
+        console.log("error in vehcla data", error);
+      })
+    } catch (error) {
+      console.log("errorr", error);
+    }
+
+  }
+
+  useEffect(() => {
+    getVehicleData()
+  }, [])
+
+
+
   return (
     <SafeAreaView style={appStyles.container}>
       <ScrollView
@@ -101,13 +109,16 @@ const UserHomeScreen = () => {
         <Header
           userData={userData}
           appStyles={appStyles}
-          setShowSheet={setShowSheet}
-          showSheet={showSheet}
-          topUpAmount={topUpAmount}
+          isDark={isDark}
         />
+
         <View style={styles.homeScreenContainer}>
+          {/* Input Text Component for Finding Destination */}
           <InputText
             placeholder="Find a destination"
+            onPressIn={() => {
+              navigation.navigate(MainRouteStrings.FIND_DESTINATON)
+            }}
             hasLeftView
             renderLeftView={() => {
               return (
@@ -115,60 +126,59 @@ const UserHomeScreen = () => {
               )
             }}
           />
-          <View style={styles.recentDestinationView}>
-            <Text style={appStyles.mediumTextBlack}>Recent destination</Text>
-            {
-              recentDestinationData.map((item) => {
-                return (
-                  <View key={item.titel} style={{ flexDirection: 'row', gap: scale(8) }}>
-                    <Images.locationPinRed height={moderateScale(20)} width={moderateScale(20)} />
-                    <View style={{ flex: 1 }}>
-                      <Text style={appStyles.smallTextBlackBold}>
-                        {item.titel}
-                      </Text>
-                      <Text style={appStyles.smallTextGray}>
-                        {item.details}
-                      </Text>
-                    </View>
-                  </View>
-                )
-              })
-            }
-          </View>
 
-          <TouchableOpacity
+          {/* Conditional Rendering based on User Authentication */}
+          {(userData?.token && !userData?.userRole[1]) && <TouchableOpacity
             activeOpacity={0.7}
-            style={{ marginVertical: verticalScale(16) }}
+            style={{ marginVertical: verticalScale(16), height: verticalScale(110), width: screenSize.width - scale(32) }}
             onPress={() => {
               navigation.navigate(MainRouteStrings.BECOME_PICKER)
             }}
           >
-            <Image source={Images.becomePicckr}
+            <Image
+              source={Images.becomePicckr}
+              resizeMode="stretch"
               style={styles.becomePickerView}
             />
-          </TouchableOpacity>
+          </TouchableOpacity>}
 
-          <Text style={appStyles.mediumTextBlack}>Choose Vehicle</Text>
-          <View style={styles.vehicleTypeList}>
+          {/* Rendering Vehicle Types */}
+          <Text style={[appStyles.mediumTextBlack, {
+            marginTop: userData?.token ? 0 : verticalScale(10)
+          }]}>Choose Vehicle</Text>
+          <ScrollView
+            horizontal
+            showsHorizontalScrollIndicator={false}
+            style={styles.vehicleTypeList}>
             {
-              VehicleType.map((item) => {
+              vehicleType.map((item) => {
                 return (
-                  <View key={item?.id} style={styles.VehicleType}>
+                  <View key={item?._id} style={styles.VehicleType}>
                     <TouchableOpacity
                       style={styles.vehicleTypeIcon}
+                      onPress={() => {
+                        setSelectedVehicle(item)
+                        navigation.navigate(MainRouteStrings.FIND_DESTINATON)
+                      }}
                     >
-                      <item.icon height={moderateScale(40)} width={moderateScale(40)} />
+                      <Image source={{ uri: item?.catImage }} style={{
+                        height: moderateScale(40),
+                        width: moderateScale(40),
+                      }} />
+                      {/* <item.icon height={moderateScale(40)} width={moderateScale(40)} /> */}
                     </TouchableOpacity>
                     <Text style={appStyles.smallTextBlack}>
-                      {item.type}
+                      {item.name}
                     </Text>
                   </View>
                 )
               })
             }
-          </View>
+          </ScrollView>
 
           <Text style={appStyles.mediumTextBlack}>Why PicckR?</Text>
+
+          {/* Rendering Reasons to Choose PicckR */}
           <View style={styles.whyPickerItemList}>
             {
               whyPickerData.map((item) => {
@@ -191,50 +201,6 @@ const UserHomeScreen = () => {
 
         </View>
       </ScrollView>
-
-      {/* sheets */}
-      <TopUpSheet
-        isVisible={showSheet.showPayment}
-        handleCardClick={() => {
-          setShowSheet({
-            ...showSheet,
-            showPayment: false,
-            addPayment: true
-          })
-        }}
-      />
-
-      <AddTopUp
-        isVisible={showSheet.addPayment}
-        appStyles={appStyles}
-        setShowSheet={setShowSheet}
-        topUpAmount={topUpAmount}
-        setTopUpAmount={setTopUpAmount}
-        handleAddTopUp={() => {
-          setShowSheet({
-            ...showSheet,
-            addPayment: false,
-            Otp: true
-          })
-        }}
-
-      />
-      <OtpPopUp
-        isVisible={showSheet.Otp}
-        appStyles={appStyles}
-        setShowSheet={setShowSheet}
-        handleVerifyOtp={() => {
-          setShowSheet({
-            ...showSheet,
-            Otp: false
-          })
-          const toastMsgConfg = {
-            isDark: isDark,
-            msg: "You successfully top up your wallet"
-          }
-          showToast(toastMsgConfg, tostMessagetypes.SUCCESS, isDark)
-        }}
-      />
     </SafeAreaView>
   )
 }
