@@ -10,6 +10,7 @@ import { Images } from '../../../assets/images'
 import { setLocalData } from '../../../helper/AsyncStorage'
 import { storageKeys } from '../../../helper/AsyncStorage/storageKeys'
 import useBackButton from '../../../customHooks/useBackButton'
+import Actions from '../../../redux/Actions'
 
 const ApprovalScreen = ({ route }) => {
     const data = route?.params?.data
@@ -24,7 +25,8 @@ const ApprovalScreen = ({ route }) => {
     const handleContinue = () => {
         const useData = { ...data, type: "user" }
         setLocalData(storageKeys.userData, useData)
-        setuserData({ ...data, type: "user" })
+        Actions.userData({ ...data, type: "user" })
+        // setuserData({ ...data, type: "user" })
         if (fromGuestUserScreen) {
             navigation.navigate(fromGuestUserScreen)
             setFromGuestUserScreen(null)
@@ -41,7 +43,8 @@ const ApprovalScreen = ({ route }) => {
         } else {
             const useData = { ...data, type: "user" }
             setLocalData(storageKeys.userData, useData)
-            setuserData({ ...data, type: "user" })
+            Actions.userData({ ...data, type: "user" })
+            // setuserData({ ...data, type: "user" })
             return true
         }
     })

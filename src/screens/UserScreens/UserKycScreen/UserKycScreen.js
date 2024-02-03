@@ -20,11 +20,13 @@ import Actions from '../../../redux/Actions'
 import { showGeneralError } from '../../../helper/showGeneralError'
 import { showErrorToast } from '../../../helper/showErrorToast'
 import DropDown from '../../../components/DropDown/DropDown'
+import { useSelector } from 'react-redux'
 
 const UserKycScreen = ({ route }) => {
 
     const data = route?.params?.data
-    const { appStyles, isDark, setIsLoggedIn, userData, setuserData } = useContext(AppContext)
+    const { appStyles, isDark, setIsLoggedIn, setuserData } = useContext(AppContext)
+    const userData = useSelector((state) => state?.userDataReducer?.userData)
     const navigation = useNavigation()
 
     const [selectedCountry, setSelctedCountry] = useState(null)
@@ -238,11 +240,17 @@ const UserKycScreen = ({ route }) => {
 
                 if (res?.status === 200) {
                     showSuccessToast("verified successfully", isDark)
-                    setuserData({
+                    Actions.userData({
                         ...userData, kyc: {
                             idNumber: bvn
                         }
                     })
+                    // setuserData({
+                    //     ...userData, kyc: {
+                    //         idNumber: bvn
+                    //     }
+                    // })
+
                     setLocalData(storageKeys.userData, {
                         ...userData, kyc: {
                             idNumber: bvn

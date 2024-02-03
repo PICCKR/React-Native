@@ -11,12 +11,14 @@ import CustomButton from '../../../components/Button/CustomButton'
 import { buttonTypes } from '../../../utils/Constents/constentStrings'
 import { MainRouteStrings } from '../../../utils/Constents/RouteStrings'
 import CancelOrderSheet from './CancelOrderSheet'
+import { formatAmount } from '../../../helper/formatter'
 
 const Ongoing = ({
-    data,
+    orderDeatils,
     appStyles,
     navigation,
-    isDark
+    isDark,
+    handleJoinRoom
 }) => {
 
     const [showSheet, setShowSheet] = useState({
@@ -28,6 +30,33 @@ const Ongoing = ({
             <View style={[styles.onGoingContentSection, {
                 borderColor: !isDark ? uiColours.LIGHT_GRAY : uiColours.GRAYED_BUTTON,
             }]}>
+                <View style={[styles.pickerProfile, {
+                    borderColor: !isDark ? uiColours.LIGHT_GRAY : uiColours.GRAYED_BUTTON,
+                }]}>
+                    <View style={styles.pickerProfileView}>
+                        {orderDeatils?.userId?.picture ? <Image source={{ uri: orderDeatils?.userId?.picture }} style={{
+                            height: moderateScale(50),
+                            width: moderateScale(50)
+                        }} /> : <Images.profile height={moderateScale(50)} width={moderateScale(50)} />}
+                    </View>
+                    <View>
+                        <Text style={appStyles?.mediumTextPrimaryBold}>{orderDeatils?.userId?.firstName} {orderDeatils?.userId?.lastName}</Text>
+                        <Text style={appStyles?.smallTextGray}>{orderDeatils?.userId?.phoneNumber}</Text>
+                    </View>
+                </View>
+                <View style={styles.sendMsg}>
+                    <TouchableOpacity
+                        style={[styles.msgInput, {
+                            backgroundColor: !isDark ? uiColours.LIGHT_GRAY : uiColours.GRAYED_BUTTON,
+                        }]}
+                        onPress={() => {
+                            handleJoinRoom(orderDeatils)
+                        }}
+                    >
+                        <Text style={appStyles.smallTextGray}>Send message to {orderDeatils?.userId?.firstName}</Text>
+                    </TouchableOpacity>
+
+                </View>
             </View>
             <View style={appStyles.bottomBorder}>
                 <Text style={[appStyles.mediumTextBlackBold, {}]}>
@@ -42,17 +71,15 @@ const Ongoing = ({
                                 Sender
                             </Text>
                             <Text style={appStyles.smallTextGray}>
-                                Jeremy Jason
+                                {orderDeatils?.requestId?.sender?.name}
                             </Text>
                             <Text style={appStyles.smallTextGray}>
-                                212-111-2222
+                                {orderDeatils?.requestId?.pickupAddress}
                             </Text>
-                            <Text style={appStyles.smallTextGray}>
-                                Lesley University
-                            </Text>
-                            <Text style={appStyles.smallTextGray}>
-                                29 Everett St, Cambridge, MA 02138
-                            </Text>
+                            {/* <Text style={appStyles.smallTextGray}>
+                                        {destination?.location}
+                                    </Text> */}
+
                         </View>
                     </View>
 
@@ -63,29 +90,17 @@ const Ongoing = ({
                                 Recipient
                             </Text>
                             <Text style={appStyles.smallTextGray}>
-                                John Cena
+                                {orderDeatils?.requestId?.recipeint?.name}
                             </Text>
                             <Text style={appStyles.smallTextGray}>
-                                212-111-2222
+                                {orderDeatils?.requestId?.dropOffAddress}
                             </Text>
-                            <Text style={appStyles.smallTextGray}>
-                                Harvard University
-                            </Text>
-                            <Text style={appStyles.smallTextGray}>
-                                Massachusetts Hall, Cambridge, MA 02138, United States of America
-                            </Text>
+                            {/* <Text style={appStyles.smallTextGray}>
+                                        {source?.location}
+                                    </Text> */}
                         </View>
                     </View>
                 </View>
-                <InputText
-                    hasTitle
-                    inputTitle="Price"
-                    value={"₦100"}
-                    textBox={{ color: uiColours.GRAY_TEXT }}
-                    editable={false}
-                    inputContainer={{ width: '100%' }}
-                    inPutStyles={{ backgroundColor: !isDark ? uiColours.LIGHT_GRAY : uiColours.GRAYED_BUTTON,marginBottom:verticalScale(16) }}
-                />
             </View>
 
             <View style={[styles.onGoingContentSection, {
@@ -98,23 +113,70 @@ const Ongoing = ({
                 <InputText
                     hasTitle
                     inputTitle="Package type"
-                    value={"Electronics"}
+                    value={orderDeatils?.requestId?.packageId?.name}
                     textBox={{ color: uiColours.GRAY_TEXT }}
                     editable={false}
                     inputContainer={{ width: '100%' }}
-                    inPutStyles={{ backgroundColor: !isDark ? uiColours.LIGHT_GRAY : uiColours.GRAYED_BUTTON, }}
+                    inPutStyles={{ backgroundColor: uiColours.LIGHT_GRAY }}
                 />
                 <InputText
                     hasTitle
-                    inputTitle="Package type"
-                    value={"Electronics"}
+                    inputTitle="Extimates item weight (kg)"
+                    value={orderDeatils?.requestId?.parcelDescription?.weight}
                     textBox={{ color: uiColours.GRAY_TEXT }}
                     editable={false}
                     inputContainer={{ width: '100%', marginTop: verticalScale(16) }}
-                    inPutStyles={{ backgroundColor: !isDark ? uiColours.LIGHT_GRAY : uiColours.GRAYED_BUTTON, }}
+                    inPutStyles={{ backgroundColor: uiColours.LIGHT_GRAY }}
                 />
-
             </View>
+
+            <View style={[styles.onGoingContentSection, {
+                borderColor: !isDark ? uiColours.LIGHT_GRAY : uiColours.GRAYED_BUTTON,
+            }]}>
+                <Text style={[appStyles.mediumTextBlackBold, { marginBottom: verticalScale(5) }]}>
+                    Payment method
+                </Text>
+
+                <View style={commonStyles.flexRowAlnCtrJutySpaceBetween}>
+                    <View style={commonStyles.flexRowAlnCtr}>
+                        <Images.wallet />
+                        <Text style={appStyles.smallTextGray}>
+                            PicckRPay
+                        </Text>
+                    </View>
+                    <Text style={appStyles.smallTextGray}>
+                        {formatAmount((orderDeatils?.requestId?.requestAmount) + (orderDeatils?.requestId?.requestAmount * 0.075))}
+                    </Text>
+                </View>
+            </View>
+
+
+            <View style={[styles.onGoingFooter, {
+                borderColor: !isDark ? uiColours.LIGHT_GRAY : uiColours.GRAYED_BUTTON,
+                flexDirection: orderDeatils?.status === "pending" ? "row" : "column",
+                justifyContent: "space-between"
+            }]}>
+                <CustomButton
+                    buttonType={buttonTypes.MEDIUM}
+                    hasBackground={false}
+                    hasOutLine
+                    title={"Dispute"}
+                    NavigationHandle={() => {
+                        navigation?.navigate(MainRouteStrings.DISPUTE_SCREEN)
+                    }}
+                />
+                {orderDeatils?.status === "pending" && <CustomButton
+                    buttonType={buttonTypes.MEDIUM}
+                    title={"Cancel order"}
+                    NavigationHandle={() => {
+                        setShowSheet({
+                            ...showSheet,
+                            confirmation: true
+                        })
+                    }}
+                />}
+            </View>
+
         </View>
     )
 }

@@ -1,41 +1,44 @@
 import React, { useContext, useEffect, useState } from 'react'
 import AuthRoutes from './AuthRoutes'
-import { AppContext } from '../context/AppContext'
+import { AppContext, useSocket } from '../context/AppContext'
 import UserRoutes from './UserRoutes'
 import PickertRoutes from './PickertRoutes'
 import SplashScreen from '../screens/AuthScreens/splashScreen/SplashScreen'
-import { fetchAuthSession, getCurrentUser } from '@aws-amplify/auth'
-import { getLocalData, setLocalData } from '../helper/AsyncStorage'
+import { fetchAuthSession, getCurrentUser, signOut } from '@aws-amplify/auth'
+import { clearLocalData, getLocalData, setLocalData } from '../helper/AsyncStorage'
 import { storageKeys } from '../helper/AsyncStorage/storageKeys'
 import NoRoutesScreen from '../screens/CommonScreens/NoRoutesScreen/NoRoutesScreen'
 import { decodeToken } from '../helper/decodeToken'
 import axios from 'axios'
 import { endPoints } from '../configs/apiUrls'
+import Geolocation from '@react-native-community/geolocation'
+import { Socket } from 'socket.io-client'
+import Actions from '../redux/Actions'
+import { useSelector } from 'react-redux'
 
 
 const CheckRoutes = () => {
-    const { userData, isLoggedIn, setIsLoggedIn, setuserData } = useContext(AppContext)
+    const isLoggedIn = useSelector((state) => state?.isLoggedInReducer?.isLoggedIn)
+    const userData = useSelector((state) => state?.userDataReducer?.userData)
+
     const [showSplashScreen, setShowSplashScreen] = useState(true)
+
 
     const getUserData = async () => {
         // get user details from local storage
         const UserData = await getLocalData(storageKeys.userData)
         // get current loggedin user
         getCurrentUser().then((res) => {
-
-            console.log(UserData);
             // if we found user the take to home screen else take to login screen
             if (res?.userId && UserData?.token) {
-                setIsLoggedIn(true)
                 getAdditionalData(UserData?.token)
-
             } else {
                 setShowSplashScreen(false)
-                setIsLoggedIn(false)
+                Actions.isLoggedIn(false)
             }
         }).catch((error) => {
             setShowSplashScreen(false)
-            setIsLoggedIn(false)
+            Actions.isLoggedIn(false)
             console.log("error", error);
         });
     }
@@ -44,7 +47,6 @@ const CheckRoutes = () => {
         try {
             // get idToken from cognito
             const { idToken } = (await fetchAuthSession()).tokens ?? {};
-            // console.log("idToken.toString()", idToken.toString());
             // pass this to in headers to get jwt token
             const config = {
                 headers: {
@@ -58,14 +60,28 @@ const CheckRoutes = () => {
                     const { data, status } = result;
                     setShowSplashScreen(false)
                     if (status == 200) {
+                        // console.log("here");
+                        Actions.isLoggedIn(true)
                         const userInformaton = await decodeToken(data?.token)
                         // console.log("userInformaton", userInformaton);
                         // after getting token store it in local storage and also set token in context
                         setLocalData(storageKeys.userData, { ...userInformaton, token: data?.token })
-                        setuserData({ ...userInformaton, token: data?.token })
+                        Actions.userData({ ...userInformaton, token: data?.token })
+                        // setuserData({ ...userInformaton, token: data?.token })
+                    } else {
+                        Actions.isLoggedIn(false)
                     }
                 })
                 .catch(async (error) => {
+                    await signOut().then(async (res) => {
+
+                    }).catch((error) => {
+
+                    })
+                    Actions.isLoggedIn(false)
+                    Actions.userData(null)
+                    await clearLocalData()
+                    Actions.showLoader(false)
                     setShowSplashScreen(false)
                     console.log("error while getting access token", error);
                 });
@@ -76,9 +92,7 @@ const CheckRoutes = () => {
     }
 
     useEffect(() => {
-        setTimeout(() => {
-            getUserData()
-        }, 1000);
+        getUserData()
     }, [])
 
     return (
@@ -91,9 +105,7 @@ const CheckRoutes = () => {
                             <PickertRoutes /> :
                             <NoRoutesScreen />
             }
-            {/* <NoRoutesScreen /> */}
         </>
-        // <PickertRoutes />
     )
 }
 

@@ -1,9 +1,9 @@
 import { View, Text, TouchableOpacity, ScrollView } from 'react-native'
-import React, { useContext, useState } from 'react'
+import React, { useCallback, useContext, useEffect, useState } from 'react'
 import WrapperContainer from '../../../components/WrapperContainer/WrapperContainer'
 import { Images } from '../../../assets/images'
 import styles from './Styles'
-import { AppContext } from '../../../context/AppContext'
+import { AppContext, useSocket } from '../../../context/AppContext'
 import { useNavigation } from '@react-navigation/native'
 import { uiColours } from '../../../utils/Styles/uiColors'
 import { moderateScale, scale, verticalScale } from 'react-native-size-matters'
@@ -17,30 +17,121 @@ import { buttonTypes } from '../../../utils/Constents/constentStrings'
 import { ReviewsData } from '../../../json/reviewData'
 import { MainRouteStrings } from '../../../utils/Constents/RouteStrings'
 import ConfirmationSheet from '../../../components/ConfirmationSheet/ConfirmationSheet'
+import { useSelector } from 'react-redux'
+import moment from 'moment'
+import OtpPopUp from '../../../components/OtpPopUp/OtpPopUp'
+import Actions from '../../../redux/Actions'
+import { showSuccessToast } from '../../../helper/showSuccessToast'
+import { showErrorToast } from '../../../helper/showErrorToast'
 
 const TripDetailsScreen = ({ route }) => {
     const { appStyles, isDark } = useContext(AppContext)
     const navigation = useNavigation()
-    const data = route.params?.data
+    const orderDeatils = route.params?.data
+    const userData = useSelector((state) => state?.userDataReducer?.userData)
 
-    const status = data?.status === "Cancelled" ? `${data?.status} by ${data?.by}` : data?.status
+    const status = orderDeatils?.status === "Cancelled" ? `${orderDeatils?.status} by ${orderDeatils?.by}` : orderDeatils?.status
+
+    const { Socket } = useSocket()
 
     const [showSheet, setShowSheet] = useState({
+        cancelOrder: false,
+        otp: false,
         completeOrder: false
     })
+    const [showOtpErr, setShowOtpErr] = useState(false)
 
     // console.log("data===>", data);
 
     const handleButtonPress = async () => {
-        if (data?.status != "Ongoing") {
-            navigation.goBack()
-        } else if (data?.status === "Ongoing") {
+        if (orderDeatils?.status === "in-transit") {
             setShowSheet({
                 ...showSheet,
                 completeOrder: true
             })
+        } else {
+            setShowSheet({
+                ...showSheet,
+                otp: true
+            })
         }
     }
+
+    const handleVerifyOtp = (otp) => {
+
+        Socket.emit("booking-start", {
+            "id": orderDeatils?._id,
+            "verificationCode": parseInt(otp)
+        })
+
+        setShowSheet({
+            ...showSheet,
+            otp: false
+        })
+    }
+
+
+    const handleBookingstartError = async (data) => {
+        console.log("booking-start-error", data);
+        // setShowOtpErr(true)
+        showErrorToast(data?.message, isDark)
+
+    }
+
+    const handleBookingstart = async (data) => {
+        console.log("booking-start-in-picker", data);
+        navigation.goBack()
+        showSuccessToast("Your booking has been started", isDark)
+    }
+
+    const handleCancelSuccess = (data) => {
+        Actions.showLoader(false)
+        console.log("request-cancel-successfully in picker", data);
+        navigation.navigate(MainRouteStrings.USER_REVIEW_WHEN_CANCELLED, {
+            data: orderDeatils
+        })
+        Actions.bookingData(null)
+        Actions.orderDeatils(null)
+    }
+
+    const handleCancelError = useCallback((data) => {
+        Actions.showLoader(false)
+        console.log("request-cancel-error in picker", data);
+
+    }, [Socket])
+
+    const handleCompleteBookingError = useCallback((data) => {
+        Actions.showLoader(false)
+        console.log("booking-complete-error", data);
+
+    }, [Socket])
+
+    const handleCompleteBookingSuccess = (data) => {
+        Actions.showLoader(false)
+        console.log("booking-complete-success", data);
+        navigation.navigate(MainRouteStrings.TRIPS_SCREEN)
+        Actions.bookingData(null)
+        Actions.orderDeatils(null)
+    }
+
+    useEffect(() => {
+        Socket.on('booking-start-error', handleBookingstartError)
+        Socket.on('booking-start-successfully', handleBookingstart)
+        Socket.on("booking-cancel-successfully", handleCancelSuccess)
+        Socket.on("booking-cancel-error", handleCancelError)
+        Socket.on("booking-complete-error", handleCompleteBookingError)
+        Socket.on("booking-complete-success", handleCompleteBookingSuccess)
+        // Socket.on('get-booking', handleGetBooking)
+
+        return () => {
+            Socket.off('booking-start-error', handleBookingstartError)
+            Socket.off('booking-start-successfully', handleBookingstart)
+            Socket.off("booking-cancel-successfully", handleCancelSuccess)
+            Socket.off("booking-cancel-error", handleCancelError)
+            Socket.off("booking-complete-succes", handleCompleteBookingSuccess)
+            // Socket.off('get-booking', handleGetBooking)
+        }
+    }, [Socket, handleBookingstartError, handleBookingstart, handleCancelSuccess, handleCancelError, handleCompleteBookingError, handleCompleteBookingSuccess])
 
     return (
         <WrapperContainer
@@ -50,26 +141,29 @@ const TripDetailsScreen = ({ route }) => {
                 navigation.goBack()
             }}
             showFooterButton={true}
-            buttonTitle={data?.status != "Ongoing" ? "Back" : "Complete Order"}
+            buttonTitle={orderDeatils?.status === "in-transit" ? "Complete Order" : "Start booking"}
             buttonActive={true}
             handleButtonPress={handleButtonPress}
             containerPadding={{ paddingHorizontal: 0 }}
         >
             <ScrollView style={{}}>
 
-                <View style={[styles.ActivitySummaryConatiner, appStyles.borderColor]}>
+                <View style={[styles.ActivitySummaryConatiner, {
+                    borderColor: !isDark ? uiColours.LIGHT_GRAY : uiColours.GRAYED_BUTTON,
+                }]}>
                     <View style={styles.vehicle}>
+                        {/* <Image source = {{uri : data?.picckrId?.vehicle?.}} /> */}
                         <Images.car height={moderateScale(34)} width={moderateScale(34)} />
                     </View>
                     <View style={{ alignItems: "flex-end" }}>
                         <Text style={appStyles.smallTextGray}>
-                            {data?.dateAndTime}
+                            {moment(orderDeatils?.createdAt).format("DD-MM-YYYY")}
                         </Text>
                         <View style={[styles.label, {
-                            backgroundColor: data?.status === "Completed" ? uiColours.LIGHT_GREEN : data?.status === "Cancelled" ? uiColours.LIGHT_RED : "#C9F3FB"
+                            backgroundColor: orderDeatils?.status === "delivered" ? uiColours.LIGHT_GREEN : orderDeatils?.status === "cancelled" ? uiColours.LIGHT_RED : "#C9F3FB"
                         }]}>
                             <Text style={[appStyles.smallTextPrimary, {
-                                color: data?.status === "Completed" ? uiColours.GREEN : data?.status === "Cancelled" ? uiColours.RED : uiColours.BLUE
+                                color: orderDeatils?.status === "delivered" ? uiColours.GREEN : orderDeatils?.status === "cancelled" ? uiColours.RED : uiColours.BLUE
 
                             }]}>
                                 {status}
@@ -78,7 +172,23 @@ const TripDetailsScreen = ({ route }) => {
                     </View>
                 </View>
 
-                {data?.status === "Cancelled" &&
+                <Ongoing
+                    orderDeatils={orderDeatils}
+                    appStyles={appStyles}
+                    navigation={navigation}
+                    isDark={isDark}
+                    userData={userData}
+                    handleJoinRoom={(data) => {
+                        Socket.emit("joinRoom", {
+                            "room": data?._id
+                        })
+                        navigation.navigate(MainRouteStrings.PICKER_MESSAGES_SCREEN, {
+                            orderDetails: data
+                        })
+                    }}
+                />
+
+                {/* {data?.status === "Cancelled" &&
                     <View style={{ paddingHorizontal: scale(16), alignItems: "center" }}>
                         <View style={[styles.profileSection, appStyles.borderColor]}>
                             <View style={styles.profileView}>
@@ -249,7 +359,7 @@ const TripDetailsScreen = ({ route }) => {
                             />
                         </View>
                     </View>}
-                </View>}
+                </View>} */}
 
             </ScrollView>
 
@@ -271,13 +381,14 @@ const TripDetailsScreen = ({ route }) => {
                 titleStyles={{ color: uiColours.PRIMARY }}
                 button1Title="Back"
                 button2Title="Yes, complete"
-                handleButton2Click={() => {
+                handleButton2Click={async () => {
                     setShowSheet({
                         ...showSheet,
                         completeOrder: false
                     })
-                    navigation.navigate(MainRouteStrings.WRITE_USER_REVIEW, {
-                        status: "Completed"
+                    await Actions.showLoader(true)
+                    await Socket.emit("booking-complete", {
+                        "id": orderDeatils?._id
                     })
                 }}
                 handleButton1Click={() => {
@@ -286,6 +397,17 @@ const TripDetailsScreen = ({ route }) => {
                         completeOrder: false
                     })
                 }}
+            />
+
+            <OtpPopUp
+                isVisible={showSheet.otp}
+                headerTitle="Transaction Pin Code"
+                title="Enter Transaction Pin Code"
+                subTitle="Ask sender for the Transaction Pin Code"
+                setShowSheet={setShowSheet}
+                handleVerifyOtp={handleVerifyOtp}
+                showOtpErr={showOtpErr}
+                setShowOtpErr={setShowOtpErr}
             />
         </WrapperContainer>
     )

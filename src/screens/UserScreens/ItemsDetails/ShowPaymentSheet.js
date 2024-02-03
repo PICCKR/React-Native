@@ -8,13 +8,15 @@ import { moderateScale, scale, verticalScale } from 'react-native-size-matters'
 import { Images } from '../../../assets/images'
 import RadioButton from '../../../components/RadioButton/RadioButton'
 import { formatAmount } from '../../../helper/formatter'
+import { useSelector } from 'react-redux'
 
 const ShowPaymentSheet = ({
   isVisible,
   setShowSheet,
   handleSelectPayment,
 }) => {
-  const { appStyles, isDark, userData } = useContext(AppContext)
+  const { appStyles, isDark, } = useContext(AppContext)
+  const userData = useSelector((state) => state?.userDataReducer?.userData)
   return (
     <BottomSheet
       isVisible={isVisible}

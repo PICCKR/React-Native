@@ -63,11 +63,11 @@ const PickerChatScreen = () => {
                 }}
                 renderItem={({ item }) => {
                     return (
-                        <TouchableOpacity 
-                        style={[styles.card, appStyles.bottomBorder]}
-                        onPress={()=> navigation.navigate(MainRouteStrings.PICKER_MESSAGES_SCREEN,{
-                            data:item
-                        })}
+                        <TouchableOpacity
+                            style={[styles.card, appStyles.bottomBorder]}
+                            onPress={() => navigation.navigate(MainRouteStrings.PICKER_MESSAGES_SCREEN, {
+                                data: item
+                            })}
                         >
                             <View style={[commonStyles.flexRowAlnCtr]}>
                                 <Images.profilePicker height={moderateScale(50)} width={moderateScale(50)} />
@@ -102,7 +102,7 @@ const PickerChatScreen = () => {
             </FlatList> :
                 <View style={{ alignItems: "center", height: '90%', justifyContent: "center" }}>
                     <Text style={appStyles.smallTextGray}>
-                        You don’t have any Rating & Reviews
+                        You don’t have any chats
                     </Text>
                 </View>
             }

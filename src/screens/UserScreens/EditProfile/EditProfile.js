@@ -24,10 +24,12 @@ import { showSuccessToast } from '../../../helper/showSuccessToast'
 import { showGeneralError } from '../../../helper/showGeneralError'
 import InputText from '../../../components/InputText/InputText'
 import { uiColours } from '../../../utils/Styles/uiColors'
+import { useSelector } from 'react-redux'
 
 const EditProfile = ({ route }) => {
     const from = route?.params?.from
-    const { appStyles, userData, isDark, setIsDark, setuserData } = useContext(AppContext)
+    const { appStyles, isDark, setIsDark, setuserData } = useContext(AppContext)
+    const userData = useSelector((state) => state?.userDataReducer?.userData)
 
     // console.log("userData =========>", userData, getLocalData(storageKeys.userData));
     const navigation = useNavigation()
@@ -102,7 +104,8 @@ const EditProfile = ({ route }) => {
             axios.put(`${endPoints.UPDATE_PROFILE}/${userData?._id}`, editFormdata, config).then((res) => {
                 if (res?.status === 200) {
                     setLocalData(storageKeys.userData, { ...res?.data?.data, token: userData?.token })
-                    setuserData({ ...res?.data?.data, token: userData?.token })
+                    Actions.userData({ ...res?.data?.data, token: userData?.token })
+                    // setuserData({ ...res?.data?.data, token: userData?.token })
                     if (from === MainRouteStrings.PICKER_PROFILE) {
                         navigation.navigate(MainRouteStrings.PICKER_PROFILE)
                     } else {

@@ -44,7 +44,7 @@ const LoginScreen = () => {
       // method to signIn pass phone number and password
       const user = await signIn(
         {
-          username: `${loginData?.selectedCountry?.code?.replace(/[()]/g, '')}${loginData?.phoneNumber.replace(/\s+/g, '')}`,
+          username: `${loginData?.selectedCountry?.code?.replace(/[()]/g, '')}${loginData?.phoneNumber?.replace(/\s+/g, '')}`,
           password: loginData?.password
         }
       );
@@ -112,23 +112,22 @@ const LoginScreen = () => {
           const { data, status } = result;
           if (status == 200) {
             const userInformaton = await decodeToken(data?.token)
-            console.log("userInformaton", userInformaton);
+            // console.log("userInformaton", userInformaton);
             // after getting token store it in local storage and also set token in context
             setLocalData(storageKeys.userData, { ...userInformaton, token: data?.token })
-            setuserData({ ...userInformaton, token: data?.token })
+            Actions.userData({ ...userInformaton, token: data?.token })
+            // setuserData({ ...userInformaton, token: data?.token })
             if (fromGuestUserScreen) {
               navigation.navigate(fromGuestUserScreen)
               setFromGuestUserScreen(null)
             } else {
-              setIsLoggedIn(true)
+              Actions.isLoggedIn(true)
               if (userInformaton?.userRole[1]) {
                 Socket.emit("driver-connect",
                   {
                     "userId": userInformaton?._id
                   }
                 )
-              } else {
-                console.log("it is user");
               }
             }
 

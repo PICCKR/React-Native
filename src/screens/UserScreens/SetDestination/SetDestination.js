@@ -21,15 +21,15 @@ const SetDestination = ({ route }) => {
   const from = route?.params?.from
   const {
     appStyles,
-    userData,
     destination,
     source,
     isDark,
     // orderDeatils,
     setOrderDeatils
   } = useContext(AppContext)
+  const userData = useSelector((state) => state?.userDataReducer?.userData)
   const orderDeatils = useSelector((state) => state?.orderDeatilsReducer?.orderDeatils)
-  // console.log("destination", orderDeatils);
+  // console.log("userData", userData);
 
   const navigation = useNavigation()
   const isFocused = useIsFocused();

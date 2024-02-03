@@ -20,9 +20,11 @@ import Actions from '../../../redux/Actions'
 import AddVehicleSheet from './AddVehicleSheet'
 import EditVehicleSheet from './EditVehicleSheet'
 import { showErrorToast } from '../../../helper/showErrorToast'
+import { useSelector } from 'react-redux'
 
 const VehicleScreen = () => {
-    const { appStyles, userData, isDark } = useContext(AppContext)
+    const { appStyles, isDark } = useContext(AppContext)
+    const userData = useSelector((state) => state?.userDataReducer?.userData)
     const navigation = useNavigation()
     const [showSheet, setShowSheet] = useState({
         add: false,

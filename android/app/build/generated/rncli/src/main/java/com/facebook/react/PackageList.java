@@ -29,6 +29,8 @@ import org.linusu.RNGetRandomValuesPackage;
 import com.imagepicker.ImagePickerPackage;
 // react-native-maps
 import com.rnmaps.maps.MapsPackage;
+// react-native-pager-view
+import com.reactnativepagerview.PagerViewPackage;
 // react-native-pure-jwt
 import com.zaguiini.RNPureJwt.RNPureJwtPackage;
 // react-native-reanimated
@@ -99,6 +101,7 @@ public class PackageList {
       new RNGetRandomValuesPackage(),
       new ImagePickerPackage(),
       new MapsPackage(),
+      new PagerViewPackage(),
       new RNPureJwtPackage(),
       new ReanimatedPackage(),
       new SafeAreaContextPackage(),

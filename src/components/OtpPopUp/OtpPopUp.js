@@ -24,7 +24,7 @@ const OtpPopUp = ({
     const [otp, setOTP] = useState('')
 
     useEffect(() => {
-        if (otp.length === 5) {
+        if (otp.length === 6) {
             setButtonActive(true)
         } else {
             setButtonActive(false)
@@ -57,18 +57,18 @@ const OtpPopUp = ({
                     }}
                     onCodeChanged={(code) => {
                         setOTP(code)
-                        if(showOtpErr){
+                        if (showOtpErr) {
                             setShowOtpErr(false)
                         }
                     }}
                     autoFocusOnLoad={false}
-                    pinCount={5}
+                    pinCount={6}
                     codeInputFieldStyle={[styles.underlineStyleBase, {
                         borderColor: showOtpErr ? uiColours.RED : uiColours.LIGHT_GRAY,
                     }]}
                     codeInputHighlightStyle={styles.borderStyleHighLighted}
                     style={[styles.otpStyles]}
-                    secureTextEntry
+                // secureTextEntry
                 />
                 {
                     showOtpErr && <Text style={[appStyles.smallTextGray, { color: uiColours.RED }]}>
@@ -92,7 +92,7 @@ const OtpPopUp = ({
             <SheetFooter
                 buttonActive={buttonActive}
                 buttonTitle="Confirm"
-                handleButtonPress={handleVerifyOtp}
+                handleButtonPress={() => handleVerifyOtp(otp)}
             />
         </BottomSheet>
     )

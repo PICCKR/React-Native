@@ -14,24 +14,26 @@ import { tostMessagetypes } from '../../../utils/Constents/constentStrings';
 import useBackButton from '../../../customHooks/useBackButton';
 import { useNavigation } from '@react-navigation/native';
 import { MainRouteStrings } from '../../../utils/Constents/RouteStrings';
+import { useSelector } from 'react-redux';
 
 const PickupScreen = ({ route }) => {
 
-    const destination = route?.params?.geometry
+    // const orderDetails = route?.params?.orderDetails
+    const orderDetails = useSelector((state) => state?.bookingDataReducer?.bookingData)
 
-    const { appStyles, selectedVehicle, isDark, source, setSource, setDestination } = useContext(AppContext)
-    // console.log("origin === > ",source)
+    const { appStyles, isDark, selectedVehicle } = useContext(AppContext)
+
+
     const navigation = useNavigation()
-    const origin1 = { latitude: 12.308905854320136, longitude: 76.63889153653533 };
-    // const origin1 = { latitude: source?.lat, longitude: source?.lng };
-    // const destination = { geometry.lat: 12.306077759217404, geometry: 76.65507293749431 };
 
+    const source = { latitude: orderDetails?.requestId?.pickupLocation?.coordinates[0], longitude: orderDetails?.requestId?.pickupLocation?.coordinates[1] };
+    const destination = { latitude: orderDetails?.requestId?.dropOffLocation?.coordinates[0], longitude: orderDetails?.requestId?.dropOffLocation?.coordinates[1] };
+
+    console.log("orderDetails =====>", source, destination);
     // Calculate deltas based on origin and destination
     const calculateMapDeltas = () => {
-
-        const { isDark } = useContext(AppContext)
-        const latitudes = [origin1.latitude, destination.latitude];
-        const longitudes = [origin1.longitude, destination.longitude];
+        const latitudes = [orderDetails?.requestId?.dropOffLocation?.coordinates[0], orderDetails?.requestId?.pickupLocation?.coordinates[0]];
+        const longitudes = [orderDetails?.requestId?.dropOffLocation?.coordinates[1], orderDetails?.requestId?.pickupLocation?.coordinates[1]];
 
         const minLat = Math.min(...latitudes);
         const maxLat = Math.max(...latitudes);
@@ -41,6 +43,8 @@ const PickupScreen = ({ route }) => {
         const LATITUDE_DELTA = maxLat - minLat + 0.02; // Adjust as needed
         const LONGITUDE_DELTA = maxLng - minLng + 0.02; // Adjust as needed
 
+        // console.log("LATITUDE_DELTA", LATITUDE_DELTA, LONGITUDE_DELTA);
+
         return {
             latitude: (minLat + maxLat) / 2,
             longitude: (minLng + maxLng) / 2,
@@ -48,8 +52,6 @@ const PickupScreen = ({ route }) => {
             LONGITUDE_DELTA,
         };
     };
-
-    const pinData = [2, 3, 5, 6, 7, 8]
 
     const { latitude, longitude, LATITUDE_DELTA, LONGITUDE_DELTA } = calculateMapDeltas();
 
@@ -64,16 +66,6 @@ const PickupScreen = ({ route }) => {
 
     useBackButton(() => {
         navigation.goBack()
-        setSource({
-            lat: "",
-            lng: "",
-            location: "Current location"
-        })
-        setDestination({
-            lat: "",
-            lng: "",
-            location: ""
-        })
         return true
     })
 
@@ -86,13 +78,13 @@ const PickupScreen = ({ route }) => {
                     latitudeDelta: LATITUDE_DELTA,
                     longitudeDelta: LONGITUDE_DELTA,
                     latitude: latitude,
-                    longitude: longitude,
+                    longitude: longitude
                 }}
                 mapType={"standard"}
                 followsUserLocation={true}
             >
                 <MapViewDirections
-                    origin={origin1}
+                    origin={source}
                     destination={destination}
                     apikey={GOOGLE_MAP_API_KEY}
                     mode={"DRIVING"}
@@ -104,7 +96,7 @@ const PickupScreen = ({ route }) => {
                     }}
                 />
                 <Marker
-                    coordinate={destination}
+                    coordinate={source}
                     title={""}
                     description={""}
                     style={{ height: moderateScale(24), width: moderateScale(24), borderWidth: 1 }}
@@ -114,14 +106,15 @@ const PickupScreen = ({ route }) => {
                 <Marker
                     title={""}
                     description={""}
-                    coordinate={origin1}
+                    coordinate={destination}
                     style={{ height: moderateScale(30), width: moderateScale(30), borderWidth: 1 }}
                 />
-            </MapView >
+            </MapView>
+
             <BottomView
                 appStyles={appStyles}
                 isDark={isDark}
-                pinData={pinData}
+                orderDetails={orderDetails}
                 selectedVehicle={selectedVehicle}
                 handleCancelOrder={() => {
                     navigation.navigate(MainRouteStrings.PICKER_REVIEW_WHEN_CANCELLED)

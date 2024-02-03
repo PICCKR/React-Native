@@ -7,6 +7,7 @@ import OTPInputView from '@twotalltotems/react-native-otp-input'
 import styles from './Styles'
 import { uiColours } from '../../../utils/Styles/uiColors'
 import { AppContext } from '../../../context/AppContext'
+import { useSelector } from 'react-redux'
 
 const OtpPopUp = ({
     isVisible,
@@ -15,7 +16,8 @@ const OtpPopUp = ({
     appStyles,
     isDark
 }) => {
-    const {userData} = useContext(AppContext)
+    const { } = useContext(AppContext)
+    const userData = useSelector((state) => state?.userDataReducer?.userData)
     const [buttonActive, setButtonActive] = useState(false)
     const [otp, setOTP] = useState('')
 
@@ -55,12 +57,12 @@ const OtpPopUp = ({
                     onCodeFilled={(code) => {
                         setOTP(code)
                     }}
-                    autoFocusOnLoad = {false}
-                    selectionColor = {uiColours.LIGHT_GRAY}
+                    autoFocusOnLoad={false}
+                    selectionColor={uiColours.LIGHT_GRAY}
                     pinCount={5}
-                    codeInputFieldStyle={[styles.underlineStyleBase,{
-                        color:isDark? uiColours.WHITE_TEXT : uiColours.BLACK_TEXT
-                      }]}
+                    codeInputFieldStyle={[styles.underlineStyleBase, {
+                        color: isDark ? uiColours.WHITE_TEXT : uiColours.BLACK_TEXT
+                    }]}
                     codeInputHighlightStyle={styles.borderStyleHighLighted}
                     style={[styles.otpStyles]}
                     secureTextEntry
@@ -80,10 +82,10 @@ const OtpPopUp = ({
                 </View>
             </ScrollView>
             <SheetFooter
-                    buttonActive={buttonActive}
-                    buttonTitle="Confirm"
-                    handleButtonPress={handleVerifyOtp}
-                />
+                buttonActive={buttonActive}
+                buttonTitle="Confirm"
+                handleButtonPress={handleVerifyOtp}
+            />
         </BottomSheet>
     )
 }

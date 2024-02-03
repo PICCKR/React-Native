@@ -9,25 +9,34 @@ import { useNavigation } from '@react-navigation/native'
 import { MainRouteStrings } from '../../../utils/Constents/RouteStrings'
 import { AppContext } from '../../../context/AppContext'
 import { formatAmount, formatter } from '../../../helper/formatter'
+import Actions from '../../../redux/Actions'
+import { useSelector } from 'react-redux'
 
 const Header = ({
     appStyles,
     isDark,
 }) => {
     // console.log("userData", userData);
-    const { setuserData, userData } = useContext(AppContext)
+    const { setuserData } = useContext(AppContext)
+    const userData = useSelector((state) => state?.userDataReducer?.userData)
     const navigation = useNavigation()
     const [showSheet, setShowSheet] = useState(false)
 
     const handleWithdraw = (data, amount) => {
         // console.log("data====>", data, amount);
         if (data?.status === "successful") {
-            setuserData({
+            Actions.userData({
                 ...userData, wallet: {
                     ...userData?.wallet,
                     balance: parseInt(userData?.wallet?.balance) - parseInt(amount)
                 }
             })
+            // setuserData({
+            //     ...userData, wallet: {
+            //         ...userData?.wallet,
+            //         balance: parseInt(userData?.wallet?.balance) - parseInt(amount)
+            //     }
+            // })
         } else {
 
         }
@@ -57,7 +66,7 @@ const Header = ({
                         <Text style={[appStyles.smallTextBlackBold, {
                             color: uiColours.BLACK_TEXT
                         }]} >
-                            {formatter.format(userData?.wallet?.balance)}
+                            {formatAmount(userData?.wallet?.balance)}
                             {/* ₦{userData?.wallet?.balance} */}
                         </Text>
                     </View>

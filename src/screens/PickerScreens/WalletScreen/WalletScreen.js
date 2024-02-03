@@ -15,9 +15,11 @@ import { endPoints } from '../../../configs/apiUrls'
 import Actions from '../../../redux/Actions'
 import { showSuccessToast } from '../../../helper/showSuccessToast'
 import { showErrorToast } from '../../../helper/showErrorToast'
+import { useSelector } from 'react-redux'
 
 const WalletScreen = () => {
-    const { appStyles, userData, setuserData, isDark } = useContext(AppContext)
+    const { appStyles, setuserData, isDark } = useContext(AppContext)
+    const userData = useSelector((state) => state?.userDataReducer?.userData)
     const navigation = useNavigation()
     const [showSheet, setShowSheet] = useState({
         withdraw: false,

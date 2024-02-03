@@ -17,6 +17,7 @@ import { GOOGLE_MAP_API_KEY } from '../../../configs/google_map_api_key'
 import { uiStrings } from '../../../utils/Constents/uiStrings'
 import SheetFooter from '../../../components/SheetFooter/SheetFooter'
 import AddAddressSheet from '../../UserScreens/AddressScreen/AddAddressSheet'
+import Actions from '../../../redux/Actions'
 
 
 const PickerFindDestination = () => {
@@ -83,8 +84,8 @@ const PickerFindDestination = () => {
             homeNumber: addressData?.homeNumber,
             location: addressData?.location,
         }
-
-        setuserData({ ...userData, address: [...userData?.address, newAddress] })
+        Actions.userData({ ...userData, address: [...userData?.address, newAddress] })
+        // setuserData({ ...userData, address: [...userData?.address, newAddress] })
         setLocalData(storageKeys.userData, { ...userData, address: [...userData?.address, newAddress] })
         setShowSheet(false)
     }
@@ -177,8 +178,8 @@ const PickerFindDestination = () => {
                             <View style={[styles.inputView]}>
                                 <Images.source height={moderateScale(16)} width={moderateScale(16)} />
                                 <TouchableOpacity
-                                    style={[styles.locationView, commonStyles.bottomBorder,{
-                                        borderColor:isDark ? uiColours.GRAYED_BUTTON : uiColours.LIGHT_GRAY
+                                    style={[styles.locationView, commonStyles.bottomBorder, {
+                                        borderColor: isDark ? uiColours.GRAYED_BUTTON : uiColours.LIGHT_GRAY
                                     }]}
                                     onPress={() => {
                                         setAction("source")
@@ -229,9 +230,9 @@ const PickerFindDestination = () => {
                         <View style={commonStyles.flexRowAlnCtr}>
                             <TouchableOpacity
                                 style={[styles.AddButton, {
-                                     marginLeft: scale(16),
-                                     borderColor:isDark ? uiColours.GRAYED_BUTTON : uiColours.LIGHT_GRAY
-                                    }]}
+                                    marginLeft: scale(16),
+                                    borderColor: isDark ? uiColours.GRAYED_BUTTON : uiColours.LIGHT_GRAY
+                                }]}
                                 onPress={() => {
                                     setShowSheet({
                                         ...showSheet,
@@ -257,8 +258,8 @@ const PickerFindDestination = () => {
                                         return (
                                             <TouchableOpacity
                                                 key={item?.id}
-                                                style={[styles.AddButton,{
-                                                    borderColor:isDark ? uiColours.GRAYED_BUTTON : uiColours.LIGHT_GRAY
+                                                style={[styles.AddButton, {
+                                                    borderColor: isDark ? uiColours.GRAYED_BUTTON : uiColours.LIGHT_GRAY
                                                 }]}
                                                 onPress={() => {
                                                     setDestination({
@@ -354,7 +355,7 @@ const PickerFindDestination = () => {
                     // return
                     navigation.navigate(MainRouteStrings.SELECT_ADDRRESS_FROM_MAP, {
                         toScreen: MainRouteStrings.PICKER_HOME_SCREEN,
-                        action:action,
+                        action: action,
                         geometry: (destination?.lat && destination?.lng) ? destination : source
                     })
                 }}

@@ -20,9 +20,11 @@ import Actions from '../../../redux/Actions'
 import { showErrorToast } from '../../../helper/showErrorToast'
 import AddAccount from './AddAccount'
 import EditBankAccount from './EditBankAccount'
+import { useSelector } from 'react-redux'
 
 const BackAccounts = () => {
- const { appStyles, userData, isDark } = useContext(AppContext)
+ const { appStyles, isDark } = useContext(AppContext)
+ const userData = useSelector((state) => state?.userDataReducer?.userData)
  const navigation = useNavigation()
  const [showSheet, setShowSheet] = useState({
   add: false,

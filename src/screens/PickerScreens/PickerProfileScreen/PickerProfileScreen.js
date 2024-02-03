@@ -16,12 +16,15 @@ import { uiColours } from '../../../utils/Styles/uiColors'
 import { clearLocalData, setLocalData } from '../../../helper/AsyncStorage'
 import { storageKeys } from '../../../helper/AsyncStorage/storageKeys'
 import SelectAmountPopup from '../../../components/SelectAmountPopup/SelectAmountPopup'
+import Actions from '../../../redux/Actions'
+import { useSelector } from 'react-redux'
 
 
 const PickerProfileScreen = () => {
 
-  const { appStyles, userData, isDark, setIsDark, setuserData } = useContext(AppContext)
+  const { appStyles, isDark, setIsDark, setuserData } = useContext(AppContext)
   // console.log("userData", userData);
+  const userData = useSelector((state) => state?.userDataReducer?.userData)
   const navigation = useNavigation()
 
   const [profileInformation, setProfileInformation] = useState({
@@ -186,7 +189,8 @@ const PickerProfileScreen = () => {
                           <Switch
                             initialValue={true}
                             handleSwitchClicked={(status) => {
-                              setuserData({ ...userData, routeType: "user" })
+                              Actions.userData({ ...userData, routeType: "user" })
+                              // setuserData({ ...userData, routeType: "user" })
                             }}
                           />
                         }

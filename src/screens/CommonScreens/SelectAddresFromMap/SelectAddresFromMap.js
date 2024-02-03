@@ -27,7 +27,7 @@ const SelectAddresFromMap = ({ route }) => {
     source
   } = useContext(AppContext)
 
-  // console.log("source===>", geometry, action);
+  console.log("source===>", geometry, action);
 
   const navigation = useNavigation()
 
@@ -36,7 +36,11 @@ const SelectAddresFromMap = ({ route }) => {
   const LATITUDE_DELTA = 0.04;
   const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
 
-  const [selectedAddress, setSelectedAddress] = useState({})
+  const [selectedAddress, setSelectedAddress] = useState({
+    location: (toScreen === MainRouteStrings.SET_DESTINATION || action === "destination") ? destination?.location : source?.location,
+    lat: "",
+    lng: ""
+  })
 
   const [mapView, setMapView] = useState('standard')
 
@@ -52,34 +56,6 @@ const SelectAddresFromMap = ({ route }) => {
           lng: coords.longitude,
           location: adddress
         })
-        if (toScreen === MainRouteStrings.FIND_DESTINATON) {
-          setSource({
-            lat: coords.latitude,
-            lng: coords.longitude,
-            location: adddress
-          })
-        } else if (toScreen === MainRouteStrings.SET_DESTINATION) {
-          // console.log('lat lan', json.results[0]);
-          setDestination({
-            ...destination,
-            lat: coords.latitude,
-            lng: coords.longitude,
-            location: adddress
-          })
-        } else if (action === "source") {
-          setSource({
-            lat: coords.latitude,
-            lng: coords.longitude,
-            location: adddress
-          })
-        } else if (action === "destination") [
-          setDestination({
-            ...destination,
-            lat: coords.latitude,
-            lng: coords.longitude,
-            location: adddress
-          })
-        ]
 
       })
       .catch(function (error) {
@@ -98,8 +74,8 @@ const SelectAddresFromMap = ({ route }) => {
         initialRegion={{
           latitudeDelta: LATITUDE_DELTA,
           longitudeDelta: LONGITUDE_DELTA,
-          latitude: geometry?.lat ? geometry?.lat : currentLocation?.lat,
-          longitude: geometry?.lng ? geometry?.lng : currentLocation?.lng
+          latitude: geometry?.lat ? geometry?.lat : currentLocation?.lat ? currentLocation?.lat : 40.74386765542541,
+          longitude: geometry?.lng ? geometry?.lng : currentLocation?.lng ? currentLocation?.lng : -74.17151573273323
         }}
         mapType={mapView}
         showsUserLocation={true}
@@ -134,9 +110,36 @@ const SelectAddresFromMap = ({ route }) => {
       </TouchableOpacity>
 
       <BottomView
-        destination={(toScreen === MainRouteStrings.SET_DESTINATION || action === "destination") ? destination : source}
+        address={selectedAddress?.location}
         appStyles={appStyles}
         handleConfirm={() => {
+          if (toScreen === MainRouteStrings.FIND_DESTINATON) {
+            setSource({
+              lat: selectedAddress.lat,
+              lng: selectedAddress.lng,
+              location: selectedAddress?.location
+            })
+          } else if (toScreen === MainRouteStrings.SET_DESTINATION) {
+            // console.log('lat lan', json.results[0]);
+            setDestination({
+              lat: selectedAddress.lat,
+              lng: selectedAddress.lng,
+              location: selectedAddress?.location
+            })
+          } else if (action === "source") {
+            setSource({
+              lat: selectedAddress.lat,
+              lng: selectedAddress.lng,
+              location: selectedAddress?.location
+            })
+          } else if (action === "destination") {
+            setDestination({
+              lat: selectedAddress.lat,
+              lng: selectedAddress.lng,
+              location: selectedAddress?.location
+            })
+          }
+
           navigation.navigate(toScreen, {
             addresData: selectedAddress
           })

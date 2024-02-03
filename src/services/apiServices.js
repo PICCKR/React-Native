@@ -49,7 +49,7 @@ export async function apiReq(
                 const data1 = error?.response ? error?.response : error;
                 if (data1) {
                     return res(data1)
-                }else{
+                } else {
                     return res(error)
                 }
             });

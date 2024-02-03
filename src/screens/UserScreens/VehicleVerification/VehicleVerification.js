@@ -11,10 +11,12 @@ import { uiColours } from '../../../utils/Styles/uiColors'
 import { MainRouteStrings } from '../../../utils/Constents/RouteStrings'
 import CheckBox from '../../../components/CheckBox/CheckBox'
 import styles from './Styles'
+import { useSelector } from 'react-redux'
 
 const VehicleVerification = ({ route }) => {
     const data = route?.params?.data
-    const { appStyles, userData } = useContext(AppContext)
+    const { appStyles } = useContext(AppContext)
+    const userData = useSelector((state) => state?.userDataReducer?.userData)
     const navigation = useNavigation()
 
     const [buttonActive, setButtonActive] = useState(false)

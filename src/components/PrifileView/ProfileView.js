@@ -4,21 +4,24 @@ import { Images } from '../../assets/images'
 import { moderateScale } from 'react-native-size-matters'
 import Styles from './Styles'
 import { AppContext } from '../../context/AppContext'
+import { useSelector } from 'react-redux'
 
 const ProfileView = ({
     size = 80,
     showVehicle = false,
     profileViewStyles,
-    userData,
     showEdit,
     handleEdit = () => { },
     hasBottomLine = true,
     profileImg,
+    userData,
+    profileSection
 }) => {
     const { appStyles } = useContext(AppContext)
+    // const userData = useSelector((state) => state?.userDataReducer?.userData)
     // console.log("lastName", userData?.picture);
     return (
-        <View style={[Styles.profileSection, hasBottomLine && appStyles.bottomBorder]}>
+        <View style={[Styles.profileSection, hasBottomLine && appStyles.bottomBorder, profileSection]}>
             <View style={[Styles.profileView, {
                 height: moderateScale(size),
                 width: moderateScale(size),

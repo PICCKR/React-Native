@@ -23,10 +23,12 @@ import { fetchAuthSession } from '@aws-amplify/auth'
 import { decodeToken } from '../../../helper/decodeToken'
 import { setLocalData } from '../../../helper/AsyncStorage'
 import { storageKeys } from '../../../helper/AsyncStorage/storageKeys'
+import { useSelector } from 'react-redux'
 
 const BecomePicker = ({ route }) => {
     const from = route?.params?.from
-    const { appStyles, userData, isDark, vehicleType, setuserData } = useContext(AppContext)
+    const { appStyles, isDark, vehicleType, setuserData } = useContext(AppContext)
+    const userData = useSelector((state) => state?.userDataReducer?.userData)
     // console.log("userData", userData);
     const navigation = useNavigation()
 
@@ -110,7 +112,8 @@ const BecomePicker = ({ route }) => {
                         const userInformaton = await decodeToken(data?.token)
                         // after getting token store it in local storage and also set token in context
                         setLocalData(storageKeys.userData, { ...userInformaton, token: data?.token })
-                        setuserData({ ...userInformaton, token: data?.token })
+                        Actions.userData({ ...userInformaton, token: data?.token })
+                        // setuserData({ ...userInformaton, token: data?.token })
                         setButtonActive(false)
                         setStatus("waiting")
 

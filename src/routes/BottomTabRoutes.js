@@ -3,6 +3,7 @@ import { useNavigation } from "@react-navigation/native";
 import { useContext } from "react";
 import { Alert, Text } from "react-native";
 import { moderateScale, scale } from "react-native-size-matters";
+import { useSelector } from "react-redux";
 import { screens } from ".";
 import { Images } from "../assets/images";
 import { AppContext } from "../context/AppContext";
@@ -14,7 +15,8 @@ const Tab = createBottomTabNavigator();
 
 const BottomTabRoutes = () => {
 
-    const { appStyles, userData, setuserData, isDark, setIsLoggedIn } = useContext(AppContext)
+    const { appStyles, setuserData, isDark, setIsLoggedIn } = useContext(AppContext)
+    const userData = useSelector((state) => state?.userDataReducer?.userData)
     const navigation = useNavigation()
 
     // Function to handle tab press based on user data

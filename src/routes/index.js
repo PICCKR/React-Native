@@ -50,6 +50,14 @@ import PickerChatScreen from "../screens/PickerScreens/PickerChatScreen/PickerCh
 import VehicleScreen from "../screens/PickerScreens/VehicleScreen/VehicleScreen";
 import UserWalletScreen from "../screens/UserScreens/UserWalletScreen/UserWalletScreen";
 import BackAccounts from "../screens/PickerScreens/BackAccounts/BackAccounts";
+import UserReviewWhenCancelled from "../screens/PickerScreens/UserReviewWhenCancelled/UserReviewWhenCancelled";
+import SetLocationScreen from "../screens/CommonScreens/SetLocationScreen/SetLocationScreen";
+import OnGoingTrips from "../screens/UserScreens/ActivityScreen/OnGoingTrips";
+import UpcomingTrips from "../screens/UserScreens/ActivityScreen/UpcomingTrips";
+import RecentTrips from "../screens/UserScreens/ActivityScreen/RecentTrips";
+import PickerOnGoingTrips from "../screens/PickerScreens/TripScreen/PickerOnGoingTrips";
+import PickerRecentTrips from "../screens/PickerScreens/TripScreen/PickerRecentTrips";
+import RequestTab from "../screens/PickerScreens/TripScreen/RequestTab";
 
 
 
@@ -69,6 +77,9 @@ export const screens = {
     BOTTOM_TAB_ROUTES: BottomTabRoutes,
     FAVORITES_SCREEN: FavoritesScreen,
     ACTIVITY_SCREEN: ActivityScreen,
+    ONGOING_TRIPS: OnGoingTrips,
+    UPCOMING_TRIPS: UpcomingTrips,
+    RECENT_TRIPS: RecentTrips,
     BECOME_PICKER: BecomePicker,
     VEHICLE_VERIFICATION: VehicleVerification,
     PICKER_ACCOUNT: PickerAccount,
@@ -96,6 +107,9 @@ export const screens = {
     PICKER_HOME_SCREEN: PickerHomeScreen,
     PICKER_PROFILE: PickerProfileScreen,
     TRIPS_SCREEN: TripScreen,
+    PICKER_ON_GOING_TRIPS: PickerOnGoingTrips,
+    PICKER_RECENT_TRIPS: PickerRecentTrips,
+    REQUEST_TAB: RequestTab,
     PICKER_MESSAGES_SCREEN: PickerMessagesScreen,
     PICKER_FIND_DESTINATION: PickerFindDestination,
     PICKER_ORDER_HISTORY: PickerOrderHistory,
@@ -106,5 +120,7 @@ export const screens = {
     TRIP_DETAILS_SCREEN: TripDetailsScreen,
     PICKER_CHAT_SCREEN: PickerChatScreen,
     VEHICLE_SCREEN: VehicleScreen,
-    BANK_ACCOUNT: BackAccounts
+    BANK_ACCOUNT: BackAccounts,
+    USER_REVIEW_WHEN_CANCELLED: UserReviewWhenCancelled,
+    SET_LOCATION_SCREEN: SetLocationScreen
 }

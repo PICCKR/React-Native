@@ -1,5 +1,5 @@
 import { View, Text, Image, TextInput, TouchableOpacity } from 'react-native'
-import React, { useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import styles from './Styles'
 import { commonStyles } from '../../../utils/Styles/CommonStyles'
 import { Images } from '../../../assets/images'
@@ -14,16 +14,21 @@ import CustomButton from '../../../components/Button/CustomButton'
 import { buttonTypes } from '../../../utils/Constents/constentStrings'
 import ConfirmationSheet from '../../../components/ConfirmationSheet/ConfirmationSheet'
 import OtpPopUp from '../../../components/OtpPopUp/OtpPopUp'
+import { formatAmount } from '../../../helper/formatter'
+import { useSocket } from '../../../context/AppContext'
+import { showErrorToast } from '../../../helper/showErrorToast'
+import Actions from '../../../redux/Actions'
 
 const BottomView = ({
     appStyles,
     data,
-    pinData,
     selectedVehicle,
     handleCancelOrder,
-    isDark
+    isDark,
+    orderDetails
 }) => {
     const navigation = useNavigation()
+    const { Socket } = useSocket()
     const [showSheet, setShowSheet] = useState({
         cancelOrder: false,
         otp: false,
@@ -33,18 +38,82 @@ const BottomView = ({
     const [tripStatus, setTripStatus] = useState(1)
 
     const handleVerifyOtp = (otp) => {
+
+        Socket.emit("booking-start", {
+            "id": orderDetails?._id,
+            "verificationCode": parseInt(otp)
+        })
+
         setShowSheet({
             ...showSheet,
             otp: false
         })
-        setTripStatus(3)
     }
 
+    const handleBookingstartError = async (data) => {
+        console.log("booking-start-error", data);
+        setShowOtpErr(true)
+        // showErrorToast(data?.message, isDark)
+    }
+
+    const handleBookingstart = async (data) => {
+        console.log("booking-start-in-picker", data);
+        setTripStatus(2)
+    }
+
+    const handleCancelSuccess = (data) => {
+        Actions.showLoader(false)
+        console.log("request-cancel-successfully in picker", data);
+        navigation.navigate(MainRouteStrings.USER_REVIEW_WHEN_CANCELLED, {
+            data: orderDetails
+        })
+
+    }
+
+    const handleCancelError = useCallback((data) => {
+        Actions.showLoader(false)
+        console.log("request-cancel-error in picker", data);
+
+    }, [Socket])
+
+    const handleCompleteBookingError = useCallback((data) => {
+        Actions.showLoader(false)
+        console.log("booking-complete-error", data);
+
+    }, [Socket])
+
+    const handleCompleteBookingSuccess = (data) => {
+        Actions.showLoader(false)
+        console.log("booking-complete-success", data);
+        navigation.navigate(MainRouteStrings.TRIPS_SCREEN)
+        Actions.bookingData(null)
+        Actions.orderDeatils(null)
+    }
+
+    // const handleGetBooking = (data) => {
+    //     console.log("get-booking-in-picker", data)
+    //     // Actions.bookingData(data?.data)
+    // }
+
+
     useEffect(() => {
-        setTimeout(() => {
-            setTripStatus(2)
-        }, 2000);
-    }, [])
+        Socket.on('booking-start-error', handleBookingstartError)
+        Socket.on('booking-start-successfully', handleBookingstart)
+        Socket.on("booking-cancel-successfully", handleCancelSuccess)
+        Socket.on("booking-cancel-error", handleCancelError)
+        Socket.on("booking-complete-error", handleCompleteBookingError)
+        Socket.on("booking-complete-success", handleCompleteBookingSuccess)
+        // Socket.on('get-booking', handleGetBooking)
+
+        return () => {
+            Socket.off('booking-start-error', handleBookingstartError)
+            Socket.off('booking-start-successfully', handleBookingstart)
+            Socket.off("booking-cancel-successfully", handleCancelSuccess)
+            Socket.off("booking-cancel-error", handleCancelError)
+            Socket.off("booking-complete-successr", handleCompleteBookingSuccess)
+            // Socket.off('get-booking', handleGetBooking)
+        }
+    }, [Socket, handleBookingstartError, handleBookingstart, handleCancelSuccess, handleCancelError, handleCompleteBookingError, handleCompleteBookingSuccess])
 
     return (
         <DragableBottomSheet
@@ -53,14 +122,18 @@ const BottomView = ({
             <View style={[styles.sheetHeader, {
                 borderColor: isDark ? uiColours.GRAYED_BUTTON : uiColours.LIGHT_GRAY
             }]}>
+                <TouchableOpacity
+                    onPress={() => {
+                        navigation.goBack()
+                    }}
+                >
+                    <Images.backArrow />
+                </TouchableOpacity>
                 <Text style={[appStyles.mediumTextPrimary, {
                     flex: 1,
                 }]}>
-                    You are heading to the pick-up address
+                    {tripStatus === 1 ? "You are heading to the pick-up address" : "You are heading to the destination"}
                 </Text>
-                <View style={styles.timeView}>
-                    <Text style={appStyles.smallTextBlack}>5 min</Text>
-                </View>
             </View>
             <ScrollView
                 nestedScrollEnabled
@@ -72,10 +145,10 @@ const BottomView = ({
                     <View style={{ borderWidth: moderateScale(1), borderColor: isDark ? uiColours.GRAYED_BUTTON : uiColours.LIGHT_GRAY, borderRadius: moderateScale(6), padding: moderateScale(16) }}>
                         <View style={[styles.pickerProfile, appStyles.borderColor]}>
                             <View style={styles.pickerProfileView}>
-                                {data?.profileImg ? <Image source={{ uri: data.profileImg }} /> : <Images.profile height={moderateScale(50)} width={moderateScale(50)} />}
+                                {orderDetails?.picckrId?.picture ? <Image source={{ uri: orderDetails?.picckrId?.picture }} /> : <Images.profile height={moderateScale(45)} width={moderateScale(45)} />}
                             </View>
                             <View>
-                                <Text style={appStyles?.mediumTextPrimaryBold}>Cooper Septimus</Text>
+                                <Text style={appStyles?.mediumTextPrimaryBold}>{orderDetails?.userId?.firstName} {orderDetails?.userId?.lastName}</Text>
                                 <View style={commonStyles.flexRowAlnCtr}>
                                     <Images.star />
                                     <Text style={appStyles.smallTextGray}>{4.9}</Text>
@@ -94,14 +167,14 @@ const BottomView = ({
 
                             <CustomButton
                                 buttonStyle={{ width: "100%" }}
-                                title={tripStatus === 1 ? "Arrived at pick-up address" : tripStatus === 2 ? "Go to destination address" : "Complete Order"}
+                                title={orderDetails?.status === "pending" ? "Go to destination address" : "Complete Order"}
                                 NavigationHandle={() => {
-                                    if (tripStatus === 2) {
+                                    if (orderDetails?.status === "pending") {
                                         setShowSheet({
                                             ...showSheet,
                                             otp: true
                                         })
-                                    }else if(tripStatus === 3){
+                                    } else {
                                         setShowSheet({
                                             ...showSheet,
                                             completeOrder: true
@@ -114,7 +187,7 @@ const BottomView = ({
                     </View>
                 </View>
 
-                <View style={[styles.sectionView, appStyles.borderColor]}>
+                {/* <View style={[styles.sectionView, appStyles.borderColor]}>
                     <View style={[styles.pinCodeInnerView, {
                         borderColor: isDark ? uiColours.GRAYED_BUTTON : uiColours.LIGHT_GRAY
                     }]}>
@@ -134,7 +207,7 @@ const BottomView = ({
                             </Text>
                         </View>
                     </View>
-                </View>
+                </View> */}
 
                 <View style={[styles.sectionView, appStyles.borderColor]}>
                     <View style={[styles.pinCodeInnerView, {
@@ -147,7 +220,7 @@ const BottomView = ({
                         <InputText
                             hasTitle
                             inputTitle="Package type"
-                            value={"Electronics"}
+                            value={(orderDetails?.requestId?.packageId)?.name}
                             textBox={{ color: uiColours.GRAY_TEXT }}
                             editable={false}
                             inputContainer={{ width: '100%' }}
@@ -156,7 +229,7 @@ const BottomView = ({
                         <InputText
                             hasTitle
                             inputTitle="Extimates item weight (kg)"
-                            value={"5"}
+                            value={orderDetails?.requestId?.parcelDescription?.weight}
                             textBox={{ color: uiColours.GRAY_TEXT }}
                             editable={false}
                             inputContainer={{ width: '100%', marginTop: verticalScale(16) }}
@@ -185,17 +258,15 @@ const BottomView = ({
                                         Sender
                                     </Text>
                                     <Text style={appStyles.smallTextGray}>
-                                        Jeremy Jason
+                                        {orderDetails?.requestId?.sender?.name}
                                     </Text>
                                     <Text style={appStyles.smallTextGray}>
-                                        212-111-2222
+                                        {orderDetails?.requestId?.pickupAddress}
                                     </Text>
-                                    <Text style={appStyles.smallTextGray}>
-                                        Lesley University
-                                    </Text>
-                                    <Text style={appStyles.smallTextGray}>
-                                        29 Everett St, Cambridge, MA 02138
-                                    </Text>
+                                    {/* <Text style={appStyles.smallTextGray}>
+                                        {destination?.location}
+                                    </Text> */}
+
                                 </View>
                             </View>
 
@@ -206,17 +277,14 @@ const BottomView = ({
                                         Recipient
                                     </Text>
                                     <Text style={appStyles.smallTextGray}>
-                                        John Cena
+                                        {orderDetails?.requestId?.recipeint?.name}
                                     </Text>
                                     <Text style={appStyles.smallTextGray}>
-                                        212-111-2222
+                                        {orderDetails?.requestId?.dropOffAddress}
                                     </Text>
-                                    <Text style={appStyles.smallTextGray}>
-                                        Harvard University
-                                    </Text>
-                                    <Text style={appStyles.smallTextGray}>
-                                        Massachusetts Hall, Cambridge, MA 02138, United States of America
-                                    </Text>
+                                    {/* <Text style={appStyles.smallTextGray}>
+                                        {source?.location}
+                                    </Text> */}
                                 </View>
                             </View>
                         </View>
@@ -238,7 +306,7 @@ const BottomView = ({
                                 Applicable Fees
                             </Text>
                             <Text style={appStyles.smallTextGray}>
-                                $100
+                                {formatAmount((orderDetails?.requestId?.requestAmount) - (orderDetails?.requestId?.requestAmount * 0.075))}
                             </Text>
                         </View>
 
@@ -247,7 +315,7 @@ const BottomView = ({
                                 Product Taxes (estimated)
                             </Text>
                             <Text style={appStyles.smallTextGray}>
-                                $10
+                                {formatAmount(orderDetails?.requestId?.requestAmount * 0.075)}
                             </Text>
                         </View>
 
@@ -256,14 +324,14 @@ const BottomView = ({
                                 Total Payment
                             </Text>
                             <Text style={appStyles.smallTextGray}>
-                                $110
+                                {formatAmount(orderDetails?.requestId?.requestAmount)}
                             </Text>
                         </View>
                     </View>
                 </View>
 
                 <View style={{ gap: verticalScale(16), marginTop: verticalScale(16) }}>
-                    <CustomButton
+                    {orderDetails?.status === "pending" && <CustomButton
                         title={"Cancel order"}
                         buttonStyle={{ borderColor: uiColours.RED }}
                         titleStyle={{ color: uiColours.RED }}
@@ -272,10 +340,10 @@ const BottomView = ({
                         NavigationHandle={() => {
                             setShowSheet({
                                 ...showSheet,
-                                confirmation: true
+                                cancelOrder: true,
                             })
                         }}
-                    />
+                    />}
                     <CustomButton
                         hasBackground={false}
                         // hasOutLine
@@ -307,12 +375,15 @@ const BottomView = ({
                 discription="You will be charged $5 if you cancel your order"
                 button1Title="Skip"
                 button2Title="Cancel order"
-                handleButton2Click={() => {
+                handleButton2Click={async () => {
                     setShowSheet({
                         ...showSheet,
                         cancelOrder: false
                     })
-                    handleCancelOrder()
+                    await Actions.showLoader(true)
+                    await Socket.emit("booking-cancel", {
+                        "id": orderDetails?._id
+                    })
                 }}
                 handleButton1Click={() => {
                     setShowSheet({
@@ -337,7 +408,7 @@ const BottomView = ({
                     )
                 }}
                 title="Are you sure you want to complete this order?"
-                titleStyles={{color:uiColours.PRIMARY}}
+                titleStyles={{ color: uiColours.PRIMARY }}
                 button1Title="Back"
                 button2Title="Yes, complete"
                 handleButton2Click={() => {
@@ -345,8 +416,9 @@ const BottomView = ({
                         ...showSheet,
                         completeOrder: false
                     })
-                    navigation.navigate(MainRouteStrings.WRITE_USER_REVIEW,{
-                        status:"Completed"
+                    Actions.showLoader(true)
+                    Socket.emit("booking-complete", {
+                        "id": orderDetails?._id
                     })
                 }}
                 handleButton1Click={() => {

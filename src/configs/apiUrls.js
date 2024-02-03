@@ -19,5 +19,10 @@ export const endPoints = {
     ADD_VEHICLE: BASE_URL + "vehicles",
     BANK_ACCOUNT: BASE_URL + "bankAccounts",
     WITHDRAWAL: BASE_URL + "withDrawal",
-    PAKAGES: BASE_URL + "packages"
+    PAKAGES: BASE_URL + "packages",
+    GET_USER_BOOKINGS: BASE_URL + "bookings/getUserBookings",
+    GET_PICKER_BOOKINGS: BASE_URL + "bookings/getPicckrBookings",
+    FAVORIES: BASE_URL + "favoritePicckr",
+    GET_PICKER_USER_ORDERS: BASE_URL + "bookings/getPastUserAndPicckrBooking",
+    GET_LAST_FIVE_BOOKINGS: BASE_URL + "bookings/getLatestBookingsLocations",
 }

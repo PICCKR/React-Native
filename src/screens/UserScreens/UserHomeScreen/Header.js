@@ -15,6 +15,7 @@ import { useNavigation } from '@react-navigation/native'
 import { MainRouteStrings } from '../../../utils/Constents/RouteStrings'
 import { formatCurrency } from 'react-native-format-currency'
 import { formatAmount, formatter } from '../../../helper/formatter'
+import { useSelector } from 'react-redux'
 
 const Header = ({
     appStyles,
@@ -22,7 +23,8 @@ const Header = ({
 }) => {
 
     const navigation = useNavigation()
-    const { setuserData, userData } = useContext(AppContext)
+    const { setuserData } = useContext(AppContext)
+    const userData = useSelector((state) => state?.userDataReducer?.userData)
     const [showSheet, setShowSheet] = useState(false)
 
     // Function to handle addition of amount to wallet balance
@@ -47,12 +49,18 @@ const Header = ({
         apiPost(endPoints.UPDATE_TOP_UP, transactionData).then((res) => {
             // console.log("res in transaction update", res?.status, res?.data);
             if (res?.status === 201) {
-                setuserData({
+                Actions.userData({
                     ...userData, wallet: {
                         ...userData?.wallet,
                         balance: parseInt(userData?.wallet?.balance) + parseInt(amount)
                     }
                 })
+                // setuserData({
+                //     ...userData, wallet: {
+                //         ...userData?.wallet,
+                //         balance: parseInt(userData?.wallet?.balance) + parseInt(amount)
+                //     }
+                // })
 
             } else {
                 showGeneralError()

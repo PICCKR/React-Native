@@ -14,9 +14,9 @@ const SplashScreen = () => {
                 style={{ flex: 1, width: "100%", height: "100%" }}
                 source={require("../../../assets/images/splashScreenGif.gif")}
             >
-                <Text style={[appStyles.smallTextWhite,{
-                    alignSelf:"center",
-                    marginTop:screenSize.height - verticalScale(100)
+                <Text style={[appStyles.smallTextWhite, {
+                    alignSelf: "center",
+                    marginTop: screenSize.height - verticalScale(100)
                 }]}>Version 1.0.0</Text>
             </ImageBackground>
 

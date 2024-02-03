@@ -11,9 +11,12 @@ import SelectAmountPopup from '../../../components/SelectAmountPopup/SelectAmoun
 import { apiPost } from '../../../services/apiServices'
 import { endPoints } from '../../../configs/apiUrls'
 import { showGeneralError } from '../../../helper/showGeneralError'
+import Actions from '../../../redux/Actions'
+import { useSelector } from 'react-redux'
 
 const UserWalletScreen = () => {
-    const { appStyles, userData, setuserData } = useContext(AppContext)
+    const { appStyles, setuserData } = useContext(AppContext)
+    const userData = useSelector((state) => state?.userDataReducer?.userData)
     const navigation = useNavigation()
     const [showSheet, setShowSheet] = useState(false)
 
@@ -38,12 +41,18 @@ const UserWalletScreen = () => {
         apiPost(endPoints.UPDATE_TOP_UP, transactionData).then((res) => {
             console.log("res in transaction update", res?.status, res?.data);
             if (res?.status === 201) {
-                setuserData({
+                Actions.userData({
                     ...userData, wallet: {
                         ...userData?.wallet,
                         balance: parseInt(userData?.wallet?.balance) + parseInt(amount)
                     }
                 })
+                // setuserData({
+                //     ...userData, wallet: {
+                //         ...userData?.wallet,
+                //         balance: parseInt(userData?.wallet?.balance) + parseInt(amount)
+                //     }
+                // })
 
             } else {
                 showGeneralError()

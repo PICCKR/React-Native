@@ -6,7 +6,7 @@ import { moderateScale, verticalScale } from 'react-native-size-matters'
 import CustomButton from '../../../components/Button/CustomButton'
 
 const BottomView = ({
-  destination,
+  address,
   appStyles,
   handleConfirm
 }) => {
@@ -17,7 +17,7 @@ const BottomView = ({
       </View>
       <View style={[commonStyles.bottomBorder, Styles.bottomViewContent]}>
         <Text style={appStyles?.smallTextBlack}>
-          {destination?.location}
+          {address}
         </Text>
       </View>
       <CustomButton

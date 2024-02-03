@@ -217,7 +217,7 @@ const OtpScreen = ({ route }) => {
       formData.append("notificationToken", "");
       formData.append("phoneNumber", `${data?.selectedCountry?.code?.replace(/[()]/g, '')} ${data?.phoneNumber.replace(/\s+/g, '')}`);
 
-      console.log(formData);
+      // console.log(formData);
       // return
       const config = {
         headers: {
@@ -230,7 +230,8 @@ const OtpScreen = ({ route }) => {
         const userInformaton = await decodeToken(res?.data?.data?.token)
         // after getting token store it in local storage and also set token in context
         await setLocalData(storageKeys.userData, { ...userInformaton, token: res?.data?.data?.token })
-        await setuserData({ ...userInformaton, token: res?.data?.data?.token })
+        // await setuserData({ ...userInformaton, token: res?.data?.data?.token })
+        await Actions.userData({ ...userInformaton, token: res?.data?.data?.token })
         navigation.navigate(AuthRouteStrings.PROFILE_INFORMATION)
       } else {
         showErrorToast(res?.data?.message, isDark)

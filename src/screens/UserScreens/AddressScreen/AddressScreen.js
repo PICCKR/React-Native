@@ -19,9 +19,11 @@ import { showGeneralError } from '../../../helper/showGeneralError'
 import { showSuccessToast } from '../../../helper/showSuccessToast'
 import Actions from '../../../redux/Actions'
 import EditAddressSheet from './EditAddressSheet'
+import { useSelector } from 'react-redux'
 
 const AddressScreen = () => {
-    const { appStyles, userData, isDark, setIsDark, setuserData } = useContext(AppContext)
+    const { appStyles, isDark, setIsDark, setuserData } = useContext(AppContext)
+    const userData = useSelector((state) => state?.userDataReducer?.userData)
     const navigation = useNavigation()
     const [showSheet, setShowSheet] = useState({
         add: false,

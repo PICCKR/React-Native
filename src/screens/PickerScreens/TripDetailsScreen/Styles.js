@@ -29,8 +29,8 @@ const styles = StyleSheet.create({
         alignItems: "center",
         borderBottomWidth: moderateScale(1),
         width: screenSize.width,
-        paddingVertical:verticalScale(16),
-        marginBottom:verticalScale(16)
+        paddingVertical: verticalScale(16),
+        marginBottom: verticalScale(16)
     },
     profileView: {
         height: moderateScale(80),
@@ -50,11 +50,11 @@ const styles = StyleSheet.create({
     },
     reviewSection: {
         // gap: verticalScale(8),
-        marginTop:verticalScale(16)
+        marginTop: verticalScale(16)
     },
     tripDetails: {
         gap: verticalScale(10),
-        marginVertical:verticalScale(10)
+        marginVertical: verticalScale(10)
     },
     pickerProfile: {
         flexDirection: 'row',
@@ -80,7 +80,7 @@ const styles = StyleSheet.create({
         left: scale(32),
     },
     paymentMethod: {
-        marginBottom:verticalScale(70)
+        marginBottom: verticalScale(70)
     },
     sendMsg: {
         flexDirection: "row",
@@ -94,7 +94,7 @@ const styles = StyleSheet.create({
         paddingLeft: scale(10),
         borderRadius: moderateScale(10),
         height: moderateScale(36),
-        justifyContent:"center"
+        justifyContent: "center"
     },
     heartIcon: {
         height: moderateScale(36),
@@ -105,34 +105,35 @@ const styles = StyleSheet.create({
         borderRadius: moderateScale(5),
         // elevation:2
     },
-    onGoingFooter:{
-        flexDirection:"row",
-        justifyContent:'space-between',
-        padding:moderateScale(16),
-        borderTopWidth:moderateScale(1),
-        borderColor:uiColours.LIGHT_GRAY,
-        width:'100%'
+    onGoingFooter: {
+        // flexDirection:"row",
+        // justifyContent:'space-between',
+        padding: moderateScale(16),
+        borderTopWidth: moderateScale(1),
+        borderColor: uiColours.LIGHT_GRAY,
+        width: '100%',
+        marginBottom: verticalScale(50)
     },
     pickerVehicleInSheet: {
         backgroundColor: uiColours.PRIMARY_LIGHT,
         padding: moderateScale(5),
-        height:moderateScale(70),
-        width:moderateScale(70),
+        height: moderateScale(70),
+        width: moderateScale(70),
         borderRadius: moderateScale(35),
-        alignItems:"center",
-        justifyContent:'center'
+        alignItems: "center",
+        justifyContent: 'center'
     },
-    warningIconView:{
+    warningIconView: {
         backgroundColor: uiColours.LIGHT_RED,
         padding: moderateScale(5),
-        height:moderateScale(28),
-        width:moderateScale(28),
+        height: moderateScale(28),
+        width: moderateScale(28),
         borderRadius: moderateScale(35),
-        alignItems:"center",
-        justifyContent:'center',
-        position:'absolute',
-        bottom:0,
-        left:scale(45)
+        alignItems: "center",
+        justifyContent: 'center',
+        position: 'absolute',
+        bottom: 0,
+        left: scale(45)
     }
 })
 export default styles

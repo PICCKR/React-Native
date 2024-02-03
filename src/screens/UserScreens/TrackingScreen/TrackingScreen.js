@@ -18,23 +18,26 @@ import { useSelector } from 'react-redux';
 
 const TrackingScreen = ({ route }) => {
 
-    const oderDetails = route?.params?.oderDetails
-    const destination = route?.params?.geometry
-    const orderDeatils = useSelector((state) => state?.orderDeatilsReducer?.orderDeatils)
+    // const orderDeatils = route?.params?.orderDetails
+    const orderDeatils = useSelector((state) => state?.bookingDataReducer?.bookingData)
+    console.log("oderDetails", orderDeatils);
+    // const destination = route?.params?.geometry
+    // const orderDeatils = useSelector((state) => state?.orderDeatilsReducer?.orderDeatils)
 
-    const { appStyles, selectedVehicle, isDark, source, setSource, setDestination } = useContext(AppContext)
+    const { appStyles, selectedVehicle, isDark, source, setSource, setDestination, destination } = useContext(AppContext)
     // console.log("origin === > ",source)
     const navigation = useNavigation()
     // const origin1 = { latitude: 12.308905854320136, longitude: 76.63889153653533 };
     const origin1 = { latitude: source?.lat, longitude: source?.lng };
-    // const destination = { geometry.lat: 12.306077759217404, geometry: 76.65507293749431 };
+    const desitination1 = { latitude: destination?.lat, longitude: destination?.lng }
+    // const destination = { latitude: 12.306077759217404, longitude: 76.65507293749431 };
 
     // Calculate deltas based on origin and destination
     const calculateMapDeltas = () => {
 
         const { isDark } = useContext(AppContext)
-        const latitudes = [origin1.latitude, destination.latitude];
-        const longitudes = [origin1.longitude, destination.longitude];
+        const latitudes = [source?.lat, destination.lat];
+        const longitudes = [source?.lng, destination.lng];
 
         const minLat = Math.min(...latitudes);
         const maxLat = Math.max(...latitudes);
@@ -51,8 +54,6 @@ const TrackingScreen = ({ route }) => {
             LONGITUDE_DELTA,
         };
     };
-
-    const pinData = [2, 3, 5, 6, 7, 8]
 
     const { latitude, longitude, LATITUDE_DELTA, LONGITUDE_DELTA } = calculateMapDeltas();
 
@@ -96,7 +97,7 @@ const TrackingScreen = ({ route }) => {
             >
                 <MapViewDirections
                     origin={origin1}
-                    destination={destination}
+                    destination={desitination1}
                     apikey={GOOGLE_MAP_API_KEY}
                     mode={"DRIVING"}
                     strokeWidth={moderateScale(5)}
@@ -107,7 +108,7 @@ const TrackingScreen = ({ route }) => {
                     }}
                 />
                 <Marker
-                    coordinate={destination}
+                    coordinate={desitination1}
                     title={""}
                     description={""}
                     style={{ height: moderateScale(24), width: moderateScale(24), borderWidth: 1 }}
@@ -125,10 +126,9 @@ const TrackingScreen = ({ route }) => {
                 appStyles={appStyles}
                 isDark={isDark}
                 orderDeatils={orderDeatils}
-                pinData={pinData}
                 selectedVehicle={selectedVehicle}
                 handleCancelOrder={() => {
-                    navigation.navigate(MainRouteStrings.PICKER_REVIEW_WHEN_CANCELLED)
+
                 }}
             />
         </View>

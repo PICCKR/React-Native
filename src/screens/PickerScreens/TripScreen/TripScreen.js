@@ -14,121 +14,11 @@ import CustomButton from '../../../components/Button/CustomButton'
 import { buttonTypes, tostMessagetypes } from '../../../utils/Constents/constentStrings'
 import RequestTab from './RequestTab'
 import { showToast } from '../../../components/tostConfig/tostConfig'
+import PicckrActivityTabs from '../../../routes/PicckrActivityTabs'
 
 const TripScreen = () => {
   const { appStyles, isDark } = useContext(AppContext)
   const navigation = useNavigation()
-  const [currentTab, setCurrentTab] = useState({
-    title: "Request",
-    data: [{
-      id: "1",
-      picker: "John Doe",
-      dateAndTime: "Send to Harvard University",
-      amount: "100",
-      status: "Request",
-      rating: '4.9',
-      distence: "1.5 km",
-      time: "00:15"
-    }]
-  },)
-
-  const tabsData = [
-    {
-      title: "Request",
-      data: [{
-        id: "1",
-        picker: "John Doe",
-        dateAndTime: "Send to Harvard University",
-        amount: "100",
-        status: "Request",
-        rating: '4.9',
-        distence: "1.5 km",
-        time: "00:15"
-      }]
-    },
-    {
-      title: "Ongoing",
-      data: [{
-        id: "1",
-        picker: "John Doe",
-        dateAndTime: "June 20 2023, 13:02 PM",
-        amount: "100",
-        status: "Ongoing"
-      }]
-    },
-    {
-      title: "Past",
-      data: [
-        {
-          id: "1",
-          picker: "John Doe",
-          dateAndTime: "June 20 2023, 13:02 PM",
-          amount: "100",
-          status: "Cancelled",
-          by: "sender"
-        },
-        {
-          id: "2",
-          picker: "John Doe",
-          dateAndTime: "June 20 2023, 13:02 PM",
-          amount: "100",
-          status: "Completed"
-        },
-        {
-          id: "3",
-          picker: "John Doe",
-          dateAndTime: "June 20 2023, 13:02 PM",
-          amount: "100",
-          status: "Completed"
-        },
-        {
-          id: "4",
-          picker: "John Doe",
-          dateAndTime: "June 20 2023, 13:02 PM",
-          amount: "100",
-          status: "Completed"
-        },
-        {
-          id: "5",
-          picker: "John Doe",
-          dateAndTime: "June 20 2023, 13:02 PM",
-          amount: "100",
-          status: "Completed"
-        },
-        {
-          id: "6",
-          picker: "John Doe",
-          dateAndTime: "June 20 2023, 13:02 PM",
-          amount: "100",
-          status: "Completed"
-        },
-        {
-          id: "7",
-          picker: "John Doe",
-          dateAndTime: "June 20 2023, 13:02 PM",
-          amount: "100",
-          status: "Cancelled",
-          by: "picker"
-        },
-        {
-          id: "8",
-          picker: "John Doe",
-          dateAndTime: "June 20 2023, 13:02 PM",
-          amount: "100",
-          status: "Completed"
-        },
-        {
-          id: "9",
-          picker: "John Doe",
-          dateAndTime: "June 20 2023, 13:02 PM",
-          amount: "100",
-          status: "Completed"
-        },
-      ]
-    },
-
-  ]
-
 
   const handleAccept = async (item) => {
     navigation.navigate(MainRouteStrings.PICKUP_SCREEN, {
@@ -147,13 +37,14 @@ const TripScreen = () => {
     }
     showToast(toastMsgConfg, tostMessagetypes.SUCCESS, isDark)
   }
+
   return (
     <WrapperContainer
       centerTitle="Activity"
       showFooterButton={false}
       containerPadding={{ paddingHorizontal: 0 }}
     >
-      <View style={[commonStyles.flexRowAlnCtrJutySpaceBetween, styles.tabContainer]}>
+      {/* <View style={[commonStyles.flexRowAlnCtrJutySpaceBetween, styles.tabContainer]}>
         {tabsData.map((item) => {
           const selected = currentTab?.title === item.title
           return (
@@ -247,7 +138,9 @@ const TripScreen = () => {
         }}
       >
 
-      </FlatList>
+      </FlatList> */}
+
+      <PicckrActivityTabs />
 
     </WrapperContainer>
   )

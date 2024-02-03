@@ -23,8 +23,6 @@ const PickUpSheet = ({
     handleBackClick,
     handleEdit,
     handlePickDate,
-    userData
-
 }) => {
 
     const pickupFormData = [

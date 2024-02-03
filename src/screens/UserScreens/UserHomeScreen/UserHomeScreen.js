@@ -13,12 +13,17 @@ import SelectAmountPopup from '../../../components/SelectAmountPopup/SelectAmoun
 import { apiGet } from '../../../services/apiServices'
 import { endPoints } from '../../../configs/apiUrls'
 import Actions from '../../../redux/Actions'
+import { useSelector } from 'react-redux'
 
 
 const UserHomeScreen = () => {
   // Context and Navigation
-  const { appStyles, userData, isDark, setSelectedVehicle, vehicleType, setVehicleType } = useContext(AppContext)
+  const { appStyles, isDark, setSelectedVehicle, vehicleType, setVehicleType } = useContext(AppContext)
+  const userData = useSelector((state) => state?.userDataReducer?.userData)
+  const currentLocation = useSelector((state) => state?.CurrentLocationReducer?.currentLocation)
   const navigation = useNavigation()
+
+  console.log("ddd", currentLocation);
 
   // Mock Data for Vehicle Types and Reasons to Choose
   const VehicleType = [
@@ -71,17 +76,22 @@ const UserHomeScreen = () => {
 
   // console.log("juser dayayyaaa", userData);
   const getVehicleData = () => {
-    Actions.showLoader(true)
-    apiGet(endPoints.GET_VEHICLE_DATA).then((res) => {
-      // console.log("ress in vehical", res?.data);
-      if (res?.status === 200) {
-        setVehicleType(res?.data?.data)
-      }
-      Actions.showLoader(false)
-    }).catch((error) => {
-      Actions.showLoader(false)
-      console.log("error in vehcla data", error);
-    })
+    try {
+      Actions.showLoader(true)
+      apiGet(endPoints.GET_VEHICLE_DATA).then((res) => {
+        // console.log("ress in vehical", res?.data);
+        if (res?.status === 200) {
+          setVehicleType(res?.data?.data)
+        }
+        Actions.showLoader(false)
+      }).catch((error) => {
+        Actions.showLoader(false)
+        console.log("error in vehcla data", error);
+      })
+    } catch (error) {
+      console.log("errorr", error);
+    }
+
   }
 
   useEffect(() => {
@@ -148,9 +158,7 @@ const UserHomeScreen = () => {
                       style={styles.vehicleTypeIcon}
                       onPress={() => {
                         setSelectedVehicle(item)
-                        navigation.navigate(MainRouteStrings.FIND_DESTINATON, {
-
-                        })
+                        navigation.navigate(MainRouteStrings.FIND_DESTINATON)
                       }}
                     >
                       <Image source={{ uri: item?.catImage }} style={{

@@ -13,43 +13,25 @@ import ChooseMediaTypeSheet from '../../../components/ChooseMediaTypeSheet/Choos
 import { openCamara } from '../../../helper/imagePickerFunctions'
 import FullScreenImagePopUp from './FullScreenImagePopUp'
 import { useNavigation } from '@react-navigation/native'
+import { useSelector } from 'react-redux'
+import ProfileView from '../../../components/PrifileView/ProfileView'
 
-const UserChatScreen = () => {
+const UserChatScreen = ({ route }) => {
+    const orderDetails = route?.params?.orderDetails
+
+    // console.log("orderDetails", orderDetails);
     const data = {}
     const { Socket } = useSocket()
     const pickerData = {}
     const navigation = useNavigation()
-    const { appStyles, userData, isDark } = useContext(AppContext)
+    const { appStyles, isDark } = useContext(AppContext)
+    const userData = useSelector((state) => state?.userDataReducer?.userData)
     const [showSheet, setShowSheet] = useState({
         mediaSheet: false,
         fullScreenImage: false
     })
     const [image, setImage] = useState(null)
-    const [messages, setMessages] = useState([
-        {
-            content: {
-                type: "text",
-                message: "Hi picke",
-                img: ""
-            },
-            createdAt: new Date(),
-            senderid: 1,
-            reciverId: 2
-        },
-        {
-            content: "Hello user",
-            content: {
-                type: "text",
-                message: "Hello user",
-                img: ""
-            },
-            createdAt: new Date(),
-            senderid: 2,
-            reciverId: 1
-        },
-
-
-    ])
+    const [messages, setMessages] = useState([])
     const [newMessage, setNewMessage] = useState('')
     const [selectedMsg, setSelectedMsg] = useState(null)
 
@@ -58,23 +40,37 @@ const UserChatScreen = () => {
 
     const handleSend = async () => {
         const msg = {
-            content: {
-                type: image ? "image" : "text",
-                message: newMessage,
-                img: image
-            },
-            createdAt: new Date(),
-            senderid: 1,
-            reciverId: 2
+            "message": newMessage,
+            "room": orderDetails?._id,
+            "user": userData?._id
         }
+
+        Socket.emit("sendMessage", msg)
+    }
+
+    const handleSendMsgError = (res) => {
+        console.log("send-message-error", res);
+    }
+    const handleSendSuccess = (res) => {
+        console.log("send-message-success", res);
+    }
+
+    const handleNewMsg = (res) => {
+        console.log("newMessage", res);
+        setMessages([...messages, res?.data])
         setNewMessage("")
-        setImage(null)
-        setMessages([...messages, msg])
     }
 
     useEffect(() => {
-        Socket.emit("setup", userData)
-    }, [])
+        Socket.on("send-message-error", handleSendMsgError)
+        Socket.on("send-message-success", handleSendSuccess)
+        Socket.on("newMessage", handleNewMsg)
+        return () => {
+            Socket.off("send-message-error", handleSendMsgError)
+            Socket.off("send-message-success", handleSendSuccess)
+            Socket.off("newMessage", handleNewMsg)
+        }
+    }, [Socket, handleSendMsgError, handleSendSuccess, handleNewMsg])
 
     return (
         <WrapperContainer
@@ -99,19 +95,25 @@ const UserChatScreen = () => {
                 <View style={[styles.pickerProfile, {
                     borderColor: isDark ? uiColours.GRAYED_BUTTON : uiColours.LIGHT_GRAY
                 }]}>
-                    <View style={styles.pickerProfileView}>
+                    <ProfileView
+                        profileImg={orderDetails?.picckrId?.picture}
+                        size={40}
+                        hasBottomLine={false}
+                        profileSection={{ paddingBottom: 0 }}
+                    />
+                    {/* <View style={styles.pickerProfileView}>
                         {data?.profileImg ? <Image source={{ uri: data.profileImg }} /> : <Images.profile height={moderateScale(50)} width={moderateScale(50)} />}
-                    </View>
-                    <View style={styles.pickerVehicle}>
+                    </View> */}
+                    {/* <View style={styles.pickerVehicle}>
                         <Images.car height={moderateScale(17)} width={moderateScale(17)} />
-                    </View>
+                    </View> */}
                     <View>
-                        <Text style={appStyles?.mediumTextPrimaryBold}>Cooper Septimus</Text>
-                        <Text>AM666EE • Toyota Prius Hybris</Text>
-                        <View style={commonStyles.flexRowAlnCtr}>
+                        <Text style={appStyles?.mediumTextPrimaryBold}>{orderDetails?.picckrId?.firstName} {orderDetails?.picckrId?.lastName}</Text>
+                        <Text style={appStyles?.smallTextGray}>{orderDetails?.picckrId?.vehicle?.plateNumber} • {orderDetails?.picckrId?.vehicle?.model} • {orderDetails?.picckrId?.vehicle?.color}</Text>
+                        {/* <View style={commonStyles.flexRowAlnCtr}>
                             <Images.star />
                             <Text style={appStyles.smallTextGray}>{4.9}</Text>
-                        </View>
+                        </View> */}
                     </View>
                 </View>
 
@@ -121,7 +123,7 @@ const UserChatScreen = () => {
                     messages?.map((item, index) => {
                         const previousItem = messages[index - 1];
                         const shouldShowDate = !previousItem || moment(previousItem?.createdAt).format("DD/MM/YYYY") !== moment(item?.createdAt).format("DD/MM/YYYY")
-                        const isSender = item?.senderid === 1
+                        const isSender = item?.user === userData?._id
                         // console.log("item?.createdAt != new Date().toString()",previousItem,moment(previousItem?.createdAt).format("DD/MM/YYYY") , moment(item?.createdAt).format("DD/MM/YYYY"));
                         return (
                             <View key={index} style={styles.chatContainer}>
@@ -132,8 +134,8 @@ const UserChatScreen = () => {
                                 <View style={isSender ? styles.sentMessageCard : [styles.reviedMessageCard, {
                                     borderColor: isDark ? uiColours.GRAYED_BUTTON : uiColours.LIGHT_GRAY
                                 }]}>
-                                    {item?.content?.type === "text" ? <Text style={[appStyles.smallTextGray, { color: isSender ? uiColours.BLACK_TEXT : uiColours.GRAY_TEXT }]}>
-                                        {item?.content?.message}
+                                    {/* {item?.message ? <Text style={[appStyles.smallTextGray, { color: isSender ? uiColours.BLACK_TEXT : uiColours.GRAY_TEXT }]}>
+                                        {item?.message}
                                     </Text> :
                                         <View style={{}}>
                                             <TouchableOpacity
@@ -155,7 +157,11 @@ const UserChatScreen = () => {
                                                 {item?.content?.message}
                                             </Text>
                                         </View>
-                                    }
+                                    } */}
+
+                                    <Text style={[appStyles.smallTextGray, { color: isSender ? uiColours.BLACK_TEXT : uiColours.GRAY_TEXT }]}>
+                                        {item?.message}
+                                    </Text>
                                     <Text style={[appStyles.smallTextGray, { fontSize: scale(10) }]}>
                                         {moment(item?.createdAt).format('h:mm a')}
                                     </Text>

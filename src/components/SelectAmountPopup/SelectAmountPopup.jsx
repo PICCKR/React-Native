@@ -9,6 +9,7 @@ import { commonStyles } from "../../utils/Styles/CommonStyles";
 import { AppContext } from "../../context/AppContext";
 import PayWithFlutterwave from "flutterwave-react-native";
 import CustomButton from "../Button/CustomButton";
+import { useSelector } from "react-redux";
 
 const SelectAmountPopup = ({
   isVisible,
@@ -21,7 +22,8 @@ const SelectAmountPopup = ({
   from,
   amountToBeAdded,
 }) => {
-  const { userData } = useContext(AppContext);
+  // const { userData } = useContext(AppContext);
+  const userData = useSelector((state) => state?.userDataReducer?.userData);
   const [buttonActive, setButtonActive] = useState(false);
   const [seletedAmount, setSelectedAmount] = useState("0");
   const [showError, setShowError] = useState(false);

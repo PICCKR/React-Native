@@ -24,15 +24,13 @@ import AddAmountSheet from './AddAmountSheet'
 import { useSelector } from 'react-redux'
 import { formatAmount } from '../../../helper/formatter'
 
-const ItemsDetails = ({ route }) => {
-
+const ItemsDetails = () => {
   const {
     appStyles,
     isDark,
     selectedVehicle,
     setSelectedVehicle,
     setuserData,
-    userData,
     vehicleType,
     setOrderDeatils,
     source,
@@ -42,6 +40,7 @@ const ItemsDetails = ({ route }) => {
 
   const { Socket } = useSocket()
 
+  const userData = useSelector((state) => state?.userDataReducer?.userData)
   const orderDeatils = useSelector((state) => state?.orderDeatilsReducer?.orderDeatils)
   // console.log("orderd deatils", orderDeatils);
 
@@ -55,10 +54,11 @@ const ItemsDetails = ({ route }) => {
   })
   const [showCustomPackage, setShowCustomPackage] = useState(false)
   const [buttonActive, setButtonActive] = useState(false)
+  const [distence, setDistence] = useState(0)
 
   const [itemsDetails, setItemsDetails] = useState({
     packagetype: orderDeatils?.itemsDetails?.packagetype ? orderDeatils?.itemsDetails?.packagetype : null,
-    estimatedItemWeight: orderDeatils?.itemsDetails?.estimatedItemWeight ? orderDeatils?.itemsDetails?.estimatedItemWeight : 1,
+    estimatedItemWeight: "",
     paymentMethod: null,
     vehicleType: selectedVehicle,
     price: 0,
@@ -114,12 +114,18 @@ const ItemsDetails = ({ route }) => {
     apiPost(endPoints.UPDATE_TOP_UP, transactionData).then((res) => {
       // console.log("res in transaction update", res?.status, res?.data);
       if (res?.status === 201) {
-        setuserData({
+        Actions.userData({
           ...userData, wallet: {
             ...userData?.wallet,
             balance: parseInt(userData?.wallet?.balance) + parseInt(amount)
           }
         })
+        // setuserData({
+        //   ...userData, wallet: {
+        //     ...userData?.wallet,
+        //     balance: parseInt(userData?.wallet?.balance) + parseInt(amount)
+        //   }
+        // })
 
       } else {
         showGeneralError()
@@ -135,16 +141,9 @@ const ItemsDetails = ({ route }) => {
 
   const calculatePrice = async () => {
     if (itemsDetails?.estimatedItemWeight) {
-      var pdis = await getPreciseDistance(
-        { latitude: source?.lat, longitude: source?.lng },
-        { latitude: destination?.lat, longitude: destination?.lng }
-      );
-      const d = ((pdis * 15) / 100) + pdis
-      const dis = Math.round((d / 1000) * 10) / 10
-      // console.log("dis====>", dis);
 
       // TotalCost= distance*distance cost + weight* weight cost
-      const totalCost = (dis * itemsDetails?.vehicleType?.distance?.cost) + (parseInt(itemsDetails?.estimatedItemWeight) * itemsDetails?.vehicleType?.weight?.cost)
+      const totalCost = (distence * itemsDetails?.vehicleType?.distance?.cost) + (parseInt(itemsDetails?.estimatedItemWeight) * itemsDetails?.vehicleType?.weight?.cost)
       const reminingAmount = (totalCost + (totalCost * 0.075)).toFixed(2) - userData?.wallet?.balance
       setItemsDetails({
         ...itemsDetails,
@@ -190,6 +189,7 @@ const ItemsDetails = ({ route }) => {
         ...orderDeatils,
         itemsDetails: itemsDetails
       })
+
       setSelectedVehicle(itemsDetails.vehicleType)
 
       const orderData = {
@@ -207,7 +207,7 @@ const ItemsDetails = ({ route }) => {
         "dropOffAddress": destination?.location,
         "pickupAddress": source?.location,
         "parcelDescription": {
-          "weight": `${itemsDetails?.estimatedItemWeight} lbs`,
+          "weight": `${itemsDetails?.estimatedItemWeight}`,
           "unit": "kg",
           "description": itemsDetails?.packagetype?.name
         },
@@ -215,16 +215,18 @@ const ItemsDetails = ({ route }) => {
           "phone": orderDeatils?.pickUpData?.phoneNumber,
           "name": orderDeatils?.pickUpData?.name
         },
-        "recipient": {
+        "recipeint": {
           "phone": orderDeatils?.recipientData?.phoneNumber,
           "name": orderDeatils?.recipientData?.name
         },
         "specialInstructions": "Handle with care",
         "pickupDate": orderDeatils?.pickUpData?.pickupDate,
-        "requestAmount": (itemsDetails?.price + (itemsDetails?.price * 0.075)).toFixed(2)
+        "requestAmount": (itemsDetails?.price + (itemsDetails?.price * 0.075)).toFixed(2),
+        "totalDistance": distence
       }
 
       // console.log("data====>", orderData);
+      // return
       Socket.emit("create-request", orderData)
       Actions.showLoader(true)
     }
@@ -244,7 +246,7 @@ const ItemsDetails = ({ route }) => {
 
         // console.log("packages===>",);
         setPackageData(packages)
-        console.log("res ===>", res?.data?.data);
+        // console.log("res ===>", res?.data?.data);
       }
 
     }).catch((error) => {
@@ -253,8 +255,19 @@ const ItemsDetails = ({ route }) => {
     })
   }
 
+  const calculateDistence = async () => {
+    var pdis = await getPreciseDistance(
+      { latitude: source?.lat, longitude: source?.lng },
+      { latitude: destination?.lat, longitude: destination?.lng }
+    );
+    const d = ((pdis * 15) / 100) + pdis
+    const dis = Math.round((d / 1000) * 10) / 10
+    setDistence(() => dis)
+  }
+
   useEffect(() => {
     getPackageData()
+    calculateDistence()
   }, [])
 
 
@@ -277,7 +290,7 @@ const ItemsDetails = ({ route }) => {
 
 
   const handleOrderCreated = useCallback(async (data) => {
-    console.log("orderAccepted", data);
+    console.log("request-created", data);
     Actions.showLoader(false)
     navigation.navigate(MainRouteStrings.FINDING_PICKER)
   }, [Socket])
@@ -285,7 +298,7 @@ const ItemsDetails = ({ route }) => {
   const handleOrderError = useCallback(async (data) => {
     // showErrorToast("")
     Actions.showLoader(false)
-    console.log("order error", data);
+    console.log("request-error", data);
   }, [Socket])
 
 
@@ -488,7 +501,8 @@ const ItemsDetails = ({ route }) => {
                   paymentMethod: true
                 })
               } else {
-                setuserData(null)
+                Actions.userData(null)
+                // setuserData(null)
               }
 
             }}

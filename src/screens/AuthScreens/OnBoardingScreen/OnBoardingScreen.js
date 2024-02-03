@@ -10,6 +10,7 @@ import styles from './Styles'
 import CustomButton from '../../../components/Button/CustomButton'
 import { buttonTypes } from '../../../utils/Constents/constentStrings'
 import { screenSize } from '../../../utils/Styles/CommonStyles'
+import Actions from '../../../redux/Actions'
 
 const OnBoardingScreen = () => {
 
@@ -45,9 +46,12 @@ const OnBoardingScreen = () => {
         onPress={() => {
           setisNew(false)
           setLocalData(storageKeys.isNew, false)
-          setuserData({
+          Actions.userData({
             type: "guest"
           })
+          // setuserData({
+          //   type: "guest"
+          // })
         }}
       >
         <Text style={[appStyles.mediumTextPrimary]}>

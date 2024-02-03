@@ -17,7 +17,8 @@ const FindingPicker = ({ route }) => {
     const {
         appStyles,
         setSource,
-        source
+        source,
+        selectedVehicle
     } = useContext(AppContext)
 
     const { Socket } = useSocket()
@@ -27,7 +28,7 @@ const FindingPicker = ({ route }) => {
     const [nearByPickers, setNearByPickers] = useState([])
     const [seletedBid, setSelectedBid] = useState(null)
 
-    // console.log("sssss", source);
+    console.log("sssss", selectedVehicle);
 
     const mapRef = useRef()
     const ASPECT_RATIO = screenSize.width / screenSize.height;
@@ -70,14 +71,24 @@ const FindingPicker = ({ route }) => {
         waiting: false
     })
 
-    const [selectedPicker, setSelectedPicker] = useState({})
 
-    const handleNewAcceptedPicker = useCallback(async (data) => {
-        // console.log("get-ride in user", data);
-    }, [Socket])
+    const handleGetride = (data) => {
+        console.log("get-ride in user", data?.data);
+        if (data?.data?.status !== "cancelled") {
+            navigation.navigate(MainRouteStrings.TRACKING_SCREEN)
+        } else {
+            Alert.alert("", "Your booking has been cancelled by pickkR")
+            navigation.navigate(MainRouteStrings.ACTIVITY_SCREEN)
+        }
+    }
 
     const handleGetBooking = (data) => {
-        // console.log("get-booking", data);
+        console.log("get-booking-in-user", data)
+        if (data?.data?.status !== "cancelled") {
+            Actions.bookingData(data?.data)
+        } else if (data?.data?.status !== "cancelled") {
+
+        }
     }
 
     const handleNewBid = (data) => {
@@ -97,39 +108,60 @@ const FindingPicker = ({ route }) => {
     }
 
     const handleAcceptBidError = useCallback(async (data) => {
+        Actions.showLoader(false)
         console.log("accept-bid-error", data);
     }, [Socket])
 
+
     const handleBidAccepted = async (data) => {
-        // console.log("accept-bid-successfully", data, se);
-        navigation.navigate(MainRouteStrings.TRACKING_SCREEN, {
-            orderDetails: seletedBid
+        Actions.showLoader(false)
+        console.log("accept-bid-successfully", data);
+    }
+
+    const handleRejectBidError = useCallback(async (data) => {
+        Actions.showLoader(false)
+        console.log("reject-bid-erro", data);
+    }, [Socket])
+
+    const handleBidDecline = async (data) => {
+        Actions.showLoader(false)
+        console.log("reject-bid-successfully in user", data?.data);
+        const newData = await pickersData.filter((val) => {
+            if (val?._id != data?.data?._id) {
+                return val
+            }
         })
+        setPickersData(() => newData)
     }
 
     useEffect(() => {
         Socket.on("availble-picckrs", handleGetAvilablePickers)
         Socket.on("get-availble-picckrs-error", handleGetAvilablePickersError)
-        Socket.on('get-ride', handleNewAcceptedPicker)
+        Socket.on('get-ride', handleGetride)
         Socket.on('get-booking', handleGetBooking)
         Socket.on("new-request-bid", handleNewBid)
         Socket.on("accept-bid-error", handleAcceptBidError)
         Socket.on("accept-bid-successfully", handleBidAccepted)
+        Socket.on("reject-bid-error", handleRejectBidError)
+        Socket.on("reject-bid-successfully", handleBidDecline)
         return () => {
             Socket.off("availble-picckrs", handleGetAvilablePickers)
-            Socket.off('get-ride', handleNewAcceptedPicker)
+            Socket.off('get-ride', handleGetride)
             Socket.off('get-booking', handleGetBooking)
             Socket.off("new-request-bid", handleNewBid)
             Socket.off("accept-bid-error", handleAcceptBidError)
             Socket.off("accept-bid-successfully", handleBidAccepted)
+            Socket.off("reject-bid-error", handleRejectBidError)
+            Socket.off("reject-bid-successfully", handleBidDecline)
         }
-    }, [Socket, handleNewAcceptedPicker, handleGetBooking, handleNewBid, handleGetAvilablePickers, handleGetAvilablePickersError, handleAcceptBidError, handleBidAccepted])
+    }, [Socket, handleGetride, handleGetBooking, handleNewBid, handleGetAvilablePickers, handleGetAvilablePickersError, handleAcceptBidError, handleBidAccepted, handleBidDecline, handleRejectBidError])
 
     useEffect(() => {
         Actions.showLoader(true)
+        console.log("source?.lat", source?.lat, source?.lng);
         Socket.emit("get-availble-picckrs", {
-            "longitude": source?.lat,
-            "latitude": source?.lng
+            "longitude": source?.lng,
+            "latitude": source?.lat
         })
     }, [])
 
@@ -158,7 +190,7 @@ const FindingPicker = ({ route }) => {
                     fillColor="rgba(201, 243, 251, 0.4)"
                 />
                 {
-                    [{}].map((item) => {
+                    nearByPickers?.map((item) => {
                         console.log(item.latitude, item.longitude);
                         return (
                             <Marker
@@ -166,7 +198,7 @@ const FindingPicker = ({ route }) => {
                                 coordinate={{ latitude: 12.3558259, longitude: 76.5885713 }}
                                 title={""}
                                 description={""}
-                                image={Images.carPng}
+                                image={selectedVehicle.catImage ? selectedVehicle.catImage : Images.carPng}
 
                             />
                         )
@@ -182,34 +214,18 @@ const FindingPicker = ({ route }) => {
                     navigation.navigate(MainRouteStrings.USER_HOME_SCREEN)
                 }}
                 handleAccept={(item) => {
-                    setSelectedBid(() => item)
+                    Actions.showLoader(true)
                     Socket.emit("accept-bid", {
                         "id": item?._id
                     })
-                    // setSelectedPicker(() => item)
-                    // setShowSheet({
-                    //     ...showSheet,
-                    //     nearByPickers: false,
-                    //     waiting: false
-                    // })
+                }}
+                handleDecline={(item) => {
+                    Actions.showLoader(true)
+                    Socket.emit("reject-bid", {
+                        "id": item?._id
+                    })
                 }}
             />
-            {/* <WaitingSheet
-                isVisible={showSheet.waiting}
-                setShowSheet={setShowSheet}
-                handlePickerAccepted={() => {
-                    console.log("sjdhsjhd ===>", selectedPicker);
-                    setShowSheet({
-                        ...showSheet,
-                        nearByPickers: false,
-                        waiting: false
-                    })
-
-                    // navigation.navigate(MainRouteStrings.TRACKING_SCREEN, {
-                    //     geometry: { latitude: selectedPicker?.lat, longitude: selectedPicker?.lng }
-                    // })
-                }}
-            /> */}
         </SafeAreaView>
     )
 }

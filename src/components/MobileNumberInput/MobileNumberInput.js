@@ -26,7 +26,6 @@ const MobileNumberInput = ({
     inPutStyles,
     editable = true
 }) => {
-    console.log("formData", formData);
 
     const { appStyles, isDark } = useContext(AppContext)
     const [showSheet, setShowSheet] = useState(false)
@@ -95,32 +94,32 @@ const MobileNumberInput = ({
     }
 
     const renderFlag = () => {
-        console.log("selectedCountry===>", selectedCountry);
+        // console.log("selectedCountry===>", selectedCountry);
         switch (selectedCountry.code) {
             case "+234":
-                return <Images.NigeriaFlags height={moderateScale(20)} width={moderateScale(35)} />
+                return <Image source={Images.NigeriaFlags} style={{ height: moderateScale(20), width: moderateScale(35) }} />
                 break;
             case "+1":
-                return <Images.usFlags height={moderateScale(20)} width={moderateScale(35)} />
+                return <Image source={Images.usFlags} style={{ height: moderateScale(20), width: moderateScale(35) }} />
                 break;
             case "+91":
-                return <Images.indianFlag height={moderateScale(20)} width={moderateScale(35)} />
+                return <Image source={Images.indianFlag} style={{ height: moderateScale(20), width: moderateScale(35) }} />
                 break;
             case "+92":
-                return <Images.pakFlag height={moderateScale(20)} width={moderateScale(35)} />
+                return <Image source={Images.pakFlag} style={{ height: moderateScale(20), width: moderateScale(35) }} />
                 break;
             case "+62":
-                return <Images.indonatiaFlag height={moderateScale(20)} width={moderateScale(35)} />
+                return <Image source={Images.indonatiaFlag} style={{ height: moderateScale(20), width: moderateScale(35) }} />
                 break;
             case "+44":
-                return <Images.ukFlag height={moderateScale(20)} width={moderateScale(35)} />
+                return <Image source={Images.ukFlag} style={{ height: moderateScale(20), width: moderateScale(35) }} />
                 break;
             case "+1":
-                return <Images.canadaFlag height={moderateScale(20)} width={moderateScale(35)} />
+                return <Image source={Images.canadaFlag} style={{ height: moderateScale(20), width: moderateScale(35) }} />
                 break;
 
             default:
-                return <Images.NigeriaFlags height={moderateScale(20)} width={moderateScale(35)} />
+                return <Image source={Images.NigeriaFlags} style={{ height: moderateScale(20), width: moderateScale(35) }} />
                 break;
         }
 
@@ -161,7 +160,7 @@ const MobileNumberInput = ({
                             }]}
                         >
                             <View style={Styles.flagView}>
-                                {selectedCountry?.flag ? <selectedCountry.flag height={moderateScale(20)} width={moderateScale(35)} /> :
+                                {selectedCountry?.flag ? <Image source={selectedCountry?.flag} style={{ height: moderateScale(20), width: moderateScale(35) }} /> :
                                     renderFlag()
                                 }
                             </View>
@@ -210,7 +209,8 @@ const MobileNumberInput = ({
 
                                     >
                                         <View style={Styles.flagView}>
-                                            <Flag height={moderateScale(20)} width={moderateScale(35)} />
+                                            <Image source={Flag} style={{ height: moderateScale(20), width: moderateScale(35) }} />
+                                            {/* <Flag height={moderateScale(20)} width={moderateScale(35)} /> */}
                                         </View>
                                         <Text style={appStyles.smallTextBlack}>{item.name} {item.code}</Text>
                                     </View>

@@ -21,10 +21,12 @@ import Actions from '../../../redux/Actions'
 import { apiPost } from '../../../services/apiServices'
 import { endPoints } from '../../../configs/apiUrls'
 import { showGeneralError } from '../../../helper/showGeneralError'
+import { useSelector } from 'react-redux'
 
 const UserProfileScreen = () => {
 
-  const { appStyles, userData, isDark, setIsDark, setuserData } = useContext(AppContext)
+  const { appStyles, isDark, setIsDark, setuserData } = useContext(AppContext)
+  const userData = useSelector((state) => state?.userDataReducer?.userData)
   // console.log("userData===>", userData?.wallateBalance);
   const navigation = useNavigation()
 
@@ -207,7 +209,8 @@ const UserProfileScreen = () => {
             showSwitch
             showSwitchValue={"off"}
             handleSwitchClicked={(value) => {
-              setuserData({ ...userData, routeType: "picker" })
+              Actions.userData({ ...userData, routeType: "picker" })
+              // setuserData({ ...userData, routeType: "picker" })
             }}
           />
           }

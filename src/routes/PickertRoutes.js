@@ -1,12 +1,86 @@
-import React from 'react'
+import React, { useCallback, useEffect } from 'react'
 import { NavigationContainer } from '@react-navigation/native'
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { AuthRouteStrings, MainRouteStrings } from '../utils/Constents/RouteStrings';
 import { screens } from '.';
+import { getLocalData } from '../helper/AsyncStorage';
+import { storageKeys } from '../helper/AsyncStorage/storageKeys';
+import Geolocation from '@react-native-community/geolocation';
+import Actions from '../redux/Actions';
+import { useSocket } from '../context/AppContext';
 
 const Stack = createNativeStackNavigator();
 
 const PickertRoutes = () => {
+    const { Socket } = useSocket()
+
+    const getCurrentLocation = async (user) => {
+        try {
+            Geolocation.getCurrentPosition((position) => {
+                const latitude = position?.coords?.latitude
+                const longitude = position?.coords?.longitude
+                Actions.currentLoaction({
+                    latitude: latitude,
+                    longitude: longitude
+                })
+                handleAppStateChange(user, latitude, longitude)
+            },
+                (error) => {
+                    console.log('Error getting location:', error);
+                },
+            )
+        } catch (error) {
+            console.log("error===>", error);
+        }
+
+    }
+
+
+    const handleAppStateChange = (user, lat, lng) => {
+        // console.log("usersss", user?._id, lat, lng);
+        Socket.emit("update-user-location", {
+            "userId": user?._id,
+            "longitude": lng,
+            "latitude": lat
+        })
+    }
+
+
+    useEffect(() => {
+        // setTimeout(() => {
+        const fetchData = async () => {
+            const UserData = await getLocalData(storageKeys.userData);
+            await getCurrentLocation(UserData);
+        };
+        const intervalId = setInterval(fetchData, 10000);
+        return () => {
+            clearInterval(intervalId);
+        };
+
+        // }, 2000);
+
+    }, [])
+
+    const handleUpdateLocationError = (data) => {
+        console.log("update-user-location-error", data);
+    }
+
+    const handleUpdateLocationSuccess = (data) => {
+        // console.log("'update-user-location-successfully", data);
+    }
+
+
+    useEffect(() => {
+        Socket.on('update-user-location-error', handleUpdateLocationError)
+        Socket.on("update-user-location-successfully", handleUpdateLocationSuccess)
+
+
+        return () => {
+            Socket.off('update-user-location-error', handleUpdateLocationError)
+            Socket.off('update-user-location-successfully', handleUpdateLocationSuccess)
+
+        }
+    }, [Socket, handleUpdateLocationError, handleUpdateLocationSuccess])
     return (
         <NavigationContainer>
             <Stack.Navigator
@@ -30,6 +104,7 @@ const PickertRoutes = () => {
                 <Stack.Screen name={MainRouteStrings.TRAINING_SCREEN} component={screens.TRAINING_SCREEN} />
                 <Stack.Screen name={MainRouteStrings.VEHICLE_SCREEN} component={screens.VEHICLE_SCREEN} />
                 <Stack.Screen name={MainRouteStrings.BANK_ACCOUNT} component={screens.BANK_ACCOUNT} />
+                <Stack.Screen name={MainRouteStrings.USER_REVIEW_WHEN_CANCELLED} component={screens.USER_REVIEW_WHEN_CANCELLED} />
             </Stack.Navigator>
         </NavigationContainer>
     )

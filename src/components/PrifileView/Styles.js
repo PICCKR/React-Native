@@ -16,7 +16,7 @@ const Styles = StyleSheet.create({
         padding: moderateScale(5),
         borderRadius: moderateScale(15)
     },
-    editIcon:{
+    editIcon: {
         position: "absolute",
         bottom: 0,
         right: 0,

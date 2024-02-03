@@ -18,10 +18,12 @@ import { endPoints } from '../../../configs/apiUrls'
 import { storageKeys } from '../../../helper/AsyncStorage/storageKeys'
 import { showGeneralErrorToast } from '../../../components/tostConfig/tostConfig'
 import { showGeneralError } from '../../../helper/showGeneralError'
+import { useSelector } from 'react-redux'
 
 const ManageAccount = () => {
 
-    const { appStyles, userData, isDark, setuserData, setIsLoggedIn } = useContext(AppContext)
+    const { appStyles, isDark, setuserData, setIsLoggedIn } = useContext(AppContext)
+    const userData = useSelector((state) => state?.userDataReducer?.userData)
     const navigation = useNavigation()
 
     const [showSheet, setShowSheet] = useState({
@@ -49,8 +51,9 @@ const ManageAccount = () => {
                 deleteUser().then((res) => {
                 }).catch((err) => {
                 })
-                setuserData(null)
-                setIsLoggedIn(false)
+                Actions.userData(null)
+                // setuserData(null)
+                Actions.isLoggedIn(false)
                 setLocalData(storageKeys.userData, null)
             } else {
                 showGeneralError()
@@ -122,12 +125,16 @@ const ManageAccount = () => {
                     Actions.showLoader(true)
                     try {
                         await signOut().then(async (res) => {
-                            setIsLoggedIn(false)
-                            setuserData(null)
+                            Actions.showLoader(false)
+                            Actions.isLoggedIn(false)
+                            Actions.userData(null)
+                            // setuserData(null)
                             await clearLocalData()
                             Actions.showLoader(false)
                         }).catch((error) => {
-                            showGeneralErrorToast()
+                            Actions.showLoader(false)
+                            console.log("error in signout cog", error);
+
                         })
 
                     } catch (error) {

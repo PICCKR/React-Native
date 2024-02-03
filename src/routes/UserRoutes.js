@@ -1,8 +1,9 @@
-import React from 'react'
+import React, { useCallback, useEffect } from 'react'
 import { NavigationContainer } from '@react-navigation/native'
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { AuthRouteStrings, MainRouteStrings } from '../utils/Constents/RouteStrings';
 import { screens } from '.';
+import { useSocket } from '../context/AppContext';
 
 const Stack = createNativeStackNavigator();
 const UserRoutes = () => {
@@ -34,6 +35,7 @@ const UserRoutes = () => {
                 <Stack.Screen name={MainRouteStrings.MANAGE_ACCOUNT} component={screens.MANAGE_ACCOUNT} />
                 <Stack.Screen name={AuthRouteStrings.OTP_SCREEN} component={screens.OTP_SCREEN} />
                 <Stack.Screen name={MainRouteStrings.USER_WALLET_SCREEN} component={screens.USER_WALLET_SCREEN} />
+                <Stack.Screen name={MainRouteStrings.SET_LOCATION_SCREEN} component={screens.SET_LOCATION_SCREEN} />
 
 
                 {/* auth routes */}

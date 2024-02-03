@@ -17,26 +17,28 @@ import { GOOGLE_MAP_API_KEY } from '../../../configs/google_map_api_key'
 import { uiStrings } from '../../../utils/Constents/uiStrings'
 import SheetFooter from '../../../components/SheetFooter/SheetFooter'
 import Actions from '../../../redux/Actions'
-import { apiPost } from '../../../services/apiServices'
+import { apiGet, apiPost } from '../../../services/apiServices'
 import { endPoints } from '../../../configs/apiUrls'
 import { showSuccessToast } from '../../../helper/showSuccessToast'
+import { useSelector } from 'react-redux'
 
 
 const FindDestination = () => {
+
     const {
         appStyles,
         isDark,
-        userData,
-        setuserData,
         source,
         setSource,
         destination,
         setDestination,
-        currentLocation
     } = useContext(AppContext)
     const navigation = useNavigation()
 
-    // console.log("userData", userData);
+    const userData = useSelector((state) => state?.userDataReducer?.userData)
+    const currentLocation = useSelector((state) => state?.CurrentLocationReducer?.currentLocation)
+
+    console.log("currentLocation", source);
 
     const [address, setAddress] = useState(
         userData?.addresses ? userData?.addresses : []
@@ -54,32 +56,34 @@ const FindDestination = () => {
     })
     const [action, setAction] = useState("")
     const [buttonActive, setButtonActive] = useState(false)
-    const recentDestinationData = [
-        {
-            title: "Harvard University",
-            details: 'Massachusetts Hall, Cambridge, MA 02138',
-            lat: 12.30536215259088,
-            lng: 76.65516416694614
-        },
-        {
-            title: "Houghton Library",
-            details: 'Quincy Street &, Harvard St, Cambridge, MA 02138',
-            lat: 12.30536215259088,
-            lng: 76.65516416694614
-        },
-        {
-            title: "Cambridge Historical Tours",
-            details: '1400 Massachusetts Ave, Cambridge, MA 02138',
-            lat: 12.30536215259088,
-            lng: 76.65516416694614
-        },
-        {
-            title: "John Harvard Statue",
-            details: 'Harvard Yard, 1, Cambridge, MA 02138',
-            lat: 12.30536215259088,
-            lng: 76.65516416694614
-        }
-    ]
+    const [recentDestinationData, setRecentDestinationData] = useState([])
+
+    // const recentDestinationData = [
+    //     {
+    //         title: "Harvard University",
+    //         details: 'Massachusetts Hall, Cambridge, MA 02138',
+    //         lat: 12.30536215259088,
+    //         lng: 76.65516416694614
+    //     },
+    //     {
+    //         title: "Houghton Library",
+    //         details: 'Quincy Street &, Harvard St, Cambridge, MA 02138',
+    //         lat: 12.30536215259088,
+    //         lng: 76.65516416694614
+    //     },
+    //     {
+    //         title: "Cambridge Historical Tours",
+    //         details: '1400 Massachusetts Ave, Cambridge, MA 02138',
+    //         lat: 12.30536215259088,
+    //         lng: 76.65516416694614
+    //     },
+    //     {
+    //         title: "John Harvard Statue",
+    //         details: 'Harvard Yard, 1, Cambridge, MA 02138',
+    //         lat: 12.30536215259088,
+    //         lng: 76.65516416694614
+    //     }
+    // ]
 
     const handleAddAddress = (newAddress) => {
         // console.log("newAddress", newAddress);
@@ -92,7 +96,8 @@ const FindDestination = () => {
         apiPost(endPoints.ADD_ADDRESS, newAddressData).then((res) => {
             // console.log("resss=>", res?.data, res?.status);
             if (res?.status === 201) {
-                setuserData({ ...userData, addresses: [...userData?.addresses, res?.data?.data] })
+                Actions.userData({ ...userData, addresses: [...userData?.addresses, res?.data?.data] })
+                // setuserData({ ...userData, addresses: [...userData?.addresses, res?.data?.data] })
                 // setAddress((prev) => [...prev, res?.data?.data])
                 showSuccessToast("You have successfully added an address", isDark)
             } else {
@@ -106,64 +111,18 @@ const FindDestination = () => {
         })
     }
 
-
-
-    const handleSelectLocation = async (data, details = null) => {
-        if (data && data.place_id) {
-            try {
-                const placeId = data.place_id;
-                const apiKey = GOOGLE_MAP_API_KEY;
-                const detailsUrl = `https://maps.googleapis.com/maps/api/place/details/json?place_id=${placeId}&key=${apiKey}`;
-                const response = await fetch(detailsUrl);
-                const json = await response.json();
-
-                if (json.status === 'OK' && json.result && json.result.geometry) {
-                    const { lat, lng } = json.result.geometry.location;
-                    if (action === "source") {
-                        setSource({
-                            lat: lat,
-                            lng: lng,
-                            location: data?.description
-                        })
-                    } else {
-                        setDestination({
-                            lat: lat,
-                            lng: lng,
-                            location: data?.description
-                        })
-                        navigation.navigate(MainRouteStrings.SET_DESTINATION)
-                    }
-
-                    // Use lat and lng in your application as needed
-                } else {
-                    if (action === "source") {
-                        setSource({
-                            lat: "",
-                            lng: "",
-                            location: data?.description
-                        })
-                    } else if (action === "destination") {
-                        setDestination({
-                            lat: "",
-                            lng: "",
-                            location: data?.description
-                        })
-                    }
-                }
-                setShowSheet({
-                    ...showSheet,
-                    setLocation: false
-                })
-            } catch (error) {
-                console.error('Error fetching place details:', error);
-                Alert.alert("", uiStrings.commonError)
+    const getLasbookings = () => {
+        apiGet(`${endPoints.GET_LAST_FIVE_BOOKINGS}/${userData?._id}`).then((res) => {
+            console.log("res in 5 booking", res?.data, res?.status);
+            if (res?.status === 200) {
+                setRecentDestinationData(res?.data?.data)
             }
-        }
-
+        }).catch((error) => {
+            console.log("error in last 5 bookins", error);
+        })
     }
 
     useEffect(() => {
-
         if (destination.location !== "" && source?.location !== "") {
             setButtonActive(true)
         } else {
@@ -171,14 +130,22 @@ const FindDestination = () => {
         }
     }, [destination, source])
 
-    useLayoutEffect(() => {
-        setSource({
-            ...source,
-            lat: currentLocation?.lat,
-            lng: currentLocation?.lng,
-            location: currentLocation?.location
-        })
+    useEffect(() => {
+        if ((recentDestinationData.length <= 0 && userData?.token)) {
+            getLasbookings()
+        }
+
     }, [])
+
+
+    // useLayoutEffect(() => {
+    //     setSource({
+    //         ...source,
+    //         lat: currentLocation?.lat,
+    //         lng: currentLocation?.lng,
+    //         location: currentLocation?.location
+    //     })
+    // }, [])
 
     return (
         <SafeAreaView
@@ -207,10 +174,8 @@ const FindDestination = () => {
                                         borderColor: isDark ? uiColours.GRAYED_BUTTON : uiColours.LIGHT_GRAY
                                     }]}
                                     onPress={() => {
-                                        setAction("source")
-                                        setShowSheet({
-                                            ...showSheet,
-                                            setLocation: true
+                                        navigation.navigate(MainRouteStrings.SET_LOCATION_SCREEN, {
+                                            from: "source"
                                         })
                                     }}
                                 >
@@ -225,10 +190,8 @@ const FindDestination = () => {
                                 <TouchableOpacity
                                     style={[styles.locationView]}
                                     onPress={() => {
-                                        setAction("destination")
-                                        setShowSheet({
-                                            ...showSheet,
-                                            setLocation: true
+                                        navigation.navigate(MainRouteStrings.SET_LOCATION_SCREEN, {
+                                            from: "destination"
                                         })
                                     }}
                                 >
@@ -326,24 +289,21 @@ const FindDestination = () => {
                         recentDestinationData.map((item) => {
                             return (
                                 <TouchableOpacity
-                                    key={item.title}
+                                    key={item._id}
                                     style={{ flexDirection: 'row', gap: scale(8) }}
                                     onPress={() => {
                                         setDestination({
                                             ...destination,
-                                            lat: item.lat,
-                                            location: item?.title,
-                                            lng: item.lng
+                                            lat: item?.dropOffLocation[0],
+                                            location: item?.dropOffAddress,
+                                            lng: item?.dropOffLocation[1]
                                         })
                                     }}
                                 >
                                     <Images.locationPinRed height={moderateScale(20)} width={moderateScale(20)} />
                                     <View style={{ flex: 1 }}>
                                         <Text style={appStyles.smallTextBlackBold}>
-                                            {item?.title}
-                                        </Text>
-                                        <Text style={appStyles.smallTextGray}>
-                                            {item?.details}
+                                            {item?.dropOffAddress}
                                         </Text>
                                     </View>
                                 </TouchableOpacity>
@@ -360,7 +320,7 @@ const FindDestination = () => {
                 setAddresData={setAddresData}
                 action={"add"}
             />
-            <SetLocationModal
+            {/* <SetLocationModal
                 setShowModal={setShowSheet}
                 isVisible={showSheet.setLocation}
 
@@ -387,17 +347,13 @@ const FindDestination = () => {
                 }}
                 placeholder={action === "source" ? "Input source location" : "Input destination location"}
                 handleSelectLocation={handleSelectLocation}
-            />
+            /> */}
 
             <SheetFooter
                 buttonActive={buttonActive}
                 buttonTitle="Next"
                 handleButtonPress={() => {
-                    Actions.orderDeatils({
-
-                    })
                     navigation.navigate(MainRouteStrings.SET_DESTINATION)
-
                 }}
             />
         </SafeAreaView>

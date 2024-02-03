@@ -125,7 +125,7 @@ const ProfileInformation = ({ route }) => {
         }
         formData.append("addresses", JSON.stringify(profileInformation?.address));
 
-        console.log(formData);
+        // console.log(formData);
         // return
         const config = {
             headers: {
@@ -144,7 +144,8 @@ const ProfileInformation = ({ route }) => {
                 // const userInformaton = await decodeToken(res?.data?.data?.token)
                 // after getting token store it in local storage and also set token in context
                 setLocalData(storageKeys.userData, { ...userData, addresses: res?.data?.data?.addresses, picture: res?.data?.data?.picture })
-                setuserData({ ...userData, addresses: res?.data?.data?.addresses, picture: res?.data?.data?.picture })
+                Actions.userData({ ...userData, addresses: res?.data?.data?.addresses, picture: res?.data?.data?.picture })
+                // setuserData({ ...userData, addresses: res?.data?.data?.addresses, picture: res?.data?.data?.picture })
                 navigation.navigate(AuthRouteStrings.KYC_SCREEN, {
                     data: { ...data, ...profileInformation }
                 })
@@ -323,7 +324,7 @@ const ProfileInformation = ({ route }) => {
                 }}
                 chooseMedia={async () => {
                     const res = await chooseMedia()
-                    console.log("res===>", res);
+                    // console.log("res===>", res);
                     setProfileInformation({
                         ...profileInformation,
                         profileImg: res?.assets[0]

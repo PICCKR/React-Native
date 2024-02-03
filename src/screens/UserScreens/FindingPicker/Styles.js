@@ -27,7 +27,8 @@ const styles = StyleSheet.create({
     buttonsView: {
         flexDirection: "row",
         alignItems: "center",
-        justifyContent: 'space-between'
+        justifyContent: 'space-between',
+        marginTop: verticalScale(10)
     }
 })
 export default styles

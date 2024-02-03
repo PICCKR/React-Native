@@ -19,10 +19,12 @@ import { setLocalData } from '../../../helper/AsyncStorage'
 import { storageKeys } from '../../../helper/AsyncStorage/storageKeys'
 import { showGeneralError } from '../../../helper/showGeneralError'
 import { showErrorToast } from '../../../helper/showErrorToast'
+import { useSelector } from 'react-redux'
 
 const KycScreen = ({ route }) => {
     const data = route?.params?.data
-    const { appStyles, isDark, setIsLoggedIn, userData, setuserData, fromGuestUserScreen, setFromGuestUserScreen } = useContext(AppContext)
+    const { appStyles, isDark, setIsLoggedIn, setuserData, fromGuestUserScreen, setFromGuestUserScreen } = useContext(AppContext)
+    const userData = useSelector((state) => state?.userDataReducer?.userData)
     const navigation = useNavigation()
 
     const [selectedCountry, setSelctedCountry] = useState({
@@ -66,11 +68,16 @@ const KycScreen = ({ route }) => {
             // console.log("res ===>", res?.data, res?.status);
             if (res?.status === 200) {
                 showSuccessToast("verified successfully", isDark)
-                setuserData({
+                Actions.userData({
                     ...userData, kyc: {
                         idNumber: bvn
                     }
                 })
+                // setuserData({
+                //     ...userData, kyc: {
+                //         idNumber: bvn
+                //     }
+                // })
                 setLocalData(storageKeys.userData, {
                     ...userData, kyc: {
                         idNumber: bvn

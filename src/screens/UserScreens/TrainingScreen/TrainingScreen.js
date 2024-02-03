@@ -9,11 +9,13 @@ import styles from './Styles'
 import Video from 'react-native-video';
 import { Images } from '../../../assets/images'
 import useBackButton from '../../../customHooks/useBackButton'
+import { useSelector } from 'react-redux'
 
 const TrainingScreen = ({ route }) => {
     const from = route?.params?.from
 
-    const { appStyles, setuserData, userData } = useContext(AppContext)
+    const { appStyles, setuserData } = useContext(AppContext)
+    const userData = useSelector((state) => state?.userDataReducer?.userData)
     const navigation = useNavigation()
 
     const videoData = [
@@ -43,7 +45,8 @@ const TrainingScreen = ({ route }) => {
         if (from === MainRouteStrings.PICKER_HOME_SCREEN) {
             navigation.navigate(MainRouteStrings.PICKER_PROFILE)
         } else {
-            setuserData({ ...userData, routeType: "picker" })
+            Actions.userData({ ...userData, routeType: "picker" })
+            // setuserData({ ...userData, routeType: "picker" })
         }
         return true
     })
@@ -52,7 +55,8 @@ const TrainingScreen = ({ route }) => {
         if (from === MainRouteStrings.PICKER_HOME_SCREEN) {
             navigation.navigate(MainRouteStrings.PICKER_PROFILE)
         } else {
-            setuserData({ ...userData, routeType: "picker" })
+            Actions.userData({ ...userData, routeType: "picker" })
+            // setuserData({ ...userData, routeType: "picker" })
         }
         // 
     }

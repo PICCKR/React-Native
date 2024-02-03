@@ -22,7 +22,7 @@ const RecipientSheet = ({
   handleBackClick,
   handleEdit
 }) => {
-const navigation =useNavigation()
+  const navigation = useNavigation()
   const recepentFormData = [
     {
       id: 1,
@@ -50,7 +50,7 @@ const navigation =useNavigation()
   const [buttonActive, setButtonActive] = useState(false)
 
   useEffect(() => {
-    if (RegEx.name__regEx.test(formData.name)  && formData.phoneNumber) {
+    if (RegEx.name__regEx.test(formData.name) && formData.phoneNumber) {
       setButtonActive(true)
     } else {
       setButtonActive(false)
@@ -66,7 +66,7 @@ const navigation =useNavigation()
   return (
     <BottomSheet
       isVisible={isVisible}
-      modelBgStyles={{backgroundColor:"rgba(255, 255, 255, 0)"}}
+      modelBgStyles={{ backgroundColor: "rgba(255, 255, 255, 0)" }}
       title="Recipients Details"
       hasBackButton
       showFooterButton
@@ -80,8 +80,8 @@ const navigation =useNavigation()
       containerStyles={{ padding: 0 }}
     >
 
-      <View style={[commonStyles.bottomBorder, Styles.bottomViewContent,{
-        borderColor:isDark ? uiColours.GRAYED_BUTTON : uiColours.LIGHT_GRAY
+      <View style={[commonStyles.bottomBorder, Styles.bottomViewContent, {
+        borderColor: isDark ? uiColours.GRAYED_BUTTON : uiColours.LIGHT_GRAY
       }]}>
         <Text style={[appStyles?.smallTextBlack, { flex: 1 }]}>
           {location?.location}
@@ -95,8 +95,8 @@ const navigation =useNavigation()
 
       </View>
 
-      <View style={[commonStyles.bottomBorder, Styles.recipientDetails,{
-        borderColor:isDark ? uiColours.GRAYED_BUTTON : uiColours.LIGHT_GRAY
+      <View style={[commonStyles.bottomBorder, Styles.recipientDetails, {
+        borderColor: isDark ? uiColours.GRAYED_BUTTON : uiColours.LIGHT_GRAY
       }]}>
         <View style={commonStyles.flexRowAlnCtrJutySpaceBetween}>
           <Text style={appStyles.mediumTextBlackBold}>
@@ -125,21 +125,21 @@ const navigation =useNavigation()
         />
       </View>
       {/* <CustomButton
-        buttonStyle={{
-          backgroundColor: buttonActive ? uiColours.PRIMARY :
-            !buttonActive && isDark ? uiColours.GRAYED_BUTTON :
-              uiColours.LIGHT_GRAY,
-          marginVertical: verticalScale(16)
-        }}
-        titleStyle={{
-          color: buttonActive ? uiColours.WHITE_TEXT : !buttonActive && isDark ? uiColours.GRAYED_BUTTON :
-            uiColours.GRAY_TEXT
-        }}
-        title="Next"
-        NavigationHandle={handleNext}
-        disabled={!buttonActive}
+    //   buttonStyle={{
+    //     backgroundColor: buttonActive ? uiColours.PRIMARY :
+    //       !buttonActive && isDark ? uiColours.GRAYED_BUTTON :
+    //         uiColours.LIGHT_GRAY,
+    //     marginVertical: verticalScale(16)
+    //   }}
+    //   titleStyle={{
+    //     color: buttonActive ? uiColours.WHITE_TEXT : !buttonActive && isDark ? uiColours.GRAYED_BUTTON :
+    //       uiColours.GRAY_TEXT
+    //   }}
+    //   title="Next"
+    //   NavigationHandle={handleNext}
+    //   disabled={!buttonActive}
 
-      /> */}
+    // /> */}
     </BottomSheet>
   )
 }

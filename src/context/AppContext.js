@@ -47,21 +47,19 @@ const AppProvider = ({ children }) => {
         // if user data exist then set login to true to that user can directly
         // navigate to home screen
         if (UserData) {
-            setuserData(UserData)
+            Actions.userData(UserData)
             if (UserData?.userRole[1]) {
                 Socket.emit("driver-connect",
                     {
                         "userId": UserData?._id
                     }
                 )
-            } else {
-                console.log("it is user");
             }
-
         }
     }
 
     const getCurrentLocation = async (user) => {
+        console.log("in locations");
         try {
             Geolocation.getCurrentPosition((position) => {
                 const latitude = position?.coords?.latitude
@@ -71,12 +69,17 @@ const AppProvider = ({ children }) => {
                 Geocoder.from(latitude, longitude)
                     .then(async json => {
                         const adddress = json.results[0]?.formatted_address
-                        setCurrentLocation({
-                            ...currentLocation,
+                        Actions.currentLoaction({
                             location: adddress,
                             lat: latitude,
                             lng: longitude
                         })
+                        setSource({
+                            location: adddress,
+                            lat: latitude,
+                            lng: longitude
+                        })
+                        console.log("llllll", adddress, latitude);
                         if (user) {
                             await handleAppStateChange(user, latitude, longitude)
                         }
@@ -101,7 +104,6 @@ const AppProvider = ({ children }) => {
 
 
     const handleAppStateChange = (user, lat, lng) => {
-        // console.log("usersss", user?._id, lat, lng);
         Socket.emit("update-user-location", {
             "userId": user?._id,
             "longitude": lng,
@@ -114,46 +116,18 @@ const AppProvider = ({ children }) => {
         getCurrentLocation()
     }, [])
 
-    useEffect(() => {
-        const fetchData = async () => {
-            const UserData = await getLocalData(storageKeys.userData);
-            await getCurrentLocation(UserData);
-        };
-
-        const intervalId = setInterval(fetchData, 15000);
-
-        return () => {
-            clearInterval(intervalId);
-        };
-
-    }, [])
-
-
-    const handleUpdateLocationError = (data) => {
-        console.log("handleUpdateLocationError", data);
+    const handleConnectDriversuccess = (data) => {
+        console.log("driver-connect-successfully", data);
     }
-
-    const handleUpdateLocationSuccess = (data) => {
-        // console.log("handleUpdateLocationSuccess", data);
-    }
-
-    const handleConnectDriversuccess = useCallback((data) => {
-        // console.log("driver-connect-successfully", data);
-    })
 
 
 
     useEffect(() => {
         Socket.on("driver-connect-successfully", handleConnectDriversuccess)
-        Socket.on('update-user-location-error', handleUpdateLocationError)
-        Socket.on("update-user-location-successfully", handleUpdateLocationSuccess)
-
         return () => {
             Socket.off("driver-connect-successfully", handleConnectDriversuccess)
-            Socket.off('update-user-location-error', handleUpdateLocationError)
-            Socket.off('update-user-location-successfully', handleUpdateLocationSuccess)
         }
-    }, [Socket, handleUpdateLocationError, handleUpdateLocationSuccess, handleConnectDriversuccess])
+    }, [Socket, handleConnectDriversuccess])
 
 
 
@@ -168,8 +142,6 @@ const AppProvider = ({ children }) => {
 
 
     // state variables
-    const [isLoggedIn, setIsLoggedIn] = useState(false);
-    const [userData, setuserData] = useState(null)
     const [isNew, setisNew] = useState(null)
     const [isDark, setIsDark] = useState(isDarkSystem)
     const [selectedVehicle, setSelectedVehicle] = useState(null)
@@ -195,7 +167,7 @@ const AppProvider = ({ children }) => {
     const [source, setSource] = useState({
         lat: "",
         lng: "",
-        location: "Current location"
+        location: ""
     })
 
     const [currentLocation, setCurrentLocation] = useState({
@@ -206,7 +178,6 @@ const AppProvider = ({ children }) => {
 
     // commanly used appliaction styles
     const appStyles = {
-
         smallTextBlack: {
             color: isDark ? uiColours?.WHITE_TEXT : uiColours?.BLACK_TEXT,
             fontSize: scale(12),
@@ -358,13 +329,9 @@ const AppProvider = ({ children }) => {
     return (
         <AppContext.Provider
             value={{
-                isLoggedIn,
-                setIsLoggedIn,
                 appStyles,
                 setisNew,
                 isNew,
-                userData,
-                setuserData,
                 isDark,
                 setIsDark,
                 destination,

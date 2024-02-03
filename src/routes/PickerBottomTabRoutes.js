@@ -14,19 +14,7 @@ const Tab = createBottomTabNavigator();
 
 const PickerBottomTabRoutes = () => {
 
-    const { appStyles, userData, setuserData, isDark } = useContext(AppContext)
-    const navigation = useNavigation()
-
-    // Function to handle tab press based on user data
-    const handleTabPress = (screenName) => {
-        if (userData?.token) {
-            // User data exists, navigate to the specified screen
-            navigation.navigate(screenName);
-        } else {
-            // User data does not exist
-            setuserData(null)
-        }
-    };
+    const { appStyles, isDark } = useContext(AppContext)
 
     return (
         <Tab.Navigator
@@ -36,8 +24,8 @@ const PickerBottomTabRoutes = () => {
         >
             <Tab.Screen name={MainRouteStrings.PICKER_HOME_SCREEN} component={screens.PICKER_HOME_SCREEN}
                 options={{
-                    
-                    tabBarStyle: {backgroundColor : isDark ? uiColours.DARK_BG : uiColours.WHITE_TEXT},
+
+                    tabBarStyle: { backgroundColor: isDark ? uiColours.DARK_BG : uiColours.WHITE_TEXT },
                     tabBarIcon: ({ focused }) => (
                         focused ? <Images.ExploreFill width={moderateScale(20)} height={moderateScale(20)} /> : <Images.search width={moderateScale(20)} height={moderateScale(20)} />
                     ),
@@ -55,7 +43,7 @@ const PickerBottomTabRoutes = () => {
 
             <Tab.Screen name={MainRouteStrings.TRIPS_SCREEN} component={screens.TRIPS_SCREEN}
                 options={{
-                    tabBarStyle: {backgroundColor : isDark ? uiColours.DARK_BG : uiColours.WHITE_TEXT},
+                    tabBarStyle: { backgroundColor: isDark ? uiColours.DARK_BG : uiColours.WHITE_TEXT },
                     tabBarIcon: ({ focused }) => (
                         focused ? <Images.activityFill width={moderateScale(20)} height={moderateScale(20)} /> : <Images.activityOutline width={moderateScale(20)} height={moderateScale(20)} />
                     ),
@@ -68,15 +56,11 @@ const PickerBottomTabRoutes = () => {
                     ),
                 }}
 
-                // listeners={{
-                //     tabPress: () => handleTabPress(MainRouteStrings.FAVORITES_SCREEN),
-                // }}
-
             />
 
             <Tab.Screen name={MainRouteStrings.PICKER_CHAT_SCREEN} component={screens.PICKER_CHAT_SCREEN}
                 options={{
-                    tabBarStyle: {backgroundColor : isDark ? uiColours.DARK_BG : uiColours.WHITE_TEXT},
+                    tabBarStyle: { backgroundColor: isDark ? uiColours.DARK_BG : uiColours.WHITE_TEXT },
                     tabBarIcon: ({ focused }) => (
                         focused ? <Images.mesageOutline width={moderateScale(20)} height={moderateScale(20)} /> : <Images.mesageOutline width={moderateScale(20)} height={moderateScale(20)} />
                     ),
@@ -88,15 +72,11 @@ const PickerBottomTabRoutes = () => {
                         </Text>
                     ),
                 }}
-                // listeners={{
-                //     tabPress: () => handleTabPress(MainRouteStrings.ACTIVITY_SCREEN),
-                // }}
-
             />
 
             <Tab.Screen name={MainRouteStrings.PICKER_PROFILE} component={screens.PICKER_PROFILE}
                 options={{
-                    tabBarStyle: {backgroundColor : isDark ? uiColours.DARK_BG : uiColours.WHITE_TEXT},
+                    tabBarStyle: { backgroundColor: isDark ? uiColours.DARK_BG : uiColours.WHITE_TEXT },
                     tabBarIcon: ({ focused }) => (
                         focused ? <Images.profile width={moderateScale(20)} height={moderateScale(20)} /> : <Images.profileOutline width={moderateScale(20)} height={moderateScale(20)} />
                     ),
@@ -108,10 +88,6 @@ const PickerBottomTabRoutes = () => {
                         </Text>
                     ),
                 }}
-                // listeners={{
-                //     tabPress: () => handleTabPress(MainRouteStrings.USER_PROFILE_SCREEN),
-                // }}
-
             />
         </Tab.Navigator>
     )

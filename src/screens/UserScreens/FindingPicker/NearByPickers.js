@@ -11,6 +11,7 @@ import CustomButton from '../../../components/Button/CustomButton'
 import { buttonTypes } from '../../../utils/Constents/constentStrings'
 import { uiColours } from '../../../utils/Styles/uiColors'
 import DragableBottomSheet from '../../../components/DragableBottomSheet/DragableBottomSheet'
+import { formatAmount } from '../../../helper/formatter'
 
 const NearByPickers = ({
     isVisible,
@@ -87,13 +88,21 @@ const NearByPickers = ({
                                         height: moderateScale(30), width: moderateScale(30)
                                     }} /> : <Images.profile height={moderateScale(30)} width={moderateScale(30)} />}
                                 </View>
-                                <View>
+                                <View style={{ flex: 1 }}>
                                     <Text style={appStyles?.smallTextPrimaryBold}>{item?.picckrId?.firstName}</Text>
                                     <Text style={appStyles?.smallTextGray}>AM666EE • Toyota Prius Hybris</Text>
-                                    <View style={commonStyles.flexRowAlnCtr}>
+                                    {/* <View style={commonStyles.flexRowAlnCtr}>
                                         <Images.star />
                                         <Text style={appStyles.smallTextGray}>{4.9}</Text>
-                                    </View>
+                                    </View> */}
+                                </View>
+                                <View>
+                                    <Text style={appStyles?.smallTextPrimaryBold}>
+                                        Bid price
+                                    </Text>
+                                    <Text style={appStyles?.smallTextPrimaryBold}>
+                                        {formatAmount(item?.bidAmount)}
+                                    </Text>
                                 </View>
                             </View>
                             <View style={styles.buttonsView}>
@@ -104,13 +113,12 @@ const NearByPickers = ({
                                     buttonStyle={{ borderColor: uiColours.RED }}
                                     title={"Decline"}
                                     titleStyle={{ color: uiColours.RED }}
-                                    NavigationHandl={() => handleDecline(item)}
+                                    NavigationHandle={() => handleDecline(item)}
                                 />
                                 <CustomButton
                                     buttonType={buttonTypes.MEDIUM}
                                     title={"Accept"}
                                     NavigationHandle={() => {
-
                                         handleAccept(item)
                                     }}
                                 />
