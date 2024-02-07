@@ -158,6 +158,9 @@ const UserSignupScreen = () => {
           rightText="Privacy Policy"
           selected={checkData.privecyCheck}
           termsView={{ marginBottom: verticalScale(70) }}
+          handleLinkClick={() => {
+            // navigation.navigate(AuthRouteStrings.PDF_VIEW)
+          }}
         />
 
       </ScrollView>

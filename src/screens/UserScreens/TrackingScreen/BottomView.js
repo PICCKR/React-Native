@@ -50,7 +50,7 @@ const BottomView = ({
             "vehicleId": orderDeatils?.picckrId?.vehicle?._id
         }).then((res) => {
             Actions.showLoader(false)
-            console.log("res innadd fav", res?.data);
+            // console.log("res innadd fav", res?.data);
             if (res?.status === 201) {
                 showSuccessToast(`${orderDeatils?.picckrId?.firstName} is added to your favorate list`, isDark)
             } else {
@@ -63,21 +63,23 @@ const BottomView = ({
     }
 
     const handleBookingstart = async (data) => {
-        console.log("booking-start-in-user", data);
+        // console.log("booking-start-in-user", data);
     }
 
     const handleGetBooking = (data) => {
         Actions.showLoader(false)
-        console.log("get-booking-in-user-traking", data?.data);
+        // console.log("get-booking-in-user-traking", data?.data);
         if (data?.data?.status === "delivered") {
             showSuccessToast("Your order deleverd successfully", isDark)
             navigation.navigate(MainRouteStrings.ACTIVITY_SCREEN)
         }
+        // Actions.bookingData(null)
+        // A
     }
 
     const handleCancelSuccess = (data) => {
         Actions.showLoader(false)
-        console.log("request-cancel-successfully in user", data);
+        // console.log("request-cancel-successfully in user", data);
         navigation.navigate(MainRouteStrings.PICKER_REVIEW_WHEN_CANCELLED, {
             data: orderDeatils
         })
@@ -85,7 +87,8 @@ const BottomView = ({
 
     const handleCancelError = useCallback((data) => {
         Actions.showLoader(false)
-        console.log("request-cancel-error", data);
+        // console.log("request-cancel-error", data);
+        showErrorToast(data?.message, isDark)
 
     }, [Socket])
 
@@ -162,10 +165,15 @@ const BottomView = ({
                             <TouchableOpacity
                                 style={styles.msgInput}
                                 onPress={() => {
-                                    navigation.navigate(MainRouteStrings.USER_CHAT_SCREEN)
+                                    Socket.emit("joinRoom", {
+                                        "room": orderDeatils?._id
+                                    })
+                                    navigation.navigate(MainRouteStrings.USER_CHAT_SCREEN, {
+                                        orderDetails: orderDeatils
+                                    })
                                 }}
                             >
-                                <Text style={appStyles.smallTextGray}>Send message to Cooper Septimus</Text>
+                                <Text style={appStyles.smallTextGray}>Send message to {orderDeatils?.picckrId?.firstName}</Text>
                             </TouchableOpacity>
                             <TouchableOpacity
                                 style={styles.heartIcon}

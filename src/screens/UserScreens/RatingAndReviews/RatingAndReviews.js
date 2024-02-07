@@ -1,5 +1,5 @@
 import { View, Text, FlatList } from 'react-native'
-import React, { useContext } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import WrapperContainer from '../../../components/WrapperContainer/WrapperContainer'
 import styles from './Styles'
 import PrifileView from '../../../components/PrifileView/ProfileView'
@@ -9,60 +9,84 @@ import { Images } from '../../../assets/images'
 import { commonStyles } from '../../../utils/Styles/CommonStyles'
 import { useNavigation } from '@react-navigation/native'
 import { uiColours } from '../../../utils/Styles/uiColors'
+import { apiGet } from '../../../services/apiServices'
+import { endPoints } from '../../../configs/apiUrls'
+import { useSelector } from 'react-redux'
 
 const RatingAndReviews = () => {
     const { appStyles, isDark } = useContext(AppContext)
+    const userData = useSelector((state) => state?.userDataReducer?.userData)
     const navigation = useNavigation()
-    const reviewData = [
-        {
-            id: "1",
-            userName: "John Doe",
-            date: "5 • June 20 2023, 13:02 PM",
-            feedback: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam."
-        },
-        {
-            id: "2",
-            userName: "John John",
-            date: "19 • July 22 2023, 13:02 PM",
-            feedback: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt"
-        },
-        {
-            id: "3",
-            userName: "John Doe",
-            date: "5 • June 20 2023, 13:02 PM",
-            feedback: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam."
-        },
-        {
-            id: "4",
-            userName: "John John",
-            date: "19 • July 22 2023, 13:02 PM",
-            feedback: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt"
-        },
-        {
-            id: "5",
-            userName: "John John",
-            date: "19 • July 22 2023, 13:02 PM",
-            feedback: ""
-        },
-        {
-            id: "6",
-            userName: "John John",
-            date: "19 • July 22 2023, 13:02 PM",
-            feedback: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam."
-        },
-        {
-            id: "7",
-            userName: "John John",
-            date: "19 • July 22 2023, 13:02 PM",
-            feedback: ""
-        },
-    ]
+    const [reviewData, setReviewData] = useState([])
+    // const reviewData = [
+    //     {
+    //         id: "1",
+    //         userName: "John Doe",
+    //         date: "5 • June 20 2023, 13:02 PM",
+    //         feedback: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam."
+    //     },
+    //     {
+    //         id: "2",
+    //         userName: "John John",
+    //         date: "19 • July 22 2023, 13:02 PM",
+    //         feedback: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt"
+    //     },
+    //     {
+    //         id: "3",
+    //         userName: "John Doe",
+    //         date: "5 • June 20 2023, 13:02 PM",
+    //         feedback: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam."
+    //     },
+    //     {
+    //         id: "4",
+    //         userName: "John John",
+    //         date: "19 • July 22 2023, 13:02 PM",
+    //         feedback: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt"
+    //     },
+    //     {
+    //         id: "5",
+    //         userName: "John John",
+    //         date: "19 • July 22 2023, 13:02 PM",
+    //         feedback: ""
+    //     },
+    //     {
+    //         id: "6",
+    //         userName: "John John",
+    //         date: "19 • July 22 2023, 13:02 PM",
+    //         feedback: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam."
+    //     },
+    //     {
+    //         id: "7",
+    //         userName: "John John",
+    //         date: "19 • July 22 2023, 13:02 PM",
+    //         feedback: ""
+    //     },
+    // ]
+
+
+    const getRatingsAndReviews = async () => {
+        apiGet(`${endPoints.GET_RATINGS_RAVIEWS}/${userData?._id}`).then((res) => {
+            console.log("res in get ratings", res?.status, res?.data);
+            if (res?.status === 200) {
+                setReviewData(res?.data?.data)
+            } else {
+
+            }
+        }).catch((error) => {
+            console.log("error in get ratings");
+        })
+    }
+
+    useEffect(() => {
+        getRatingsAndReviews()
+    }, [])
+
     return (
         <WrapperContainer
             centerTitle="Rating & Reviews"
             showFooterButton={false}
             showBackButton
-            handleBack={()=>{
+            handleBack={() => {
                 navigation.goBack()
             }}
             containerPadding={{}}
@@ -82,11 +106,11 @@ const RatingAndReviews = () => {
                 }}
                 renderItem={({ item }) => {
                     return (
-                        <View style={[styles.card,{
-                            borderColor : isDark ? uiColours.GRAYED_BUTTON : uiColours.LIGHT_GRAY
+                        <View style={[styles.card, {
+                            borderColor: isDark ? uiColours.GRAYED_BUTTON : uiColours.LIGHT_GRAY
                         }]}>
-                            <View style={[styles.profileSection,{
-                                borderColor : isDark ? uiColours.GRAYED_BUTTON : uiColours.LIGHT_GRAY
+                            <View style={[styles.profileSection, {
+                                borderColor: isDark ? uiColours.GRAYED_BUTTON : uiColours.LIGHT_GRAY
                             }]}>
                                 <PrifileView
                                     size={moderateScale(40)}
@@ -120,7 +144,7 @@ const RatingAndReviews = () => {
             >
 
             </FlatList> :
-                <View style={{alignItems:"center",height:'90%', justifyContent:"center"}}>
+                <View style={{ alignItems: "center", height: '90%', justifyContent: "center" }}>
                     <Text style={appStyles.smallTextGray}>
                         You don’t have any Rating & Reviews
                     </Text>

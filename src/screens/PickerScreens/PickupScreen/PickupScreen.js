@@ -29,7 +29,7 @@ const PickupScreen = ({ route }) => {
     const source = { latitude: orderDetails?.requestId?.pickupLocation?.coordinates[0], longitude: orderDetails?.requestId?.pickupLocation?.coordinates[1] };
     const destination = { latitude: orderDetails?.requestId?.dropOffLocation?.coordinates[0], longitude: orderDetails?.requestId?.dropOffLocation?.coordinates[1] };
 
-    console.log("orderDetails =====>", source, destination);
+    // console.log("orderDetails =====>", source, destination);
     // Calculate deltas based on origin and destination
     const calculateMapDeltas = () => {
         const latitudes = [orderDetails?.requestId?.dropOffLocation?.coordinates[0], orderDetails?.requestId?.pickupLocation?.coordinates[0]];

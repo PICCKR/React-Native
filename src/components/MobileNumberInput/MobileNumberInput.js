@@ -177,7 +177,7 @@ const MobileNumberInput = ({
             <BottomSheet
                 isVisible={showSheet}
                 hasCloseIcon
-                title="Choose Regi(onal Number"
+                title="Choose Regional Number"
                 onBackdropPress={() => {
                     setShowSheet(false)
                 }}
@@ -206,7 +206,6 @@ const MobileNumberInput = ({
                                 >
                                     <View
                                         style={{ flexDirection: 'row', alignItems: 'center', gap: scale(10) }}
-
                                     >
                                         <View style={Styles.flagView}>
                                             <Image source={Flag} style={{ height: moderateScale(20), width: moderateScale(35) }} />

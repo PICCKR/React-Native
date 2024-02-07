@@ -25,4 +25,7 @@ export const endPoints = {
     FAVORIES: BASE_URL + "favoritePicckr",
     GET_PICKER_USER_ORDERS: BASE_URL + "bookings/getPastUserAndPicckrBooking",
     GET_LAST_FIVE_BOOKINGS: BASE_URL + "bookings/getLatestBookingsLocations",
+    GET_CHAT_MSG: BASE_URL + "chat/roomchat",
+    GET_CHAT_HSITORY: BASE_URL + "chat/getPicckrChatHistory",
+    GET_RATINGS_RAVIEWS: BASE_URL + "ratings"
 }

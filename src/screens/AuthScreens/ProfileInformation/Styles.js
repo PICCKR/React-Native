@@ -10,6 +10,7 @@ const styles = StyleSheet.create({
         borderColor: uiColours.LIGHT_GRAY,
         width: screenSize.width,
         padding: moderateScale(16),
+
     },
     profileView: {
         height: moderateScale(100),
@@ -75,12 +76,12 @@ const styles = StyleSheet.create({
         borderWidth: moderateScale(1),
         borderRadius: moderateScale(6),
         borderColor: uiColours.LIGHT_GRAY,
-        minHeight:verticalScale(45),
-        flexDirection:'row',
-        alignItems:"center",
-        paddingHorizontal:scale(10),
-        gap:scale(10),
-        paddingVertical:verticalScale(8)
+        minHeight: verticalScale(45),
+        flexDirection: 'row',
+        alignItems: "center",
+        paddingHorizontal: scale(10),
+        gap: scale(10),
+        paddingVertical: verticalScale(8)
 
     }
 })

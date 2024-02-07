@@ -7,102 +7,14 @@ import { AppContext } from '../../../context/AppContext'
 import { useNavigation } from '@react-navigation/native'
 import { Images } from '../../../assets/images'
 import styles from './Styles'
-import AddAddressSheet from './AddAddressSheet'
-import { showToast } from '../../../components/tostConfig/tostConfig'
-import { tostMessagetypes } from '../../../utils/Constents/constentStrings'
-import { setLocalData } from '../../../helper/AsyncStorage'
 import { uiColours } from '../../../utils/Styles/uiColors'
-import axios from 'axios'
-import { apiGet, apiPost, apiPut } from '../../../services/apiServices'
-import { endPoints } from '../../../configs/apiUrls'
-import { showGeneralError } from '../../../helper/showGeneralError'
-import { showSuccessToast } from '../../../helper/showSuccessToast'
-import Actions from '../../../redux/Actions'
-import EditAddressSheet from './EditAddressSheet'
 import { useSelector } from 'react-redux'
+import { MainRouteStrings } from '../../../utils/Constents/RouteStrings'
 
 const AddressScreen = () => {
-    const { appStyles, isDark, setIsDark, setuserData } = useContext(AppContext)
+    const { appStyles } = useContext(AppContext)
     const userData = useSelector((state) => state?.userDataReducer?.userData)
     const navigation = useNavigation()
-    const [showSheet, setShowSheet] = useState({
-        add: false,
-        edit: false
-    })
-
-    const [address, setAddress] = useState([])
-
-    const [selectedAddress, setSelectedAddress] = useState(null)
-
-    const handleAddressEdit = async (newAddress) => {
-        // console.log("newAddress", newAddress);
-
-        setShowSheet({
-            ...showSheet,
-            edit: false
-        })
-        Actions.showLoader(true)
-        apiPut(`${endPoints.ADD_ADDRESS}/${selectedAddress?._id}`, newAddress).then((res) => {
-            // console.log("resss=>", res?.data, res?.status);
-            if (res?.status === 200) {
-                getAddress()
-                // setAddress((prev) => [...prev, res?.data?.data])
-                showSuccessToast("You have successfully edited an address", isDark)
-            } else {
-                showGeneralError()
-            }
-            Actions.showLoader(false)
-        }).catch((error) => {
-            Actions.showLoader(false)
-            showGeneralError()
-            console.log("error in edit address", error);
-        })
-    }
-
-    const handleAddAddress = (newAddress) => {
-        // console.log("newAddress", newAddress);
-        setShowSheet({
-            ...showSheet,
-            add: false
-        })
-        const newAddressData = { ...newAddress, userId: userData?._id }
-        Actions.showLoader(true)
-        apiPost(endPoints.ADD_ADDRESS, newAddressData).then((res) => {
-            console.log("resss=>", res?.data, res?.status);
-            if (res?.status === 201) {
-                setAddress((prev) => [...prev, res?.data?.data])
-                showSuccessToast("You have successfully added an address", isDark)
-            } else {
-
-            }
-            Actions.showLoader(false)
-        }).catch((error) => {
-            Actions.showLoader(false)
-            showGeneralError()
-            console.log("error in add address", error);
-        })
-    }
-
-    const getAddress = async () => {
-        Actions.showLoader(true)
-        apiGet(`${endPoints.GET_ADDRESS}/${userData?._id}`).then((res) => {
-            // console.log("get address res", res?.data, res?.status);
-            if (res?.status === 200) {
-                setAddress(res?.data?.data)
-            } else {
-                setAddress([])
-            }
-            Actions.showLoader(false)
-        }).catch((error) => {
-            Actions.showLoader(false)
-            console.log("error in get address", error);
-        })
-    }
-
-    useEffect(() => {
-        getAddress()
-    }, [])
-
 
     return (
 
@@ -117,14 +29,13 @@ const AddressScreen = () => {
         >
             <View style={commonStyles.flexRowAlnCtrJutySpaceBetween}>
                 <Text style={appStyles?.smallTextPrimaryBold}>
-                    Saved address ({address.length}/3)
+                    Saved address ({userData?.addresses?.length}/3)
                 </Text>
-                {address.length < 3 && <TouchableOpacity
+                {userData?.addresses?.length < 3 && <TouchableOpacity
                     style={{ paddingVertical: verticalScale(5) }}
                     onPress={() => {
-                        setShowSheet({
-                            ...showSheet,
-                            add: true
+                        navigation.navigate(MainRouteStrings.ADD_ADDRESS, {
+                            action: "add"
                         })
                     }}
                 >
@@ -132,8 +43,8 @@ const AddressScreen = () => {
                 </TouchableOpacity>}
             </View>
 
-            {address.length > 0 ? <FlatList
-                data={address}
+            {userData?.addresses?.length > 0 ? <FlatList
+                data={userData?.addresses}
                 keyExtractor={(item) => item?._id}
                 style={{ marginTop: verticalScale(10) }}
                 renderItem={({ item }) => {
@@ -155,11 +66,12 @@ const AddressScreen = () => {
                                 <TouchableOpacity
                                     style={styles.addresEditIcon}
                                     onPress={() => {
-                                        setShowSheet({
-                                            ...showSheet,
-                                            edit: true
+
+                                        navigation.navigate(MainRouteStrings.ADD_ADDRESS, {
+                                            action: "edit",
+                                            data: item
                                         })
-                                        setSelectedAddress(item)
+
                                     }}
                                 >
                                     <Images.edit />
@@ -182,19 +94,6 @@ const AddressScreen = () => {
                 </Text>
 
             }
-
-            <AddAddressSheet
-                isVisible={showSheet?.add}
-                setShowSheet={setShowSheet}
-                handleAddAddress={handleAddAddress}
-            />
-
-            <EditAddressSheet
-                isVisible={showSheet?.edit}
-                setShowSheet={setShowSheet}
-                handleEditAddress={handleAddressEdit}
-                data={selectedAddress}
-            />
         </WrapperContainer>
     )
 }

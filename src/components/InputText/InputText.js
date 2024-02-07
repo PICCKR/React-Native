@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { View, StyleSheet, Text, TextInput } from 'react-native';
+import { View, StyleSheet, Text, TextInput, Keyboard, TouchableWithoutFeedback } from 'react-native';
 import { scale } from 'react-native-size-matters';
 import { AppContext } from '../../context/AppContext';
 import { commonStyles } from '../../utils/Styles/CommonStyles';
@@ -38,6 +38,7 @@ const InputText = ({
     const { appStyles, isDark } = useContext(AppContext)
 
     return (
+        // <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
         <View style={[styles.inputContainer, inputContainer]}>
             {hasTitle && <View style={[styles.inputTitle, inputTitleStyles]}>
                 <Text style={[appStyles.smallTextBlack, { fontFamily: "Poppins-Medium" }]}>
@@ -89,6 +90,7 @@ const InputText = ({
             }
 
         </View >
+        // </TouchableWithoutFeedback>
     );
 }
 

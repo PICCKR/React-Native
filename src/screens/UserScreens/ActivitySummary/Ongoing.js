@@ -39,7 +39,7 @@ const Ongoing = ({
             "vehicleId": orderDeatils?.picckrId?.vehicle?._id
         }).then((res) => {
             Actions.showLoader(false)
-            console.log("res innadd fav", res?.data);
+            // console.log("res innadd fav", res?.data);
             if (res?.status === 201) {
                 showSuccessToast(`${orderDeatils?.picckrId?.firstName} is added to your favorate list`, isDark)
             } else {

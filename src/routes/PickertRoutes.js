@@ -47,7 +47,6 @@ const PickertRoutes = () => {
 
 
     useEffect(() => {
-        // setTimeout(() => {
         const fetchData = async () => {
             const UserData = await getLocalData(storageKeys.userData);
             await getCurrentLocation(UserData);
@@ -56,13 +55,10 @@ const PickertRoutes = () => {
         return () => {
             clearInterval(intervalId);
         };
-
-        // }, 2000);
-
     }, [])
 
     const handleUpdateLocationError = (data) => {
-        console.log("update-user-location-error", data);
+        // console.log("update-user-location-error", data);
     }
 
     const handleUpdateLocationSuccess = (data) => {
@@ -105,6 +101,10 @@ const PickertRoutes = () => {
                 <Stack.Screen name={MainRouteStrings.VEHICLE_SCREEN} component={screens.VEHICLE_SCREEN} />
                 <Stack.Screen name={MainRouteStrings.BANK_ACCOUNT} component={screens.BANK_ACCOUNT} />
                 <Stack.Screen name={MainRouteStrings.USER_REVIEW_WHEN_CANCELLED} component={screens.USER_REVIEW_WHEN_CANCELLED} />
+                <Stack.Screen name={MainRouteStrings.ADD_ADDRESS} component={screens.ADD_ADDRESS} />
+                <Stack.Screen name={MainRouteStrings.SET_LOCATION_SCREEN_PICKKR} component={screens.SET_LOCATION_SCREEN_PICKKR} />
+                <Stack.Screen name={MainRouteStrings.ADD_VEHICLE} component={screens.ADD_VEHICLE} />
+                <Stack.Screen name={MainRouteStrings.ADD_BANCK_ACCOUNT} component={screens.ADD_BANCK_ACCOUNT} />
             </Stack.Navigator>
         </NavigationContainer>
     )

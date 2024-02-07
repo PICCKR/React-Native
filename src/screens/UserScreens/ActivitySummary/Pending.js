@@ -42,7 +42,7 @@ const Pending = ({
             "vehicleId": orderDeatils?.picckrId?.vehicle?._id
         }).then((res) => {
             Actions.showLoader(false)
-            console.log("res innadd fav", res?.data);
+            // console.log("res innadd fav", res?.data);
             if (res?.status === 201) {
                 showSuccessToast(`${orderDeatils?.picckrId?.firstName} is added to your favorate list`, isDark)
             } else {
@@ -56,12 +56,12 @@ const Pending = ({
 
 
     const handleBookingstart = async (data) => {
-        console.log("booking-start-in-user", data);
+        // console.log("booking-start-in-user", data);
     }
 
     const handleGetBooking = (data) => {
         Actions.showLoader(false)
-        console.log("get-booking-in-user-traking", data?.data);
+        // console.log("get-booking-in-user-traking", data?.data);
         if (data?.data?.status === "in-transit") {
             navigation.navigate(MainRouteStrings.ONGOING_TRIPS)
         }
@@ -73,7 +73,7 @@ const Pending = ({
 
     const handleCancelSuccess = (data) => {
         Actions.showLoader(false)
-        console.log("request-cancel-successfully in user", data);
+        // console.log("request-cancel-successfully in user", data);
         navigation.navigate(MainRouteStrings.PICKER_REVIEW_WHEN_CANCELLED, {
             data: orderDeatils
         })
@@ -81,7 +81,7 @@ const Pending = ({
 
     const handleCancelError = useCallback((data) => {
         Actions.showLoader(false)
-        console.log("request-cancel-error", data);
+        // console.log("request-cancel-error", data);
 
     }, [Socket])
 

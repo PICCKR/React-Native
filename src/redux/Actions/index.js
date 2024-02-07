@@ -5,6 +5,9 @@ import * as isLoggedIn from './isLoggedIn';
 import * as userData from './userData';
 import * as bookingData from './bookingData';
 import * as bookingDataPiccker from './bookingDataPiccker';
+import * as addressData from './addressData';
+import * as vehicleData from './vehicleData';
+import * as banckAccountData from './banckAccountData';
 
 export default {
     ...showLoader,
@@ -13,5 +16,8 @@ export default {
     ...isLoggedIn,
     ...userData,
     ...bookingData,
-    ...bookingDataPiccker
+    ...bookingDataPiccker,
+    ...addressData,
+    ...vehicleData,
+    ...banckAccountData
 }

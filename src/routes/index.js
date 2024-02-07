@@ -58,6 +58,11 @@ import RecentTrips from "../screens/UserScreens/ActivityScreen/RecentTrips";
 import PickerOnGoingTrips from "../screens/PickerScreens/TripScreen/PickerOnGoingTrips";
 import PickerRecentTrips from "../screens/PickerScreens/TripScreen/PickerRecentTrips";
 import RequestTab from "../screens/PickerScreens/TripScreen/RequestTab";
+import PdfView from "../screens/AuthScreens/PdfView/PdfView";
+import AddAddress from "../screens/CommonScreens/AddAddress/AddAddress";
+import SetLocationScreenPickker from "../screens/CommonScreens/SetLocationScreen/SetLocationScreenPickker";
+import AddVehicleScreen from "../screens/PickerScreens/VehicleScreen/AddVehicleScreen";
+import AddBankAccount from "../screens/PickerScreens/BackAccounts/AddBankAccount";
 
 
 
@@ -102,6 +107,7 @@ export const screens = {
     MANAGE_ACCOUNT: ManageAccount,
     CHANGE_PASSWORD: ChangePassword,
     USER_WALLET_SCREEN: UserWalletScreen,
+    PDF_VIEW: PdfView,
 
     PICKER_BOTTOM_ROUTES: PickerBottomTabRoutes,
     PICKER_HOME_SCREEN: PickerHomeScreen,
@@ -122,5 +128,9 @@ export const screens = {
     VEHICLE_SCREEN: VehicleScreen,
     BANK_ACCOUNT: BackAccounts,
     USER_REVIEW_WHEN_CANCELLED: UserReviewWhenCancelled,
-    SET_LOCATION_SCREEN: SetLocationScreen
+    SET_LOCATION_SCREEN: SetLocationScreen,
+    ADD_ADDRESS: AddAddress,
+    SET_LOCATION_SCREEN_PICKKR: SetLocationScreenPickker,
+    ADD_VEHICLE: AddVehicleScreen,
+    ADD_BANCK_ACCOUNT: AddBankAccount
 }

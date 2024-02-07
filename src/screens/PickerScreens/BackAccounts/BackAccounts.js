@@ -18,20 +18,24 @@ import { showGeneralError } from '../../../helper/showGeneralError'
 import { showSuccessToast } from '../../../helper/showSuccessToast'
 import Actions from '../../../redux/Actions'
 import { showErrorToast } from '../../../helper/showErrorToast'
-import AddAccount from './AddAccount'
+import AddAccount from './AddBankAccount'
 import EditBankAccount from './EditBankAccount'
 import { useSelector } from 'react-redux'
+import { MainRouteStrings } from '../../../utils/Constents/RouteStrings'
 
 const BackAccounts = () => {
  const { appStyles, isDark } = useContext(AppContext)
  const userData = useSelector((state) => state?.userDataReducer?.userData)
+ const bacnkAccounts = useSelector((state) => state?.bankAccountReducer?.bankAccounts)
+
+
  const navigation = useNavigation()
  const [showSheet, setShowSheet] = useState({
   add: false,
   edit: false
  })
 
- const [bacnkAccounts, setBacnkAccounts] = useState([])
+ // const [bacnkAccounts, setBacnkAccounts] = useState([])
 
  const [bacnkAccountData, setBacnkAccountData] = useState({
   bankName: "",
@@ -42,65 +46,16 @@ const BackAccounts = () => {
 
  const [selectedAccount, setSelectedAccount] = useState(null)
 
- const handleUpdateBackAccount = async (accountData) => {
-  setShowSheet({
-   ...showSheet,
-   edit: false
-  })
-  // console.log("accountData ==>", accountData);
-  // return
-  Actions.showLoader(true)
-  apiPut(`${endPoints.BANK_ACCOUNT}/${selectedAccount?._id}`, bacnkAccountData).then((res) => {
-   // console.log("resss=>", res?.data, res?.status);
-   if (res?.status === 200) {
-    getAccountData()
-    showSuccessToast("You have successfully edited an vehicle", isDark)
-   } else {
-    showGeneralError()
-   }
-   Actions.showLoader(false)
-  }).catch((error) => {
-   Actions.showLoader(false)
-   showGeneralError()
-   console.log("error in edit address", error);
-  })
- }
 
- const handleAddBackAccount = (newVehicle) => {
-
-  // console.log("newAddress", newVehicle);
-  // return
-  setShowSheet({
-   ...showSheet,
-   add: false
-  })
-  Actions.showLoader(true)
-  apiPost(endPoints.BANK_ACCOUNT, { ...newVehicle, userId: userData?._id }).then((res) => {
-   // console.log("resss=>", res?.data, res?.status);
-
-   if (res?.status === 201) {
-    const data = res?.data?.data
-    setBacnkAccounts((prev) => [...prev, res?.data?.data])
-    showSuccessToast("You have successfully added an vehicle", isDark)
-   } else {
-    showErrorToast(res?.data?.message, isDark)
-   }
-   Actions.showLoader(false)
-  }).catch((error) => {
-   Actions.showLoader(false)
-   showGeneralError()
-   console.log("error in add address", error);
-  })
- }
 
  const getAccountData = async () => {
   Actions.showLoader(true)
   apiGet(`${endPoints.BANK_ACCOUNT}`).then((res) => {
    // console.log("get vehicle res ", res?.data, res?.status);
    if (res?.status === 200) {
-    setBacnkAccounts(res?.data?.data)
+    Actions.banckAccountData(res?.data?.data)
    } else {
-    setBacnkAccounts([])
+
    }
    Actions.showLoader(false)
   }).catch((error) => {
@@ -110,7 +65,10 @@ const BackAccounts = () => {
  }
 
  useEffect(() => {
-  getAccountData()
+  if (bacnkAccounts.length <= 0) {
+   getAccountData()
+  }
+
  }, [])
 
 
@@ -132,9 +90,8 @@ const BackAccounts = () => {
     {bacnkAccounts.length < 3 && <TouchableOpacity
      style={{ paddingVertical: verticalScale(5) }}
      onPress={() => {
-      setShowSheet({
-       ...showSheet,
-       add: true
+      navigation.navigate(MainRouteStrings.ADD_BANCK_ACCOUNT, {
+       action: "add"
       })
      }}
     >
@@ -167,9 +124,9 @@ const BackAccounts = () => {
         <TouchableOpacity
          style={styles.editIcon}
          onPress={() => {
-          setShowSheet({
-           ...showSheet,
-           edit: true
+          navigation.navigate(MainRouteStrings.ADD_BANCK_ACCOUNT, {
+           action: "edit",
+           data: item
           })
           setBacnkAccountData({
            ...bacnkAccountData,
@@ -205,7 +162,7 @@ const BackAccounts = () => {
 
    }
 
-   <AddAccount
+   {/* <AddAccount
     isVisible={showSheet?.add}
     setShowSheet={setShowSheet}
     handleAddBackAccount={handleAddBackAccount}
@@ -217,7 +174,7 @@ const BackAccounts = () => {
     handleUpdateBackAccount={handleUpdateBackAccount}
     bacnkAccountData={bacnkAccountData}
     setBacnkAccountData={setBacnkAccountData}
-   />
+   /> */}
   </WrapperContainer>
  )
 }

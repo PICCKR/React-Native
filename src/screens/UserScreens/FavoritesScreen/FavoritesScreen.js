@@ -23,7 +23,7 @@ const FavoritesScreen = () => {
     Actions.showLoader(true)
     apiGet(endPoints?.FAVORIES).then((res) => {
       Actions.showLoader(false)
-      console.log("🚀 ~ getFavoritesData ~ getFavoritesData:", res?.status)
+      // console.log("🚀 ~ getFavoritesData ~ getFavoritesData:", res?.status)
       if (res?.status === 200) {
         setFavorateData(res?.data?.data)
       } else {
@@ -48,49 +48,59 @@ const FavoritesScreen = () => {
       showFooterButton={false}
       containerPadding={{ paddingHorizontal: 0 }}
     >
-      <FlatList
-        data={favorateData}
-        keyExtractor={(item) => item?._id}
-        renderItem={({ item }) => {
-          // console.log("item", item?.userId?.firstName);
-          return (
-            <TouchableOpacity
-              style={styles.card}
-              onPress={() => {
-                navigation.navigate(MainRouteStrings.PICKER_DETAILS, {
-                  data: item
-                })
-              }}
-            >
-              <View style={{ flexDirection: 'row', width: "100%" }}>
-                <ProfileView
-                  size={40}
-                  profileImg={item?.picckrId?.picture}
-                  hasBottomLine={false}
-                />
 
-                <View style={styles.content}>
-                  <Text style={appStyles.smallTextPrimaryBold}>
-                    {item?.picckrId?.firstName} {item?.picckrId?.lastName}
-                  </Text>
-                  <Text style={appStyles.smallTextGray}>
-                    {item?.vehicleId?.plateNumber} - {item?.vehicleId?.model} -{item?.vehicleId?.color}
-                  </Text>
-                  <View style={{ flexDirection: 'row', gap: scale(5) }}>
-                    <Images.star height={moderateScale(20)} width={moderateScale(20)} />
-                    <Text style={appStyles.smallTextGray}>{item.rating}</Text>
+      {
+        favorateData?.length > 0 ?
+          <FlatList
+            data={favorateData}
+            keyExtractor={(item) => item?._id}
+            renderItem={({ item }) => {
+              // console.log("item", item?.userId?.firstName);
+              return (
+                <TouchableOpacity
+                  style={styles.card}
+                  onPress={() => {
+                    navigation.navigate(MainRouteStrings.PICKER_DETAILS, {
+                      data: item
+                    })
+                  }}
+                >
+                  <View style={{ flexDirection: 'row', width: "100%" }}>
+                    <ProfileView
+                      size={40}
+                      profileImg={item?.picckrId?.picture}
+                      hasBottomLine={false}
+                    />
+
+                    <View style={styles.content}>
+                      <Text style={appStyles.smallTextPrimaryBold}>
+                        {item?.picckrId?.firstName} {item?.picckrId?.lastName}
+                      </Text>
+                      <Text style={appStyles.smallTextGray}>
+                        {item?.vehicleId?.plateNumber} - {item?.vehicleId?.model} -{item?.vehicleId?.color}
+                      </Text>
+                      <View style={{ flexDirection: 'row', gap: scale(5) }}>
+                        <Images.star height={moderateScale(20)} width={moderateScale(20)} />
+                        <Text style={appStyles.smallTextGray}>{item.rating}</Text>
+                      </View>
+                    </View>
                   </View>
-                </View>
-              </View>
-              <View style={styles.heartIcon}>
-                <Images.heartRed />
-              </View>
-            </TouchableOpacity>
-          )
-        }}
-      >
+                  <View style={styles.heartIcon}>
+                    <Images.heartRed />
+                  </View>
+                </TouchableOpacity>
+              )
+            }}
+          >
 
-      </FlatList>
+          </FlatList> :
+          <View style={{ alignItems: 'center', justifyContent: 'center', marginTop: '50%' }}>
+            <Text style={appStyles.smallTextGray}>
+              You do not have favorite picckrs
+            </Text>
+          </View>
+      }
+
     </WrapperContainer>
   )
 }

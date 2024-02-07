@@ -23,7 +23,7 @@ const UpcomingTrips = () => {
   const getActivityData = async () => {
     Actions.showLoader(true)
     apiGet(`${endPoints.GET_USER_BOOKINGS}?status=pending`).then((res) => {
-      console.log("ress in booking", res?.data?.data);
+      // console.log("ress in booking", res?.data?.data);
       Actions.showLoader(false)
       if (res?.status === 200) {
         setData(res?.data?.data)

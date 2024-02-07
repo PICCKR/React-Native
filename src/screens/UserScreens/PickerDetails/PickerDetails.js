@@ -15,7 +15,7 @@ import { MainRouteStrings } from '../../../utils/Constents/RouteStrings'
 
 const PickerDetails = ({ route }) => {
     const data = route?.params?.data
-    console.log("data", data);
+    // console.log("data", data);
     const navigation = useNavigation()
     const { appStyles, isDark } = useContext(AppContext)
     const [selectedHistory, setSelectedHistory] = useState(false)
@@ -26,7 +26,7 @@ const PickerDetails = ({ route }) => {
         Actions.showLoader(true)
         apiGet(`${endPoints.GET_PICKER_USER_ORDERS}/${data?.picckrId?._id}`).then((res) => {
             Actions.showLoader(false)
-            console.log("res===>", res.status, res?.data?.data);
+            // console.log("res===>", res.status, res?.data?.data);
             if (res?.status === 200) {
                 setHistoryData(res?.data?.data)
             }
@@ -89,7 +89,7 @@ const PickerDetails = ({ route }) => {
                                 historyData?.length !== 0 ?
                                     historyData.map((item) => {
                                         return (
-                                            <View key={item?.id}>
+                                            <View key={item?._id}>
                                                 <TouchableOpacity
                                                     style={styles.historyCard}
                                                     onPress={() => {

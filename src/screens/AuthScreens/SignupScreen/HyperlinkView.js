@@ -9,11 +9,12 @@ const HyperlinkView = ({
     selected,
     leftText,
     rightText,
-    termsView
+    termsView,
+    handleLinkClick = () => { }
 }) => {
-    const { appStyles, isDark} = useContext(AppContext)
+    const { appStyles, isDark } = useContext(AppContext)
     return (
-        <View style={[Styles.termsView,termsView]}>
+        <View style={[Styles.termsView, termsView]}>
             <CheckBox
                 handleCheck={handleCheck}
                 selected={selected}
@@ -25,6 +26,7 @@ const HyperlinkView = ({
                 </Text>
                 <TouchableOpacity
                     style={Styles.linkTextView}
+                    onPress={handleLinkClick}
                 >
                     <Text style={appStyles.smallTextPrimary}> {rightText} </Text>
                 </TouchableOpacity>

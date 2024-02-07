@@ -45,7 +45,7 @@ const UserProfileScreen = () => {
 
   const handleOptionClick = (item) => {
 
-    console.log("item", item);
+    // console.log("item", item);
     switch (item) {
       case "Address":
         navigation.navigate(MainRouteStrings.ADDRESS_SCREEN)

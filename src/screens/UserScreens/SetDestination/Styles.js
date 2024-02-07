@@ -39,35 +39,35 @@ export const Styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center'
     },
-    
+
     bottomView: {
-        position:"absolute",
-        alignSelf:"flex-start",
-        backgroundColor:uiColours.WHITE_TEXT,
-        width:screenSize.width,
-        borderTopRightRadius:moderateScale(8),
-        borderTopLeftRadius:moderateScale(8),
-        bottom:0
+        position: "absolute",
+        alignSelf: "flex-start",
+        backgroundColor: uiColours.WHITE_TEXT,
+        width: screenSize.width,
+        borderTopRightRadius: moderateScale(8),
+        borderTopLeftRadius: moderateScale(8),
+        bottom: 0
     },
-    bottomViewContent:{
-        padding:moderateScale(16),
-        flexDirection:"row",
-        alignItems:"center",
-        gap:scale(10)
+    bottomViewContent: {
+        padding: moderateScale(16),
+        flexDirection: "row",
+        alignItems: "center",
+        gap: scale(10)
     },
-    recipientDetails:{
-        padding:moderateScale(16),
+    recipientDetails: {
+        padding: moderateScale(16),
     },
-    pickupButton:{
-        marginTop:verticalScale(5),
-        borderWidth:moderateScale(1),
-        borderColor:uiColours.LIGHT_GRAY,
-        borderRadius:moderateScale(5),
-        height:verticalScale(45),
-        flexDirection:"row",
-        alignItems:"center",
-        justifyContent:"space-between",
-        paddingHorizontal:scale(16)
+    pickupButton: {
+        marginTop: verticalScale(5),
+        borderWidth: moderateScale(1),
+        borderColor: uiColours.LIGHT_GRAY,
+        borderRadius: moderateScale(5),
+        height: verticalScale(45),
+        flexDirection: "row",
+        alignItems: "center",
+        justifyContent: "space-between",
+        paddingHorizontal: scale(16)
     }
-    
+
 })

@@ -31,7 +31,7 @@ const ApprovalScreen = ({ route }) => {
             navigation.navigate(fromGuestUserScreen)
             setFromGuestUserScreen(null)
         } else {
-            setIsLoggedIn(true)
+            Actions.isLoggedIn(true)
         }
 
     }

@@ -1,6 +1,5 @@
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import AuthRoutes from './AuthRoutes'
-import { AppContext, useSocket } from '../context/AppContext'
 import UserRoutes from './UserRoutes'
 import PickertRoutes from './PickertRoutes'
 import SplashScreen from '../screens/AuthScreens/splashScreen/SplashScreen'
@@ -11,8 +10,6 @@ import NoRoutesScreen from '../screens/CommonScreens/NoRoutesScreen/NoRoutesScre
 import { decodeToken } from '../helper/decodeToken'
 import axios from 'axios'
 import { endPoints } from '../configs/apiUrls'
-import Geolocation from '@react-native-community/geolocation'
-import { Socket } from 'socket.io-client'
 import Actions from '../redux/Actions'
 import { useSelector } from 'react-redux'
 
@@ -22,7 +19,6 @@ const CheckRoutes = () => {
     const userData = useSelector((state) => state?.userDataReducer?.userData)
 
     const [showSplashScreen, setShowSplashScreen] = useState(true)
-
 
     const getUserData = async () => {
         // get user details from local storage
@@ -37,6 +33,7 @@ const CheckRoutes = () => {
                 Actions.isLoggedIn(false)
             }
         }).catch((error) => {
+            // if the user is not found then we should make user to login again
             setShowSplashScreen(false)
             Actions.isLoggedIn(false)
             console.log("error", error);
@@ -63,7 +60,6 @@ const CheckRoutes = () => {
                         // console.log("here");
                         Actions.isLoggedIn(true)
                         const userInformaton = await decodeToken(data?.token)
-                        // console.log("userInformaton", userInformaton);
                         // after getting token store it in local storage and also set token in context
                         setLocalData(storageKeys.userData, { ...userInformaton, token: data?.token })
                         Actions.userData({ ...userInformaton, token: data?.token })

@@ -4,17 +4,10 @@ import { AppContext } from '../../../context/AppContext'
 import { moderateScale, scale, verticalScale } from 'react-native-size-matters'
 import { Images } from '../../../assets/images'
 import styles from './Styles'
-import InputText from '../../../components/InputText/InputText'
 import { uiColours } from '../../../utils/Styles/uiColors'
 import { commonStyles } from '../../../utils/Styles/CommonStyles'
-import AddAddressSheet from "../AddressScreen/AddAddressSheet"
-import { setLocalData } from '../../../helper/AsyncStorage'
-import { storageKeys } from '../../../helper/AsyncStorage/storageKeys'
 import { useNavigation } from '@react-navigation/native'
 import { MainRouteStrings } from '../../../utils/Constents/RouteStrings'
-import SetLocationModal from '../../../components/SetLocationModal/SetLocationModal'
-import { GOOGLE_MAP_API_KEY } from '../../../configs/google_map_api_key'
-import { uiStrings } from '../../../utils/Constents/uiStrings'
 import SheetFooter from '../../../components/SheetFooter/SheetFooter'
 import Actions from '../../../redux/Actions'
 import { apiGet, apiPost } from '../../../services/apiServices'
@@ -36,84 +29,14 @@ const FindDestination = () => {
     const navigation = useNavigation()
 
     const userData = useSelector((state) => state?.userDataReducer?.userData)
-    const currentLocation = useSelector((state) => state?.CurrentLocationReducer?.currentLocation)
 
-    console.log("currentLocation", source);
-
-    const [address, setAddress] = useState(
-        userData?.addresses ? userData?.addresses : []
-    )
-    const [showSheet, setShowSheet] = useState({
-        addAddress: false,
-        setLocation: false
-    })
-    const [addressData, setAddresData] = useState({
-        id: "",
-        addressType: "",
-        buildingName: "",
-        homeNumber: "",
-        location: "",
-    })
-    const [action, setAction] = useState("")
     const [buttonActive, setButtonActive] = useState(false)
     const [recentDestinationData, setRecentDestinationData] = useState([])
 
-    // const recentDestinationData = [
-    //     {
-    //         title: "Harvard University",
-    //         details: 'Massachusetts Hall, Cambridge, MA 02138',
-    //         lat: 12.30536215259088,
-    //         lng: 76.65516416694614
-    //     },
-    //     {
-    //         title: "Houghton Library",
-    //         details: 'Quincy Street &, Harvard St, Cambridge, MA 02138',
-    //         lat: 12.30536215259088,
-    //         lng: 76.65516416694614
-    //     },
-    //     {
-    //         title: "Cambridge Historical Tours",
-    //         details: '1400 Massachusetts Ave, Cambridge, MA 02138',
-    //         lat: 12.30536215259088,
-    //         lng: 76.65516416694614
-    //     },
-    //     {
-    //         title: "John Harvard Statue",
-    //         details: 'Harvard Yard, 1, Cambridge, MA 02138',
-    //         lat: 12.30536215259088,
-    //         lng: 76.65516416694614
-    //     }
-    // ]
-
-    const handleAddAddress = (newAddress) => {
-        // console.log("newAddress", newAddress);
-        setShowSheet({
-            ...showSheet,
-            addAddress: false
-        })
-        const newAddressData = { ...newAddress, userId: userData?._id }
-        Actions.showLoader(true)
-        apiPost(endPoints.ADD_ADDRESS, newAddressData).then((res) => {
-            // console.log("resss=>", res?.data, res?.status);
-            if (res?.status === 201) {
-                Actions.userData({ ...userData, addresses: [...userData?.addresses, res?.data?.data] })
-                // setuserData({ ...userData, addresses: [...userData?.addresses, res?.data?.data] })
-                // setAddress((prev) => [...prev, res?.data?.data])
-                showSuccessToast("You have successfully added an address", isDark)
-            } else {
-
-            }
-            Actions.showLoader(false)
-        }).catch((error) => {
-            Actions.showLoader(false)
-            showGeneralError()
-            console.log("error in add address", error);
-        })
-    }
 
     const getLasbookings = () => {
         apiGet(`${endPoints.GET_LAST_FIVE_BOOKINGS}/${userData?._id}`).then((res) => {
-            console.log("res in 5 booking", res?.data, res?.status);
+            // console.log("res in 5 booking", res?.data, res?.status);
             if (res?.status === 200) {
                 setRecentDestinationData(res?.data?.data)
             }
@@ -137,15 +60,6 @@ const FindDestination = () => {
 
     }, [])
 
-
-    // useLayoutEffect(() => {
-    //     setSource({
-    //         ...source,
-    //         lat: currentLocation?.lat,
-    //         lng: currentLocation?.lng,
-    //         location: currentLocation?.location
-    //     })
-    // }, [])
 
     return (
         <SafeAreaView
@@ -222,9 +136,13 @@ const FindDestination = () => {
                                     borderColor: isDark ? uiColours.GRAYED_BUTTON : uiColours.LIGHT_GRAY
                                 }]}
                                 onPress={() => {
-                                    setShowSheet({
-                                        ...showSheet,
-                                        addAddress: true
+                                    // setShowSheet({
+                                    //     ...showSheet,
+                                    //     addAddress: true
+                                    // })
+                                    navigation.navigate(MainRouteStrings.ADD_ADDRESS, {
+                                        action: "add",
+
                                     })
                                 }}
                             >
@@ -292,11 +210,12 @@ const FindDestination = () => {
                                     key={item._id}
                                     style={{ flexDirection: 'row', gap: scale(8) }}
                                     onPress={() => {
+                                        // console.log("item?.dropOffLocation[0]", item?.dropOffLocation?.coordinates[0]);
                                         setDestination({
                                             ...destination,
-                                            lat: item?.dropOffLocation[0],
+                                            lat: item?.dropOffLocation?.coordinates[0],
                                             location: item?.dropOffAddress,
-                                            lng: item?.dropOffLocation[1]
+                                            lng: item?.dropOffLocation?.coordinates[1]
                                         })
                                     }}
                                 >
@@ -312,42 +231,6 @@ const FindDestination = () => {
                     }
                 </View>}
             </ScrollView>
-            <AddAddressSheet
-                isVisible={showSheet.addAddress}
-                setShowSheet={setShowSheet}
-                handleAddAddress={handleAddAddress}
-                addressData={addressData}
-                setAddresData={setAddresData}
-                action={"add"}
-            />
-            {/* <SetLocationModal
-                setShowModal={setShowSheet}
-                isVisible={showSheet.setLocation}
-
-                handleSelectFromMap={() => {
-                    setShowSheet({
-                        ...showSheet,
-                        setLocation: false
-                    })
-                    // console.log("sorce", source);
-                    if (action === "destination" && (destination?.lat === "" || destination?.lng === "")) {
-                        setDestination({
-                            ...destination,
-                            lat: source?.lat,
-                            lng: source?.lng,
-                            location: source?.location
-                        })
-                    }
-
-                    // return
-                    navigation.navigate(MainRouteStrings.SELECT_ADDRRESS_FROM_MAP, {
-                        toScreen: action === "source" ? MainRouteStrings.FIND_DESTINATON : MainRouteStrings.SET_DESTINATION,
-                        geometry: (destination?.lat && destination?.lng) ? destination : source
-                    })
-                }}
-                placeholder={action === "source" ? "Input source location" : "Input destination location"}
-                handleSelectLocation={handleSelectLocation}
-            /> */}
 
             <SheetFooter
                 buttonActive={buttonActive}

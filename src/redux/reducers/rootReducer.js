@@ -6,7 +6,9 @@ import isLoggedInReducer from "./isLoggedInReducer"
 import userDataReducer from "./userDataReducer"
 import bookingDataReducer from "./bookingDataReducer"
 import bookingDataPickkerReducer from "./bookingDataPickkerReducer"
-
+import addressDataReducer from "./addressDataReducer"
+import vehicleDataReducer from "./vehicleDataReducer"
+import bankAccountReducer from "./bankAccountReducer"
 
 const appReducer = combineReducers({
     showLoader,
@@ -15,7 +17,10 @@ const appReducer = combineReducers({
     isLoggedInReducer,
     userDataReducer,
     bookingDataReducer,
-    bookingDataPickkerReducer
+    bookingDataPickkerReducer,
+    addressDataReducer,
+    vehicleDataReducer,
+    bankAccountReducer
 
 })
 

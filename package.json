@@ -1,5 +1,5 @@
 {
-  "name": "PickkR",
+  "name": "picckr",
   "version": "0.0.1",
   "private": true,
   "scripts": {
@@ -45,6 +45,7 @@
     "react-native-maps-directions": "^1.9.0",
     "react-native-modal": "^13.0.1",
     "react-native-pager-view": "^6.2.3",
+    "react-native-permissions": "^4.1.1",
     "react-native-pure-jwt": "^3.0.2",
     "react-native-ratings": "^8.1.0",
     "react-native-reanimated": "^3.6.1",

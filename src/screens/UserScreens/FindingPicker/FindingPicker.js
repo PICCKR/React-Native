@@ -28,7 +28,7 @@ const FindingPicker = ({ route }) => {
     const [nearByPickers, setNearByPickers] = useState([])
     const [seletedBid, setSelectedBid] = useState(null)
 
-    console.log("sssss", selectedVehicle);
+    // console.log("sssss", selectedVehicle);
 
     const mapRef = useRef()
     const ASPECT_RATIO = screenSize.width / screenSize.height;
@@ -89,43 +89,45 @@ const FindingPicker = ({ route }) => {
         } else if (data?.data?.status !== "cancelled") {
 
         }
+
+        Actions.orderDeatils(null)
     }
 
     const handleNewBid = (data) => {
-        console.log("new bid", data?.data);
+        // console.log("new bid", data?.data);
         setPickersData([...pickersData, data?.data])
     }
 
     const handleGetAvilablePickers = (data) => {
         Actions.showLoader(false)
-        console.log("data pickeerrss", data?.data);
+        // console.log("data pickeerrss", data?.data);
         setNearByPickers(data?.data)
     }
 
     const handleGetAvilablePickersError = (data) => {
         Actions.showLoader(false)
-        console.log("handleGetAvilablePickersError", data);
+        // console.log("handleGetAvilablePickersError", data);
     }
 
     const handleAcceptBidError = useCallback(async (data) => {
         Actions.showLoader(false)
-        console.log("accept-bid-error", data);
+        // console.log("accept-bid-error", data);
     }, [Socket])
 
 
     const handleBidAccepted = async (data) => {
         Actions.showLoader(false)
-        console.log("accept-bid-successfully", data);
+        // console.log("accept-bid-successfully", data);
     }
 
     const handleRejectBidError = useCallback(async (data) => {
         Actions.showLoader(false)
-        console.log("reject-bid-erro", data);
+        // console.log("reject-bid-erro", data);
     }, [Socket])
 
     const handleBidDecline = async (data) => {
         Actions.showLoader(false)
-        console.log("reject-bid-successfully in user", data?.data);
+        // console.log("reject-bid-successfully in user", data?.data);
         const newData = await pickersData.filter((val) => {
             if (val?._id != data?.data?._id) {
                 return val
@@ -158,7 +160,7 @@ const FindingPicker = ({ route }) => {
 
     useEffect(() => {
         Actions.showLoader(true)
-        console.log("source?.lat", source?.lat, source?.lng);
+        // console.log("source?.lat", source?.lat, source?.lng);
         Socket.emit("get-availble-picckrs", {
             "longitude": source?.lng,
             "latitude": source?.lat

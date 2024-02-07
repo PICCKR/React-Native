@@ -1,5 +1,5 @@
 PODS:
-  - AmplifyRTNCore (1.0.10):
+  - AmplifyRTNCore (1.0.13):
     - React-Core
   - Base64 (1.1.2)
   - boost (1.76.0)
@@ -408,14 +408,14 @@ PODS:
     - React-Core
   - react-native-get-random-values (1.10.0):
     - React-Core
-  - react-native-google-maps (1.9.1):
+  - react-native-google-maps (1.10.0):
     - Google-Maps-iOS-Utils (= 4.2.2)
     - GoogleMaps (= 7.4.0)
     - React-Core
   - react-native-image-picker (7.1.0):
     - RCT-Folly (= 2021.07.22.00)
     - React-Core
-  - react-native-maps (1.9.1):
+  - react-native-maps (1.10.0):
     - React-Core
   - react-native-netinfo (11.2.1):
     - React-Core
@@ -425,14 +425,14 @@ PODS:
   - react-native-pure-jwt (3.0.2):
     - JWT (= 3.0.0-beta.12)
     - React
-  - react-native-safe-area-context (4.8.2):
+  - react-native-safe-area-context (4.9.0):
     - React-Core
   - react-native-video (5.2.1):
     - React-Core
     - react-native-video/Video (= 5.2.1)
   - react-native-video/Video (5.2.1):
     - React-Core
-  - react-native-webview (13.6.4):
+  - react-native-webview (13.7.0):
     - RCT-Folly (= 2021.07.22.00)
     - React-Core
   - React-NativeModulesApple (0.72.7):
@@ -549,10 +549,10 @@ PODS:
     - React-Core
   - RNCClipboard (1.5.1):
     - React-Core
-  - RNGestureHandler (2.14.0):
+  - RNGestureHandler (2.14.1):
     - RCT-Folly (= 2021.07.22.00)
     - React-Core
-  - RNReanimated (3.6.1):
+  - RNReanimated (3.6.2):
     - RCT-Folly (= 2021.07.22.00)
     - React-Core
     - ReactCommon/turbomodule/core
@@ -794,7 +794,7 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon/yoga"
 
 SPEC CHECKSUMS:
-  AmplifyRTNCore: 74fc06365f08cabb0fa2e22869fe62fd89bda2c5
+  AmplifyRTNCore: 8ae89bf2e13d9b475f3016653d3b91917bc34461
   Base64: cecfb41a004124895a7bcee567a89bae5a89d49b
   boost: 57d2868c099736d80fcd648bf211b4431e51a558
   CocoaAsyncSocket: 065fd1e645c7abab64f7a6a2007a48038fdc6a99
@@ -834,15 +834,15 @@ SPEC CHECKSUMS:
   React-logger: 8edc785c47c8686c7962199a307015e2ce9a0e4f
   react-native-geolocation: ef66fb798d96284c6043f0b16c15d9d1d4955db4
   react-native-get-random-values: 384787fd76976f5aec9465aff6fa9e9129af1e74
-  react-native-google-maps: 5e3af3d3bd16a9936a44be5be47ced7dbd45029b
+  react-native-google-maps: 8007277310c0d0f7266f7987e511fb3f5505f3f2
   react-native-image-picker: 5e076db26cd81660cfb6db5bcf517cfa12054d45
-  react-native-maps: 4f45622710094c3603b262279c40026750579b1f
+  react-native-maps: b4c3b092b1c71240d8d4792bae3738828942f14a
   react-native-netinfo: 8a7fd3f7130ef4ad2fb4276d5c9f8d3f28d2df3d
   react-native-pager-view: e26d35e382d86950c936f8917e3beb9188115ccc
   react-native-pure-jwt: c7aabf3e38f688922741774c5b37d1288fc64311
-  react-native-safe-area-context: 0ee144a6170530ccc37a0fd9388e28d06f516a89
+  react-native-safe-area-context: b97eb6f9e3b7f437806c2ce5983f479f8eb5de4b
   react-native-video: c26780b224543c62d5e1b2a7244a5cd1b50e8253
-  react-native-webview: 107961c73db53d66549c867a3b64eaa20d34c41f
+  react-native-webview: 4e7d637b43eddec107016d316ae75f7063a3075c
   React-NativeModulesApple: b6868ee904013a7923128892ee4a032498a1024a
   React-perflogger: 31ea61077185eb1428baf60c0db6e2886f141a5a
   React-RCTActionSheet: 392090a3abc8992eb269ef0eaa561750588fc39d
@@ -862,8 +862,8 @@ SPEC CHECKSUMS:
   ReactCommon: 5f704096ccf7733b390f59043b6fa9cc180ee4f6
   RNCAsyncStorage: 618d03a5f52fbccb3d7010076bc54712844c18ef
   RNCClipboard: 41d8d918092ae8e676f18adada19104fa3e68495
-  RNGestureHandler: 32a01c29ecc9bb0b5bf7bc0a33547f61b4dc2741
-  RNReanimated: fdbaa9c964bbab7fac50c90862b6cc5f041679b9
+  RNGestureHandler: fe2be3be5598dc74329b211c58c9f2d231461769
+  RNReanimated: ce6bef77caeee09d7f022532cee0c8d9bad09c9a
   RNScreens: 3c5b9f4a9dcde752466854b6109b79c0e205dad3
   RNSVG: ba3e7232f45e34b7b47e74472386cf4e1a676d0a
   RNVectorIcons: 64e6a523ac30a3241efa9baf1ffbcc5e76ff747a
@@ -871,6 +871,6 @@ SPEC CHECKSUMS:
   Yoga: 4c3aa327e4a6a23eeacd71f61c81df1bcdf677d5
   YogaKit: f782866e155069a2cca2517aafea43200b01fd5a
 
-PODFILE CHECKSUM: cad4102cfe7d7ea992bc3250b8583e5212edf418
+PODFILE CHECKSUM: 942c069f8a1fe8b6c4e24331c8bf9816c1a27c9e
 
 COCOAPODS: 1.14.3

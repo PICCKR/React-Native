@@ -72,11 +72,11 @@ const PickerReviewWhenCancelled = ({ route }) => {
     }
 
     const handleReviewError = useCallback(async (data) => {
-        console.log("feedback-passenger-error", data);
+        // console.log("feedback-passenger-error", data);
     }, [Socket])
 
     const handleReviewSuccess = useCallback(async (data) => {
-        console.log("feedback-passenger-success", data);
+        // console.log("feedback-passenger-success", data);
         navigation.navigate(MainRouteStrings.ACTIVITY_SCREEN)
     }, [Socket])
 

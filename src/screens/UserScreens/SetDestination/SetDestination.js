@@ -1,4 +1,4 @@
-import { View, Text, SafeAreaView, DatePickerAndroid } from 'react-native'
+import { View, Text, SafeAreaView, DatePickerAndroid, Platform } from 'react-native'
 import React, { useContext, useEffect, useRef, useState } from 'react'
 import { AppContext } from '../../../context/AppContext'
 import { useIsFocused, useNavigation } from '@react-navigation/native'
@@ -67,6 +67,7 @@ const SetDestination = ({ route }) => {
         recipient: true
       })
     }
+
   }, [isFocused]);
 
 
@@ -126,11 +127,35 @@ const SetDestination = ({ route }) => {
 
         }}
         handleNext={() => {
-          setShowBottomSheet({
-            ...showBottomSheet,
-            recipient: false,
-            pickup: true
-          })
+          if (Platform.OS === "android") {
+            setShowBottomSheet({
+              ...showBottomSheet,
+              recipient: false,
+              pickup: true
+            })
+          } else {
+            setShowBottomSheet({
+              ...showBottomSheet,
+              recipient: false,
+            })
+            Actions.showLoader(true)
+            setTimeout(() => {
+              Actions.showLoader(false)
+              setShowBottomSheet({
+                pickup: true
+              })
+
+            }, 1000);
+          }
+
+          // setShowBottomSheet(() => {
+          //   return {
+          //     recipient: false,
+          //     pickup: true
+          //   }
+
+          // })
+
           // navigation.navigate(toScreen)
         }}
       />
@@ -153,11 +178,27 @@ const SetDestination = ({ route }) => {
           navigation.navigate(MainRouteStrings.FIND_DESTINATON)
         }}
         handleBackClick={() => {
-          setShowBottomSheet({
-            ...showBottomSheet,
-            recipient: true,
-            pickup: false
-          })
+
+          if (Platform.OS === "android") {
+            setShowBottomSheet({
+              ...showBottomSheet,
+              recipient: true,
+              pickup: false
+            })
+          } else {
+            setShowBottomSheet({
+              ...showBottomSheet,
+              pickup: false
+            })
+            Actions.showLoader(true)
+            setTimeout(() => {
+              Actions.showLoader(false)
+              setShowBottomSheet({
+                recipient: true,
+              })
+
+            }, 1000);
+          }
         }}
         handlePickDate={async () => {
           setShowBottomSheet({
@@ -203,6 +244,7 @@ const SetDestination = ({ route }) => {
         }}
         minDate={new Date()}
         onSeclectTime={(data) => {
+          console.log("data===>", data);
           setShowBottomSheet({
             ...showBottomSheet,
             datePicker: false,
@@ -210,7 +252,7 @@ const SetDestination = ({ route }) => {
           })
           setPickUpData({
             ...pickUpData,
-            pickupDate: data?.time
+            pickupDate: moment(data).format("YYYY-MM-DD")
           })
         }}
         onBackdropPress={() => {
