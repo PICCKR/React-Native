@@ -19,31 +19,37 @@ const FullScreenModal = ({
 
 }) => {
     return (
-        <Modal
-            isVisible={isVisible}
-            style={{ margin: 0 }}
-            animationIn="fadeInUp"
-            animationOut="fadeOut"
-            onBackdropPress={() => {
+        // <Modal
+        //     isVisible={isVisible}
+        //     style={{}}
+        //     animationIn="fadeInUp"
+        //     animationOut="fadeOut"
+        //     onBackdropPress={() => {
+        //         setShowModal(false)
+        //     }}
+        // >
+
+        <WrapperContainer
+            leftTitle={leftTitle}
+            hasCloseIcon={hasCloseIcon}
+            buttonTitle={buttonTitle}
+            handleButtonPress={handleButtonPress}
+            buttonActive={buttonActive}
+            leftViewStyles={leftViewStyles}
+            centerViewStyles={centerViewStyles}
+            righyViewStyles={righyViewStyles}
+            handlerRightViewPress={() => {
                 setShowModal(false)
             }}
+            containerStyle={{
+                position: 'absolute'
+            }}
         >
-            <WrapperContainer
-                leftTitle={leftTitle}
-                hasCloseIcon={hasCloseIcon}
-                buttonTitle={buttonTitle}
-                handleButtonPress={handleButtonPress}
-                buttonActive={buttonActive}
-                leftViewStyles={leftViewStyles}
-                centerViewStyles={centerViewStyles}
-                righyViewStyles={righyViewStyles}
-                handlerRightViewPress={() => {
-                    setShowModal(false)
-                }}
-            >
-                {children}
-            </WrapperContainer>
-        </Modal>
+            {children}
+        </WrapperContainer>
+
+        // {children}
+        // </Modal>
     )
 }
 

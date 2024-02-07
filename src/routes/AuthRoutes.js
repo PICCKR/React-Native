@@ -7,14 +7,14 @@ import { AppContext } from '../context/AppContext';
 const Stack = createNativeStackNavigator();
 
 const AuthRoutes = () => {
-    const {isNew} = useContext(AppContext)
+    const { isNew } = useContext(AppContext)
 
     return (
         <NavigationContainer>
             <Stack.Navigator
                 screenOptions={{ headerShown: false }}
             >
-                {isNew && <Stack.Screen name={AuthRouteStrings.ON_BOARDING} component = {screens.ON_BOARDING} />}
+                {isNew && <Stack.Screen name={AuthRouteStrings.ON_BOARDING} component={screens.ON_BOARDING} />}
                 <Stack.Screen name={AuthRouteStrings.WELCOME_SCREEN} component={screens.WELCOME_SCREEN} />
                 <Stack.Screen name={AuthRouteStrings.LOGIN_SCREEN} component={screens.LOGIN_SCREEN} />
                 <Stack.Screen name={AuthRouteStrings.FORGOT_PASSWORD} component={screens.FORGOT_PASSWORD} />
@@ -25,7 +25,9 @@ const AuthRoutes = () => {
                 <Stack.Screen name={AuthRouteStrings.KYC_SCREEN} component={screens.KYC_SCREEN} />
                 <Stack.Screen name={AuthRouteStrings.APPROVAL_SCREEN} component={screens.APPROVAL_SCREEN} />
                 <Stack.Screen name={MainRouteStrings.SELECT_ADDRRESS_FROM_MAP} component={screens.SELECT_ADDRRESS_FROM_MAP} />
-              
+                <Stack.Screen name={AuthRouteStrings.PDF_VIEW} component={screens.PDF_VIEW} />
+                <Stack.Screen name={MainRouteStrings.ADD_ADDRESS} component={screens.ADD_ADDRESS} />
+
             </Stack.Navigator>
         </NavigationContainer>
     )

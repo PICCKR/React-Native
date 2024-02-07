@@ -170,20 +170,18 @@ const Content = ({
           />
         ))}
       </View>
-
       <View style={styles.footer}>
-          <TouchableOpacity style={styles.btn} onPress={onConfirmPress}>
-            <Text style={appStyles.smallTextWhite}>
-              Save date
-            </Text>
-          </TouchableOpacity>
-        </View>
-      {/* <View style={styles.footer}>
-        {hideTime && <ScrollView
-          horizontal
+        {hideTime && <ScrollView 
+        horizontal
+        showsHorizontalScrollIndicator = {false}
         >
           <View style={{ flexDirection: "row", alignItems: "center", gap: scale(10) }}>
-            <TouchableOpacity style={[styles.timeCardNow]}>
+            <TouchableOpacity 
+            style={[styles.timeCardNow]}
+            onPress={()=>{
+              onSeclectTime(new Date())
+            }}
+            >
               <Text style={appStyles?.smallTextPrimary}>
                 Now
               </Text>
@@ -200,7 +198,7 @@ const Content = ({
                     <TouchableOpacity 
                     key={item?.time} style={styles.timeCard}
                     onPress={()=>{
-                      onSeclectTime(item)
+                      onSeclectTime(new Date())
                     }}
                     >
                       <Text style={appStyles?.smallTextGray}>
@@ -221,7 +219,7 @@ const Content = ({
           </TouchableOpacity>
         </View>
 
-      </View> */}
+      </View>
 
 
       <ChangeYearModal
@@ -296,7 +294,6 @@ const styles = StyleSheet.create({
     width: screenSize.width,
     padding: moderateScale(16),
     borderColor: uiColours.LIGHT_GRAY,
-    marginBottom:verticalScale(40)
   },
   timeDataView: {
     flexDirection: "row",

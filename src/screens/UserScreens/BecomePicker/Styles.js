@@ -25,7 +25,8 @@ const styles = StyleSheet.create({
         alignItems: "center",
         gap: scale(10),
         marginTop: verticalScale(16),
-        marginBottom: verticalScale(70) 
+        marginBottom: verticalScale(70),
+        paddingHorizontal: scale(16)
     },
     linkTextView: {
         paddingVertical: verticalScale(6),
@@ -35,10 +36,10 @@ const styles = StyleSheet.create({
         paddingVertical: verticalScale(5),
         alignItems: 'center',
         gap: verticalScale(5),
-        marginRight:scale(10),
-        width: moderateScale((screenSize.width - scale(92))/4),
-        borderRadius:moderateScale(6),
-        borderColor:uiColours.PRIMARY
+        marginRight: scale(10),
+        width: moderateScale((screenSize.width - scale(92)) / 4),
+        borderRadius: moderateScale(6),
+        borderColor: uiColours.PRIMARY
     },
     vehicleTypeIcon: {
         backgroundColor: uiColours.CREAM,

@@ -20,7 +20,7 @@ const TrackingScreen = ({ route }) => {
 
     // const orderDeatils = route?.params?.orderDetails
     const orderDeatils = useSelector((state) => state?.bookingDataReducer?.bookingData)
-    console.log("oderDetails", orderDeatils);
+    // console.log("oderDetails", orderDeatils);
     // const destination = route?.params?.geometry
     // const orderDeatils = useSelector((state) => state?.orderDeatilsReducer?.orderDeatils)
 

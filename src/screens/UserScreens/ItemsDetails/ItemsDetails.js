@@ -140,10 +140,11 @@ const ItemsDetails = () => {
 
 
   const calculatePrice = async () => {
-    if (itemsDetails?.estimatedItemWeight) {
+    console.log();
+    if (itemsDetails?.estimatedItemWeight && itemsDetails?.estimatedItemWeight > 0) {
 
       // TotalCost= distance*distance cost + weight* weight cost
-      const totalCost = (distence * itemsDetails?.vehicleType?.distance?.cost) + (parseInt(itemsDetails?.estimatedItemWeight) * itemsDetails?.vehicleType?.weight?.cost)
+      const totalCost = (distence * itemsDetails?.vehicleType?.distance?.cost) + (parseFloat(itemsDetails?.estimatedItemWeight) * itemsDetails?.vehicleType?.weight?.cost)
       const reminingAmount = (totalCost + (totalCost * 0.075)).toFixed(2) - userData?.wallet?.balance
       setItemsDetails({
         ...itemsDetails,
@@ -172,7 +173,7 @@ const ItemsDetails = () => {
     await Actions.orderDeatils({
       ...orderDeatils, amountToBeAdded: reminingAmount
     })
-    console.log("itemsDetails?.amountToBeAdded", reminingAmount);
+    // console.log("itemsDetails?.amountToBeAdded", reminingAmount);
     // return
     if (userData?.wallet?.balance < reminingAmount) {
       setShowSheet({
@@ -290,7 +291,7 @@ const ItemsDetails = () => {
 
 
   const handleOrderCreated = useCallback(async (data) => {
-    console.log("request-created", data);
+    // console.log("request-created", data);
     Actions.showLoader(false)
     navigation.navigate(MainRouteStrings.FINDING_PICKER)
   }, [Socket])
@@ -298,7 +299,7 @@ const ItemsDetails = () => {
   const handleOrderError = useCallback(async (data) => {
     // showErrorToast("")
     Actions.showLoader(false)
-    console.log("request-error", data);
+    // console.log("request-error", data);
   }, [Socket])
 
 
@@ -355,7 +356,7 @@ const ItemsDetails = () => {
               // console.log("item?.catImage", item?.catImage);
               return (
                 <TouchableOpacity
-                  key={item.id}
+                  key={item._id}
                   style={commonStyles.flexRowAlnCtrJutySpaceBetween}
                   onPress={() => {
                     setSelectedVehicle(item)
@@ -475,6 +476,10 @@ const ItemsDetails = () => {
             keyboardType={"numeric"}
             value={itemsDetails.estimatedItemWeight}
             handleChange={(e) => {
+              if (e.startsWith('.')) {
+                // Prepend zero to the input
+                e = '0' + e;
+              }
               setItemsDetails({
                 ...itemsDetails,
                 estimatedItemWeight: e

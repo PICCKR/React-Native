@@ -7,108 +7,31 @@ import { AppContext } from '../../../context/AppContext'
 import { useNavigation } from '@react-navigation/native'
 import { Images } from '../../../assets/images'
 import styles from './Styles'
-import { showToast } from '../../../components/tostConfig/tostConfig'
-import { tostMessagetypes } from '../../../utils/Constents/constentStrings'
-import { setLocalData } from '../../../helper/AsyncStorage'
-import { uiColours } from '../../../utils/Styles/uiColors'
-import axios from 'axios'
 import { apiGet, apiPost, apiPut } from '../../../services/apiServices'
 import { endPoints } from '../../../configs/apiUrls'
 import { showGeneralError } from '../../../helper/showGeneralError'
 import { showSuccessToast } from '../../../helper/showSuccessToast'
 import Actions from '../../../redux/Actions'
-import AddVehicleSheet from './AddVehicleSheet'
 import EditVehicleSheet from './EditVehicleSheet'
 import { showErrorToast } from '../../../helper/showErrorToast'
 import { useSelector } from 'react-redux'
+import { MainRouteStrings } from '../../../utils/Constents/RouteStrings'
 
 const VehicleScreen = () => {
     const { appStyles, isDark } = useContext(AppContext)
     const userData = useSelector((state) => state?.userDataReducer?.userData)
+    const vehicles = useSelector((state) => state?.vehicleDataReducer?.vehicleData)
+
     const navigation = useNavigation()
-    const [showSheet, setShowSheet] = useState({
-        add: false,
-        edit: false
-    })
-
-    const [vehicles, setVehicles] = useState([])
-
-    const [selectedVehicle, setSelectedVehicle] = useState(null)
-
-    const handleEditVehicle = async (newVehicle) => {
-
-        const newVehicleData = {
-            riderId: userData?._id,
-            category: newVehicle?.vehicleType?._id,
-            plateNumber: newVehicle?.palte_number,
-            model: newVehicle?.model_name,
-            year: newVehicle?.year,
-            color: newVehicle?.color
-        }
-        setShowSheet({
-            ...showSheet,
-            edit: false
-        })
-
-        Actions.showLoader(true)
-        apiPut(`${endPoints.EDIT_VEHICLE}/${selectedVehicle?._id}`, newVehicleData).then((res) => {
-            // console.log("resss=>", res?.data, res?.status);
-            if (res?.status === 200) {
-                getVehicleData()
-                showSuccessToast("You have successfully edited an vehicle", isDark)
-            } else {
-                showGeneralError()
-            }
-            Actions.showLoader(false)
-        }).catch((error) => {
-            Actions.showLoader(false)
-            showGeneralError()
-            console.log("error in edit address", error);
-        })
-    }
-
-    const handleAddAddVehicle = (newVehicle) => {
-
-        // console.log("newAddress", newVehicle);
-        setShowSheet({
-            ...showSheet,
-            add: false
-        })
-        const newVehicleData = {
-            riderId: userData?._id,
-            category: newVehicle?.vehicleType?._id,
-            plateNumber: newVehicle?.palte_number,
-            model: newVehicle?.model_name,
-            year: newVehicle?.year,
-            color: newVehicle?.color
-        }
-        Actions.showLoader(true)
-        apiPost(endPoints.ADD_VEHICLE, newVehicleData).then((res) => {
-            // console.log("resss=>", res?.data, res?.status);
-
-            if (res?.status === 201) {
-                const data = res?.data?.data
-                setVehicles((prev) => [...prev, res?.data?.data])
-                showSuccessToast("You have successfully added an vehicle", isDark)
-            } else {
-                showErrorToast(res?.data?.message, isDark)
-            }
-            Actions.showLoader(false)
-        }).catch((error) => {
-            Actions.showLoader(false)
-            showGeneralError()
-            console.log("error in add address", error);
-        })
-    }
 
     const getVehicleData = async () => {
         Actions.showLoader(true)
         apiGet(`${endPoints.GET_VEHICLES}/${userData?._id}`).then((res) => {
-            // console.log("get vehicle res ", res?.data, res?.status);
+            console.log("get vehicle res ", res?.data);
             if (res?.status === 200) {
-                setVehicles(res?.data?.data)
+                Actions.vehicleData(res?.data?.data)
             } else {
-                setVehicles([])
+                Actions.vehicleData([])
             }
             Actions.showLoader(false)
         }).catch((error) => {
@@ -129,9 +52,8 @@ const VehicleScreen = () => {
             showFooterButton={false}
             rightTitle="Add vehicle"
             handlerRightViewPress={() => {
-                setShowSheet({
-                    ...showSheet,
-                    add: true
+                navigation.navigate(MainRouteStrings.ADD_VEHICLE, {
+                    action: "add"
                 })
             }}
             showBackButton
@@ -141,7 +63,7 @@ const VehicleScreen = () => {
             containerPadding={{ paddingTop: verticalScale(10) }}
         >
 
-            {vehicles.length > 0 ? <FlatList
+            {vehicles?.length > 0 ? <FlatList
                 data={vehicles}
                 keyExtractor={(item) => item?._id}
                 style={{ marginTop: verticalScale(10) }}
@@ -150,7 +72,7 @@ const VehicleScreen = () => {
                         <View style={{ marginBottom: verticalScale(16) }}>
                             <View style={commonStyles.flexRowAlnCtrJutySpaceBetween}>
                                 <View style={commonStyles.flexRowAlnCtr}>
-                                    <Image source={Images.home} style={[commonStyles.icon]} />
+                                    <Image source={{ uri: item?.category?.catImage }} style={[commonStyles.icon]} />
 
                                     <View style={{ width: "84%" }}>
                                         <Text style={appStyles.smallTextPrimary}>
@@ -172,11 +94,10 @@ const VehicleScreen = () => {
                                 <TouchableOpacity
                                     style={styles.addresEditIcon}
                                     onPress={() => {
-                                        setShowSheet({
-                                            ...showSheet,
-                                            edit: true
+                                        navigation.navigate(MainRouteStrings.ADD_VEHICLE, {
+                                            action: "edit",
+                                            data: item
                                         })
-                                        setSelectedVehicle(item)
                                     }}
                                 >
                                     <Images.edit />
@@ -202,18 +123,18 @@ const VehicleScreen = () => {
 
             }
 
-            <AddVehicleSheet
+            {/* <AddVehicleSheet
                 isVisible={showSheet?.add}
                 setShowSheet={setShowSheet}
                 handleAddVehicle={handleAddAddVehicle}
-            />
+            /> */}
 
-            <EditVehicleSheet
+            {/* <EditVehicleSheet
                 isVisible={showSheet?.edit}
                 setShowSheet={setShowSheet}
                 handleEditVehicle={handleEditVehicle}
                 data={selectedVehicle}
-            />
+            /> */}
         </WrapperContainer>
     )
 }

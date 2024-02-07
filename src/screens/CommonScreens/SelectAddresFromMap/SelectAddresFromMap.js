@@ -27,7 +27,7 @@ const SelectAddresFromMap = ({ route }) => {
     source
   } = useContext(AppContext)
 
-  console.log("source===>", geometry, action);
+  // console.log("source===>", geometry, action);
 
   const navigation = useNavigation()
 

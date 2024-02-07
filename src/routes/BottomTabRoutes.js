@@ -7,6 +7,7 @@ import { useSelector } from "react-redux";
 import { screens } from ".";
 import { Images } from "../assets/images";
 import { AppContext } from "../context/AppContext";
+import Actions from "../redux/Actions";
 import { MainRouteStrings } from "../utils/Constents/RouteStrings";
 import { uiColours } from "../utils/Styles/uiColors";
 
@@ -26,7 +27,7 @@ const BottomTabRoutes = () => {
             navigation.navigate(screenName);
         } else {
             // User data does not exist
-            setIsLoggedIn(false)
+            Actions.isLoggedIn(false)
         }
     };
 

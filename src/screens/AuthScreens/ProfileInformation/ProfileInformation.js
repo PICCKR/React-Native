@@ -7,109 +7,32 @@ import styles from './Styles'
 import EditAction from './EditAction'
 import EmailSheet from './EmailSheet'
 import ShowAddressSheet from './ShowAddressSheet'
-import AddAddressSheet from './AddAddressSheet'
 import { showToast } from '../../../components/tostConfig/tostConfig'
 import { tostMessagetypes } from '../../../utils/Constents/constentStrings'
-import { AuthRouteStrings } from '../../../utils/Constents/RouteStrings'
+import { AuthRouteStrings, MainRouteStrings } from '../../../utils/Constents/RouteStrings'
 import ChooseMediaTypeSheet from '../../../components/ChooseMediaTypeSheet/ChooseMediaTypeSheet'
 import { chooseMedia, openCamara } from '../../../helper/imagePickerFunctions'
 import ProfileView from '../../../components/PrifileView/ProfileView'
 import useBackButton from '../../../customHooks/useBackButton'
-import { apiPost } from '../../../services/apiServices'
 import { endPoints } from '../../../configs/apiUrls'
 import Actions from '../../../redux/Actions'
 import { showGeneralError } from '../../../helper/showGeneralError'
 import { setLocalData } from '../../../helper/AsyncStorage'
 import { storageKeys } from '../../../helper/AsyncStorage/storageKeys'
 import { showErrorToast } from '../../../helper/showErrorToast'
-import { showSuccessToast } from '../../../helper/showSuccessToast'
-import { decodeToken } from '../../../helper/decodeToken'
 import axios from 'axios'
-import { deleteUser } from '@aws-amplify/auth'
-// import jwt from 'jsonwebtoken';
+import { useSelector } from 'react-redux'
 
 const ProfileInformation = ({ route }) => {
     const data = route?.params?.data
-    const { appStyles, isDark, userData, setuserData, setIsLoggedIn, fromGuestUserScreen, setFromGuestUserScreen } = useContext(AppContext)
-    // console.log("data ====>", data);
+    const { appStyles, isDark, setIsLoggedIn, fromGuestUserScreen, setFromGuestUserScreen, profileInformation, setProfileInformation } = useContext(AppContext)
+    const userData = useSelector((state) => state?.userDataReducer?.userData)
     const navigation = useNavigation()
     const [buttonActive, setButtonActive] = useState(false)
     const [showSheet, setShowSheet] = useState({
-        email: false,
         showAddress: false,
-        addAddress: false,
         mediaType: false,
-        setLocation: false
     })
-
-    const [profileInformation, setProfileInformation] = useState({
-        profileImg: null,
-        email: "",
-        address: [],
-    })
-    const [addressData, setAddresData] = useState({
-        title: "",
-        coordinates: [],
-        type: "",
-        street_address: "",
-        favorite: false,
-        house_number: "",
-        building_name: ""
-    })
-
-    const [action, setAction] = useState("add")
-
-    const handleAddAddress = () => {
-        setShowSheet({
-            addAddress: false
-        })
-        setProfileInformation({
-            ...profileInformation,
-            address: [...profileInformation.address, addressData]
-        })
-        setAddresData({
-            title: "",
-            coordinates: [],
-            type: "",
-            street_address: "",
-            favorite: false,
-            house_number: "",
-            building_name: ""
-        })
-        showSuccessToast("You have successfully added an address", isDark)
-    }
-
-    const handleEditAddress = async () => {
-        setShowSheet({
-            addAddress: false
-        })
-
-        var addresss = profileInformation.address
-
-        const newAddress = await addresss.map((item) => {
-            // console.log(item.id, addressData.id);
-            if (item.id === addressData.id) {
-                return addressData
-            } else {
-                return item
-            }
-        })
-
-        setProfileInformation({
-            ...profileInformation,
-            address: newAddress
-        })
-        setAddresData({
-            title: "",
-            coordinates: [],
-            type: "",
-            street_address: "",
-            favorite: false,
-            house_number: "",
-            building_name: ""
-        })
-        showSuccessToast("You have successfully edited an address", isDark)
-    }
 
     const handleSave = async (from) => {
         var formData = new FormData();
@@ -125,8 +48,6 @@ const ProfileInformation = ({ route }) => {
         }
         formData.append("addresses", JSON.stringify(profileInformation?.address));
 
-        // console.log(formData);
-        // return
         const config = {
             headers: {
                 'Content-Type': 'multipart/form-data',
@@ -140,19 +61,15 @@ const ProfileInformation = ({ route }) => {
             const res = await axios.put(`${endPoints.UPDATE_PROFILE}/${userData?._id}`, formData, config)
             // const res = await apiPost(endPoints.CREATE_USER, createUserData)
             if (res?.status == 200) {
-                // console.log(res?.data?.data);
-                // const userInformaton = await decodeToken(res?.data?.data?.token)
                 // after getting token store it in local storage and also set token in context
                 setLocalData(storageKeys.userData, { ...userData, addresses: res?.data?.data?.addresses, picture: res?.data?.data?.picture })
                 Actions.userData({ ...userData, addresses: res?.data?.data?.addresses, picture: res?.data?.data?.picture })
-                // setuserData({ ...userData, addresses: res?.data?.data?.addresses, picture: res?.data?.data?.picture })
                 navigation.navigate(AuthRouteStrings.KYC_SCREEN, {
                     data: { ...data, ...profileInformation }
                 })
             } else {
                 showErrorToast(res?.data?.message, isDark)
             }
-            // console.log("res===>", res?.status, res?.data);
         } catch (error) {
             if (error?.response?.status < 500) {
                 showErrorToast(error?.response?.data?.message, isDark)
@@ -183,7 +100,7 @@ const ProfileInformation = ({ route }) => {
             navigation.navigate(fromGuestUserScreen)
             setFromGuestUserScreen(null)
         } else {
-            setIsLoggedIn(true)
+            Actions.isLoggedIn(true)
         }
         return true
     })
@@ -195,7 +112,6 @@ const ProfileInformation = ({ route }) => {
             handlerRightViewPress={() => {
                 navigation.navigate(AuthRouteStrings.KYC_SCREEN)
             }}
-            // showBackButton
             buttonTitle={"Save"}
             handleBack={() => {
                 if (fromGuestUserScreen) {
@@ -204,7 +120,6 @@ const ProfileInformation = ({ route }) => {
                 } else {
                     setIsLoggedIn(true)
                 }
-                // navigation.navigate(AuthRouteStrings.USER_SIGN_UP)
             }}
             handleButtonPress={handleSave}
             buttonActive={buttonActive}
@@ -255,55 +170,32 @@ const ProfileInformation = ({ route }) => {
                 isVisible={showSheet.showAddress}
                 setShowSheet={setShowSheet}
                 profileInformation={profileInformation}
-                setAction={setAction}
                 handleAddAddress={() => {
-                    setAction("add")
-                    setAddresData({
-                        title: "",
-                        coordinates: [],
-                        type: "",
-                        street_address: "",
-                        favorite: false,
-                        house_number: "",
-                        building_name: ""
-                    })
                     setShowSheet({
-                        addAddress: true,
                         showAddress: false
                     })
+                    navigation.navigate(MainRouteStrings.ADD_ADDRESS, {
+                        action: "add",
+                        from: AuthRouteStrings.PROFILE_INFORMATION
+                    })
+
                 }}
 
                 handleAddressEdit={(address) => {
-                    setAction("edit")
                     setShowSheet({
-                        addAddress: true,
                         showAddress: false
                     })
-                    setAddresData({
-                        coordinates: address?.coordinates,
-                        street_address: address?.street_address,
-                        house_number: address?.house_number,
-                        building_name: address?.building_name,
-                        type: address?.type
-                    })
-                }}
-            />
 
-            <AddAddressSheet
-                isVisible={showSheet.addAddress}
-                setShowSheet={setShowSheet}
-                profileInformation={profileInformation}
-                setProfileInformation={setProfileInformation}
-                handleAddAddress={handleAddAddress}
-                addressData={addressData}
-                setAddresData={setAddresData}
-                action={action}
-                handleEditAddress={handleEditAddress}
-                handleSetLocationPress={() => {
-                    setShowSheet({
-                        ...showSheet,
-                        addAddress: false,
-                        setLocation: true
+                    navigation.navigate(MainRouteStrings.ADD_ADDRESS, {
+                        action: "edit",
+                        from: AuthRouteStrings.PROFILE_INFORMATION,
+                        data: {
+                            coordinates: address?.coordinates,
+                            street_address: address?.street_address,
+                            house_number: address?.house_number,
+                            building_name: address?.building_name,
+                            type: address?.type
+                        }
                     })
                 }}
             />

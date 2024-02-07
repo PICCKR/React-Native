@@ -11,19 +11,19 @@ export const screenSize = {
 
 export const commonStyles = {
 
-    flexRowAlnCtrJutySpaceBetween:{
+    flexRowAlnCtrJutySpaceBetween: {
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: "space-between"
     },
-    flexRowAlnCtr:{
+    flexRowAlnCtr: {
         flexDirection: 'row',
         alignItems: 'center',
-        gap:scale(10)
+        gap: scale(10)
     },
-    bottomBorder:{
-        borderBottomWidth:moderateScale(1),
-        borderColor:uiColours.LIGHT_GRAY,
+    bottomBorder: {
+        borderBottomWidth: moderateScale(1),
+        borderColor: uiColours.LIGHT_GRAY,
     },
 
     dropShadow: {

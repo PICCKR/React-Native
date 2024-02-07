@@ -42,7 +42,7 @@ const SetLocationModal = ({
                             setShowModal(false)
                         }}
                     />
-                    <View style={{position:"absolute", top:verticalScale(70), left:scale(25)}}>
+                    <View style={{ position: "absolute", top: verticalScale(70), left: scale(25) }}>
                         <Images.locationPin />
                     </View>
                     <GooglePlacesAutocomplete

@@ -22,7 +22,7 @@ const UserWalletScreen = () => {
 
 
     const handleAddAmount = async (data, amount) => {
-        console.log("data====>", data, amount);
+        // console.log("data====>", data, amount);
         if (data?.status === "successful") {
             updateTransaction(data, amount)
         } else {
@@ -39,7 +39,7 @@ const UserWalletScreen = () => {
             "flutterwaveDetails": { ...data, amount: amount }
         }
         apiPost(endPoints.UPDATE_TOP_UP, transactionData).then((res) => {
-            console.log("res in transaction update", res?.status, res?.data);
+            // console.log("res in transaction update", res?.status, res?.data);
             if (res?.status === 201) {
                 Actions.userData({
                     ...userData, wallet: {
@@ -74,7 +74,7 @@ const UserWalletScreen = () => {
                 navigation.goBack()
             }}
         >
-            <Text style={appStyles?.mediumTextBlack}>Wallet</Text>
+            <Text style={appStyles?.mediumTextBlack}>E-Wallet</Text>
 
             <View style={[
                 commonStyles.flexRowAlnCtrJutySpaceBetween,

@@ -17,6 +17,7 @@ import Actions from '../../../redux/Actions'
 import { useNavigation } from '@react-navigation/native'
 import { MainRouteStrings } from '../../../utils/Constents/RouteStrings'
 import { useSelector } from 'react-redux'
+import { showErrorToast } from '../../../helper/showErrorToast'
 
 const RequestTab = ({
 }) => {
@@ -64,13 +65,14 @@ const RequestTab = ({
 
     const handleNewRequest = (data) => {
         Actions.showLoader(false)
-        console.log("new-ride-request", data?.data);
+        // console.log("new-ride-request", data?.data);
         setNewRequest([...newRequest, data?.data?.data])
     }
 
     const acceptRequestError = useCallback(async (data) => {
         Actions.showLoader(false)
         console.log("error in ccept request", data);
+        showErrorToast(data?.message)
     }, [Socket])
 
     const handleRequestSuccessfully = useCallback(async (data) => {
@@ -84,22 +86,22 @@ const RequestTab = ({
 
     const placeBidError = useCallback(async (data) => {
         Actions.showLoader(false)
-        console.log("placeBidError", data);
+        // console.log("placeBidError", data);
     }, [Socket])
 
     const handleBidPlaced = useCallback(async (data) => {
         Actions.showLoader(false)
-        console.log("placeBidError", data);
+        // console.log("placeBidError", data);
         setBidPlaced(true)
     }, [Socket])
 
     const handleBidDecline = async (data) => {
         Actions.showLoader(false)
-        console.log("reject-bid-successfully in picker", data);
+        // console.log("reject-bid-successfully in picker", data);
     }
 
     const handleGetRide = useCallback((data) => {
-        console.log("get-ride in picker", data);
+        // console.log("get-ride in picker", data);
         if (data?.data?.status !== "cancelled") {
             Actions.showLoader(true)
             setTimeout(() => {
@@ -147,6 +149,24 @@ const RequestTab = ({
             Socket.off('get-booking', handleGetBooking)
         }
     }, [Socket, handleNewRequest, acceptRequestError, handleRequestSuccessfully, placeBidError, handleBidPlaced, handleBidDecline, handleGetRide, handleGetBooking])
+
+
+    useEffect(() => {
+        const unsubscribeFocus = navigation.addListener('focus', () => {
+            Socket.emit("driver-connect",
+                {
+                    "userId": userData?._id
+                }
+            )
+        });
+
+        // Cleanup function (optional)
+        return () => {
+            unsubscribeFocus();
+            // Cleanup logic, if needed
+        };
+    }, [navigation]);
+
 
     return (
         <View>

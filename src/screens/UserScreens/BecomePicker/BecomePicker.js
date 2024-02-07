@@ -36,10 +36,12 @@ const BecomePicker = ({ route }) => {
     const [status, setStatus] = useState("unapproved")
     const [pickerData, setPickerData] = useState({
         vehicleType: null,
-        insurance: "",
+        insuranceFileType: "",
         insuranceFileName: "",
-        registration: "",
+        insuranceFileUri: "",
+        registrationFileType: "",
         registrationFileName: "",
+        registrationFileUri: "",
         bvn: userData?.bvn,
         check: false
     })
@@ -47,19 +49,20 @@ const BecomePicker = ({ route }) => {
 
 
     const handleSubmit = () => {
+        console.log("pickerData", pickerData);
         var formData = new FormData();
         formData.append("userId", userData?._id);
         formData.append("registrationProofDocs", {
-            uri: pickerData?.registration?.uri,
-            type: pickerData?.registration?.type,
-            name: pickerData?.registration?.fileName,
-            fileName: pickerData?.registration?.fileName
+            uri: pickerData?.registrationFileUri,
+            type: pickerData?.registrationFileType,
+            name: pickerData?.registrationFileName,
+            fileName: pickerData?.registrationFileName
         });
         formData.append("insuranceProofDocs", {
-            uri: pickerData?.insurance?.uri,
-            type: pickerData?.insurance?.type,
-            name: pickerData?.insurance?.fileName,
-            fileName: pickerData?.insurance?.fileName
+            uri: pickerData?.insuranceFileUri,
+            type: pickerData?.insuranceFileType,
+            name: pickerData?.insuranceFileName,
+            fileName: pickerData?.insuranceFileName
         });
 
         const config = {
@@ -68,6 +71,8 @@ const BecomePicker = ({ route }) => {
                 'Authorization': `Bearer ${userData.token}`,
             },
         };
+
+        console.log("formData==>", formData?._parts);
         Actions.showLoader(true)
 
         axios.post(endPoints.BECOME_PICKER, formData, config).then((res) => {
@@ -120,7 +125,6 @@ const BecomePicker = ({ route }) => {
                     } else {
 
                     }
-                    // console.log("token res====>", status);
                     Actions.showLoader(false)
                 })
                 .catch(async (error) => {
@@ -172,40 +176,40 @@ const BecomePicker = ({ route }) => {
                     profileImg={userData?.picture}
                 />
 
-                <View style={{ paddingHorizontal: scale(16) }}>
+                <View style={{ flexDirection: "row", justifyContent: "space-between", width: '100%', paddingHorizontal: scale(16) }}>
 
                     <DocumentUpload
                         title={"Proof of insurance"}
                         placeHolder={pickerData?.insuranceFileName ? pickerData?.insuranceFileName : "Take a vehicle registration photo"}
                         document={pickerData}
                         setDocument={setPickerData}
-                        documentType="insurance"
+                        documentType="insuranceFileType"
                         fileName="insuranceFileName"
+                        fileUri="insuranceFileUri"
                     />
                     <DocumentUpload
                         title={"Vehicle registration"}
                         placeHolder={pickerData?.registrationFileName ? pickerData?.registrationFileName : "Take a vehicle registration photo"}
                         document={pickerData}
                         setDocument={setPickerData}
-                        documentType="registration"
+                        documentType="registrationFileType"
                         fileName="registrationFileName"
+                        fileUri="registrationFileUri"
                     />
-
-
-                    <View style={styles.termsView}>
-                        <CheckBox
-                            handleCheck={() => {
-                                setPickerData({
-                                    ...pickerData,
-                                    check: !pickerData.check
-                                })
-                            }}
-                            selected={pickerData.check}
-                        />
-                        <Text style={appStyles.smallTextGray}>
-                            I agree that I am over 21 years old
-                        </Text>
-                    </View>
+                </View>
+                <View style={styles.termsView}>
+                    <CheckBox
+                        handleCheck={() => {
+                            setPickerData({
+                                ...pickerData,
+                                check: !pickerData.check
+                            })
+                        }}
+                        selected={pickerData.check}
+                    />
+                    <Text style={appStyles.smallTextGray}>
+                        I agree that I am over 21 years old
+                    </Text>
                 </View>
 
             </ScrollView>}

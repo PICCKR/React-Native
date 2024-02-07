@@ -1,4 +1,4 @@
-import { View, Text, TouchableOpacity } from 'react-native'
+import { View, Text, TouchableOpacity, Platform } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { Styles } from './Styles'
 import { commonStyles } from '../../../utils/Styles/CommonStyles'
@@ -55,7 +55,7 @@ const PickUpSheet = ({
 
 
     useEffect(() => {
-        if (formData.name !== "" && formData.phoneNumber && formData?.pickupDate) {
+        if (formData.name !== "" && formData.phoneNumber.length > 6 && formData?.pickupDate) {
             setButtonActive(true)
         } else {
             setButtonActive(false)
@@ -67,11 +67,15 @@ const PickUpSheet = ({
             isVisible={isVisible}
             // hasCloseIcon
             title="Pick-up Details"
+            modelStyles={{
+                position: Platform.OS === "android" ? 'absolute' : "relative",
+                marginTop: Platform.OS === "android" ? 0 : "85%",
+            }}
             modelBgStyles={{ backgroundColor: "rgba(255, 255, 255, 0)" }}
             hasBackButton
             handleBackClick={handleBackClick}
             containerStyles={{ padding: 0 }}
-            showFooterButton
+            showFooterButton={true}
             buttonActive={buttonActive}
             buttonTitle="Next"
             handleButtonPress={handleNext}
@@ -91,9 +95,7 @@ const PickUpSheet = ({
 
             </View>
 
-            <View style={[commonStyles.bottomBorder, Styles.recipientDetails, {
-                borderColor: isDark ? uiColours.GRAYED_BUTTON : uiColours.LIGHT_GRAY
-            }]}>
+            <View style={[Styles.recipientDetails, {}]}>
                 <View style={commonStyles.flexRowAlnCtrJutySpaceBetween}>
                     <Text style={appStyles.mediumTextBlackBold}>
                         Sender details<Text style={{ color: uiColours.RED }}>*</Text>

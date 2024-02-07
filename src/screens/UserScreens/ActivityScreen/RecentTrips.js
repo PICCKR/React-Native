@@ -24,7 +24,7 @@ const RecentTrips = () => {
     Actions.showLoader(true)
     apiGet(`${endPoints.GET_USER_BOOKINGS}?status=past`).then((res) => {
       Actions.showLoader(false)
-      console.log("ress in booking recent", res?.data?.data);
+      // console.log("ress in booking recent", res?.data?.data);
       if (res?.status === 200) {
         setData(res?.data?.data)
       }

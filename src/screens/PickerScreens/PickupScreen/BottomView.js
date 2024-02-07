@@ -51,19 +51,19 @@ const BottomView = ({
     }
 
     const handleBookingstartError = async (data) => {
-        console.log("booking-start-error", data);
+        // console.log("booking-start-error", data);
         setShowOtpErr(true)
         // showErrorToast(data?.message, isDark)
     }
 
     const handleBookingstart = async (data) => {
-        console.log("booking-start-in-picker", data);
+        // console.log("booking-start-in-picker", data);
         setTripStatus(2)
     }
 
     const handleCancelSuccess = (data) => {
         Actions.showLoader(false)
-        console.log("request-cancel-successfully in picker", data);
+        // console.log("request-cancel-successfully in picker", data);
         navigation.navigate(MainRouteStrings.USER_REVIEW_WHEN_CANCELLED, {
             data: orderDetails
         })
@@ -72,19 +72,20 @@ const BottomView = ({
 
     const handleCancelError = useCallback((data) => {
         Actions.showLoader(false)
-        console.log("request-cancel-error in picker", data);
+        // console.log("request-cancel-error in picker", data);
+        showErrorToast(data?.message, isDark)
 
     }, [Socket])
 
     const handleCompleteBookingError = useCallback((data) => {
         Actions.showLoader(false)
-        console.log("booking-complete-error", data);
+        // console.log("booking-complete-error", data);
 
     }, [Socket])
 
     const handleCompleteBookingSuccess = (data) => {
         Actions.showLoader(false)
-        console.log("booking-complete-success", data);
+        // console.log("booking-complete-success", data);
         navigation.navigate(MainRouteStrings.TRIPS_SCREEN)
         Actions.bookingData(null)
         Actions.orderDeatils(null)
@@ -159,10 +160,16 @@ const BottomView = ({
                             <TouchableOpacity
                                 style={styles.msgInput}
                                 onPress={() => {
-                                    navigation.navigate(MainRouteStrings.USER_CHAT_SCREEN)
+                                    Socket.emit("joinRoom", {
+                                        "room": orderDetails?._id
+                                    })
+                                    navigation.navigate(MainRouteStrings.PICKER_MESSAGES_SCREEN, {
+                                        orderDetails: orderDetails
+                                    })
+
                                 }}
                             >
-                                <Text style={appStyles.smallTextGray}>Send message to Cooper Septimus</Text>
+                                <Text style={appStyles.smallTextGray}>Send message to {orderDetails?.userId?.firstName}</Text>
                             </TouchableOpacity>
 
                             <CustomButton

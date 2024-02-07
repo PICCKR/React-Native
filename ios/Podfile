@@ -25,7 +25,7 @@ if linkage != nil
   use_frameworks! :linkage => linkage.to_sym
 end
 
-target 'PickkR' do
+target 'picckr' do
   config = use_native_modules!
 
   # Flags change depending on the env values.
@@ -49,7 +49,7 @@ target 'PickkR' do
     :app_path => "#{Pod::Config.instance.installation_root}/.."
   )
 
-  target 'PickkRTests' do
+  target 'picckrTests' do
     inherit! :complete
     # Pods for testing
   end

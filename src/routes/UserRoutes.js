@@ -36,6 +36,7 @@ const UserRoutes = () => {
                 <Stack.Screen name={AuthRouteStrings.OTP_SCREEN} component={screens.OTP_SCREEN} />
                 <Stack.Screen name={MainRouteStrings.USER_WALLET_SCREEN} component={screens.USER_WALLET_SCREEN} />
                 <Stack.Screen name={MainRouteStrings.SET_LOCATION_SCREEN} component={screens.SET_LOCATION_SCREEN} />
+                <Stack.Screen name={MainRouteStrings.ADD_ADDRESS} component={screens.ADD_ADDRESS} />
 
 
                 {/* auth routes */}

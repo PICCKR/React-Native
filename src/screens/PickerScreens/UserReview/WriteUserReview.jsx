@@ -20,7 +20,7 @@ const WriteUserReview = ({ route }) => {
   const status = route?.params?.status;
   const data = route?.params?.data;
   const { Socket } = useSocket();
-  console.log("data", data);
+  // console.log("data", data);
   const { appStyles } = useContext(AppContext);
   const navigation = useNavigation();
   const [reviewsData, setReviewsData] = useState(WriteReviewsData);

@@ -72,21 +72,21 @@ const TripDetailsScreen = ({ route }) => {
 
 
     const handleBookingstartError = async (data) => {
-        console.log("booking-start-error", data);
+        // console.log("booking-start-error", data);
         // setShowOtpErr(true)
         showErrorToast(data?.message, isDark)
 
     }
 
     const handleBookingstart = async (data) => {
-        console.log("booking-start-in-picker", data);
+        // console.log("booking-start-in-picker", data);
         navigation.goBack()
         showSuccessToast("Your booking has been started", isDark)
     }
 
     const handleCancelSuccess = (data) => {
         Actions.showLoader(false)
-        console.log("request-cancel-successfully in picker", data);
+        // console.log("request-cancel-successfully in picker", data);
         navigation.navigate(MainRouteStrings.USER_REVIEW_WHEN_CANCELLED, {
             data: orderDeatils
         })
@@ -96,19 +96,19 @@ const TripDetailsScreen = ({ route }) => {
 
     const handleCancelError = useCallback((data) => {
         Actions.showLoader(false)
-        console.log("request-cancel-error in picker", data);
+        // console.log("request-cancel-error in picker", data);
 
     }, [Socket])
 
     const handleCompleteBookingError = useCallback((data) => {
         Actions.showLoader(false)
-        console.log("booking-complete-error", data);
+        // console.log("booking-complete-error", data);
 
     }, [Socket])
 
     const handleCompleteBookingSuccess = (data) => {
         Actions.showLoader(false)
-        console.log("booking-complete-success", data);
+        // console.log("booking-complete-success", data);
         navigation.navigate(MainRouteStrings.TRIPS_SCREEN)
         Actions.bookingData(null)
         Actions.orderDeatils(null)

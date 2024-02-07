@@ -18,7 +18,7 @@ import useBackButton from '../../../customHooks/useBackButton'
 const UserReviewWhenCancelled = ({ route }) => {
     const data = route?.params?.data
     const { Socket } = useSocket()
-    console.log("data===>", data);
+    // console.log("data===>", data);
     const { appStyles } = useContext(AppContext)
     const navigation = useNavigation()
     const [reviewsData, setReviewsData] = useState(ReviewsData)
@@ -76,14 +76,14 @@ const UserReviewWhenCancelled = ({ route }) => {
 
     const handleReviewError = useCallback(
         async (data) => {
-            console.log("feedback-passenger-error", data);
+            // console.log("feedback-passenger-error", data);
         },
         [Socket]
     );
 
     const handleReviewSuccess = useCallback(
         async (data) => {
-            console.log("feedback-passenger-success", data);
+            // console.log("feedback-passenger-success", data);
             navigation.navigate(MainRouteStrings.PICKER_HOME_SCREEN, {
                 from: "review",
             });

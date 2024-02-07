@@ -23,7 +23,7 @@ const UserHomeScreen = () => {
   const currentLocation = useSelector((state) => state?.CurrentLocationReducer?.currentLocation)
   const navigation = useNavigation()
 
-  console.log("ddd", currentLocation);
+  // console.log("ddd", currentLocation);
 
   // Mock Data for Vehicle Types and Reasons to Choose
   const VehicleType = [

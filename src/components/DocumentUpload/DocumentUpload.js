@@ -15,7 +15,8 @@ const DocumentUpload = ({
     placeHolder,
     title,
     documentType,
-    fileName
+    fileName,
+    fileUri
 }) => {
 
     useEffect(() => {
@@ -45,11 +46,12 @@ const DocumentUpload = ({
                     } else if (response.customButton) {
                     } else {
                         const source = response.assets[0].uri;
-                        // console.log("source", source, response?.assets[0]?.fileName);
+                        // console.log("source", source);
                         setDocument({
                             ...document,
-                            [documentType]: response?.assets[0],
-                            [fileName]: response?.assets[0]?.fileName
+                            [documentType]: response?.assets[0]?.type,
+                            [fileName]: response?.assets[0]?.fileName,
+                            [fileUri]: response?.assets[0]?.uri,
                         })
                         setShowMode(false)
                     }
@@ -83,10 +85,12 @@ const DocumentUpload = ({
             try {
                 if (response) {
                     const source = response.assets[0].uri;
+                    // console.log("sdfdfdsfs", response.assets[0]);
                     setDocument({
                         ...document,
-                        [documentType]: response?.assets[0]?.uri,
-                        [fileName]: response?.assets[0]?.fileName
+                        [documentType]: response?.assets[0]?.type,
+                        [fileName]: response?.assets[0]?.fileName,
+                        [fileUri]: response?.assets[0]?.uri,
                     })
                     setShowMode(false)
                 }
@@ -102,29 +106,18 @@ const DocumentUpload = ({
             <Text style={[appStyles.smallTextBlack, { fontFamily: "Poppins-Medium" }]}>{title}</Text>
             <TouchableOpacity
                 onPress={() => setShowMode(true)}
-                style={[styles.inputContainer,{
+                style={[styles.inputContainer, {
                     borderColor: isDark ? uiColours.GRAYED_BUTTON : uiColours.LIGHT_GRAY
                 }]}>
-                <View style={{ flexDirection: 'row', alignItems: 'center', gap: scale(10), width: '80%' }}>
-                    <Images.camera />
-                    <Text style={appStyles.smallTextGray}>
+                {!document[documentType] ? <View style={{ alignItems: 'center', gap: scale(10) }}>
+                    <Images.camera height={moderateScale(30)} width={moderateScale(30)} />
+                    <Text style={[appStyles.smallTextGray, { textAlign: "center" }]}>
                         {placeHolder}
                     </Text>
-                </View>
-                {document[documentType] && <TouchableOpacity
-                onPress={()=>{
-                    setDocument({
-                        ...document,
-                        [documentType]: "",
-                        [fileName]: ""
-                    })
-                }}
-                >
-                    <Images.close height={moderateScale(22)} width={moderateScale(22)} />
-                </TouchableOpacity>}
-
+                </View> :
+                    <Image source={{ uri: document[fileUri] }} style={{ height: '100%', width: '100%' }} />
+                }
             </TouchableOpacity>
-
             <BottomSheet
                 isVisible={showModel}
                 hasCloseIcon
@@ -153,7 +146,7 @@ const DocumentUpload = ({
                     </TouchableOpacity>
                 </View>
             </BottomSheet>
-        </View>
+        </View >
     )
 }
 

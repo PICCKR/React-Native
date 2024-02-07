@@ -9,10 +9,11 @@ import { buttonTypes } from '../../../utils/Constents/constentStrings'
 import { useNavigation } from '@react-navigation/native'
 import { AuthRouteStrings } from '../../../utils/Constents/RouteStrings'
 import WrapperContainer from '../../../components/WrapperContainer/WrapperContainer'
+import Actions from '../../../redux/Actions'
 
 const WelcomeScreen = () => {
 
-    const { appStyles, setIsLoggedIn, fromGuestUserScreen } = useContext(AppContext)
+    const { appStyles, fromGuestUserScreen } = useContext(AppContext)
     const navigation = useNavigation()
     return (
         <WrapperContainer
@@ -22,7 +23,7 @@ const WelcomeScreen = () => {
                 if (fromGuestUserScreen) {
                     navigation.goBack()
                 } else {
-                    setIsLoggedIn(true)
+                    Actions.isLoggedIn(true)
                 }
             }}
         >

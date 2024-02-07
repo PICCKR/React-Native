@@ -1,12 +1,10 @@
-import { useColorScheme, Appearance, StyleSheet, Alert, AppState } from "react-native";
-import React, { useCallback, useContext, useEffect, useMemo, useState, } from "react";
-import { PermissionsAndroid, Platform } from 'react-native';
+import { useColorScheme } from "react-native";
+import React, { useContext, useEffect, useMemo, useState, } from "react";
 import { getLocalData } from "../helper/AsyncStorage";
 import { storageKeys } from "../helper/AsyncStorage/storageKeys";
 import { screenSize } from "../utils/Styles/CommonStyles";
-import { moderateScale, scale, verticalScale } from "react-native-size-matters";
+import { moderateScale, scale } from "react-native-size-matters";
 import { uiColours } from "../utils/Styles/uiColors";
-import { useNavigation } from "@react-navigation/native";
 import Geolocation from "@react-native-community/geolocation";
 import Actions from "../redux/Actions";
 import Geocoder from "react-native-geocoding";
@@ -19,12 +17,10 @@ export const AppContext = React.createContext();
 
 export const useSocket = () => {
     const Socket = useContext(AppContext)
-    // console.log("Socket", Socket);
     return Socket
 }
 
 const AppProvider = ({ children }) => {
-    // const Socket = useMemo(() => io.connect("http://192.168.227.150:7071"), [])
     const Socket = useMemo(() => io.connect("https://dev.picckr.live", {
         path: "/sockets",
         secure: true,
@@ -48,6 +44,7 @@ const AppProvider = ({ children }) => {
         // navigate to home screen
         if (UserData) {
             Actions.userData(UserData)
+            console.log("UserData", UserData);
             if (UserData?.userRole[1]) {
                 Socket.emit("driver-connect",
                     {
@@ -59,7 +56,7 @@ const AppProvider = ({ children }) => {
     }
 
     const getCurrentLocation = async (user) => {
-        console.log("in locations");
+        // console.log("in locations");
         try {
             Geolocation.getCurrentPosition((position) => {
                 const latitude = position?.coords?.latitude
@@ -79,7 +76,6 @@ const AppProvider = ({ children }) => {
                             lat: latitude,
                             lng: longitude
                         })
-                        console.log("llllll", adddress, latitude);
                         if (user) {
                             await handleAppStateChange(user, latitude, longitude)
                         }
@@ -87,10 +83,7 @@ const AppProvider = ({ children }) => {
                     })
                     .catch((error) => {
                         console.log('errr', error);
-                        // Alert.alert("", "Something went wrong please try again")
                     });
-
-                // Actions.currentLoaction(position)
             },
                 (error) => {
                     console.log('Error getting location:', error);
@@ -117,7 +110,7 @@ const AppProvider = ({ children }) => {
     }, [])
 
     const handleConnectDriversuccess = (data) => {
-        console.log("driver-connect-successfully", data);
+        // console.log("driver-connect-successfully", data);
     }
 
 
@@ -149,6 +142,10 @@ const AppProvider = ({ children }) => {
     const [fromGuestUserScreen, setFromGuestUserScreen] = useState(null)
     const [newRequest, setNewRequest] = useState([])
     const [bidPlaced, setBidPlaced] = useState(false)
+    const [profileInformation, setProfileInformation] = useState({
+        profileImg: null,
+        address: [],
+    })
 
 
 
@@ -165,12 +162,6 @@ const AppProvider = ({ children }) => {
     })
 
     const [source, setSource] = useState({
-        lat: "",
-        lng: "",
-        location: ""
-    })
-
-    const [currentLocation, setCurrentLocation] = useState({
         lat: "",
         lng: "",
         location: ""
@@ -322,9 +313,6 @@ const AppProvider = ({ children }) => {
         }
     }
 
-    // storing the color mode of the mobile 
-
-    // setIsDark(isDark1)
 
     return (
         <AppContext.Provider
@@ -336,8 +324,6 @@ const AppProvider = ({ children }) => {
                 setIsDark,
                 destination,
                 setDestination,
-                currentLocation,
-                setCurrentLocation,
                 source,
                 setSource,
                 selectedVehicle,
@@ -348,7 +334,8 @@ const AppProvider = ({ children }) => {
                 orderDeatils, setOrderDeatils,
                 fromGuestUserScreen, setFromGuestUserScreen,
                 newRequest, setNewRequest,
-                bidPlaced, setBidPlaced
+                bidPlaced, setBidPlaced,
+                profileInformation, setProfileInformation
             }}
         >
             {children}

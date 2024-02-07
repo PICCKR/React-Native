@@ -1,4 +1,4 @@
-import { View, Text, TouchableOpacity } from 'react-native'
+import { View, Text, TouchableOpacity, Platform } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { Styles } from './Styles'
 import { commonStyles } from '../../../utils/Styles/CommonStyles'
@@ -50,7 +50,7 @@ const RecipientSheet = ({
   const [buttonActive, setButtonActive] = useState(false)
 
   useEffect(() => {
-    if (RegEx.name__regEx.test(formData.name) && formData.phoneNumber) {
+    if (RegEx.name__regEx.test(formData.name) && formData?.phoneNumber?.length > 6) {
       setButtonActive(true)
     } else {
       setButtonActive(false)
@@ -64,9 +64,17 @@ const RecipientSheet = ({
   })
 
   return (
+
     <BottomSheet
       isVisible={isVisible}
-      modelBgStyles={{ backgroundColor: "rgba(255, 255, 255, 0)" }}
+      modelBgStyles={{
+        backgroundColor: "rgba(255, 255, 255, 0)",
+
+      }}
+      modelStyles={{
+        position: Platform.OS === "android" ? 'absolute' : "relative",
+        marginTop: Platform.OS === "android" ? 0 : "95%",
+      }}
       title="Recipients Details"
       hasBackButton
       showFooterButton
@@ -95,8 +103,9 @@ const RecipientSheet = ({
 
       </View>
 
-      <View style={[commonStyles.bottomBorder, Styles.recipientDetails, {
-        borderColor: isDark ? uiColours.GRAYED_BUTTON : uiColours.LIGHT_GRAY
+      <View style={[Styles.recipientDetails, {
+        // borderColor: isDark ? uiColours.GRAYED_BUTTON : uiColours.LIGHT_GRAY
+        marginBottom: Platform.OS === "ios" ? verticalScale(50) : verticalScale(10)
       }]}>
         <View style={commonStyles.flexRowAlnCtrJutySpaceBetween}>
           <Text style={appStyles.mediumTextBlackBold}>

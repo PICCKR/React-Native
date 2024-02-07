@@ -31,6 +31,8 @@ import com.imagepicker.ImagePickerPackage;
 import com.rnmaps.maps.MapsPackage;
 // react-native-pager-view
 import com.reactnativepagerview.PagerViewPackage;
+// react-native-permissions
+import com.zoontek.rnpermissions.RNPermissionsPackage;
 // react-native-pure-jwt
 import com.zaguiini.RNPureJwt.RNPureJwtPackage;
 // react-native-reanimated
@@ -102,6 +104,7 @@ public class PackageList {
       new ImagePickerPackage(),
       new MapsPackage(),
       new PagerViewPackage(),
+      new RNPermissionsPackage(),
       new RNPureJwtPackage(),
       new ReanimatedPackage(),
       new SafeAreaContextPackage(),

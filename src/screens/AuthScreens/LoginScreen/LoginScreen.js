@@ -21,7 +21,7 @@ import { showErrorToast } from '../../../helper/showErrorToast'
 import { decodeToken } from '../../../helper/decodeToken'
 
 const LoginScreen = () => {
-  const { appStyles, isDark, setuserData, userData, setIsLoggedIn, fromGuestUserScreen, setFromGuestUserScreen } = useContext(AppContext)
+  const { appStyles, isDark, fromGuestUserScreen, setFromGuestUserScreen } = useContext(AppContext)
   const navigation = useNavigation()
 
   const { Socket } = useSocket()
@@ -48,8 +48,6 @@ const LoginScreen = () => {
           password: loginData?.password
         }
       );
-      // deleteUser()
-      // return
       // if user is created but not verify the otp 
       if (user?.nextStep?.signInStep === "CONFIRM_SIGN_UP") {
         handleConfirmSignup()
@@ -133,7 +131,6 @@ const LoginScreen = () => {
 
           } else {
             await signOut().then((res) => {
-              // handleLogin()
             });
             showGeneralError(isDark)
           }
@@ -174,7 +171,7 @@ const LoginScreen = () => {
   }, [loginData]);
 
   const handleConnectDriversuccess = (data) => {
-    console.log("driver-connect-successfully", data);
+    // console.log("driver-connect-successfully", data);
   }
 
 
@@ -209,6 +206,7 @@ const LoginScreen = () => {
 
       <ScrollView style={styles.formView}>
 
+        {/* mobile number input feild */}
         <MobileNumberInput
           handleChange={(number) => {
             setLoginData({

@@ -23,19 +23,19 @@ const PickerOnGoingTrips = () => {
 
     const userData = useSelector((state) => state?.userDataReducer?.userData)
 
-    console.log("userData", userData);
+    // console.log("userData", userData);
 
     const getActivityData = async () => {
         Actions.showLoader(true)
         apiGet(`${endPoints.GET_PICKER_BOOKINGS}?status=ongoing`).then((res) => {
-            console.log("ress in booking", res?.data);
+            // console.log("ress in booking", res?.data);
             Actions.showLoader(false)
             if (res?.status === 200) {
                 setData(res?.data?.data)
             }
         }).catch((error) => {
             Actions.showLoader(false)
-            console.log("error in getting orders", error);
+            // console.log("error in getting orders", error);
         })
     }
 

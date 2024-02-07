@@ -15,11 +15,14 @@ import FullScreenImagePopUp from './FullScreenImagePopUp'
 import { useNavigation } from '@react-navigation/native'
 import { useSelector } from 'react-redux'
 import ProfileView from '../../../components/PrifileView/ProfileView'
+import { endPoints } from '../../../configs/apiUrls'
+import { apiGet } from '../../../services/apiServices'
+import Actions from '../../../redux/Actions'
 
 const PickerMessagesScreen = ({ route }) => {
     const orderDetails = route?.params?.orderDetails
 
-    // console.log("orderDetails", orderDetails);
+    // console.log("orderDetails in piccer", orderDetails);
     const data = {}
     const { Socket } = useSocket()
     const pickerData = {}
@@ -31,6 +34,7 @@ const PickerMessagesScreen = ({ route }) => {
         fullScreenImage: false
     })
     const [image, setImage] = useState(null)
+    const [base64, setBase64] = useState(null)
     const [messages, setMessages] = useState([])
     const [newMessage, setNewMessage] = useState('')
     const [selectedMsg, setSelectedMsg] = useState(null)
@@ -40,25 +44,28 @@ const PickerMessagesScreen = ({ route }) => {
 
     const handleSend = async () => {
         const msg = {
-            "message": newMessage,
+            "message": (base64 && !newMessage) ? " " : newMessage,
             "room": orderDetails?._id,
             "user": userData?._id
         }
 
-        Socket.emit("sendMessage", msg)
+        // console.log("msg===>", msg);
+        Socket.emit("sendMessage", msg, base64 && base64)
     }
 
     const handleSendMsgError = (res) => {
-        console.log("send-message-error", res);
+        // console.log("send-message-error", res);
     }
     const handleSendSuccess = (res) => {
-        console.log("send-message-success", res);
+        // console.log("send-message-success", res);
     }
 
     const handleNewMsg = (res) => {
-        console.log("newMessage", res);
+        // console.log("newMessage", res);
         setMessages([...messages, res?.data])
         setNewMessage("")
+        setImage(null)
+        setBase64(null)
     }
 
     useEffect(() => {
@@ -71,6 +78,28 @@ const PickerMessagesScreen = ({ route }) => {
             Socket.off("newMessage", handleNewMsg)
         }
     }, [Socket, handleSendMsgError, handleSendSuccess, handleNewMsg])
+
+
+    const getChatMessages = async () => {
+        Actions.showLoader(true)
+        apiGet(`${endPoints.GET_CHAT_MSG}/${orderDetails?._id}`).then((res) => {
+            // console.log('res in get msg', res?.data);
+            if (res?.status === 200) {
+                setMessages(res?.data?.data)
+            }
+            Actions.showLoader(false)
+        }).catch((error) => {
+            Actions.showLoader(false)
+            console.log("🚀 ~ apiGet messages ~ error:", error)
+        })
+    }
+
+
+    useEffect(() => {
+        getChatMessages()
+    }, [])
+
+
 
     return (
         <WrapperContainer
@@ -96,7 +125,7 @@ const PickerMessagesScreen = ({ route }) => {
                     borderColor: isDark ? uiColours.GRAYED_BUTTON : uiColours.LIGHT_GRAY
                 }]}>
                     <ProfileView
-                        profileImg={orderDetails?.picckrId?.picture}
+                        profileImg={orderDetails?.userId?.picture}
                         size={40}
                         hasBottomLine={false}
                         profileSection={{ paddingBottom: 0 }}
@@ -108,8 +137,8 @@ const PickerMessagesScreen = ({ route }) => {
                         <Images.car height={moderateScale(17)} width={moderateScale(17)} />
                     </View> */}
                     <View>
-                        <Text style={appStyles?.mediumTextPrimaryBold}>{orderDetails?.picckrId?.firstName} {orderDetails?.picckrId?.lastName}</Text>
-                        <Text style={appStyles?.smallTextGray}>{orderDetails?.picckrId?.vehicle?.plateNumber} • {orderDetails?.picckrId?.vehicle?.model} • {orderDetails?.picckrId?.vehicle?.color}</Text>
+                        <Text style={appStyles?.mediumTextPrimaryBold}>{orderDetails?.userId?.firstName} {orderDetails?.userId?.lastName}</Text>
+                        <Text style={appStyles?.smallTextGray}>{orderDetails?.userId?.phoneNumber}</Text>
                         {/* <View style={commonStyles.flexRowAlnCtr}>
                             <Images.star />
                             <Text style={appStyles.smallTextGray}>{4.9}</Text>
@@ -123,7 +152,8 @@ const PickerMessagesScreen = ({ route }) => {
                     messages?.map((item, index) => {
                         const previousItem = messages[index - 1];
                         const shouldShowDate = !previousItem || moment(previousItem?.createdAt).format("DD/MM/YYYY") !== moment(item?.createdAt).format("DD/MM/YYYY")
-                        const isSender = item?.user === userData?._id
+                        const isSender = item?.user?._id === userData?._id
+                        // console.log(" item?.attachment", item?.attachment);
                         // console.log("item?.createdAt != new Date().toString()",previousItem,moment(previousItem?.createdAt).format("DD/MM/YYYY") , moment(item?.createdAt).format("DD/MM/YYYY"));
                         return (
                             <View key={index} style={styles.chatContainer}>
@@ -134,7 +164,7 @@ const PickerMessagesScreen = ({ route }) => {
                                 <View style={isSender ? styles.sentMessageCard : [styles.reviedMessageCard, {
                                     borderColor: isDark ? uiColours.GRAYED_BUTTON : uiColours.LIGHT_GRAY
                                 }]}>
-                                    {/* {item?.message ? <Text style={[appStyles.smallTextGray, { color: isSender ? uiColours.BLACK_TEXT : uiColours.GRAY_TEXT }]}>
+                                    {!item?.attachment ? <Text style={[appStyles.smallTextGray, { color: isSender ? uiColours.BLACK_TEXT : uiColours.GRAY_TEXT }]}>
                                         {item?.message}
                                     </Text> :
                                         <View style={{}}>
@@ -148,23 +178,23 @@ const PickerMessagesScreen = ({ route }) => {
                                                 }}
                                             >
                                                 <Image
-                                                    source={{ uri: item?.content?.img }}
+                                                    source={{ uri: item?.attachment }}
                                                     style={{ height: moderateScale(100), width: moderateScale(100) }}
                                                 />
                                             </TouchableOpacity>
 
                                             <Text>
-                                                {item?.content?.message}
+                                                {item?.message}
                                             </Text>
                                         </View>
-                                    } */}
+                                    }
 
-                                    <Text style={[appStyles.smallTextGray, { color: isSender ? uiColours.BLACK_TEXT : uiColours.GRAY_TEXT }]}>
+                                    {/* <Text style={[appStyles.smallTextGray, { color: isSender ? uiColours.BLACK_TEXT : uiColours.GRAY_TEXT }]}>
                                         {item?.message}
                                     </Text>
                                     <Text style={[appStyles.smallTextGray, { fontSize: scale(10) }]}>
                                         {moment(item?.createdAt).format('h:mm a')}
-                                    </Text>
+                                    </Text> */}
                                 </View>
                             </View>
                         )
@@ -250,6 +280,8 @@ const PickerMessagesScreen = ({ route }) => {
                 setShowMode={setShowSheet}
                 openCamara={async () => {
                     const res = await openCamara()
+                    // console.log("res", res?.assets[0]?.base64);
+                    setBase64(res?.assets[0]?.base64)
                     setImage(res?.assets[0]?.uri)
                     setShowSheet({
                         ...showSheet,

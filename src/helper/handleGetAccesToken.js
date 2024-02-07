@@ -7,7 +7,7 @@ export const handleGetAccesToken = async () => {
   try {
     // get idToken from cognito
     const { idToken } = (await fetchAuthSession()).tokens ?? {};
-    console.log("idToken", idToken);
+    // console.log("idToken", idToken);
     // console.log("idToken.toString()", idToken.toString());
     // pass this to in headers to get jwt token
     const config = {

@@ -16,15 +16,16 @@ import SetLocationModal from '../../../components/SetLocationModal/SetLocationMo
 import { GOOGLE_MAP_API_KEY } from '../../../configs/google_map_api_key'
 import { uiStrings } from '../../../utils/Constents/uiStrings'
 import SheetFooter from '../../../components/SheetFooter/SheetFooter'
-import AddAddressSheet from '../../UserScreens/AddressScreen/AddAddressSheet'
 import Actions from '../../../redux/Actions'
+import { useSelector } from 'react-redux'
+import { apiGet } from '../../../services/apiServices'
+import { endPoints } from '../../../configs/apiUrls'
 
 
 const PickerFindDestination = () => {
     const {
         appStyles,
         isDark,
-        userData,
         setuserData,
         source,
         setSource,
@@ -34,62 +35,17 @@ const PickerFindDestination = () => {
     } = useContext(AppContext)
     const navigation = useNavigation()
 
+    const userData = useSelector((state) => state?.userDataReducer?.userData)
+    const [recentDestinationData, setRecentDestinationData] = useState([])
+
     // console.log("userData", userData);
 
     const [showSheet, setShowSheet] = useState({
         addAddress: false,
         setLocation: false
     })
-    const [addressData, setAddresData] = useState({
-        id: "",
-        addressType: "",
-        buildingName: "",
-        homeNumber: "",
-        location: "",
-    })
     const [action, setAction] = useState("")
     const [buttonActive, setButtonActive] = useState(false)
-    const recentDestinationData = [
-        {
-            title: "Harvard University",
-            details: 'Massachusetts Hall, Cambridge, MA 02138',
-            lat: 12.30536215259088,
-            lng: 76.65516416694614
-        },
-        {
-            title: "Houghton Library",
-            details: 'Quincy Street &, Harvard St, Cambridge, MA 02138',
-            lat: 12.30536215259088,
-            lng: 76.65516416694614
-        },
-        {
-            title: "Cambridge Historical Tours",
-            details: '1400 Massachusetts Ave, Cambridge, MA 02138',
-            lat: 12.30536215259088,
-            lng: 76.65516416694614
-        },
-        {
-            title: "John Harvard Statue",
-            details: 'Harvard Yard, 1, Cambridge, MA 02138',
-            lat: 12.30536215259088,
-            lng: 76.65516416694614
-        }
-    ]
-
-    const handleAddAddress = async () => {
-        const newAddress = {
-            id: userData.address.length + 1,
-            addressType: addressData?.addressType,
-            buildingName: addressData?.buildingName,
-            homeNumber: addressData?.homeNumber,
-            location: addressData?.location,
-        }
-        Actions.userData({ ...userData, address: [...userData?.address, newAddress] })
-        // setuserData({ ...userData, address: [...userData?.address, newAddress] })
-        setLocalData(storageKeys.userData, { ...userData, address: [...userData?.address, newAddress] })
-        setShowSheet(false)
-    }
-
 
     const handleSelectLocation = async (data, details = null) => {
         // console.log("DDD", data);
@@ -154,6 +110,21 @@ const PickerFindDestination = () => {
         }
     }, [destination, source])
 
+    const getLasbookings = () => {
+        apiGet(`${endPoints.GET_LAST_FIVE_BOOKINGS}/${userData?._id}`).then((res) => {
+            // console.log("res in 5 booking", res?.data, res?.status);
+            if (res?.status === 200) {
+                setRecentDestinationData(res?.data?.data)
+            }
+        }).catch((error) => {
+            console.log("error in last 5 bookins", error);
+        })
+    }
+
+    useEffect(() => {
+        getLasbookings()
+    }, [])
+
 
     return (
         <SafeAreaView
@@ -182,10 +153,8 @@ const PickerFindDestination = () => {
                                         borderColor: isDark ? uiColours.GRAYED_BUTTON : uiColours.LIGHT_GRAY
                                     }]}
                                     onPress={() => {
-                                        setAction("source")
-                                        setShowSheet({
-                                            ...showSheet,
-                                            setLocation: true
+                                        navigation.navigate(MainRouteStrings.SET_LOCATION_SCREEN_PICKKR, {
+                                            from: "source"
                                         })
                                     }}
                                 >
@@ -200,10 +169,8 @@ const PickerFindDestination = () => {
                                 <TouchableOpacity
                                     style={[styles.locationView]}
                                     onPress={() => {
-                                        setAction("destination")
-                                        setShowSheet({
-                                            ...showSheet,
-                                            setLocation: true
+                                        navigation.navigate(MainRouteStrings.SET_LOCATION_SCREEN_PICKKR, {
+                                            from: "destination"
                                         })
                                     }}
                                 >
@@ -228,15 +195,19 @@ const PickerFindDestination = () => {
                         showsHorizontalScrollIndicator={false}
                         style={{ marginTop: verticalScale(10) }}>
                         <View style={commonStyles.flexRowAlnCtr}>
-                            <TouchableOpacity
+                            {userData?.addresses?.length < 3 && <TouchableOpacity
                                 style={[styles.AddButton, {
                                     marginLeft: scale(16),
                                     borderColor: isDark ? uiColours.GRAYED_BUTTON : uiColours.LIGHT_GRAY
                                 }]}
                                 onPress={() => {
-                                    setShowSheet({
-                                        ...showSheet,
-                                        addAddress: true
+                                    // setShowSheet({
+                                    //     ...showSheet,
+                                    //     addAddress: true
+                                    // })
+                                    navigation.navigate(MainRouteStrings.ADD_ADDRESS, {
+                                        action: "add",
+
                                     })
                                 }}
                             >
@@ -250,35 +221,37 @@ const PickerFindDestination = () => {
                                     </Text>
                                 </View>
 
-                            </TouchableOpacity>
+                            </TouchableOpacity>}
                             <View style={{ paddingRight: scale(16), flexDirection: "row", gap: scale(10) }}>
                                 {
-                                    userData?.address?.map((item) => {
+                                    userData?.addresses?.map((item) => {
                                         // console.log("dsdsdsad", item);
                                         return (
                                             <TouchableOpacity
-                                                key={item?.id}
+                                                key={item?._id}
                                                 style={[styles.AddButton, {
                                                     borderColor: isDark ? uiColours.GRAYED_BUTTON : uiColours.LIGHT_GRAY
                                                 }]}
                                                 onPress={() => {
                                                     setDestination({
                                                         ...destination,
-                                                        location: item?.location
+                                                        lat: item?.coordinates[0],
+                                                        lng: item?.coordinates[1],
+                                                        location: item?.street_address
                                                     })
                                                 }}
                                             >
                                                 {
-                                                    item?.addressType === "Home" ? <Image source={Images.home} style={commonStyles.icon} /> :
+                                                    item?.type === "Home" ? <Image source={Images.home} style={commonStyles.icon} /> :
                                                         <Image source={Images.work} style={commonStyles.icon} />
                                                 }
 
-                                                <View>
+                                                <View style={{ width: '90%' }}>
                                                     <Text style={appStyles.smallTextBlackBold}>
-                                                        {item?.addressType}
+                                                        {item?.type}
                                                     </Text>
                                                     <Text ellipsizeMode="tail" numberOfLines={1} style={appStyles.smallTextGray}>
-                                                        {item?.buildingName}
+                                                        {item?.street_address}
                                                     </Text>
                                                 </View>
 
@@ -293,30 +266,29 @@ const PickerFindDestination = () => {
                     </ScrollView>
                 </View>
 
+
                 <View style={styles.recentDestinationView}>
                     <Text style={appStyles.mediumTextBlack}>Recent destination</Text>
                     {
                         recentDestinationData.map((item) => {
                             return (
                                 <TouchableOpacity
-                                    key={item.title}
+                                    key={item._id}
                                     style={{ flexDirection: 'row', gap: scale(8) }}
                                     onPress={() => {
+                                        // console.log("item?.dropOffLocation[0]", item?.dropOffLocation?.coordinates[0]);
                                         setDestination({
                                             ...destination,
-                                            lat: item.lat,
-                                            location: item?.title,
-                                            lng: item.lng
+                                            lat: item?.dropOffLocation?.coordinates[0],
+                                            location: item?.dropOffAddress,
+                                            lng: item?.dropOffLocation?.coordinates[1]
                                         })
                                     }}
                                 >
                                     <Images.locationPinRed height={moderateScale(20)} width={moderateScale(20)} />
                                     <View style={{ flex: 1 }}>
                                         <Text style={appStyles.smallTextBlackBold}>
-                                            {item?.title}
-                                        </Text>
-                                        <Text style={appStyles.smallTextGray}>
-                                            {item?.details}
+                                            {item?.dropOffAddress}
                                         </Text>
                                     </View>
                                 </TouchableOpacity>
@@ -325,14 +297,7 @@ const PickerFindDestination = () => {
                     }
                 </View>
             </ScrollView>
-            <AddAddressSheet
-                isVisible={showSheet.addAddress}
-                setShowSheet={setShowSheet}
-                handleAddAddress={handleAddAddress}
-                addressData={addressData}
-                setAddresData={setAddresData}
-                action={"add"}
-            />
+
             <SetLocationModal
                 setShowModal={setShowSheet}
                 isVisible={showSheet.setLocation}

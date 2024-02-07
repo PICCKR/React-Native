@@ -16,6 +16,7 @@ import { MainRouteStrings } from '../../../utils/Constents/RouteStrings'
 import { formatCurrency } from 'react-native-format-currency'
 import { formatAmount, formatter } from '../../../helper/formatter'
 import { useSelector } from 'react-redux'
+import ProfileView from '../../../components/PrifileView/ProfileView'
 
 const Header = ({
     appStyles,
@@ -69,7 +70,7 @@ const Header = ({
         }).catch((err) => {
             showGeneralError()
             Actions.showLoader(false)
-            console.log("error in update transaction", err);
+            // console.log("error in update transaction", err);
         })
     }
 
@@ -77,9 +78,12 @@ const Header = ({
         <View style={styles.headerContainer}>
             {/* Profile Section */}
             <View style={styles.profileSection}>
-                <View style={styles.profileView}>
-                    <Images.profile height={moderateScale(50)} width={moderateScale(50)} />
-                </View>
+                <ProfileView
+                    hasBottomLine={false}
+                    profileSection={{ paddingBottom: 0 }}
+                    size={50}
+                    profileImg={userData?.picture}
+                />
                 <View style={{ flex: 1 }}>
                     {/* Displaying user's name if authenticated */}
                     {userData?.token ? <Text numberOfLines={1} ellipsizeMode="tail" style={appStyles?.largeTextWhiteBold}>
