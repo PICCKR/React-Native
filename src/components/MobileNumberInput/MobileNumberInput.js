@@ -185,7 +185,7 @@ const MobileNumberInput = ({
                     setShowSheet(false)
                 }}
             >
-                <View style={{ gap: verticalScale(16) }}>
+                <View style={{ gap: verticalScale(16), paddingBottom: verticalScale(16) }}>
                     {
                         countryData.map((item) => {
                             const Flag = item.flag

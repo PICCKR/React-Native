@@ -12,25 +12,23 @@ import { buttonTypes } from '../../../utils/Constents/constentStrings'
 import { MainRouteStrings } from '../../../utils/Constents/RouteStrings'
 import CancelOrderSheet from './CancelOrderSheet'
 import { formatAmount } from '../../../helper/formatter'
+import Actions from '../../../redux/Actions'
 
 const Ongoing = ({
     orderDeatils,
     appStyles,
     navigation,
     isDark,
-    handleJoinRoom
+    handleJoinRoom,
+    handleCancelOrder
 }) => {
-
-    const [showSheet, setShowSheet] = useState({
-        confirmation: false
-    })
 
     return (
         <View style={{ padding: moderateScale(16), gap: verticalScale(16) }}>
             <View style={[styles.onGoingContentSection, {
                 borderColor: !isDark ? uiColours.LIGHT_GRAY : uiColours.GRAYED_BUTTON,
             }]}>
-                <View style={[styles.pickerProfile, {
+                {/* <View style={[styles.pickerProfile, {
                     borderColor: !isDark ? uiColours.LIGHT_GRAY : uiColours.GRAYED_BUTTON,
                 }]}>
                     <View style={styles.pickerProfileView}>
@@ -43,6 +41,9 @@ const Ongoing = ({
                         <Text style={appStyles?.mediumTextPrimaryBold}>{orderDeatils?.userId?.firstName} {orderDeatils?.userId?.lastName}</Text>
                         <Text style={appStyles?.smallTextGray}>{orderDeatils?.userId?.phoneNumber}</Text>
                     </View>
+                </View> */}
+                <View>
+                    <Text style={appStyles?.mediumTextPrimaryBold}>{orderDeatils?.userId?.firstName} {orderDeatils?.userId?.lastName}</Text>
                 </View>
                 <View style={styles.sendMsg}>
                     <TouchableOpacity
@@ -168,15 +169,9 @@ const Ongoing = ({
                 {orderDeatils?.status === "pending" && <CustomButton
                     buttonType={buttonTypes.MEDIUM}
                     title={"Cancel order"}
-                    NavigationHandle={() => {
-                        setShowSheet({
-                            ...showSheet,
-                            confirmation: true
-                        })
-                    }}
+                    NavigationHandle={handleCancelOrder}
                 />}
             </View>
-
         </View>
     )
 }

@@ -1,4 +1,4 @@
-import { View, Text, SafeAreaView, StatusBar } from 'react-native'
+import { View, Text, SafeAreaView, StatusBar, KeyboardAvoidingView, Platform } from 'react-native'
 import React, { useContext } from 'react'
 import { uiColours } from '../../utils/Styles/uiColors'
 import { AppContext } from '../../context/AppContext'
@@ -26,15 +26,21 @@ const WrapperContainer = ({
     leftViewStyles,
     centerViewStyles,
     righyViewStyles,
-    handleBack = () => {}
+    handleBack = () => { }
 }) => {
     const { appStyles, isDark } = useContext(AppContext)
     return (
         <View style={{ flex: 1, backgroundColor: uiColours.WHITE_TEXT, ...containerStyle }}>
             {/* <StatusBar backgroundColor={StatusBarColor} barStyle={barStyle} /> */}
+
+            {/* <KeyboardAvoidingView
+                style={{ flex: 1 }}
+                behavior={Platform.OS === "ios" ? "padding" : "position"}
+                keyboardVerticalOffset={Platform.OS === "ios" ? verticalScale(100) : 0}
+            > */}
             <SafeAreaView style={[appStyles.container,]}>
                 <Header
-                   leftTitle={leftTitle}
+                    leftTitle={leftTitle}
                     centerTitle={centerTitle}
                     handlerRightViewPress={handlerRightViewPress}
                     rightTitle={rightTitle}
@@ -48,9 +54,9 @@ const WrapperContainer = ({
                 />
 
 
-                <View style={[appStyles.containerPadding,{
-                   paddingBottom : showFooterButton ? verticalScale(16) : 0,
-                   paddingTop: verticalScale(16)
+                <View style={[appStyles.containerPadding, {
+                    paddingBottom: showFooterButton ? verticalScale(16) : 0,
+                    paddingTop: verticalScale(16)
                 }, containerPadding]}>
                     {children}
                 </View>
@@ -58,8 +64,8 @@ const WrapperContainer = ({
 
                 {showFooterButton && <View style={[Styles.footer,
                 {
-                    backgroundColor:isDark ? uiColours.DARK_BG : uiColours.WHITE_TEXT,
-                    borderColor:isDark ? uiColours.GRAYED_BUTTON : uiColours.LIGHT_GRAY , 
+                    backgroundColor: isDark ? uiColours.DARK_BG : uiColours.WHITE_TEXT,
+                    borderColor: isDark ? uiColours.GRAYED_BUTTON : uiColours.LIGHT_GRAY,
                 }
                 ]}>
                     <CustomButton
@@ -78,6 +84,7 @@ const WrapperContainer = ({
                     />
                 </View>}
             </SafeAreaView>
+            {/* </KeyboardAvoidingView> */}
         </View>
 
     )

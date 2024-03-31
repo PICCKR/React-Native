@@ -27,7 +27,7 @@ const UserProfileScreen = () => {
 
   const { appStyles, isDark, setIsDark, setuserData } = useContext(AppContext)
   const userData = useSelector((state) => state?.userDataReducer?.userData)
-  // console.log("userData===>", userData?.wallateBalance);
+  console.log("userData===>", userData);
   const navigation = useNavigation()
 
   const [profileInformation, setProfileInformation] = useState({
@@ -60,8 +60,8 @@ const UserProfileScreen = () => {
         navigation.navigate(MainRouteStrings.USER_KYC_SCREEN)
         break;
       case "Become PicckR":
-        navigation.navigate(MainRouteStrings.BECOME_PICKER)
-        return
+        // navigation.navigate(MainRouteStrings.BECOME_PICKER)
+        // return
         if (userData?.kycStatus === "approved") {
           navigation.navigate(MainRouteStrings.BECOME_PICKER)
         } else {
@@ -76,6 +76,23 @@ const UserProfileScreen = () => {
       default:
         break;
     }
+  }
+
+  function hideNumber(number) {
+    // return number
+    // Convert the number to a string
+    if(number){
+     var numberStr = number?.toString();
+  
+     // Replace all but the last 4 characters with asterisks
+     var hiddenPart = '*'.repeat(numberStr?.length - 4);
+   
+     // Concatenate the last 4 characters back onto the string
+     var result = hiddenPart + numberStr.slice(-4);
+   
+     return result;
+    }
+  
   }
 
 
@@ -192,7 +209,7 @@ const UserProfileScreen = () => {
             showArrow={userData?.kycStatus === "approved" ? false : true}
             disabled={userData?.kycStatus === "approved" ? true : false}
             handlePress={handleOptionClick}
-            value={userData?.kycStatus === "approved" ? userData?.kyc?.idNumber : ""}
+            value={userData?.kycStatus === "approved" ? hideNumber(userData?.kyc?.idNumber) : ""}
           />
 
           {userData?.userRole?.length < 2 && <EditAction

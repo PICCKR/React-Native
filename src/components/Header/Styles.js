@@ -9,12 +9,13 @@ const styles = StyleSheet.create({
         flexDirection: "row",
         width: screenSize.width,
         alignItems: "center",
-        borderBottomWidth:moderateScale(1),
-        justifyContent:"space-between",
+        borderBottomWidth: moderateScale(1),
+        justifyContent: "space-between",
+        zIndex: 10
     },
     leftView: {
         width: (screenSize.width - moderateScale(32)) / 3,
-        paddingLeft:scale(10),
+        paddingLeft: scale(10),
     },
     backButton: {
         height: moderateScale(30),
@@ -29,7 +30,7 @@ const styles = StyleSheet.create({
     righyView: {
         width: (screenSize.width - moderateScale(32)) / 3,
         alignItems: "flex-end",
-        paddingRight:scale(16)
+        paddingRight: scale(16)
     },
     rightText: {
 

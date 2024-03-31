@@ -12,6 +12,7 @@ import { buttonTypes } from '../../../utils/Constents/constentStrings'
 import { uiColours } from '../../../utils/Styles/uiColors'
 import DragableBottomSheet from '../../../components/DragableBottomSheet/DragableBottomSheet'
 import { formatAmount } from '../../../helper/formatter'
+import ProfileView from '../../../components/PrifileView/ProfileView'
 
 const NearByPickers = ({
     isVisible,
@@ -19,59 +20,26 @@ const NearByPickers = ({
     handleDecline,
     handleAccept,
     handleCancelRide,
-    nearByPickersData = []
+    nearByPickersData = [],
+    navigation
 }) => {
     const { appStyles, isDark } = useContext(AppContext)
-
-    // const nearByPickersData = [
-    //     {
-    //         id: "1",
-    //         lat: 12.293049583717883,
-    //         lng: 76.63101437360515,
-    //     },
-    //     {
-    //         id: "2",
-    //         lat: 12.302739640568026,
-    //         lng: 76.62731305608372
-    //     },
-    //     {
-    //         id: "3",
-    //         lat: 12.306077759217404,
-    //         lng: 76.65507293749431
-    //     },
-    //     {
-    //         id: "4",
-    //         lat: 12.295053579462769,
-    //         lng: 76.64540017987146
-    //     },
-    // ]
 
     return (
         <DragableBottomSheet
             index={nearByPickersData?.length}
         >
-            {/* isVisible={isVisible}
-            title="Choose PicckR"
-            renderRightView={() => {
-                return (
-                    <TouchableOpacity
-                        onPress={handleCancelRide}
-                    >
-                        <Text style={appStyles.mediumTextGray}>
-                            Cancel the ride
-                        </Text>
-                    </TouchableOpacity>
-                )
-            }} */}
+            <View style={[appStyles.bottomBorder, styles.header]}>
+                <TouchableOpacity
+                    onPress={() => {
+                        navigation.goBack()
+                    }}
+                    style={{ paddingHorizontal: scale(16) }}
+                >
+                    <Images.backArrow />
+                </TouchableOpacity>
 
-
-            {/* onBackdropPress={() => {
-                // setShowSheet(false)
-            }}
-            handleRightClick={() => {
-                setShowSheet(false)
-            }}
-            containerStyles={{ maxHeight: screenSize.height - verticalScale(150) }} */}
+            </View>
 
             {nearByPickersData?.length > 0 ? <FlatList
                 data={nearByPickersData}
@@ -83,14 +51,21 @@ const NearByPickers = ({
                             borderColor: isDark ? uiColours.GRAYED_BUTTON : uiColours.LIGHT_GRAY
                         }]}>
                             <View style={styles.pickerProfile}>
-                                <View style={styles.pickerProfileView}>
-                                    {item?.picckrId?.picture ? <Image source={{ uri: picckrId?.picture }} style={{
+                                <ProfileView
+                                    profileImg={item?.picckrId?.picture}
+                                    hasBottomLine={false}
+                                    profileSection={{ paddingBottom: 0 }}
+                                    size={30}
+                                />
+                                {/* <View style={styles.pickerProfileView}>
+
+                                    {item?.picckrId?.picture ? <Image source={{ uri: item?.picckrId?.picture }} style={{
                                         height: moderateScale(30), width: moderateScale(30)
                                     }} /> : <Images.profile height={moderateScale(30)} width={moderateScale(30)} />}
-                                </View>
+                                </View> */}
                                 <View style={{ flex: 1 }}>
                                     <Text style={appStyles?.smallTextPrimaryBold}>{item?.picckrId?.firstName}</Text>
-                                    <Text style={appStyles?.smallTextGray}>AM666EE • Toyota Prius Hybris</Text>
+                                    <Text style={appStyles?.smallTextGray}>{item?.picckrId?.vehicle?.plateNumber} • {item?.picckrId?.vehicle?.model} • {item?.picckrId?.vehicle?.color}</Text>
                                     {/* <View style={commonStyles.flexRowAlnCtr}>
                                         <Images.star />
                                         <Text style={appStyles.smallTextGray}>{4.9}</Text>

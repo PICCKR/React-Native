@@ -1,4 +1,4 @@
-import { Text, TouchableOpacity, ScrollView } from 'react-native'
+import { Text, TouchableOpacity, ScrollView, KeyboardAvoidingView } from 'react-native'
 import React, { useContext, useEffect, useState } from 'react'
 import styles from './Styles'
 import { AppContext, useSocket } from '../../../context/AppContext'
@@ -27,7 +27,12 @@ const LoginScreen = () => {
   const { Socket } = useSocket()
 
   const [loginData, setLoginData] = useState({
-    selectedCountry: {},
+    selectedCountry: {
+      id: 1,
+      flag: Images.NigeriaFlags,
+      name: "Nigeria",
+      code: "(+234)"
+    },
     phoneNumber: "",
     password: ""
   })
@@ -42,12 +47,18 @@ const LoginScreen = () => {
     Actions.showLoader(true)
     try {
       // method to signIn pass phone number and password
+      console.log("sssss", {
+        username: `${loginData?.selectedCountry?.code?.replace(/[()]/g, '')}${loginData?.phoneNumber?.replace(/\s+/g, '')}`,
+        password: loginData?.password
+      });
       const user = await signIn(
         {
           username: `${loginData?.selectedCountry?.code?.replace(/[()]/g, '')}${loginData?.phoneNumber?.replace(/\s+/g, '')}`,
           password: loginData?.password
         }
       );
+      // deleteUser()
+      // return
       // if user is created but not verify the otp 
       if (user?.nextStep?.signInStep === "CONFIRM_SIGN_UP") {
         handleConfirmSignup()
@@ -67,6 +78,7 @@ const LoginScreen = () => {
         })
       }
       else {
+        console.log("error?.message", error?.message);
         Actions.showLoader(false)
         showErrorToast(error?.message, isDark)
       }
@@ -110,7 +122,6 @@ const LoginScreen = () => {
           const { data, status } = result;
           if (status == 200) {
             const userInformaton = await decodeToken(data?.token)
-            // console.log("userInformaton", userInformaton);
             // after getting token store it in local storage and also set token in context
             setLocalData(storageKeys.userData, { ...userInformaton, token: data?.token })
             Actions.userData({ ...userInformaton, token: data?.token })
@@ -128,7 +139,6 @@ const LoginScreen = () => {
                 )
               }
             }
-
           } else {
             await signOut().then((res) => {
             });
@@ -204,8 +214,8 @@ const LoginScreen = () => {
         One more step and you can enjoy the features
       </Text>
 
-      <ScrollView style={styles.formView}>
 
+      <ScrollView style={styles.formView}>
         {/* mobile number input feild */}
         <MobileNumberInput
           handleChange={(number) => {

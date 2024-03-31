@@ -69,7 +69,8 @@ const PickUpSheet = ({
             title="Pick-up Details"
             modelStyles={{
                 position: Platform.OS === "android" ? 'absolute' : "relative",
-                marginTop: Platform.OS === "android" ? 0 : "85%",
+                marginTop: Platform.OS === "android" ? 0 : "75%",
+                paddingBottom: Platform.OS === "android" ? 0 : verticalScale(50)
             }}
             modelBgStyles={{ backgroundColor: "rgba(255, 255, 255, 0)" }}
             hasBackButton

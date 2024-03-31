@@ -148,6 +148,9 @@ const AddVehicleScreen = ({ route }) => {
             buttonTitle={"Add vehicle"}
             leftTitle="Vehicle"
             hasCloseIcon
+            handlerRightViewPress={() => {
+                navigation.goBack()
+            }}
             handleButtonPress={() => {
                 if (action === "add") {
                     handleAddVehicle()

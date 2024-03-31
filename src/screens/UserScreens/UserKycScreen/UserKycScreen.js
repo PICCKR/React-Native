@@ -1,4 +1,4 @@
-import { View, Text, TouchableOpacity, LayoutAnimation, Animated } from 'react-native'
+import { View, Text, TouchableOpacity, LayoutAnimation, Animated, ScrollView } from 'react-native'
 import React, { useContext, useEffect, useRef, useState } from 'react'
 import WrapperContainer from '../../../components/WrapperContainer/WrapperContainer'
 import { AppContext } from '../../../context/AppContext'
@@ -372,65 +372,66 @@ const UserKycScreen = ({ route }) => {
                     })
                 }
             </View> */}
-            <DropDown
-                title={"select country"}
-                data={countryData}
-                palceholder="Selecte your country"
-                changeKey={"name"}
-                dropDownPress={() => {
-                    setKycData({
-                        ...kycData,
-                        sectedIdType: null
-                    })
-                }}
-                handleSelectItem={(item) => {
-                    // console.log("item", item);
-                    setKycData({
-                        ...kycData,
-                        selectedCountry: item
-                    })
-                }}
-            />
-            <DropDown
-                title={"selecte id type"}
-                palceholder="Selecte your id type"
-                data={kycData.selectedCountry?.idTypes ? kycData.selectedCountry?.idTypes : []}
-                changeKey={"type"}
-                Value={kycData?.sectedIdType}
-                handleSelectItem={(item) => {
-                    // console.log("item", item);
-                    setKycData({
-                        ...kycData,
-                        sectedIdType: item
-                    })
-                }}
+            <ScrollView
+                showsVerticalScrollIndicator={false}
+            >
+                <DropDown
+                    title={"select country"}
+                    data={countryData}
+                    palceholder="Selecte your country"
+                    changeKey={"name"}
+                    dropDownPress={() => {
+                        setKycData({
+                            ...kycData,
+                            sectedIdType: null
+                        })
+                    }}
+                    handleSelectItem={(item) => {
+                        // console.log("item", item);
+                        setKycData({
+                            ...kycData,
+                            selectedCountry: item
+                        })
+                    }}
+                />
+                <DropDown
+                    title={"selecte id type"}
+                    palceholder="Selecte your id type"
+                    data={kycData.selectedCountry?.idTypes ? kycData.selectedCountry?.idTypes : []}
+                    changeKey={"type"}
+                    Value={kycData?.sectedIdType}
+                    handleSelectItem={(item) => {
+                        // console.log("item", item);
+                        setKycData({
+                            ...kycData,
+                            sectedIdType: item
+                        })
+                    }}
 
-            />
+                />
 
-            <InputText
-                hasTitle
-                inputTitle="Enter id number"
-                placeholder="Enter id number"
-                value={kycData?.idNumber}
-                keyboardType="numeric"
-                maxLength={11}
-                inputContainer={{ marginTop: verticalScale(10) }}
-                handleChange={(e) => {
-                    setKycData({
-                        ...kycData,
-                        idNumber: e
+                <InputText
+                    hasTitle
+                    inputTitle="Enter id number"
+                    placeholder="Enter id number"
+                    value={kycData?.idNumber}
+                    maxLength={11}
+                    inputContainer={{ marginTop: verticalScale(10) }}
+                    handleChange={(e) => {
+                        setKycData({
+                            ...kycData,
+                            idNumber: e
 
-                    })
-                }}
-            />
+                        })
+                    }}
+                />
 
-            <WhyBvnSheet
-                isVisible={showSheet}
-                setShowSheet={setShowSheet}
-                appStyles={appStyles}
-            />
-
-
+                <WhyBvnSheet
+                    isVisible={showSheet}
+                    setShowSheet={setShowSheet}
+                    appStyles={appStyles}
+                />
+            </ScrollView>
         </WrapperContainer>
     )
 }

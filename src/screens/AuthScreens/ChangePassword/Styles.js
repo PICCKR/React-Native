@@ -3,32 +3,35 @@ import { moderateScale, scale, verticalScale } from "react-native-size-matters"
 import { uiColours } from "../../../utils/Styles/uiColors"
 
 const styles = StyleSheet.create({
- underlineStyleBase: {
-  width: moderateScale(50),
-  height: moderateScale(50),
-  borderRadius:moderateScale(6),
-  borderWidth:moderateScale(1),
-  fontSize:scale(20),
-  color:uiColours.BLACK_TEXT
-},
+  underlineStyleBase: {
+    width: moderateScale(50),
+    height: moderateScale(50),
+    borderRadius: moderateScale(6),
+    borderWidth: moderateScale(1),
+    fontSize: scale(20),
+    color: uiColours.BLACK_TEXT
+  },
 
-borderStyleHighLighted: {
-  borderColor: uiColours.PRIMARY,
-},
+  borderStyleHighLighted: {
+    borderColor: uiColours.PRIMARY,
 
-otpStyles: {
-  marginTop: '1%',
-  flexDirection: 'row',
-  alignItems: 'center',
-  justifyContent: 'space-between',
-  alignSelf: 'center',
-},
+  },
 
-resendOtpView:{
-  flexDirection:'row',
-  marginTop:verticalScale(20),
-  alignSelf:'center',
-  alignItems:"center"
-}
+  otpStyles: {
+    marginTop: '1%',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    alignSelf: 'center',
+    paddingRight: 1
+    // backgroundColor: 'red's
+  },
+
+  resendOtpView: {
+    flexDirection: 'row',
+    marginTop: verticalScale(20),
+    alignSelf: 'center',
+    alignItems: "center"
+  }
 })
 export default styles

@@ -42,13 +42,18 @@ const SetLocationModal = ({
                             setShowModal(false)
                         }}
                     />
-                    <View style={{ position: "absolute", top: verticalScale(70), left: scale(25) }}>
+                    {/* <View style={{ position: "absolute", top: verticalScale(70), left: scale(25) }}>
                         <Images.locationPin />
-                    </View>
+                    </View> */}
                     <GooglePlacesAutocomplete
                         textInputProps={{
                             autoFocus: true,
                         }}
+                        renderLeftButton={() =>
+                            <View style={{ right: scale(10) }}>
+                                <Images.locationPin />
+                            </View>
+                        }
                         inbetweenCompo={showSelectfromMap ?
                             <TouchableOpacity
                                 style={styles.selectMap}
@@ -80,6 +85,7 @@ const SetLocationModal = ({
                                 borderColor: isDark ? uiColours.GRAYED_BUTTON : uiColours.LIGHT_GRAY,
                                 marginTop: verticalScale(5),
                                 paddingLeft: scale(20),
+                                alignItems: "center"
                             },
                             textInput: {
                                 backgroundColor: isDark ? uiColours.DARK_BG : null,

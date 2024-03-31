@@ -60,6 +60,7 @@ const CheckRoutes = () => {
                         // console.log("here");
                         Actions.isLoggedIn(true)
                         const userInformaton = await decodeToken(data?.token)
+                        console.log("userInformaton", userInformaton);
                         // after getting token store it in local storage and also set token in context
                         setLocalData(storageKeys.userData, { ...userInformaton, token: data?.token })
                         Actions.userData({ ...userInformaton, token: data?.token })

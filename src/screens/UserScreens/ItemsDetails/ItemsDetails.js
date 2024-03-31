@@ -97,7 +97,7 @@ const ItemsDetails = () => {
       payment: false
     })
     // console.log("data====>", data, amount);
-    if (data?.status === "successful") {
+    if (data?.status === "successful" || data?.status === "completed") {
       updateTransaction(data, amount)
     } else {
       // Handle unsuccessful transaction
@@ -611,11 +611,19 @@ const ItemsDetails = () => {
             //   handleOrder()
             // }
 
+            handleOrder()
+            return
             if (!userData?._id) {
               setFromGuestUserScreen(MainRouteStrings?.ITEMS_DETAILS)
               navigation.navigate(AuthRouteStrings.WELCOME_SCREEN)
             } else {
-              handleOrder()
+              if (userData?.kycStatus === "approved") {
+                handleOrder()
+              } else {
+                showErrorToast("Plase verify KYC Before doing transation", isDark)
+                navigation.navigate(MainRouteStrings.USER_KYC_SCREEN)
+              }
+
             }
           }}
         />
@@ -656,6 +664,7 @@ const ItemsDetails = () => {
         setItemsDetails={setItemsDetails}
         handleOnRedirect={(data, amount) => { handleAddAmount(data, amount) }}
         setShowSheet={setShowSheet}
+        userData={userData}
 
       />
       {/* <SelectAmountPopup

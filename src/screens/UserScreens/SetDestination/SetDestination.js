@@ -59,6 +59,20 @@ const SetDestination = ({ route }) => {
 
   const [showTime, setShowTime] = useState(true)
 
+  const getDate = () =>{
+    // Create a new Date object
+var currentDate = new Date();
+
+// Get the current date
+var day = currentDate.getDate();
+
+// Set the date to one day back
+currentDate.setDate(day - 1);
+
+// Output the updated date
+return currentDate.toISOString()
+  }
+
   useEffect(() => {
     // This will run every time the screen comes into focus
     if (isFocused) {
@@ -123,7 +137,7 @@ const SetDestination = ({ route }) => {
             recipient: false,
             pickup: false
           })
-          navigation.goBack()
+          navigation.navigate(MainRouteStrings.FIND_DESTINATON)
 
         }}
         handleNext={() => {
@@ -242,6 +256,7 @@ const SetDestination = ({ route }) => {
           // console.log("sdds");
           setShowTime(false)
         }}
+        startDate={new Date()}
         minDate={new Date()}
         onSeclectTime={(data) => {
           console.log("data===>", data);

@@ -7,7 +7,7 @@ export const endPoints = {
     CREATE_USER: BASE_URL + "users",
     UPDATE_PROFILE: BASE_URL + "users",
     DELETE_USER: BASE_URL + "users/deleteUser",
-    BECOME_PICKER: BASE_URL + "picckrDcouments",
+    BECOME_PICKER: BASE_URL + "picckrDocuments",
     GET_ADDRESS: BASE_URL + "userAddress/user",
     ADD_ADDRESS: BASE_URL + "userAddress",
     GET_WALATE_BALANCE: BASE_URL + "wallet/balance",

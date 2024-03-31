@@ -1,4 +1,4 @@
-import { View, Text, Alert } from 'react-native'
+import { View, Text, Alert, ScrollView } from 'react-native'
 import React, { useContext, useState } from 'react'
 import WrapperContainer from '../../../components/WrapperContainer/WrapperContainer'
 import { AppContext } from '../../../context/AppContext'
@@ -83,23 +83,24 @@ const ForgotPassword = () => {
       }}
       handleButtonPress={handleNext}
     >
-      <Text style={[appStyles.mediumTextPrimaryBold]}>
-        Enter your phome number to find your account
-      </Text>
+      <ScrollView>
+        <Text style={[appStyles.mediumTextPrimaryBold]}>
+          Enter your phone number to find your account
+        </Text>
 
-      <MobileNumberInput
-        handleChange={handleChange}
-        ErrorMsg={errorMsg}
-        ShowError={ShowError?.phoneNumber}
-        onPressIn={() => {
-          setShowError(false)
-        }}
-        setFormData={setFormData}
-      />
-      <Text style={appStyles.smallTextGray}>
-        If your phone number is correct, you can enter the OTP code that will be sent to the connected phone number.
-      </Text>
-
+        <MobileNumberInput
+          handleChange={handleChange}
+          ErrorMsg={errorMsg}
+          ShowError={ShowError?.phoneNumber}
+          onPressIn={() => {
+            setShowError(false)
+          }}
+          setFormData={setFormData}
+        />
+        <Text style={appStyles.smallTextGray}>
+          If your phone number is correct, you can enter the OTP code that will be sent to the connected phone number.
+        </Text>
+      </ScrollView>
 
     </WrapperContainer>
 

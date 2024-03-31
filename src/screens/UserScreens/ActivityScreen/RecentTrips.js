@@ -13,6 +13,7 @@ import moment from 'moment'
 import { formatAmount } from '../../../helper/formatter'
 import Actions from '../../../redux/Actions'
 import { MainRouteStrings } from '../../../utils/Constents/RouteStrings'
+import ProfileView from '../../../components/PrifileView/ProfileView'
 
 const RecentTrips = () => {
   const { appStyles, isDark } = useContext(AppContext)
@@ -70,9 +71,18 @@ const RecentTrips = () => {
 
               }}
             >
-              <View style={commonStyles.flexRowAlnCtr}>
-                {item?.picckrId?.picture ? <Image source={{ uri: item?.picckrId?.picture }} /> : <Images.profile height={moderateScale(40)} width={moderateScale(40)} />}
-                <View>
+              <View style={[commonStyles.flexRowAlnCtr, {
+                flex: 1,
+                gap: scale(15)
+              }]}>
+                <ProfileView
+                  profileImg={item?.picckrId?.picture}
+                  hasBottomLine={false}
+                  profileSection={{ paddingBottom: 0 }}
+                  size={40}
+                />
+                {/* {item?.picckrId?.picture ? <Image source={{ uri: item?.picckrId?.picture }} /> : <Images.profile height={moderateScale(40)} width={moderateScale(40)} />} */}
+                <View style={{ flex: 1 }}>
                   <Text style={appStyles.smallTextPrimaryBold}>
                     {item?.picckrId?.firstName} {item?.picckrId?.lastName}
                   </Text>

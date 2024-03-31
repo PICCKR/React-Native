@@ -125,6 +125,23 @@ const PickerProfileScreen = () => {
     }
   }
 
+  function hideNumber(number) {
+    // return number
+    // Convert the number to a string
+    if(number){
+     var numberStr = number?.toString();
+  
+     // Replace all but the last 4 characters with asterisks
+     var hiddenPart = '*'.repeat(numberStr?.length - 4);
+   
+     // Concatenate the last 4 characters back onto the string
+     var result = hiddenPart + numberStr.slice(-4);
+   
+     return result;
+    }
+  
+  }
+
   return (
     <WrapperContainer
       centerTitle="Profile"
@@ -197,7 +214,7 @@ const PickerProfileScreen = () => {
 
                       </View>}
                     {item.type === "KYC" &&
-                      <Text style={appStyles.smallTextGray}>{userData?.kyc?.idNumber}</Text>
+                      <Text style={appStyles.smallTextGray}>{hideNumber(userData?.kyc?.idNumber)}</Text>
                     }
 
 

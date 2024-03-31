@@ -6,6 +6,7 @@ import PayWithFlutterwave from 'flutterwave-react-native'
 import BottomSheet from '../../../components/BottomSheet/BottomSheet'
 import InputText from '../../../components/InputText/InputText'
 import CustomButton from '../../../components/Button/CustomButton'
+import { FLUTTER_WAVE_KEY } from '../../../configs/flutterWaveKey'
 
 const AddAmountSheet = ({
  isVisible,
@@ -14,7 +15,8 @@ const AddAmountSheet = ({
  handleOnRedirect = () => { },
  sheetTitle,
  orderDeatils,
- setItemsDetails
+ setItemsDetails,
+ userData
 }) => {
  const [buttonActive, setButtonActive] = useState(true)
 
@@ -78,9 +80,9 @@ const AddAmountSheet = ({
      onRedirect={(data) => { handleOnRedirect(data, orderDeatils?.amountToBeAdded) }}
      options={{
       tx_ref: generateTransactionRef(10),
-      authorization: 'FLWPUBK_TEST-7f4ea27a4d79df5c4de2c602d199b213-X',
+      authorization: FLUTTER_WAVE_KEY,
       customer: {
-       email: "mahammadsuhel17@gmail.com"
+       email: userData?.email
       },
       amount: parseInt(orderDeatils?.amountToBeAdded),
       currency: 'NGN',

@@ -30,10 +30,9 @@ const Header = ({
 
     // Function to handle addition of amount to wallet balance
     const handleAddAmount = async (data, amount) => {
-        // console.log("data====>", data, amount);
-        if (data?.status === "successful") {
+        console.log("data====>", data, amount);
+        if (data?.status === "successful" || data?.status === "completed") {
             updateTransaction(data, amount)
-
         } else {
             // Handle unsuccessful transaction
         }
@@ -74,6 +73,26 @@ const Header = ({
         })
     }
 
+    const getGreetings = () => {
+        console.log("ss");
+        var now = new Date();
+        var hour = now.getHours()
+        var greeting;
+        if (hour >= 5 && hour < 12) {
+            greeting = "Good morning";
+        } else if (hour >= 12 && hour < 18) {
+            greeting = "Good afternoon";
+        } else {
+            greeting = "Good evening";
+        }
+        return greeting;
+    }
+
+    // useEffect(() => {
+    //     getGreetings()
+    // }, [])
+
+
     return (
         <View style={styles.headerContainer}>
             {/* Profile Section */}
@@ -87,10 +106,10 @@ const Header = ({
                 <View style={{ flex: 1 }}>
                     {/* Displaying user's name if authenticated */}
                     {userData?.token ? <Text numberOfLines={1} ellipsizeMode="tail" style={appStyles?.largeTextWhiteBold}>
-                        Good morning, {userData?.firstName} {userData?.lastName}!
+                        {getGreetings()}, {userData?.firstName}!
                     </Text> :
                         <Text numberOfLines={1} ellipsizeMode="tail" style={appStyles?.largeTextWhiteBold}>
-                            Good morning!
+                            {getGreetings()}!
                         </Text>
                     }
                     <Text style={appStyles.mediumTextWhite}>Let's send the package now!</Text>
@@ -116,7 +135,12 @@ const Header = ({
                 {/* Button to open SelectAmountPopup for topping up wallet */}
                 <TouchableOpacity
                     onPress={() => {
-                        if (userData?.kyc?.idNumber) {
+                        // setShowSheet({
+                        //     ...showSheet,
+                        //     addPayment: true
+                        // })
+                        // return
+                        if (userData?.kycStatus === "approved") {
                             setShowSheet({
                                 ...showSheet,
                                 addPayment: true

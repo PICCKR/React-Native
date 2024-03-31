@@ -11,6 +11,7 @@ const ChooseMediaTypeSheet = ({
     openCamara,
     chooseMedia
 }) => {
+
     return (
         <BottomSheet
             isVisible={isVisible}
@@ -24,7 +25,7 @@ const ChooseMediaTypeSheet = ({
             }}
         >
             <View style={styles.modalContainer}>
-                <View style={{alignItems:"center", gap:verticalScale(5)}}>
+                <View style={{ alignItems: "center", gap: verticalScale(5) }}>
                     <TouchableOpacity
                         style={styles.modalContainerItmes}
                         onPress={openCamara}
@@ -32,19 +33,18 @@ const ChooseMediaTypeSheet = ({
                         <Images.camera height={moderateScale(24)} width={moderateScale(24)} />
 
                     </TouchableOpacity>
-                    <Text>camera</Text>
+                    <Text>Camera</Text>
                 </View>
 
-                <View style={{alignItems:"center", gap:verticalScale(5)}}>
+                <View style={{ alignItems: "center", gap: verticalScale(5) }}>
                     <TouchableOpacity
                         style={styles.modalContainerItmes}
                         onPress={chooseMedia}
                     >
                         <Image source={Images.gallary} style={{ height: moderateScale(24), width: moderateScale(24) }} />
                     </TouchableOpacity>
-                    <Text>gallary</Text>
+                    <Text>Gallery</Text>
                 </View>
-
             </View>
         </BottomSheet>
     )

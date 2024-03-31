@@ -34,7 +34,8 @@ const DropDown = ({
   handleSelectItem = () => { },
   loadMoreItems = () => { },
   dropDownPress = () => { },
-  Value
+  Value,
+  noDataMsg
 }) => {
   // console.log("vala", Value);
   const { appStyles } = useContext(AppContext)
@@ -113,7 +114,7 @@ const DropDown = ({
           scrollEventThrottle={400}
           style={[styles.itemView, appStyles?.borderColor, itemView]}
         >
-          {
+          {modifiedData?.length > 0 ?
             modifiedData?.map((item, i) => {
               return (
                 <TouchableOpacity
@@ -136,7 +137,12 @@ const DropDown = ({
                   </Text>
                 </TouchableOpacity>
               )
-            })
+            }) :
+            <View style={{ padding: moderateScale(16) }}>
+              <Text style={appStyles.smallTextBlack}>
+                {noDataMsg ? noDataMsg : "No data found"}
+              </Text>
+            </View>
           }
         </ScrollView>}
 

@@ -26,12 +26,12 @@ const CancelOrderSheet = ({
                 setShowSheet(false)
             }}
         >
-            <View style={{alignItems:'center', gap:verticalScale(6), paddingBottom:verticalScale(16)}}>
+            <View style={{ alignItems: 'center', gap: verticalScale(6), paddingBottom: verticalScale(16) }}>
                 <View>
                     <View style={styles.pickerVehicle}>
                         <Images.car height={moderateScale(50)} width={moderateScale(50)} />
                     </View>
-                    <View style={styles.warkingIconView}>
+                    <View style={styles.warningIconView}>
                         <Images.warning height={moderateScale(15)} width={moderateScale(15)} />
                     </View>
                 </View>
@@ -39,8 +39,8 @@ const CancelOrderSheet = ({
                 <Text style={appStyles.smallTextPrimaryBold}>
                     Are you sure you want to cancel this order?
                 </Text>
-                <Text style={[appStyles.smallTextPrimary,{color:uiColours.RED}]}>
-                You will be charged ₦5 if you cancel your order
+                <Text style={[appStyles.smallTextPrimary, { color: uiColours.RED }]}>
+                    You will be charged ₦5 if you cancel your order
                 </Text>
             </View>
 

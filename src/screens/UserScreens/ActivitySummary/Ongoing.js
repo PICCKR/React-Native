@@ -17,6 +17,7 @@ import { endPoints } from '../../../configs/apiUrls'
 import { showSuccessToast } from '../../../helper/showSuccessToast'
 import { showErrorToast } from '../../../helper/showErrorToast'
 import { Socket } from 'socket.io-client'
+import ProfileView from '../../../components/PrifileView/ProfileView'
 
 const Ongoing = ({
     orderDeatils,
@@ -59,12 +60,12 @@ const Ongoing = ({
                 <View style={[styles.pickerProfile, {
                     borderColor: !isDark ? uiColours.LIGHT_GRAY : uiColours.GRAYED_BUTTON,
                 }]}>
-                    <View style={styles.pickerProfileView}>
-                        {orderDeatils?.picckrId?.picture ? <Image source={{ uri: orderDeatils?.picckrId?.picture }} style={{
-                            height: moderateScale(50),
-                            width: moderateScale(50)
-                        }} /> : <Images.profile height={moderateScale(50)} width={moderateScale(50)} />}
-                    </View>
+                    <ProfileView
+                        profileImg={orderDeatils?.picckrId?.picture}
+                        hasBottomLine={false}
+                        profileSection={{ paddingBottom: 0 }}
+                        size={50}
+                    />
                     <View>
                         <Text style={appStyles?.mediumTextPrimaryBold}>{orderDeatils?.picckrId?.firstName} {orderDeatils?.picckrId?.lastName}</Text>
                         <Text style={appStyles?.smallTextGray}>{orderDeatils?.picckrId?.vehicle?.plateNumber} • {orderDeatils?.picckrId?.vehicle?.model} • {orderDeatils?.picckrId?.vehicle?.color}</Text>

@@ -180,7 +180,7 @@ const BecomePicker = ({ route }) => {
 
                     <DocumentUpload
                         title={"Proof of insurance"}
-                        placeHolder={pickerData?.insuranceFileName ? pickerData?.insuranceFileName : "Take a vehicle registration photo"}
+                        placeHolder={pickerData?.insuranceFileName ? pickerData?.insuranceFileName : "Take a vehicle insurance photo"}
                         document={pickerData}
                         setDocument={setPickerData}
                         documentType="insuranceFileType"

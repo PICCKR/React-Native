@@ -1,10 +1,63 @@
 {
   "__v": 0,
-  "_id": "65be077f749a40c408b3a46f",
-  "attachment": null,
-  "createdAt": "2024-02-03T09:29:35.329Z",
-  "message": "dsdsd",
-  "room": "65be0148749a40c408b3a390",
-  "updatedAt": "2024-02-03T09:29:35.329Z",
-  "user": "65b77354896fccfc3e2b98ee"
+  "_id": "65d13eb2e0fcb7645cd1c9f8",
+  "addresses": [
+    {
+      "__v": 0,
+      "_id": "65d13f0ee0fcb7645cd1ca00",
+      "building_name": "Ayo Fasugba Street, Isheri Magodo GRA",
+      "created_at": "2024-02-17T23:19:42.483Z",
+      "favorite": false,
+      "house_number": "1",
+      "street_address": "1 Ayo Fasugba Road, Lagos, Nigeria",
+      "title": "",
+      "type": "Home",
+      "updated_at": "2024-02-21T19:02:06.237Z",
+      "userId": "65d13eb2e0fcb7645cd1c9f8"
+    }
+  ],
+  "cognitoId": "71069efc-66d2-42e8-aa03-7eb0cdf166a5",
+  "email": "gabod2000@yahoo.com",
+  "exp": 1710909678,
+  "firstName": "Olukayode",
+  "iat": 1710823278,
+  "isActive": true,
+  "kyc": {
+    "__v": 0,
+    "_id": "65d3c5f93e62343f006c2965",
+    "country": "NG",
+    "createdAt": "2024-02-19T21:19:53.485Z",
+    "idNumber": "22334825371",
+    "idType": "BVN",
+    "jobId": "job-fa7ec8f2-d28f-4aa4-9f6e-017ced8c1b1d",
+    "jobType": 5,
+    "partnerId": "6456",
+    "resultType": "ID Verification",
+    "signature": "+kXSu5JD2raCQJYJ8A832tAKJfyHErUNHSu9kxPN4aE=",
+    "smileJobId": "0000000168",
+    "smileResultCode": "1014",
+    "smileSource": "ID API",
+    "timestamp": "2024-02-19T21:19:53.319Z",
+    "updatedAt": "2024-02-19T21:19:53.485Z",
+    "userId": "65d13eb2e0fcb7645cd1c9f8"
+  },
+  "kycStatus": "approved",
+  "lastName": "Aboderin",
+  "latitude": "12.3462445",
+  "longitude": "76.6149829",
+  "notificationToken": "jsleorwewe",
+  "phoneNumber": "+234 7083675818",
+  "picture": "https://picckr-blob-dev.s3.amazonaws.com/profile_pictures/17085524027760.4007859647663292",
+  "socketId": "XXmF-PYM8VQyAm5nAADP",
+  "status": "offline",
+  "userRole": [
+    "Picckr",
+    "User"
+  ],
+  "wallet": {
+    "__v": 0,
+    "_id": "65d13eb2e0fcb7645cd1c9fa",
+    "balance": 600,
+    "userId": "65d13eb2e0fcb7645cd1c9f8"
+  }
 }

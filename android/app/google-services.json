@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "113019646168",
+    "firebase_url": "https://picckr-default-rtdb.firebaseio.com",
+    "project_id": "picckr",
+    "storage_bucket": "picckr.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:113019646168:android:01e69c5522870507c3a7ad",
+        "android_client_info": {
+          "package_name": "com.picckr"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDjAnV3yCkQzrObXnDWyKbT6r3GDQAc5-Y"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -64,12 +64,31 @@ const BackAccounts = () => {
   })
  }
 
+ function hideNumber(number) {
+  // return number
+  // Convert the number to a string
+  if(number){
+   var numberStr = number?.toString();
+
+   // Replace all but the last 4 characters with asterisks
+   var hiddenPart = '*'.repeat(numberStr?.length - 4);
+ 
+   // Concatenate the last 4 characters back onto the string
+   var result = hiddenPart + numberStr.slice(-4);
+ 
+   return result;
+  }
+
+}
+
  useEffect(() => {
   if (bacnkAccounts.length <= 0) {
    getAccountData()
   }
 
  }, [])
+
+
 
 
  return (
@@ -95,7 +114,7 @@ const BackAccounts = () => {
       })
      }}
     >
-     <Text style={appStyles?.smallTextPrimary}>Add address</Text>
+     <Text style={appStyles?.smallTextPrimary}>Add account</Text>
     </TouchableOpacity>}
    </View>
    {bacnkAccounts.length > 0 ? <FlatList
@@ -114,7 +133,7 @@ const BackAccounts = () => {
          </Text>
 
          <Text style={appStyles.smallTextGray}>
-          <Text style={appStyles.smallTextGrayBold}> Account Number : </Text> {item?.accountNumber}
+          <Text style={appStyles.smallTextGrayBold}> Account Number : </Text> { hideNumber(item?.accountNumber)}
          </Text>
          <Text style={appStyles.smallTextGray}>
           <Text style={appStyles.smallTextGrayBold}> Bank Code :</Text>

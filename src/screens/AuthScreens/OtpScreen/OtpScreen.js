@@ -1,4 +1,4 @@
-import { View, Text, TouchableOpacity, Alert } from 'react-native'
+import { View, Text, TouchableOpacity, Alert, ScrollView } from 'react-native'
 import React, { useContext, useEffect, useState } from 'react'
 import WrapperContainer from '../../../components/WrapperContainer/WrapperContainer'
 import { AppContext } from '../../../context/AppContext'
@@ -274,55 +274,57 @@ const OtpScreen = ({ route }) => {
       handleButtonPress={handleConfirm}
       buttonActive={buttonActive}
     >
-      <Text style={[appStyles.mediumTextPrimaryBold]}>
-        OTP Verification
-      </Text>
-      <Text style={[appStyles.smallTextGray, { marginTop: verticalScale(5) }]}>
-        The OTP code will be sent to the phone number
-      </Text>
-      <Text style={appStyles.smallTextGray}>
-        {(from === AuthRouteStrings.FORGOT_PASSWORD || from === MainRouteStrings.EDIT_PROFILE) ? phoneNumber : `${data?.selectedCountry?.code} ${data?.phoneNumber}`}
-      </Text>
-
-      <OTPInputView
-        onCodeFilled={(code) => {
-          setShowError(false)
-          setOTP(code)
-        }}
-        selectionColor={uiColours.LIGHT_GRAY}
-        autoFocusOnLoad={false}
-        pinCount={6}
-        codeInputFieldStyle={[styles.underlineStyleBase, {
-          color: isDark ? uiColours.WHITE_TEXT : uiColours.BLACK_TEXT,
-          borderColor: showError ? uiColours.RED : uiColours.LIGHT_GRAY,
-        }]}
-        codeInputHighlightStyle={[styles.borderStyleHighLighted, {
-          borderColor: showError ? uiColours.RED : uiColours.LIGHT_GRAY,
-        }]}
-        style={[styles.otpStyles]}
-        secureTextEntry
-      />
-
-      {
-        showError &&
-        <Text style={[appStyles.smallTextBlack, { color: uiColours.RED, marginTop: verticalScale(5) }]}>
-          The OTP code you entered is invalid. Please enter the correct OTP code.
+      <ScrollView>
+        <Text style={[appStyles.mediumTextPrimaryBold]}>
+          OTP Verification
         </Text>
-      }
-
-      <View style={styles.resendOtpView}>
-        <Text style={appStyles.smallTextBlack}>
-          Didn’t receive code?
+        <Text style={[appStyles.smallTextGray, { marginTop: verticalScale(5) }]}>
+          The OTP code will be sent to the phone number
         </Text>
-        <TouchableOpacity
-          onPress={handleResendOtp}
-          style={{ padding: moderateScale(5) }}
-        >
-          <Text style={appStyles.smallTextPrimaryBold}>
-            Resend
+        <Text style={appStyles.smallTextGray}>
+          {(from === AuthRouteStrings.FORGOT_PASSWORD || from === MainRouteStrings.EDIT_PROFILE) ? phoneNumber : `${data?.selectedCountry?.code} ${data?.phoneNumber}`}
+        </Text>
+
+        <OTPInputView
+          onCodeFilled={(code) => {
+            setShowError(false)
+            setOTP(code)
+          }}
+          selectionColor={uiColours.LIGHT_GRAY}
+          autoFocusOnLoad={false}
+          pinCount={6}
+          codeInputFieldStyle={[styles.underlineStyleBase, {
+            color: isDark ? uiColours.WHITE_TEXT : uiColours.BLACK_TEXT,
+            borderColor: showError ? uiColours.RED : uiColours.LIGHT_GRAY,
+          }]}
+          codeInputHighlightStyle={[styles.borderStyleHighLighted, {
+            borderColor: showError ? uiColours.RED : uiColours.LIGHT_GRAY,
+          }]}
+          style={[styles.otpStyles]}
+          secureTextEntry
+        />
+
+        {
+          showError &&
+          <Text style={[appStyles.smallTextBlack, { color: uiColours.RED, marginTop: verticalScale(5) }]}>
+            The OTP code you entered is invalid. Please enter the correct OTP code.
           </Text>
-        </TouchableOpacity>
-      </View>
+        }
+
+        <View style={styles.resendOtpView}>
+          <Text style={appStyles.smallTextBlack}>
+            Didn’t receive code?
+          </Text>
+          <TouchableOpacity
+            onPress={handleResendOtp}
+            style={{ padding: moderateScale(5) }}
+          >
+            <Text style={appStyles.smallTextPrimaryBold}>
+              Resend
+            </Text>
+          </TouchableOpacity>
+        </View>
+      </ScrollView>
     </WrapperContainer>
   )
 }

@@ -35,6 +35,9 @@ const ProfileInformation = ({ route }) => {
     })
 
     const handleSave = async (from) => {
+        // if(profileInformation.profileImg){
+
+        // }
         var formData = new FormData();
         if (profileInformation.profileImg) {
             formData.append("picture", {
@@ -46,6 +49,7 @@ const ProfileInformation = ({ route }) => {
         } else {
             formData.append("picture", "");
         }
+
         formData.append("addresses", JSON.stringify(profileInformation?.address));
 
         const config = {
@@ -55,6 +59,8 @@ const ProfileInformation = ({ route }) => {
             },
         };
 
+        console.log("formData", formData);
+
         // return
         Actions.showLoader(true)
         try {
@@ -62,6 +68,8 @@ const ProfileInformation = ({ route }) => {
             // const res = await apiPost(endPoints.CREATE_USER, createUserData)
             if (res?.status == 200) {
                 // after getting token store it in local storage and also set token in context
+                // console.log("res?.data?.data", res?.data?.data)
+                // return
                 setLocalData(storageKeys.userData, { ...userData, addresses: res?.data?.data?.addresses, picture: res?.data?.data?.picture })
                 Actions.userData({ ...userData, addresses: res?.data?.data?.addresses, picture: res?.data?.data?.picture })
                 navigation.navigate(AuthRouteStrings.KYC_SCREEN, {
@@ -83,11 +91,11 @@ const ProfileInformation = ({ route }) => {
         }
         return
     }
-
+    // console.log("profileInformation?.address", profileInformation?.address?.length);
 
     useEffect(() => {
         if (
-            profileInformation?.profileImg || profileInformation?.address.length > 1
+            profileInformation?.profileImg || profileInformation?.address.length > 0
         ) {
             setButtonActive(true);
         } else {
@@ -152,7 +160,7 @@ const ProfileInformation = ({ route }) => {
                 />
             </View>
 
-            <EmailSheet
+            {/* <EmailSheet
                 isVisible={showSheet.email}
                 setShowSheet={setShowSheet}
                 setProfileInformation={setProfileInformation}
@@ -164,7 +172,7 @@ const ProfileInformation = ({ route }) => {
                     }
                     showToast(toastMsgConfg, tostMessagetypes.SUCCESS, isDark)
                 }}
-            />
+            /> */}
 
             <ShowAddressSheet
                 isVisible={showSheet.showAddress}

@@ -121,7 +121,7 @@ const EditProfile = ({ route }) => {
             }).catch((err) => {
                 Actions.showLoader(false)
                 showGeneralError()
-                // console.log("update profile error", err);
+                console.log("update profile error", err);
             })
             // apiPut(`${endPoints.UPDATE_PROFILE}/${userData?._id}`, editFormdata).
             // setLocalData(storageKeys.userData, { ...userData, ...formData })

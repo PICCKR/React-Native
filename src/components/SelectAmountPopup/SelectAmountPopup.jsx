@@ -10,6 +10,8 @@ import { AppContext } from "../../context/AppContext";
 import PayWithFlutterwave from "flutterwave-react-native";
 import CustomButton from "../Button/CustomButton";
 import { useSelector } from "react-redux";
+import { FLUTTER_WAVE_KEY } from "../../configs/flutterWaveKey";
+import { formatAmount } from "../../helper/formatter";
 
 const SelectAmountPopup = ({
   isVisible,
@@ -31,42 +33,42 @@ const SelectAmountPopup = ({
   const priceData = [
     {
       id: "1",
-      price: from === "itemDetails" ? amountToBeAdded : "10",
+      price: from === "itemDetails" ? amountToBeAdded : "500",
     },
     {
       id: "2",
       price:
         from === "itemDetails"
           ? amountToBeAdded + ((amountToBeAdded % 10) + 20)
-          : "35",
+          : "1000",
     },
     {
       id: "3",
       price:
         from === "itemDetails"
           ? amountToBeAdded + ((amountToBeAdded % 10) + 50)
-          : "50",
+          : "4000",
     },
     {
       id: "4",
       price:
         from === "itemDetails"
           ? amountToBeAdded + ((amountToBeAdded % 10) + 80)
-          : "75",
+          : "10000",
     },
     {
       id: "5",
       price:
         from === "itemDetails"
           ? amountToBeAdded + ((amountToBeAdded % 10) + 100)
-          : "100",
+          : "20000",
     },
     {
       id: "6",
       price:
         from === "itemDetails"
           ? amountToBeAdded + ((amountToBeAdded % 10) + 500)
-          : "500",
+          : "50000",
     },
   ];
 
@@ -101,11 +103,11 @@ const SelectAmountPopup = ({
         <View style={{}}>
           {from === "itemDetails" ? (
             <Text style={[appStyles?.smallTextPrimaryBold]}>
-              {wallateBalance}
+              {formatAmount(wallateBalance)}
             </Text>
           ) : (
             <Text style={[appStyles?.smallTextPrimaryBold]}>
-              wallet balance ₦{wallateBalance}
+              wallet balance ₦{formatAmount(wallateBalance)}
             </Text>
           )}
         </View>
@@ -199,7 +201,7 @@ const SelectAmountPopup = ({
           <View style={commonStyles.flexRowAlnCtrJutySpaceBetween}>
             <Text style={appStyles.smallTextGray}>Total Payment</Text>
             <Text style={appStyles.smallTextPrimary}>
-              ₦{seletedAmount ? seletedAmount : "0"}
+              {seletedAmount ? formatAmount(seletedAmount) : "0"}
             </Text>
           </View>
         </View>
@@ -211,13 +213,13 @@ const SelectAmountPopup = ({
             }}
             options={{
               tx_ref: generateTransactionRef(10),
-              authorization: "FLWPUBK_TEST-7f4ea27a4d79df5c4de2c602d199b213-X",
+              authorization: FLUTTER_WAVE_KEY,
               customer: {
                 email: userData?.email,
               },
               amount: parseInt(seletedAmount),
               currency: "NGN",
-              payment_options: "card",
+              // payment_options: "card",
             }}
             customButton={(props) => (
               <CustomButton

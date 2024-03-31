@@ -13,6 +13,8 @@ import java.util.ArrayList;
 
 // @aws-amplify/react-native
 import com.amazonaws.amplify.rtncore.AmplifyRTNCorePackage;
+// @notifee/react-native
+import io.invertase.notifee.NotifeePackage;
 // @react-native-async-storage/async-storage
 import com.reactnativecommunity.asyncstorage.AsyncStoragePackage;
 // @react-native-community/clipboard
@@ -21,6 +23,10 @@ import com.reactnativecommunity.clipboard.ClipboardPackage;
 import com.reactnativecommunity.geolocation.GeolocationPackage;
 // @react-native-community/netinfo
 import com.reactnativecommunity.netinfo.NetInfoPackage;
+// @react-native-firebase/app
+import io.invertase.firebase.app.ReactNativeFirebaseAppPackage;
+// @react-native-firebase/messaging
+import io.invertase.firebase.messaging.ReactNativeFirebaseMessagingPackage;
 // react-native-gesture-handler
 import com.swmansion.gesturehandler.RNGestureHandlerPackage;
 // react-native-get-random-values
@@ -95,10 +101,13 @@ public class PackageList {
     return new ArrayList<>(Arrays.<ReactPackage>asList(
       new MainReactPackage(mConfig),
       new AmplifyRTNCorePackage(),
+      new NotifeePackage(),
       new AsyncStoragePackage(),
       new ClipboardPackage(),
       new GeolocationPackage(),
       new NetInfoPackage(),
+      new ReactNativeFirebaseAppPackage(),
+      new ReactNativeFirebaseMessagingPackage(),
       new RNGestureHandlerPackage(),
       new RNGetRandomValuesPackage(),
       new ImagePickerPackage(),

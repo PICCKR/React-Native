@@ -227,6 +227,7 @@ const FindingPicker = ({ route }) => {
                         "id": item?._id
                     })
                 }}
+                navigation={navigation}
             />
         </SafeAreaView>
     )

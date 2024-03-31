@@ -21,6 +21,7 @@ import { showSuccessToast } from '../../../helper/showSuccessToast'
 import { endPoints } from '../../../configs/apiUrls'
 import { showErrorToast } from '../../../helper/showErrorToast'
 import useBackButton from '../../../customHooks/useBackButton'
+import ProfileView from '../../../components/PrifileView/ProfileView'
 
 const BottomView = ({
     appStyles,
@@ -146,12 +147,12 @@ const BottomView = ({
                         <View style={[styles.pickerProfile, {
                             borderColor: isDark ? uiColours.GRAYED_BUTTON : uiColours.LIGHT_GRAY
                         }]}>
-                            <View style={styles.pickerProfileView}>
-                                {orderDeatils?.picckrId?.picture ? <Image source={{ uri: orderDeatils?.picckrId?.picture }} style={{ height: moderateScale(40), width: moderateScale(40) }} /> : <Images.profile height={moderateScale(40)} width={moderateScale(40)} />}
-                            </View>
-                            {/* <View style={styles.pickerVehicle}>
-                                <Images.car height={moderateScale(17)} width={moderateScale(17)} />
-                            </View> */}
+                            <ProfileView
+                                profileImg={orderDeatils?.picckrId?.picture}
+                                hasBottomLine={false}
+                                profileSection={{ paddingBottom: 0 }}
+                                size={40}
+                            />
                             <View>
                                 <Text style={appStyles?.mediumTextPrimaryBold}>{orderDeatils?.picckrId?.firstName} {orderDeatils?.picckrId?.lastName}</Text>
                                 <Text style={appStyles?.smallTextGray}>{orderDeatils?.picckrId?.vehicle?.plateNumber} • {orderDeatils?.picckrId?.vehicle?.model} • {orderDeatils?.picckrId?.vehicle?.color}</Text>

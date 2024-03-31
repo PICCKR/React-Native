@@ -159,7 +159,7 @@ const PickerFindDestination = () => {
                                     }}
                                 >
                                     <Text style={appStyles.smallTextBlack}>
-                                        {currentLocation.location === source.location ? "Current location" : source.location}
+                                        {source?.location ? source?.location : "Select your source location"}
                                     </Text>
                                 </TouchableOpacity>
                             </View>
@@ -175,7 +175,7 @@ const PickerFindDestination = () => {
                                     }}
                                 >
                                     <Text style={appStyles.smallTextBlack}>
-                                        {destination.location ? destination.location : "Find a destination"}
+                                        {destination?.location ? destination?.location : "Find a destination"}
                                     </Text>
                                 </TouchableOpacity>
                             </View>
