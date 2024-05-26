@@ -1,0 +1,21 @@
+export const uiColours = {
+    PRIMARY: "#847C3d",
+    PRIMARY_LIGHT:"#F0E796",
+    GRAYED_BUTTON: "#444444",
+    BLACK_TEXT: "#444444",
+    GRAY_TEXT: "#878D96",
+    WHITE_TEXT: "#FFFFFF",
+    LIGHT_GRAY: "#DDE1E6",
+    DARK_BG:"#121619",
+    RED:"#CB3A31",
+    LIGHT_RED:"#FFF4F2",
+    GREEN:"#4BB543",
+    LIGHT_GREEN:"#E0FAE0",
+    TOAST_BG:"#E0FAE0",
+    CREAM:"#F0E796",
+    BLUE:"#016DB2",
+    LIGHT_BLUE:"#C9F3FB",
+    GOLDEN_DARK:"#686232",
+    GOLDEN_LIGHT:"#F0E796",
+    BLACK:"#121619"
+}
