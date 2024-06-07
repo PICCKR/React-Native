@@ -65,7 +65,7 @@ const PickerRecentTrips = () => {
               }
               ]}
               onPress={() => {
-                navigation.navigate(MainRouteStrings.ACTIVITY_SUMMERY, {
+                navigation.navigate(MainRouteStrings.TRIP_DETAILS_SCREEN, {
                   data: item
                 })
 

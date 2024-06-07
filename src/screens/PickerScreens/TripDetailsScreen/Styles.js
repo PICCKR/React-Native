@@ -75,9 +75,9 @@ const styles = StyleSheet.create({
     pickerVehicle: {
         backgroundColor: uiColours.PRIMARY_LIGHT,
         padding: moderateScale(5),
-        borderRadius: moderateScale(20),
-        position: 'absolute',
-        left: scale(32),
+        borderRadius: moderateScale(30),
+        // position: 'absolute',
+        alignSelf: "center",
     },
     paymentMethod: {
         marginBottom: verticalScale(70)

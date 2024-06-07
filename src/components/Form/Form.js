@@ -92,6 +92,7 @@ const Form = ({
                                             [item?.type]: false
                                         }));
                                     }}
+                                    
                                     keyboardType={item?.keyboardType ? item?.keyboardType : "default"}
                                     inPutStyles={{ marginTop: verticalScale(-5) }}
                                     inputTitle={item?.title}

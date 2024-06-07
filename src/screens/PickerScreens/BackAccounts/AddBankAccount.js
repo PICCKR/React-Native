@@ -203,9 +203,12 @@ const AddBankAccount = ({ route }) => {
 
     return (
         <WrapperContainer
-            buttonTitle={"Add bck account"}
+            buttonTitle={"Add bank account"}
             leftTitle="Account"
             hasCloseIcon
+            handlerRightViewPress={() => {
+                navigation.goBack()
+            }}
             buttonActive={buttonActive}
             handleButtonPress={() => {
                 if (action === "add") {

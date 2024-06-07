@@ -14,6 +14,7 @@ import { apiGet } from '../../../services/apiServices'
 import { endPoints } from '../../../configs/apiUrls'
 import Actions from '../../../redux/Actions'
 import { useSelector } from 'react-redux'
+import { showErrorToast } from '../../../helper/showErrorToast'
 
 
 const UserHomeScreen = () => {
@@ -132,7 +133,12 @@ const UserHomeScreen = () => {
             activeOpacity={0.7}
             style={{ marginVertical: verticalScale(16), height: verticalScale(110), width: screenSize.width - scale(32) }}
             onPress={() => {
-              navigation.navigate(MainRouteStrings.BECOME_PICKER)
+              if (userData?.kycStatus === "approved") {
+                navigation.navigate(MainRouteStrings.BECOME_PICKER)
+              } else {
+                showErrorToast("Please verify your KYC first", isDark)
+                navigation.navigate(MainRouteStrings.USER_KYC_SCREEN)
+              }
             }}
           >
             <Image
@@ -144,7 +150,7 @@ const UserHomeScreen = () => {
 
           {/* Rendering Vehicle Types */}
           <Text style={[appStyles.mediumTextBlack, {
-            marginTop: userData?.token ? 0 : verticalScale(10)
+            marginTop: verticalScale(10)
           }]}>Choose Vehicle</Text>
           <ScrollView
             horizontal

@@ -1,0 +1,2 @@
+export const FLUTTER_WAVE_KEY = "FLWPUBK-7e0da170cacab4c48e83de68e079aafb-X"
+// export const FLUTTER_WAVE_KEY = "FLWPUBK_TEST-7f4ea27a4d79df5c4de2c602d199b213-X"

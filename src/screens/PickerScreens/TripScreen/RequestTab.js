@@ -18,6 +18,7 @@ import { useNavigation } from '@react-navigation/native'
 import { MainRouteStrings } from '../../../utils/Constents/RouteStrings'
 import { useSelector } from 'react-redux'
 import { showErrorToast } from '../../../helper/showErrorToast'
+import { formatAmount } from '../../../helper/formatter'
 
 const RequestTab = ({
 }) => {
@@ -86,12 +87,13 @@ const RequestTab = ({
 
     const placeBidError = useCallback(async (data) => {
         Actions.showLoader(false)
-        // console.log("placeBidError", data);
+        console.log("placeBidError", data);
+        showErrorToast(data?.message)
     }, [Socket])
 
     const handleBidPlaced = useCallback(async (data) => {
         Actions.showLoader(false)
-        // console.log("placeBidError", data);
+        console.log("placeBid", data);
         setBidPlaced(true)
     }, [Socket])
 
@@ -100,6 +102,12 @@ const RequestTab = ({
         // console.log("reject-bid-successfully in picker", data);
     }
 
+    const handleBidRejected = async (data) => {
+        console.log("bid-rejected", data);
+        showErrorToast("Your bid has been declined by user", isDark)
+        setBidPlaced(false)
+        setNewRequest([])
+    }
     const handleGetRide = useCallback((data) => {
         // console.log("get-ride in picker", data);
         if (data?.data?.status !== "cancelled") {
@@ -108,9 +116,10 @@ const RequestTab = ({
                 navigation.navigate(MainRouteStrings.PICKUP_SCREEN)
                 Actions.showLoader(false)
             }, 200);
+            setBidPlaced(false)
             setNewRequest([])
         } else if (data?.data?.status !== "cancelled") {
-
+            setBidPlaced(false)
         }
 
     }, [Socket])
@@ -122,6 +131,7 @@ const RequestTab = ({
         if (data?.data?.status !== "cancelled") {
             Actions.bookingData(data?.data)
         } else if (data?.data?.status === "cancelled") {
+            setBidPlaced(false)
             Alert.alert("", "Your booking has been cancelled by user")
             navigation.navigate(MainRouteStrings.TRIPS_SCREEN)
         }
@@ -137,6 +147,7 @@ const RequestTab = ({
         Socket.on('get-ride', handleGetRide)
         Socket.on("reject-bid-successfully", handleBidDecline)
         Socket.on('get-booking', handleGetBooking)
+        Socket.on("bid-rejected", handleBidRejected)
 
         return () => {
             Socket.off('new-ride-request', handleNewRequest)
@@ -147,8 +158,9 @@ const RequestTab = ({
             Socket.off('get-ride', handleGetRide)
             Socket.off("reject-bid-successfully", handleBidDecline)
             Socket.off('get-booking', handleGetBooking)
+            Socket.off("bid-rejected", handleBidRejected)
         }
-    }, [Socket, handleNewRequest, acceptRequestError, handleRequestSuccessfully, placeBidError, handleBidPlaced, handleBidDecline, handleGetRide, handleGetBooking])
+    }, [Socket, handleNewRequest, acceptRequestError, handleRequestSuccessfully, placeBidError, handleBidPlaced, handleBidDecline, handleGetRide, handleGetBooking, handleBidRejected])
 
 
     useEffect(() => {
@@ -196,7 +208,7 @@ const RequestTab = ({
 
                             <View style={{ alignItems: "flex-end" }}>
                                 <Text style={appStyles.smallTextPrimaryBold}>
-                                    ₦{selectedTrip?.bidPrice}
+                                    {formatAmount(selectedTrip?.bidPrice)}
                                 </Text>
                                 <Text style={appStyles.smallTextGray}>
                                     {selectedTrip?.distence}km

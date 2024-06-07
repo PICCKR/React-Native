@@ -8,6 +8,7 @@ import { storageKeys } from '../helper/AsyncStorage/storageKeys';
 import Geolocation from '@react-native-community/geolocation';
 import Actions from '../redux/Actions';
 import { useSocket } from '../context/AppContext';
+import ForegroundHandler from '../services/NotificationService/ForegroundHandler';
 
 const Stack = createNativeStackNavigator();
 
@@ -79,6 +80,7 @@ const PickertRoutes = () => {
     }, [Socket, handleUpdateLocationError, handleUpdateLocationSuccess])
     return (
         <NavigationContainer>
+            <ForegroundHandler />
             <Stack.Navigator
                 screenOptions={{ headerShown: false }}
             >

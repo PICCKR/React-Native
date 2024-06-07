@@ -142,7 +142,7 @@ const DocumentUpload = ({
                         onPress={chooseMedia}
                     >
                         <Image source={Images.gallary} style={{ height: moderateScale(30), width: moderateScale(30) }} />
-                        <Text>gallary</Text>
+                        <Text>Gallary</Text>
                     </TouchableOpacity>
                 </View>
             </BottomSheet>

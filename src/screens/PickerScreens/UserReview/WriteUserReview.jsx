@@ -1,4 +1,11 @@
-import { View, Text, ScrollView, TouchableOpacity } from "react-native";
+import {
+  View,
+  Text,
+  ScrollView,
+  TouchableOpacity,
+  KeyboardAvoidingView,
+  Platform,
+} from "react-native";
 import React, { useCallback, useContext, useEffect, useState } from "react";
 import WrapperContainer from "../../../components/WrapperContainer/WrapperContainer";
 import { moderateScale, scale, verticalScale } from "react-native-size-matters";
@@ -15,12 +22,14 @@ import { ReviewsData } from "../../../json/reviewData";
 import { MainRouteStrings } from "../../../utils/Constents/RouteStrings";
 import useBackButton from "../../../customHooks/useBackButton";
 import { WriteReviewsData } from "../../../json/writeUserReviewData";
+import moment from "moment";
+import Actions from "../../../redux/Actions";
 
 const WriteUserReview = ({ route }) => {
-  const status = route?.params?.status;
+  // const status = route?.params?.status;
   const data = route?.params?.data;
   const { Socket } = useSocket();
-  // console.log("data", data);
+  console.log("data", data);
   const { appStyles } = useContext(AppContext);
   const navigation = useNavigation();
   const [reviewsData, setReviewsData] = useState(WriteReviewsData);
@@ -41,9 +50,12 @@ const WriteUserReview = ({ route }) => {
       });
 
       const selectedData = updatedData.filter((item) => item.selected);
-      setUserReview({
-        ...userReview,
-        selectedItems: selectedData,
+      console.log("selectedData", selectedData);
+      setUserReview(() => {
+        return {
+          ...userReview,
+          selectedItems: selectedData,
+        };
       });
       return updatedData;
     });
@@ -51,14 +63,15 @@ const WriteUserReview = ({ route }) => {
 
   useEffect(() => {
     if (
-      userReview.rating > 0 &&
+      parseInt(userReview.rating) > 0 &&
       userReview.review !== "" &&
-      userReview.selectedItems.length !== 0
+      userReview.selectedItems.length > 0
     ) {
       setButtonActive(true);
     } else {
       setButtonActive(false);
     }
+    console.log("userReview", userReview);
   }, [userReview]);
 
   useBackButton(() => {
@@ -68,136 +81,179 @@ const WriteUserReview = ({ route }) => {
     return true;
   });
 
+  const handleSubmit = async () => {
+    // console.log("SSSS");
+    // return
+    Actions.showLoader(true);
+    Socket.emit("feedback-passenger", {
+      bookingId: data?._id,
+      passengerRating: userReview?.rating,
+      passengerReview: userReview?.review,
+    });
+  };
+
+  const handleReviewError = useCallback(
+    async (data) => {
+      Actions.showLoader(false);
+      console.log("feedback-passenger-error", data);
+    },
+    [Socket]
+  );
+
+  const handleReviewSuccess = useCallback(
+    async (data) => {
+      console.log("feedback-passenger-success", data);
+      Actions.showLoader(false);
+      navigation.navigate(MainRouteStrings.PICKER_HOME_SCREEN, {
+        from: "review",
+      });
+    },
+    [Socket]
+  );
+
+  useEffect(() => {
+    Socket.on("feedback-passenger-error", handleReviewError);
+    Socket.on("feedback-passenger-success", handleReviewSuccess);
+    return () => {
+      Socket.off("feedback-passenger-error", handleReviewError);
+      Socket.off("feedback-passenger-success", handleReviewSuccess);
+    };
+  }, [Socket, handleReviewSuccess, handleReviewError]);
+
   return (
     <WrapperContainer
       centerTitle="Review Sender"
       showBackButton
       handleBack={() => {
-        // handleSubmit();
+        navigation.navigate(MainRouteStrings.PICKER_HOME_SCREEN, {
+          from: "review",
+        });
       }}
       showFooterButton={true}
       buttonTitle="Submit"
       buttonActive={buttonActive}
       handleButtonPress={() => {
-        navigation.navigate(MainRouteStrings.PICKER_HOME_SCREEN, {
-          from: "review",
-        });
+        handleSubmit();
       }}
       containerPadding={{ paddingHorizontal: 0 }}
     >
-      <ScrollView
-        style={{
-          marginBottom: verticalScale(76),
-        }}
+      <KeyboardAvoidingView
+        style={{ flex: 1 }}
+        behavior={Platform.OS === "ios" && "padding"}
+        keyboardVerticalOffset={Platform.OS === "ios" ? verticalScale(10) : 0}
       >
-        <View style={styles.TopSection}>
-          <View style={styles.vehicle}>
-            <Images.car height={moderateScale(34)} width={moderateScale(34)} />
-          </View>
-          <View style={{ alignItems: "flex-end" }}>
-            <Text style={appStyles.smallTextGray}>June 20 2023, 13:02 PM</Text>
-            <View
-              style={[
-                styles.label,
-                {
-                  backgroundColor: uiColours?.LIGHT_RED,
-                },
-              ]}
-            >
+        <ScrollView
+          style={{
+            marginBottom: verticalScale(76),
+          }}
+        >
+          <View style={styles.TopSection}>
+            <View style={styles.vehicle}>
+              <Images.car
+                height={moderateScale(34)}
+                width={moderateScale(34)}
+              />
+            </View>
+            <View style={{ alignItems: "flex-end" }}>
+              <Text style={appStyles.smallTextGray}>
+                {moment(new Date()).format("MMM DD YYYY hh:mm a")}
+              </Text>
               <Text
                 style={[
                   appStyles.smallTextPrimary,
                   {
-                    color:
-                      status === "Completed" ? uiColours.GREEN : uiColours?.RED,
+                    color: uiColours.GREEN,
                   },
                 ]}
               >
-                {status}
+                {"Deleverd"}
               </Text>
             </View>
           </View>
-        </View>
 
-        <View style={styles.profileSection}>
-          <PrifileView />
-          <Text style={appStyles.mediumTextGray}>
-            Let’s rate
-            <Text style={appStyles.mediumTextPrimaryBold}>
-              {" "}
-              Cooper Septimus
+          <View style={styles.profileSection}>
+            <PrifileView
+              profileImg={data?.userId.picture}
+              hasBottomLine={false}
+            />
+            <Text style={appStyles.mediumTextGray}>
+              Let’s rate
+              <Text style={appStyles.mediumTextPrimaryBold}>
+                {" "}
+                {data?.userId?.firstName} {data?.userId?.lastName}
+              </Text>
             </Text>
-          </Text>
-          <Rating
-            ratingCount={5}
-            startingValue={0}
-            imageSize={moderateScale(22)}
-            onFinishRating={(e) => {
-              setUserReview({
-                ...userReview,
-                rating: parseInt(e),
-              });
-            }}
-          />
-        </View>
-
-        <View style={styles.reviewSection}>
-          <Text style={appStyles.smallTextBlack}>What can be improved?</Text>
-          <View
-            style={[
-              commonStyles.flexRowAlnCtr,
-              { flexWrap: "wrap", gap: scale(8) },
-            ]}
-          >
-            {reviewsData.map((item) => {
-              return (
-                <TouchableOpacity
-                  key={item.id}
-                  style={[
-                    styles.reviewCard,
-                    {
-                      borderColor:
-                        item.selected === true
-                          ? uiColours.GOLDEN_DARK
-                          : uiColours.GRAY_TEXT,
-                      backgroundColor:
-                        item.selected === true
-                          ? uiColours.GOLDEN_LIGHT
-                          : uiColours.LIGHT_GRAY,
-                    },
-                  ]}
-                  onPress={() => handeleReviewPress(item)}
-                >
-                  <Text
-                    style={[appStyles.smallTextGray, { fontSize: scale(10) }]}
-                  >
-                    {item.title}
-                  </Text>
-                </TouchableOpacity>
-              );
-            })}
+            <Rating
+              ratingCount={5}
+              startingValue={0}
+              imageSize={moderateScale(22)}
+              onFinishRating={(e) => {
+                setUserReview({
+                  ...userReview,
+                  rating: parseInt(e),
+                });
+              }}
+            />
           </View>
-        </View>
 
-        <View style={{ padding: moderateScale(16) }}>
-          <InputText
-            inputContainer={{}}
-            hasTitle
-            inputTitle="Any other feedback for Cooper Septimus?"
-            placeholder="Write down your feedback"
-            hasLeftView
-            handleChange={(e) => {
-              setUserReview({
-                ...userReview,
-                review: e,
-              });
-            }}
-            renderLeftView={() => {
-              return <Images.edit />;
-            }}
-          />
-        </View>
-      </ScrollView>
+          <View style={styles.reviewSection}>
+            <Text style={appStyles.smallTextBlack}>What can be improved?</Text>
+            <View
+              style={[
+                commonStyles.flexRowAlnCtr,
+                { flexWrap: "wrap", gap: scale(8) },
+              ]}
+            >
+              {reviewsData.map((item) => {
+                return (
+                  <TouchableOpacity
+                    key={item.id}
+                    style={[
+                      styles.reviewCard,
+                      {
+                        borderColor:
+                          item.selected === true
+                            ? uiColours.GOLDEN_DARK
+                            : uiColours.GRAY_TEXT,
+                        backgroundColor:
+                          item.selected === true
+                            ? uiColours.GOLDEN_LIGHT
+                            : uiColours.LIGHT_GRAY,
+                      },
+                    ]}
+                    onPress={() => handeleReviewPress(item)}
+                  >
+                    <Text
+                      style={[appStyles.smallTextGray, { fontSize: scale(10) }]}
+                    >
+                      {item.title}
+                    </Text>
+                  </TouchableOpacity>
+                );
+              })}
+            </View>
+          </View>
+
+          <View style={{ padding: moderateScale(16) }}>
+            <InputText
+              inputContainer={{}}
+              hasTitle
+              inputTitle="Any other feedback for Cooper Septimus?"
+              placeholder="Write down your feedback"
+              hasLeftView
+              handleChange={(e) => {
+                setUserReview({
+                  ...userReview,
+                  review: e,
+                });
+              }}
+              renderLeftView={() => {
+                return <Images.edit />;
+              }}
+            />
+          </View>
+        </ScrollView>
+      </KeyboardAvoidingView>
     </WrapperContainer>
   );
 };

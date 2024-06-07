@@ -41,6 +41,8 @@
 	<string></string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>PickkR Would like to Access the gallary</string>
+	<key>NSPhotoLibraryAddUsageDescription</key>
+	<string>PickkR Would like to Access the gallary</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>Poppins-Regular.ttf</string>

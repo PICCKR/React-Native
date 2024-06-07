@@ -26,7 +26,6 @@ const SetLocationScreen = ({
     const inputRef = useRef(null);
 
     const handleSelectFromMap = () => {
-
         if (from === "destination" && (destination?.lat === "" || destination?.lng === "")) {
             setDestination({
                 ...destination,
@@ -96,7 +95,7 @@ const SetLocationScreen = ({
                     autoFocus: true,
                 }}
                 renderLeftButton={() =>
-                    <View style={{ marginTop: verticalScale(15), right: scale(10) }}>
+                    <View style={{ right: scale(10) }}>
                         <Images.locationPin />
                     </View>
                 }
@@ -130,6 +129,7 @@ const SetLocationScreen = ({
                         borderColor: isDark ? uiColours.GRAYED_BUTTON : uiColours.LIGHT_GRAY,
                         marginTop: verticalScale(5),
                         paddingLeft: scale(20),
+                        alignItems: "center"
                     },
                     textInput: {
                         backgroundColor: isDark ? uiColours.DARK_BG : null,

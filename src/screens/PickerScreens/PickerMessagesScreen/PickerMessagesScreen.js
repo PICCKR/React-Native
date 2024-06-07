@@ -1,4 +1,4 @@
-import { View, Text, Image, ScrollView, TouchableOpacity, TextInput } from 'react-native'
+import { View, Text, Image, ScrollView, TouchableOpacity, TextInput, KeyboardAvoidingView, Platform } from 'react-native'
 import React, { useContext, useEffect, useRef, useState } from 'react'
 import WrapperContainer from '../../../components/WrapperContainer/WrapperContainer'
 import styles from './Styles'
@@ -112,100 +112,105 @@ const PickerMessagesScreen = ({ route }) => {
             containerPadding={{ paddingHorizontal: 0 }}
 
         >
-            <ScrollView
-                nestedScrollEnabled={true}
-                ref={ref => scrollView.current = ref}
-                onContentSizeChange={() => {
-                    scrollView.current.scrollToEnd({ animated: true })
-                }}
-                contentContainerStyle={{ paddingBottom: verticalScale(10), paddingHorizontal: scale(16), gap: verticalScale(10) }}
-                style={{}}
+            <KeyboardAvoidingView
+                style={{ flex: 1 }}
+                behavior={"padding"}
+                keyboardVerticalOffset={Platform.OS === "ios" ? verticalScale(70) : 0}
             >
-                <View style={[styles.pickerProfile, {
-                    borderColor: isDark ? uiColours.GRAYED_BUTTON : uiColours.LIGHT_GRAY
-                }]}>
-                    <ProfileView
-                        profileImg={orderDetails?.userId?.picture}
-                        size={40}
-                        hasBottomLine={false}
-                        profileSection={{ paddingBottom: 0 }}
-                    />
-                    {/* <View style={styles.pickerProfileView}>
+                <ScrollView
+                    nestedScrollEnabled={true}
+                    ref={ref => scrollView.current = ref}
+                    onContentSizeChange={() => {
+                        scrollView.current.scrollToEnd({ animated: true })
+                    }}
+                    contentContainerStyle={{ paddingBottom: verticalScale(10), paddingHorizontal: scale(16), gap: verticalScale(10) }}
+                    style={{}}
+                >
+                    <View style={[styles.pickerProfile, {
+                        borderColor: isDark ? uiColours.GRAYED_BUTTON : uiColours.LIGHT_GRAY
+                    }]}>
+                        <ProfileView
+                            profileImg={orderDetails?.userId?.picture}
+                            size={40}
+                            hasBottomLine={false}
+                            profileSection={{ paddingBottom: 0 }}
+                        />
+                        {/* <View style={styles.pickerProfileView}>
                         {data?.profileImg ? <Image source={{ uri: data.profileImg }} /> : <Images.profile height={moderateScale(50)} width={moderateScale(50)} />}
                     </View> */}
-                    {/* <View style={styles.pickerVehicle}>
+                        {/* <View style={styles.pickerVehicle}>
                         <Images.car height={moderateScale(17)} width={moderateScale(17)} />
                     </View> */}
-                    <View>
-                        <Text style={appStyles?.mediumTextPrimaryBold}>{orderDetails?.userId?.firstName} {orderDetails?.userId?.lastName}</Text>
-                        <Text style={appStyles?.smallTextGray}>{orderDetails?.userId?.phoneNumber}</Text>
-                        {/* <View style={commonStyles.flexRowAlnCtr}>
+                        <View>
+                            <Text style={appStyles?.mediumTextPrimaryBold}>{orderDetails?.userId?.firstName} {orderDetails?.userId?.lastName}</Text>
+                            <Text style={appStyles?.smallTextGray}>{orderDetails?.userId?.phoneNumber}</Text>
+                            {/* <View style={commonStyles.flexRowAlnCtr}>
                             <Images.star />
                             <Text style={appStyles.smallTextGray}>{4.9}</Text>
                         </View> */}
+                        </View>
                     </View>
-                </View>
 
 
 
-                {
-                    messages?.map((item, index) => {
-                        const previousItem = messages[index - 1];
-                        const shouldShowDate = !previousItem || moment(previousItem?.createdAt).format("DD/MM/YYYY") !== moment(item?.createdAt).format("DD/MM/YYYY")
-                        const isSender = item?.user?._id === userData?._id
-                        // console.log(" item?.attachment", item?.attachment);
-                        // console.log("item?.createdAt != new Date().toString()",previousItem,moment(previousItem?.createdAt).format("DD/MM/YYYY") , moment(item?.createdAt).format("DD/MM/YYYY"));
-                        return (
-                            <View key={index} style={styles.chatContainer}>
-                                {shouldShowDate && moment(item?.createdAt).format("DD/MM/YYYY") != moment(new Date()).format("DD/MM/YYYY") && <Text style={[appStyles.smallTextGray, { alignSelf: 'center' }]}>{moment(item?.createdAt).format("DD/MM/YYYY")}</Text>}
-                                {moment(item?.createdAt).format("DD/MM/YYYY") === moment(new Date()).format("DD/MM/YYYY") && shouldShowDate && <Text style={[appStyles.smallTextGray, { alignSelf: 'center' }]}>
-                                    Today
-                                </Text>}
-                                <View style={isSender ? styles.sentMessageCard : [styles.reviedMessageCard, {
-                                    borderColor: isDark ? uiColours.GRAYED_BUTTON : uiColours.LIGHT_GRAY
-                                }]}>
-                                    {!item?.attachment ? <Text style={[appStyles.smallTextGray, { color: isSender ? uiColours.BLACK_TEXT : uiColours.GRAY_TEXT }]}>
-                                        {item?.message}
-                                    </Text> :
-                                        <View style={{}}>
-                                            <TouchableOpacity
-                                                onPress={() => {
-                                                    setSelectedMsg(item)
-                                                    setShowSheet({
-                                                        ...showSheet,
-                                                        fullScreenImage: true
-                                                    })
-                                                }}
-                                            >
-                                                <Image
-                                                    source={{ uri: item?.attachment }}
-                                                    style={{ height: moderateScale(100), width: moderateScale(100) }}
-                                                />
-                                            </TouchableOpacity>
+                    {
+                        messages?.map((item, index) => {
+                            const previousItem = messages[index - 1];
+                            const shouldShowDate = !previousItem || moment(previousItem?.createdAt).format("DD/MM/YYYY") !== moment(item?.createdAt).format("DD/MM/YYYY")
+                            const isSender = item?.user?._id === userData?._id
+                            // console.log(" item?.attachment", item?.attachment);
+                            // console.log("item?.createdAt != new Date().toString()",previousItem,moment(previousItem?.createdAt).format("DD/MM/YYYY") , moment(item?.createdAt).format("DD/MM/YYYY"));
+                            return (
+                                <View key={index} style={styles.chatContainer}>
+                                    {shouldShowDate && moment(item?.createdAt).format("DD/MM/YYYY") != moment(new Date()).format("DD/MM/YYYY") && <Text style={[appStyles.smallTextGray, { alignSelf: 'center' }]}>{moment(item?.createdAt).format("DD/MM/YYYY")}</Text>}
+                                    {moment(item?.createdAt).format("DD/MM/YYYY") === moment(new Date()).format("DD/MM/YYYY") && shouldShowDate && <Text style={[appStyles.smallTextGray, { alignSelf: 'center' }]}>
+                                        Today
+                                    </Text>}
+                                    <View style={isSender ? styles.sentMessageCard : [styles.reviedMessageCard, {
+                                        borderColor: isDark ? uiColours.GRAYED_BUTTON : uiColours.LIGHT_GRAY
+                                    }]}>
+                                        {!item?.attachment ? <Text style={[appStyles.smallTextGray, { color: isSender ? uiColours.BLACK_TEXT : uiColours.GRAY_TEXT }]}>
+                                            {item?.message}
+                                        </Text> :
+                                            <View style={{}}>
+                                                <TouchableOpacity
+                                                    onPress={() => {
+                                                        setSelectedMsg(item)
+                                                        setShowSheet({
+                                                            ...showSheet,
+                                                            fullScreenImage: true
+                                                        })
+                                                    }}
+                                                >
+                                                    <Image
+                                                        source={{ uri: item?.attachment }}
+                                                        style={{ height: moderateScale(100), width: moderateScale(100) }}
+                                                    />
+                                                </TouchableOpacity>
 
-                                            <Text>
-                                                {item?.message}
-                                            </Text>
-                                        </View>
-                                    }
+                                                <Text>
+                                                    {item?.message}
+                                                </Text>
+                                            </View>
+                                        }
 
-                                    {/* <Text style={[appStyles.smallTextGray, { color: isSender ? uiColours.BLACK_TEXT : uiColours.GRAY_TEXT }]}>
+                                        {/* <Text style={[appStyles.smallTextGray, { color: isSender ? uiColours.BLACK_TEXT : uiColours.GRAY_TEXT }]}>
                                         {item?.message}
                                     </Text>
                                     <Text style={[appStyles.smallTextGray, { fontSize: scale(10) }]}>
                                         {moment(item?.createdAt).format('h:mm a')}
                                     </Text> */}
+                                    </View>
                                 </View>
-                            </View>
-                        )
-                    })
-                }
-            </ScrollView>
+                            )
+                        })
+                    }
+                </ScrollView>
 
-            <View style={[styles.inputContainer, {
-                borderColor: isDark ? uiColours.GRAYED_BUTTON : uiColours.LIGHT_GRAY
-            }]}>
-                {/* {(newMessage === "" && !image) && <TouchableOpacity
+                <View style={[styles.inputContainer, {
+                    borderColor: isDark ? uiColours.GRAYED_BUTTON : uiColours.LIGHT_GRAY
+                }]}>
+                    {/* {(newMessage === "" && !image) && <TouchableOpacity
                     style={styles.sendButton}
                     onPress={() => {
                         setShowSheet({
@@ -217,64 +222,65 @@ const PickerMessagesScreen = ({ route }) => {
                     <Images.camera height={moderateScale(20)}
                         width={moderateScale(20)} />
                 </TouchableOpacity>} */}
-                <View style={{ flex: 1 }}>
-                    {image &&
-                        <View style={styles.selectedImageView}>
-                            <Image
-                                source={{ uri: image }}
-                                style={{ height: "100%", width: '25%' }}
-                                resizeMode="contain"
-                            />
-                            <TouchableOpacity
-                                style={{ paddingVertical: verticalScale(5) }}
-                                onPress={() => {
-                                    setImage(null)
-                                }}
-                            >
-                                <Images.close />
-                            </TouchableOpacity>
+                    <View style={{ flex: 1 }}>
+                        {image &&
+                            <View style={styles.selectedImageView}>
+                                <Image
+                                    source={{ uri: image }}
+                                    style={{ height: "100%", width: '25%' }}
+                                    resizeMode="contain"
+                                />
+                                <TouchableOpacity
+                                    style={{ paddingVertical: verticalScale(5) }}
+                                    onPress={() => {
+                                        setImage(null)
+                                    }}
+                                >
+                                    <Images.close />
+                                </TouchableOpacity>
 
-                        </View>
+                            </View>
+                        }
+                        <TextInput
+                            style={[styles.input, {
+                                borderColor: isDark ? uiColours.GRAYED_BUTTON : uiColours.LIGHT_GRAY
+                            }]}
+                            value={newMessage}
+                            placeholder='Message'
+                            multiline={true}
+                            onChangeText={(e) => {
+                                setNewMessage(e)
+                            }}
+                        />
+                    </View>
+
+                    {(newMessage === "" && !image) ?
+                        <TouchableOpacity
+                            style={styles.sendButton}
+                            onPress={() => {
+                                setShowSheet({
+                                    ...showSheet,
+                                    mediaSheet: true
+                                })
+                            }}
+                        >
+                            <Images.camera height={moderateScale(20)}
+                                width={moderateScale(20)} />
+                        </TouchableOpacity> :
+
+                        <TouchableOpacity
+                            onPress={handleSend}
+                            disabled={(newMessage !== "" || image) ? false : true}
+                            style={styles.sendButton}
+                        >
+                            <Images.send height={moderateScale(20)}
+                                width={moderateScale(20)} />
+                        </TouchableOpacity>
+
                     }
-                    <TextInput
-                        style={[styles.input, {
-                            borderColor: isDark ? uiColours.GRAYED_BUTTON : uiColours.LIGHT_GRAY
-                        }]}
-                        value={newMessage}
-                        placeholder='Message'
-                        multiline={true}
-                        onChangeText={(e) => {
-                            setNewMessage(e)
-                        }}
-                    />
+
                 </View>
-                {(newMessage === "" && !image) ?
-                    <TouchableOpacity
-                        style={styles.sendButton}
-                        onPress={() => {
-                            setShowSheet({
-                                ...showSheet,
-                                mediaSheet: true
-                            })
-                        }}
-                    >
-                        <Images.camera height={moderateScale(20)}
-                            width={moderateScale(20)} />
-                    </TouchableOpacity> :
-
-                    <TouchableOpacity
-                        onPress={handleSend}
-                        disabled={(newMessage !== "" || image) ? false : true}
-                        style={styles.sendButton}
-                    >
-                        <Images.send height={moderateScale(20)}
-                            width={moderateScale(20)} />
-                    </TouchableOpacity>
-
-                }
-
-            </View>
-
+            </KeyboardAvoidingView>
             <ChooseMediaTypeSheet
                 isVisible={showSheet.mediaSheet}
                 setShowMode={setShowSheet}

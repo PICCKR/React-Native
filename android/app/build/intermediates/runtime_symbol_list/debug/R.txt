@@ -4034,7 +4034,8 @@ int layout select_dialog_multichoice_material 0x7f0d0083
 int layout select_dialog_singlechoice_material 0x7f0d0084
 int layout support_simple_spinner_dropdown_item 0x7f0d0085
 int mipmap ic_launcher 0x7f0f0000
-int mipmap ic_launcher_round 0x7f0f0001
+int mipmap ic_launcher_foreground 0x7f0f0001
+int mipmap ic_launcher_round 0x7f0f0002
 int plurals exo_controls_fastforward_by_amount_description 0x7f100000
 int plurals exo_controls_rewind_by_amount_description 0x7f100001
 int plurals mtrl_badge_content_description 0x7f100002

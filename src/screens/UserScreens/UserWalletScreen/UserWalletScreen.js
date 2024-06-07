@@ -13,9 +13,11 @@ import { endPoints } from '../../../configs/apiUrls'
 import { showGeneralError } from '../../../helper/showGeneralError'
 import Actions from '../../../redux/Actions'
 import { useSelector } from 'react-redux'
+import { MainRouteStrings } from '../../../utils/Constents/RouteStrings'
+import { showErrorToast } from '../../../helper/showErrorToast'
 
 const UserWalletScreen = () => {
-    const { appStyles, setuserData } = useContext(AppContext)
+    const { appStyles, setuserData, isDark } = useContext(AppContext)
     const userData = useSelector((state) => state?.userDataReducer?.userData)
     const navigation = useNavigation()
     const [showSheet, setShowSheet] = useState(false)
@@ -95,7 +97,13 @@ const UserWalletScreen = () => {
 
                 <TouchableOpacity
                     onPress={() => {
-                        setShowSheet(true)
+                        if (userData?.kycStatus != "approved") {
+                            showErrorToast("Please complete your kyc first", isDark)
+                            navigation.navigate(MainRouteStrings.USER_KYC_SCREEN)
+                        } else {
+                            setShowSheet(true)
+                        }
+
                     }}
                     style={{ paddingVertical: verticalScale(5) }}
                 >

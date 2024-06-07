@@ -1,4 +1,4 @@
-import { View, Text, TouchableOpacity } from 'react-native'
+import { View, Text, TouchableOpacity, Platform } from 'react-native'
 import React, { useContext, useEffect, useState } from 'react'
 import styles from './Styles'
 import { moderateScale, scale, verticalScale } from 'react-native-size-matters'
@@ -40,7 +40,7 @@ const BidPriceSheet = ({
   ]
 
   const handleCalculatePrice = (item) => {
-    const price = (selectedTrip?.requestAmount + (selectedTrip?.requestAmount * item?.value)).toString()
+    const price = (selectedTrip?.requestAmount + (selectedTrip?.requestAmount * item?.value)).toFixed(2).toString()
     setSelectedTrip({ ...selectedTrip, bidPrice: price })
     setBidPrice(price)
   }
@@ -65,6 +65,7 @@ const BidPriceSheet = ({
       handleRightClick={() => {
         setShowSheet(false)
       }}
+      modelStyles={{ paddingBottom: Platform.OS === "ios" ? verticalScale(20) : 0 }}
     >
       <InputText
         inputTitle={"Bid the order price (₦)"}

@@ -18,6 +18,7 @@ import { formatAmount } from '../../../helper/formatter'
 import { useSocket } from '../../../context/AppContext'
 import { showErrorToast } from '../../../helper/showErrorToast'
 import Actions from '../../../redux/Actions'
+import ProfileView from '../../../components/PrifileView/ProfileView'
 
 const BottomView = ({
     appStyles,
@@ -85,10 +86,15 @@ const BottomView = ({
 
     const handleCompleteBookingSuccess = (data) => {
         Actions.showLoader(false)
-        // console.log("booking-complete-success", data);
-        navigation.navigate(MainRouteStrings.TRIPS_SCREEN)
-        Actions.bookingData(null)
-        Actions.orderDeatils(null)
+        console.log("booking-complete-success", data?.data?.booking, orderDetails);
+        // const bookingData = data?.data?.booking
+        // return
+        navigation.navigate(MainRouteStrings.WRITE_USER_REVIEW, {
+            data: { _id: data?.data?.booking?._id, userId: orderDetails?.userId }
+        })
+        // navigation.navigate(MainRouteStrings.TRIPS_SCREEN)
+        // Actions.bookingData(null)
+        // Actions.orderDeatils(null)
     }
 
     // const handleGetBooking = (data) => {
@@ -111,7 +117,7 @@ const BottomView = ({
             Socket.off('booking-start-successfully', handleBookingstart)
             Socket.off("booking-cancel-successfully", handleCancelSuccess)
             Socket.off("booking-cancel-error", handleCancelError)
-            Socket.off("booking-complete-successr", handleCompleteBookingSuccess)
+            Socket.off("booking-complete-success", handleCompleteBookingSuccess)
             // Socket.off('get-booking', handleGetBooking)
         }
     }, [Socket, handleBookingstartError, handleBookingstart, handleCancelSuccess, handleCancelError, handleCompleteBookingError, handleCompleteBookingSuccess])
@@ -145,9 +151,15 @@ const BottomView = ({
                 }]}>
                     <View style={{ borderWidth: moderateScale(1), borderColor: isDark ? uiColours.GRAYED_BUTTON : uiColours.LIGHT_GRAY, borderRadius: moderateScale(6), padding: moderateScale(16) }}>
                         <View style={[styles.pickerProfile, appStyles.borderColor]}>
-                            <View style={styles.pickerProfileView}>
+                            <ProfileView
+                                profileImg={orderDetails?.userId?.picture}
+                                hasBottomLine={false}
+                                profileSection={{ paddingBottom: 0 }}
+                                size={40}
+                            />
+                            {/* <View style={styles.pickerProfileView}>
                                 {orderDetails?.picckrId?.picture ? <Image source={{ uri: orderDetails?.picckrId?.picture }} /> : <Images.profile height={moderateScale(45)} width={moderateScale(45)} />}
-                            </View>
+                            </View> */}
                             <View>
                                 <Text style={appStyles?.mediumTextPrimaryBold}>{orderDetails?.userId?.firstName} {orderDetails?.userId?.lastName}</Text>
                                 <View style={commonStyles.flexRowAlnCtr}>

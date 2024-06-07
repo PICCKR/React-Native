@@ -26,7 +26,8 @@ const BottomSheet = ({
     buttonTitle,
     handleButtonPress,
     renderRightView = () => { },
-    modelBgStyles
+    modelBgStyles,
+    keyboardVerticalOffset = 100
 }) => {
     const { appStyles, isDark } = useContext(AppContext)
     return (
@@ -41,7 +42,7 @@ const BottomSheet = ({
             <KeyboardAvoidingView
                 style={{ flex: 1 }}
                 behavior="padding"
-                keyboardVerticalOffset={100}
+                keyboardVerticalOffset={keyboardVerticalOffset}
             >
                 <View style={[styles.modal, {
                     backgroundColor: isDark ? uiColours.DARK_BG : uiColours.WHITE_TEXT

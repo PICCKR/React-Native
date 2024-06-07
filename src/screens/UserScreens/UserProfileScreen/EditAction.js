@@ -30,7 +30,7 @@ const EditAction = ({
                 {title}
             </Text>
 
-            {value && <Text>
+            {value && <Text style={appStyles.smallTextGray}>
                 {value}
             </Text>
             }

@@ -10,6 +10,7 @@ import Form from '../../../components/Form/Form'
 import BottomSheet from '../../../components/BottomSheet/BottomSheet'
 import { useNavigation } from '@react-navigation/native'
 import useBackButton from '../../../customHooks/useBackButton'
+import { MainRouteStrings } from '../../../utils/Constents/RouteStrings'
 
 const RecipientSheet = ({
   location,
@@ -27,7 +28,7 @@ const RecipientSheet = ({
     {
       id: 1,
       title: 'Name',
-      placeHolder: "Input your name",
+      placeHolder: "Enter name",
       type: "name",
       maxLenght: 100,
       isRequired: true,
@@ -59,7 +60,8 @@ const RecipientSheet = ({
 
   useBackButton(() => {
     // setShowBottomSheet(false)
-    navigation.goBack()
+    navigation.navigate(MainRouteStrings.FIND_DESTINATON)
+    // navigation.goBack()
     return true
   })
 

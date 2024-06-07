@@ -29,6 +29,11 @@ const styles = StyleSheet.create({
         alignItems: "center",
         justifyContent: 'space-between',
         marginTop: verticalScale(10)
+    },
+    header: {
+        alignSelf: "flex-start",
+        width: '100%',
+        paddingBottom: verticalScale(16)
     }
 })
 export default styles

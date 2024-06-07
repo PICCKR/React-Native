@@ -1,4 +1,4 @@
-import { View, Text, TouchableOpacity, ScrollView } from 'react-native'
+import { View, Text, TouchableOpacity, ScrollView, Platform } from 'react-native'
 import React, { useContext, useEffect, useState } from 'react'
 import styles from './Styles'
 import { moderateScale, scale, verticalScale } from 'react-native-size-matters'
@@ -39,7 +39,7 @@ const WithdrawPopUp = ({
     const getAccountData = async () => {
         // Actions.showLoader(true)
         apiGet(`${endPoints.BANK_ACCOUNT}`).then((res) => {
-            // console.log("get vehicle res ", res?.data, res?.status);
+            console.log("get vehicle res ", res?.data, res?.status);
             if (res?.status === 200) {
                 setBankData(res?.data?.data)
             } else {
@@ -75,6 +75,12 @@ const WithdrawPopUp = ({
             hasCloseIcon
             setShowModal={setShowSheet}
             buttonActive={buttonActive}
+            modelStyles={{
+                position: "relative",
+                marginTop: Platform.OS === "android" ? 0 : "100%",
+                paddingBottom: Platform.OS === "android" ? 0 : verticalScale(50)
+            }}
+            keyboardVerticalOffset={0}
             handleRightClick={() => {
                 setShowSheet(false)
             }}
@@ -99,6 +105,7 @@ const WithdrawPopUp = ({
             showFooterButton
             buttonTitle={"Confirm"}
         >
+
             <ScrollView style={{}}>
                 <View style={{ gap: verticalScale(10) }}>
                     <Text style={[appStyles?.smallTextPrimaryBold]}>
@@ -133,6 +140,7 @@ const WithdrawPopUp = ({
                                 account_bank: item
                             })
                         }}
+                        noDataMsg="You have not created any account"
                     />
 
                 </View>

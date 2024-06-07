@@ -23,6 +23,10 @@ import OtpPopUp from '../../../components/OtpPopUp/OtpPopUp'
 import Actions from '../../../redux/Actions'
 import { showSuccessToast } from '../../../helper/showSuccessToast'
 import { showErrorToast } from '../../../helper/showErrorToast'
+import Cancelled from './Cancelled'
+import Completed from './Completed'
+import ProfileView from '../../../components/PrifileView/ProfileView'
+import CancelOrderSheet from './CancelOrderSheet'
 
 const TripDetailsScreen = ({ route }) => {
     const { appStyles, isDark } = useContext(AppContext)
@@ -108,8 +112,12 @@ const TripDetailsScreen = ({ route }) => {
 
     const handleCompleteBookingSuccess = (data) => {
         Actions.showLoader(false)
-        // console.log("booking-complete-success", data);
-        navigation.navigate(MainRouteStrings.TRIPS_SCREEN)
+        console.log("booking-complete-success", data);
+        return
+        navigation.navigate(MainRouteStrings.WRITE_USER_REVIEW, {
+            data: orderDeatils
+        })
+        // navigation.navigate(MainRouteStrings.TRIPS_SCREEN)
         Actions.bookingData(null)
         Actions.orderDeatils(null)
     }
@@ -140,21 +148,33 @@ const TripDetailsScreen = ({ route }) => {
             handleBack={() => {
                 navigation.goBack()
             }}
-            showFooterButton={true}
+            showFooterButton={(orderDeatils?.status === "cancelled" || orderDeatils?.status === "delivered") ? false : true}
             buttonTitle={orderDeatils?.status === "in-transit" ? "Complete Order" : "Start booking"}
             buttonActive={true}
             handleButtonPress={handleButtonPress}
             containerPadding={{ paddingHorizontal: 0 }}
         >
             <ScrollView style={{}}>
-
                 <View style={[styles.ActivitySummaryConatiner, {
                     borderColor: !isDark ? uiColours.LIGHT_GRAY : uiColours.GRAYED_BUTTON,
                 }]}>
-                    <View style={styles.vehicle}>
-                        {/* <Image source = {{uri : data?.picckrId?.vehicle?.}} /> */}
-                        <Images.car height={moderateScale(34)} width={moderateScale(34)} />
+                    <View style={[commonStyles.flexRowAlnCtr, {
+                        width: "70%",
+                    }]}>
+                        <ProfileView
+                            profileImg={orderDeatils?.userId?.picture}
+                            hasBottomLine={false}
+                            profileSection={{ paddingBottom: 0 }}
+                            size={50}
+                        />
+                        <View style={{ width: '80%' }}>
+                            <Text numberOfLines={1} ellipsizeMode="tail" style={[appStyles?.mediumTextPrimaryBold, {
+
+                            }]}>{orderDeatils?.userId?.firstName} {orderDeatils?.userId?.lastName} </Text>
+                            <Text style={appStyles?.smallTextGray}>{orderDeatils?.userId?.phoneNumber}</Text>
+                        </View>
                     </View>
+
                     <View style={{ alignItems: "flex-end" }}>
                         <Text style={appStyles.smallTextGray}>
                             {moment(orderDeatils?.createdAt).format("DD-MM-YYYY")}
@@ -172,21 +192,49 @@ const TripDetailsScreen = ({ route }) => {
                     </View>
                 </View>
 
-                <Ongoing
-                    orderDeatils={orderDeatils}
-                    appStyles={appStyles}
-                    navigation={navigation}
-                    isDark={isDark}
-                    userData={userData}
-                    handleJoinRoom={(data) => {
-                        Socket.emit("joinRoom", {
-                            "room": data?._id
-                        })
-                        navigation.navigate(MainRouteStrings.PICKER_MESSAGES_SCREEN, {
-                            orderDetails: data
-                        })
-                    }}
-                />
+                {orderDeatils?.status === "delivered" &&
+                    <Completed
+                        orderDeatils={orderDeatils}
+                        appStyles={appStyles}
+                        navigation={navigation}
+                        isDark={isDark}
+                        userData={userData}
+                    />
+
+                }
+
+                {orderDeatils?.status === "cancelled" &&
+                    <Cancelled
+                        orderDeatils={orderDeatils}
+                        appStyles={appStyles}
+                        navigation={navigation}
+                        isDark={isDark}
+                        userData={userData}
+                    />
+                }
+
+                {
+                    (orderDeatils?.status === "in-transit" || orderDeatils?.status === "pending") && <Ongoing
+                        orderDeatils={orderDeatils}
+                        appStyles={appStyles}
+                        navigation={navigation}
+                        isDark={isDark}
+                        userData={userData}
+                        handleCancelOrder={() => {
+                            setShowSheet({
+                                ...showSheet,
+                                cancelOrder: true
+                            })
+                        }}
+                        handleJoinRoom={(data) => {
+                            Socket.emit("joinRoom", {
+                                "room": data?._id
+                            })
+                            navigation.navigate(MainRouteStrings.PICKER_MESSAGES_SCREEN, {
+                                orderDetails: data
+                            })
+                        }}
+                    />}
 
                 {/* {data?.status === "Cancelled" &&
                     <View style={{ paddingHorizontal: scale(16), alignItems: "center" }}>
@@ -395,6 +443,19 @@ const TripDetailsScreen = ({ route }) => {
                     setShowSheet({
                         ...showSheet,
                         completeOrder: false
+                    })
+                }}
+            />
+
+            <CancelOrderSheet
+                isVisible={showSheet.cancelOrder}
+                appStyles={appStyles}
+                setShowSheet={setShowSheet}
+                handleCancelOrder={async () => {
+                    setShowSheet(false)
+                    await Actions.showLoader(true)
+                    await Socket.emit("booking-cancel", {
+                        "id": orderDeatils?._id
                     })
                 }}
             />

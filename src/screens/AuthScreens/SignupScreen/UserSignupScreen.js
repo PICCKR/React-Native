@@ -1,4 +1,4 @@
-import { ScrollView, Text } from 'react-native'
+import { KeyboardAvoidingView, Platform, ScrollView, Text } from 'react-native'
 import React, { useContext, useEffect, useState } from 'react'
 import WrapperContainer from '../../../components/WrapperContainer/WrapperContainer'
 import { Styles } from './Styles'
@@ -116,55 +116,59 @@ const UserSignupScreen = () => {
       buttonActive={buttonActive}
       handleButtonPress={handledContinue}
     >
-      <ScrollView
-        style={Styles.formView}
-        showsVerticalScrollIndicator={false}
+      <KeyboardAvoidingView
+        style={{ flex: 1 }}
+        behavior={Platform.OS === "ios" && "padding"}
+        keyboardVerticalOffset={Platform.OS === "ios" ? verticalScale(100) : 0}
       >
+        <ScrollView
+          style={Styles.formView}
+          showsVerticalScrollIndicator={false}
+        >
+          <Form
+            data={signUpFormData}
+            formData={formData}
+            setFormData={setFormData}
+            ShowError={ShowError}
+            setShowError={setShowError}
+            errorMsg={errorMsg}
+            setErrorMsg={setErrorMsg}
+          />
 
-        <Form
-          data={signUpFormData}
-          formData={formData}
-          setFormData={setFormData}
-          ShowError={ShowError}
-          setShowError={setShowError}
-          errorMsg={errorMsg}
-          setErrorMsg={setErrorMsg}
-        />
-
-        {/* <Text style={[appStyles.smallTextGray,{fontSize:scale(8)}]}>
+          {/* <Text style={[appStyles.smallTextGray,{fontSize:scale(8)}]}>
           Password must contain at least 1 uppercase letter, 1 lowercase letter, 1 number, 1 special character, and be at least 8 characters long.
         </Text> */}
 
-        <HyperlinkView
-          handleCheck={() => {
-            setCheckData({
-              ...checkData,
-              termsCheck: !checkData.termsCheck
-            })
-          }}
-          leftText="I agree to"
-          rightText="Terms and Conditions"
-          selected={checkData.termsCheck}
-        />
+          <HyperlinkView
+            handleCheck={() => {
+              setCheckData({
+                ...checkData,
+                termsCheck: !checkData.termsCheck
+              })
+            }}
+            leftText="I agree to"
+            rightText="Terms and Conditions"
+            selected={checkData.termsCheck}
+          />
 
-        <HyperlinkView
-          handleCheck={() => {
-            setCheckData({
-              ...checkData,
-              privecyCheck: !checkData.privecyCheck
-            })
-          }}
-          leftText="I have read the"
-          rightText="Privacy Policy"
-          selected={checkData.privecyCheck}
-          termsView={{ marginBottom: verticalScale(70) }}
-          handleLinkClick={() => {
-            // navigation.navigate(AuthRouteStrings.PDF_VIEW)
-          }}
-        />
-
-      </ScrollView>
-    </WrapperContainer>
+          <HyperlinkView
+            handleCheck={() => {
+              setCheckData({
+                ...checkData,
+                privecyCheck: !checkData.privecyCheck
+              })
+            }}
+            termsView={{ marginBottom: verticalScale(70) }}
+            leftText="I have read the"
+            rightText="Privacy Policy"
+            selected={checkData.privecyCheck}
+            handleLinkClick={() => {
+              // navigation.navigate(AuthRouteStrings.PDF_VIEW)
+            }}
+          />
+        </ScrollView>
+      </KeyboardAvoidingView>
+    </WrapperContainer >
   )
 }
 

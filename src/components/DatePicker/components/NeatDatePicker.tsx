@@ -25,7 +25,7 @@ const NeatDatePicker = ({
     modalStyles, mode,
     onBackButtonPress, onBackdropPress,
     onCancel, onConfirm,onSeclectTime,handleClose,
-    startDate,
+    startDate = new Date(),
     chooseYearFirst,
     withoutModal, hideTime, onSelectDate
 }: NeatDatePickerProps) => {

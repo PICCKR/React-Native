@@ -27,7 +27,7 @@ const SelectAddresFromMap = ({ route }) => {
     source
   } = useContext(AppContext)
 
-  // console.log("source===>", geometry, action);
+  console.log("source===>", toScreen, action, geometry);
 
   const navigation = useNavigation()
 
@@ -38,13 +38,15 @@ const SelectAddresFromMap = ({ route }) => {
 
   const [selectedAddress, setSelectedAddress] = useState({
     location: (toScreen === MainRouteStrings.SET_DESTINATION || action === "destination") ? destination?.location : source?.location,
-    lat: "",
-    lng: ""
+    lat: geometry?.lat ? geometry?.lat : currentLocation?.lat,
+    lng: geometry?.lng ? geometry?.lng : currentLocation?.lng
   })
 
   const [mapView, setMapView] = useState('standard')
 
   const onLocationSelect = async (coords, d) => {
+    // console.log("coords===>", coords);
+    // return
     // console.log("e", coords);
     Geocoder.init(GOOGLE_MAP_API_KEY);
     Geocoder.from(coords.latitude, coords.longitude)
@@ -120,7 +122,8 @@ const SelectAddresFromMap = ({ route }) => {
               location: selectedAddress?.location
             })
           } else if (toScreen === MainRouteStrings.SET_DESTINATION) {
-            // console.log('lat lan', json.results[0]);
+            console.log('lat lan', selectedAddress);
+            // return
             setDestination({
               lat: selectedAddress.lat,
               lng: selectedAddress.lng,
@@ -139,7 +142,6 @@ const SelectAddresFromMap = ({ route }) => {
               location: selectedAddress?.location
             })
           }
-
           navigation.navigate(toScreen, {
             addresData: selectedAddress
           })

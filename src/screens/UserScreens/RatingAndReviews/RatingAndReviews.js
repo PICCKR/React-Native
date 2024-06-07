@@ -12,60 +12,20 @@ import { uiColours } from '../../../utils/Styles/uiColors'
 import { apiGet } from '../../../services/apiServices'
 import { endPoints } from '../../../configs/apiUrls'
 import { useSelector } from 'react-redux'
+import Actions from '../../../redux/Actions'
 
 const RatingAndReviews = () => {
     const { appStyles, isDark } = useContext(AppContext)
     const userData = useSelector((state) => state?.userDataReducer?.userData)
     const navigation = useNavigation()
     const [reviewData, setReviewData] = useState([])
-    // const reviewData = [
-    //     {
-    //         id: "1",
-    //         userName: "John Doe",
-    //         date: "5 • June 20 2023, 13:02 PM",
-    //         feedback: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam."
-    //     },
-    //     {
-    //         id: "2",
-    //         userName: "John John",
-    //         date: "19 • July 22 2023, 13:02 PM",
-    //         feedback: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt"
-    //     },
-    //     {
-    //         id: "3",
-    //         userName: "John Doe",
-    //         date: "5 • June 20 2023, 13:02 PM",
-    //         feedback: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam."
-    //     },
-    //     {
-    //         id: "4",
-    //         userName: "John John",
-    //         date: "19 • July 22 2023, 13:02 PM",
-    //         feedback: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt"
-    //     },
-    //     {
-    //         id: "5",
-    //         userName: "John John",
-    //         date: "19 • July 22 2023, 13:02 PM",
-    //         feedback: ""
-    //     },
-    //     {
-    //         id: "6",
-    //         userName: "John John",
-    //         date: "19 • July 22 2023, 13:02 PM",
-    //         feedback: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam."
-    //     },
-    //     {
-    //         id: "7",
-    //         userName: "John John",
-    //         date: "19 • July 22 2023, 13:02 PM",
-    //         feedback: ""
-    //     },
-    // ]
+
 
 
     const getRatingsAndReviews = async () => {
+        Actions.showLoader(true)
         apiGet(`${endPoints.GET_RATINGS_RAVIEWS}/${userData?._id}`).then((res) => {
+            Actions.showLoader(false)
             console.log("res in get ratings", res?.status, res?.data);
             if (res?.status === 200) {
                 setReviewData(res?.data?.data)
@@ -73,6 +33,7 @@ const RatingAndReviews = () => {
 
             }
         }).catch((error) => {
+            Actions.showLoader(false)
             console.log("error in get ratings");
         })
     }
@@ -114,15 +75,21 @@ const RatingAndReviews = () => {
                             }]}>
                                 <PrifileView
                                     size={moderateScale(40)}
+                                    profileImg={item?.picckrId?.picture}
+                                    hasBottomLine={false}
+                                    profileSection={{ paddingBottom: 0 }}
                                 />
                                 <View>
                                     <Text style={appStyles.mediumTextPrimaryBold}>
-                                        {item.userName}
+                                        {item.picckrId?.firstName} {item.picckrId?.lastName}
                                     </Text>
                                     <View style={commonStyles.flexRowAlnCtr}>
                                         <Images.star />
+                                        <Text style={appStyles?.smallTextBlack}>
+                                            {item?.passengerRating}
+                                        </Text>
                                         <Text style={appStyles.smallTextGray}>
-                                            {item.date}
+                                            {item?.createdAt}
                                         </Text>
                                     </View>
 
@@ -134,7 +101,7 @@ const RatingAndReviews = () => {
                                     Feedback :
                                 </Text>
                                 <Text style={appStyles.smallTextGray}>
-                                    {item.feedback}
+                                    {item?.passengerReview}
                                 </Text>
                             </View>
 
